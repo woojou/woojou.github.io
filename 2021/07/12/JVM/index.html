@@ -8,13 +8,13 @@
   <link rel="dns-prefetch" href="http://woojou.github.io">
   <title>JVM | woojou&#39;s blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="内存结构方法区定义线程共享，存储与类结构相关的信息，包含运行时常量池，类的成员变量，方法数据以及成员方法和构造器 方法代码。  在虚拟机被启动时创建，逻辑上是堆的组成部分，这只是个概念，不同厂商实现不同。HotSpot  JDK1.8之前使用的都是永久代，即方法区的管理方式和堆一样（有默认的上限大小），都是在 JVM 的内存结构中。后来使用的是元空间，使用的是操作系统的内存（即本地内存，默认没">
+  <meta name="description" content="本文章来源于B站黑马JVM课程。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="JVM">
 <meta property="og:url" content="http://woojou.github.io/2021/07/12/JVM/index.html">
 <meta property="og:site_name" content="woojou&#39;s blog">
-<meta property="og:description" content="内存结构方法区定义线程共享，存储与类结构相关的信息，包含运行时常量池，类的成员变量，方法数据以及成员方法和构造器 方法代码。  在虚拟机被启动时创建，逻辑上是堆的组成部分，这只是个概念，不同厂商实现不同。HotSpot  JDK1.8之前使用的都是永久代，即方法区的管理方式和堆一样（有默认的上限大小），都是在 JVM 的内存结构中。后来使用的是元空间，使用的是操作系统的内存（即本地内存，默认没">
-<meta property="og:locale" content="en_US">
+<meta property="og:description" content="本文章来源于B站黑马JVM课程。">
+<meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608150547.png">
 <meta property="og:image" content="http://woojou.github.io/.io//saltfish/JVM/笔记/pics/javap-v1.PNG">
 <meta property="og:image" content="http://woojou.github.io/.io//saltfish/JVM/笔记/pics/javap-v2.PNG">
@@ -85,7 +85,7 @@
 <meta property="og:image" content="http://woojou.github.io/.io//saltfish/JVM/笔记/pics/图解-a++(4).PNG">
 <meta property="og:image" content="http://woojou.github.io/.io//saltfish/JVM/笔记/pics/反射.PNG">
 <meta property="article:published_time" content="2021-07-12T11:14:50.000Z">
-<meta property="article:modified_time" content="2021-07-12T11:41:05.777Z">
+<meta property="article:modified_time" content="2021-07-12T11:58:51.552Z">
 <meta property="article:author" content="Woojou">
 <meta property="article:tag" content="JAVA">
 <meta name="twitter:card" content="summary">
@@ -121,8 +121,10 @@
 			<img src="" class="js-avatar">
 		</a>
 		<hgroup>
-		  <h1 class="header-author"><a href="/"></a></h1>
+		  <h1 class="header-author"><a href="/">Woojou</a></h1>
 		</hgroup>
+		
+		<p class="header-subtitle">不学习会变成猪猪哦</p>
 		
 
 		<nav class="header-menu">
@@ -179,8 +181,10 @@
 				<img src="" class="js-avatar">
 			</div>
 			<hgroup>
-			  <h1 class="header-author js-header-author"></h1>
+			  <h1 class="header-author js-header-author">Woojou</h1>
 			</hgroup>
+			
+			<p class="header-subtitle"><i class="icon icon-quo-left"></i>不学习会变成猪猪哦<i class="icon icon-quo-right"></i></p>
 			
 			
 			
@@ -245,7 +249,8 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <span id="more"></span>
+        <p>本文章来源于B站黑马JVM课程。</p>
+<span id="more"></span>
 
 <h2 id="内存结构"><a href="#内存结构" class="headerlink" title="内存结构"></a>内存结构</h2><h3 id="方法区"><a href="#方法区" class="headerlink" title="方法区"></a>方法区</h3><h4 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h4><p>线程<strong>共享</strong>，存储与类结构相关的信息，包含<strong>运行时常量池</strong>，类的<strong>成员变量</strong>，<strong>方法数据</strong>以及成员方法和构造器 方法代码。 </p>
 <p>在虚拟机被启动时创建，逻辑上是堆的组成部分，这只是个概念，不同厂商实现不同。HotSpot  JDK1.8之前使用的都是永久代，即方法区的管理方式和堆一样（有默认的上限大小），都是在 JVM 的内存结构中。后来使用的是<strong>元空间</strong>，使用的是<strong>操作系统的内存</strong>（即本地内存，默认没有内存上限 大小，只要本地有内存空间），而不是堆内存。 方法区内存溢出错误会报错OutofMemoryError。</p>
@@ -2186,8 +2191,8 @@ enum SEX &#123;
 <nav id="article-nav">
   
   
-    <a href="/2021/07/12/test1/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">test1</div>
+    <a href="/2021/07/12/hello-world/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Hello World</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -2396,7 +2401,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
     
     	<section class="tools-section tools-section-me" q-show="aboutme">
   	  	
-  	  		<div class="aboutme-wrap" id="js-aboutme">很惭愧&lt;br&gt;&lt;br&gt;只做了一点微小的工作&lt;br&gt;谢谢大家</div>
+  	  		<div class="aboutme-wrap" id="js-aboutme">虽然菜&lt;br&gt;但是会努力的</div>
   	  	
     	</section>
     
