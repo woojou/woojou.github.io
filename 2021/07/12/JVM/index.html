@@ -6,41 +6,41 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://woojou.github.io">
-  <title>JVM | woojou&#39;s blog</title>
+  <title>woojou&#39;s blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="本文章来源于B站黑马程序员 JVM 课程。">
+  <meta name="description" content="title: JVMdate: 2021-07-12 19:14:50tags:   JAVA  本文章来源于B站黑马程序员 JVM 课程。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="JVM">
+<meta property="og:title" content="woojou&#39;s blog">
 <meta property="og:url" content="http://woojou.github.io/2021/07/12/JVM/index.html">
 <meta property="og:site_name" content="woojou&#39;s blog">
-<meta property="og:description" content="本文章来源于B站黑马程序员 JVM 课程。">
+<meta property="og:description" content="title: JVMdate: 2021-07-12 19:14:50tags:   JAVA  本文章来源于B站黑马程序员 JVM 课程。">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608150547.png">
-<meta property="og:image" content="http://woojou.github.io/.io//saltfish/JVM/笔记/pics/javap-v1.PNG">
-<meta property="og:image" content="http://woojou.github.io/.io//saltfish/JVM/笔记/pics/javap-v2.PNG">
-<meta property="og:image" content="http://woojou.github.io/.io//saltfish/JVM/笔记/pics/javap-v3.PNG">
-<meta property="og:image" content="http://woojou.github.io/.io//saltfish/JVM/笔记/pics/javap-v4.PNG">
-<meta property="og:image" content="http://woojou.github.io/.io//saltfish/JVM/笔记/pics/demo1_22_1.PNG">
-<meta property="og:image" content="http://woojou.github.io/.io//saltfish/JVM/笔记/pics/demo1_22_2.PNG">
-<meta property="og:image" content="http://woojou.github.io/.io//saltfish/JVM/笔记/pics/jvm1.8&1.6.PNG">
-<meta property="og:image" content="http://woojou.github.io/.io//saltfish/JVM/笔记/pics/6.29heap.PNG">
-<meta property="og:image" content="http://woojou.github.io/.io//saltfish/JVM/笔记/pics/6.29symboltable.PNG">
-<meta property="og:image" content="http://woojou.github.io/.io//saltfish/JVM/笔记/pics/6.29stringtablestatistics.PNG">
-<meta property="og:image" content="http://woojou.github.io/.io//saltfish/JVM/笔记/pics/6.29stringtablestatistics1.PNG">
-<meta property="og:image" content="http://woojou.github.io/.io//saltfish/JVM/笔记/pics/6.29stringtablestatistics2.PNG">
-<meta property="og:image" content="http://woojou.github.io/.io//saltfish/JVM/笔记/pics/6.29directmemory1.PNG">
-<meta property="og:image" content="http://woojou.github.io/.io//saltfish/JVM/笔记/pics/6.29directmemory2.PNG">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210713181757173.PNG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210713181800429.PNG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2021071318174618.PNG#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210713181759133.PNG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2021071318175916.PNG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210713181745855.PNG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210713182558314.PNG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210713181753748.PNG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210713181756179.PNG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210713181745553.PNG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210713181756124.PNG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210713181756177.PNG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210713182953580.PNG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210713182953712.PNG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center">
 <meta property="og:image" content="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608150750.png">
-<meta property="og:image" content="http://woojou.github.io/.io//saltfish/JVM/笔记/pics/7.1fivereferences.PNG">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210713183108332.PNG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center">
 <meta property="og:image" content="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608150813.png">
 <meta property="og:image" content="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608150827.png">
 <meta property="og:image" content="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608150842.png">
 <meta property="og:image" content="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608150931.png">
-<meta property="og:image" content="http://woojou.github.io/.io//saltfish/JVM/笔记/pics/vm.PNG">
-<meta property="og:image" content="http://woojou.github.io/.io//saltfish/JVM/笔记/pics/72vm1.PNG">
-<meta property="og:image" content="http://woojou.github.io/.io//saltfish/JVM/笔记/pics/72vm2.PNG">
-<meta property="og:image" content="http://woojou.github.io/.io//saltfish/JVM/笔记/pics/72vm3.PNG">
-<meta property="og:image" content="http://woojou.github.io/.io//saltfish/JVM/笔记/pics/72vm4.PNG">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210713183308490.PNG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210713181757782.PNG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210713181758929.PNG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210713181800788.PNG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210713181753722.PNG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center">
 <meta property="og:image" content="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151027.png">
 <meta property="og:image" content="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151039.png">
 <meta property="og:image" content="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151052.png">
@@ -51,16 +51,16 @@
 <meta property="og:image" content="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151201.png">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/20191114203926403.jpeg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM4NTU3MTk0,size_16,color_FFFFFF,t_70">
 <meta property="og:image" content="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151229.png">
-<meta property="og:image" content="http://woojou.github.io/.io//saltfish/JVM/笔记/pics/7.4original.PNG">
-<meta property="og:image" content="http://woojou.github.io/.io//saltfish/JVM/笔记/pics/7.4new.PNG">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210713181758915.PNG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210713181758874.PNG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center">
 <meta property="og:image" content="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151249.png">
 <meta property="og:image" content="https://pic1.zhimg.com/v2-d627f33b6e850bc2efe0fac63c241280_r.jpg">
 <meta property="og:image" content="https://img-blog.csdn.net/20180803172812278?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3E5ODIxNTE3NTY=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
 <meta property="og:image" content="https://pic2.zhimg.com/80/v2-285f678a8c1b330ab5f5d8a6c4ead635_720w.jpg">
-<meta property="og:image" content="http://woojou.github.io/.io//saltfish/JVM/笔记/pics/Field信息.PNG">
-<meta property="og:image" content="http://woojou.github.io/.io//saltfish/JVM/笔记/pics/图解-运行时常量池.PNG">
-<meta property="og:image" content="http://woojou.github.io/.io//saltfish/JVM/笔记/pics/图解-方法区.PNG">
-<meta property="og:image" content="http://woojou.github.io/.io//saltfish/JVM/笔记/pics/图解-main.PNG">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210713183812997.PNG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210713181804203.PNG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210713183308458.PNG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210713184123859.PNG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center">
 <meta property="og:image" content="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151336.png">
 <meta property="og:image" content="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151346.png">
 <meta property="og:image" content="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151412.png">
@@ -78,21 +78,21 @@
 <meta property="og:image" content="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151624.png">
 <meta property="og:image" content="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151632.png">
 <meta property="og:image" content="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151640.png">
-<meta property="og:image" content="http://woojou.github.io/.io//saltfish/JVM/笔记/pics/图解-a++.PNG">
-<meta property="og:image" content="http://woojou.github.io/.io//saltfish/JVM/笔记/pics/图解-a++(2).PNG">
-<meta property="og:image" content="http://woojou.github.io/.io//saltfish/JVM/笔记/pics/图解-a++(1).PNG">
-<meta property="og:image" content="http://woojou.github.io/.io//saltfish/JVM/笔记/pics/图解-a++(3).PNG">
-<meta property="og:image" content="http://woojou.github.io/.io//saltfish/JVM/笔记/pics/图解-a++(4).PNG">
-<meta property="og:image" content="http://woojou.github.io/.io//saltfish/JVM/笔记/pics/反射.PNG">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210713181759356.PNG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210713181759251.PNG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210713183307473.PNG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/202107131833083.PNG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2021071318330850.PNG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210713183310548.PNG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center">
 <meta property="og:image" content="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200611205050.png">
 <meta property="og:image" content="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200611223153.png">
 <meta property="og:image" content="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200611230658.png">
 <meta property="og:image" content="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200611223441.png">
 <meta property="og:image" content="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200613104723.png">
-<meta property="article:published_time" content="2021-07-12T11:14:50.000Z">
-<meta property="article:modified_time" content="2021-07-13T09:59:39.069Z">
+<meta property="article:published_time" content="2021-07-12T11:14:50.316Z">
+<meta property="article:modified_time" content="2021-07-13T10:47:30.700Z">
 <meta property="article:author" content="Woojou">
-<meta property="article:tag" content="JAVA">
+<meta property="article:tag" content="程序媛">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608150547.png">
   
@@ -237,24 +237,13 @@
             <article id="post-JVM" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
-      <header class="article-header">
-        
-  
-    <h1 class="article-title" itemprop="name">
-      JVM
-    </h1>
-  
-
-        
-        <a href="/2021/07/12/JVM/" class="archive-article-date">
-  	<time datetime="2021-07-12T11:14:50.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-07-12</time>
-</a>
-        
-      </header>
-    
     <div class="article-entry" itemprop="articleBody">
       
-        <p>本文章来源于<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1yE411Z7AP">B站黑马程序员 JVM 课程</a>。</p>
+        <p>title: JVM<br>date: 2021-07-12 19:14:50<br>tags: </p>
+<ul>
+<li>JAVA</li>
+</ul>
+<p>本文章来源于<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1yE411Z7AP">B站黑马程序员 JVM 课程</a>。</p>
 <span id="more"></span>
 
 <h2 id="内存结构"><a href="#内存结构" class="headerlink" title="内存结构"></a>内存结构</h2><h3 id="方法区"><a href="#方法区" class="headerlink" title="方法区"></a>方法区</h3><h4 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h4><p>线程<strong>共享</strong>，存储与类结构相关的信息，包含<strong>运行时常量池</strong>，类的<strong>成员变量</strong>，<strong>方法数据</strong>以及成员方法和构造器 方法代码。 </p>
@@ -274,16 +263,17 @@
 <p>但是二进制字节码是我们看不懂的，可以通过反编译指令<code>javap -v 类的绝对路径</code>。</p>
 <ul>
 <li><p>第一部分是<strong>类的基本信息</strong>。可以看到类文件、修改时间、签名、版本、自身类this_class和父类super_class、还有接口信息interfaces</p>
-<p><img src="/.io//saltfish\JVM\笔记\pics\javap-v1.PNG" alt="javap-v1"></p>
+<p><img src="https://img-blog.csdnimg.cn/20210713181757173.PNG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center" alt="javap-v1"></p>
 </li>
 <li><p>第二部分是<strong>常量池</strong></p>
 <p>#2 Fieldref 指引用的成员变量</p>
-<p><img src="/.io//saltfish\JVM\笔记\pics\javap-v2.PNG" alt="javap-v2"></p>
-<img src="/.io//saltfish\JVM\笔记\pics\javap-v3.PNG" alt="javap-v3" style="zoom:67%;"></li>
+<p><img src="https://img-blog.csdnimg.cn/20210713181800429.PNG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center" alt="javap-v2"></p>
+<p><img src="https://img-blog.csdnimg.cn/2021071318174618.PNG#pic_center"></p>
+</li>
 <li><p>第三部分是<strong>类的方法定义</strong>。</p>
 <p>第一行<code>public Main();</code>是编译器自动产生的无参构造方法</p>
 <p>Main方法后面的Code部分就对应着<strong>虚拟机指令</strong>。<code>getstatic</code>就是获取静态变量，<code>ldc</code>找到引用地址加载参数，<code>invokevirtual</code>执行区方法调用。#2、#3、#4对应着常量池里的位置</p>
-<p><img src="/.io//saltfish\JVM\笔记\pics\javap-v4.PNG" alt="javap-v4"></p>
+<p><img src="https://img-blog.csdnimg.cn/20210713181759133.PNG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center" alt="javap-v4"></p>
 </li>
 </ul>
 <p>常量池就是一张表，虚拟机指令根据这张常量表找到要执行的<strong>类名</strong>、<strong>方法名</strong>、<strong>参数类型</strong>、<strong>字面量</strong>等信息。</p>
@@ -318,12 +308,12 @@ public class Demo1_22 &#123;
 &#125;
 </code></pre>
 <p>反编译以后看它的虚拟机指令部分</p>
-<p><img src="/.io//saltfish\JVM\笔记\pics\demo1_22_1.PNG"></p>
+<p><img src="https://img-blog.csdnimg.cn/2021071318175916.PNG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center"></p>
 <ul>
 <li><p><code>ldc #2</code>把a符号变成字符串对象”a”，在StringTable中查找是否有这个对象，如果没有就会把它放入StringTable中。串池中的字符串对象都是唯一的。</p>
 </li>
 <li><p><code>2: astore_1</code>是把加载好的字符串对象<code>a</code>存入Slot=1的局部变量。局部变量表如下：</p>
-<p><img src="/.io//saltfish\JVM\笔记\pics\demo1_22_2.PNG"></p>
+<p><img src="https://img-blog.csdnimg.cn/20210713181745855.PNG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center"></p>
 </li>
 <li><p><code>new #5</code>创建一个StringBuilder对象</p>
 </li>
@@ -392,7 +382,7 @@ public class Demo1_22 &#123;
 &#125;
 </code></pre>
 <p><strong>1.8 和 1.6 的位置对比</strong></p>
-<p><img src="/.io//saltfish\JVM\笔记\pics\jvm1.8&1.6.PNG" alt="jvm1.8&amp;1.6"></p>
+<p><img src="https://img-blog.csdnimg.cn/20210713182558314.PNG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center" alt="jvm1.8&amp;1.6"></p>
 <p>永久代的内存效率比较低，只有在full GC的时候（老年代）才会触发垃圾回收。堆里的年轻代就会触发垃圾回收。</p>
 <p><strong>StringTable垃圾回收</strong></p>
 <p>StringTable底层实现是哈希表（数组加链表的结构，数组的个数叫做桶）来做的。</p>
@@ -419,14 +409,14 @@ public class Demo1_7 &#123;
 </code></pre>
 <ul>
 <li><p>打印的堆信息</p>
-<p><img src="/.io//saltfish\JVM\笔记\pics\6.29heap.PNG" alt="6.29heap"></p>
+<p><img src="https://img-blog.csdnimg.cn/20210713181753748.PNG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center" alt="6.29heap"></p>
 </li>
 <li><p>打印出的变量表</p>
-<p><img src="/.io//saltfish\JVM\笔记\pics\6.29symboltable.PNG" alt="6.29symboltable"></p>
+<p><img src="https://img-blog.csdnimg.cn/20210713181756179.PNG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center" alt="6.29symboltable"></p>
 </li>
 <li><p>打印出的串池统计信息：buckets是桶，entries是键值对，literals是字符串常量。</p>
 <p>现在还没有做什么就已经有很多字符串常量了，这是因为Java的各种类名、方法名都是以字符串常量形式存储的。</p>
-<p><img src="/.io//saltfish\JVM\笔记\pics\6.29stringtablestatistics.PNG" alt="6.29stringtablestatistics"></p>
+<p><img src="https://img-blog.csdnimg.cn/20210713181745553.PNG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center" alt="6.29stringtablestatistics"></p>
 </li>
 </ul>
 <p>如果现在把一百个字符串加入串池。</p>
@@ -448,10 +438,10 @@ public class Demo1_7 &#123;
 &#125;
 </code></pre>
 <p>打印出串池的信息：</p>
-<p><img src="/.io//saltfish\JVM\笔记\pics\6.29stringtablestatistics1.PNG"></p>
+<p><img src="https://img-blog.csdnimg.cn/20210713181756124.PNG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center"></p>
 <p>可以看到明显的literals的数量增加了一百多个。</p>
 <p>如果要存入十万个呢？打印出结果：</p>
-<p><img src="/.io//saltfish\JVM\笔记\pics\6.29stringtablestatistics2.PNG"></p>
+<p><img src="https://img-blog.csdnimg.cn/20210713181756177.PNG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center"></p>
 <p>可以看到数量并没有像我们想象的增加到十万多个，这是因为触发了垃圾回收机制。</p>
 <p><strong>StringTable性能调优</strong></p>
 <ul>
@@ -470,10 +460,10 @@ public class Demo1_7 &#123;
 <p><strong>Java本身并不具有读写的能力</strong>，它要进行磁盘读写必须要调用操作系统提供的函数，即本地方法，从用户态切入到内核态。</p>
 <p>切换到内核态后，磁盘文件在操作系统中划出一块缓冲区，磁盘文件的内容先读一部分入到缓存区中，而在系统内存中Java代码是不可以运行的，所以要把系统缓存区中的内容读到java缓冲区中。于是就又从内核态进入到了用户态。</p>
 <p>这样做的结果就是，数据做了<strong>两次拷贝缓存</strong>。</p>
-<p><img src="/.io//saltfish\JVM\笔记\pics\6.29directmemory1.PNG"></p>
+<p><img src="https://img-blog.csdnimg.cn/20210713182953580.PNG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center"></p>
 <p><strong>使用直接内存Direct Memory</strong></p>
 <p>依然是要在<strong>操作系统中划出一块缓冲区</strong>，但不同的是<strong>Java代码可以直接访问</strong>。无需将代码从系统内存复制到Java堆内存，从而提高了效率</p>
-<p><img src="/.io//saltfish\JVM\笔记\pics\6.29directmemory2.PNG" alt="6.29directmemory2"></p>
+<p><img src="https://img-blog.csdnimg.cn/20210713182953712.PNG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center" alt="6.29directmemory2"></p>
 <h4 id="内存溢出"><a href="#内存溢出" class="headerlink" title="内存溢出"></a>内存溢出</h4><p>会报出错误：java.lang.OutOfMemoryError: Direct buffer memory</p>
 <h4 id="释放原理"><a href="#释放原理" class="headerlink" title="释放原理"></a>释放原理</h4><p>直接内存的回收不是通过JVM的垃圾回收来释放的，而是必须通过调用 <strong>unsafe.freeMemory 手动释放</strong>。</p>
 <ul>
@@ -570,7 +560,7 @@ unsafe.setMemory(base, _1Gb, (byte) 0);
 <li><p>本地方法栈中JNI（即一般说的<strong>Native方法</strong>）引用的对象</p>
 </li>
 </ul>
-<h4 id="五种引用"><a href="#五种引用" class="headerlink" title="五种引用"></a>五种引用</h4><p><img src="/.io//saltfish\JVM\笔记\pics\7.1fivereferences.PNG" alt="7.1fivereferences"></p>
+<h4 id="五种引用"><a href="#五种引用" class="headerlink" title="五种引用"></a>五种引用</h4><p><img src="https://img-blog.csdnimg.cn/20210713183108332.PNG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center" alt="7.1fivereferences"></p>
 <p><em>上图实线箭头的就是强引用</em>。</p>
 <p>可以<a target="_blank" rel="noopener" href="https://www.cnblogs.com/liyutian/p/9690974.html">参考</a></p>
 <h5 id="强引用"><a href="#强引用" class="headerlink" title="强引用"></a><strong>强引用</strong></h5><p>具有<code>Object object = new Object()</code>引用关系的叫做强引用。只要被GCRoot强引用了，就不会被垃圾回收。</p>
@@ -777,9 +767,9 @@ null null null null null null null null null [B@548c4f57
 <li><p>老年代存储长时间存活的对象。采用<strong>标记清除或标记整理</strong>算法</p>
 </li>
 </ul>
-<h4 id="相关VM参数"><a href="#相关VM参数" class="headerlink" title="相关VM参数"></a>相关VM参数</h4><p><img src="/.io//saltfish\JVM\笔记\pics\vm.PNG"></p>
+<h4 id="相关VM参数"><a href="#相关VM参数" class="headerlink" title="相关VM参数"></a>相关VM参数</h4><p><img src="https://img-blog.csdnimg.cn/20210713183308490.PNG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center"></p>
 <h4 id="GC分析"><a href="#GC分析" class="headerlink" title="GC分析"></a>GC分析</h4><p>设置初始堆大小20M，新生代10M，打印信息：</p>
-<p><img src="/.io//saltfish\JVM\笔记\pics\72vm1.PNG"></p>
+<p><img src="https://img-blog.csdnimg.cn/20210713181757782.PNG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center"></p>
 <p>可以看到图中新生代显示共有9216K，这是因为幸存区的To区域是不可用的，没有把它算进去。即使我们的main()方法没做任何操作也会有Eden区的使用，这是因为Java代码运行本身就需要内存。老年代（tenured generation）共有10M。还有元空间（Metaspace）的信息。</p>
 <ul>
 <li><p>添加7MB的对象。</p>
@@ -793,7 +783,7 @@ null null null null null null null null null [B@548c4f57
 &#125;
 </code></pre>
 <p>打印出信息如下：</p>
-<p><img src="/.io//saltfish\JVM\笔记\pics\72vm2.PNG"></p>
+<p><img src="https://img-blog.csdnimg.cn/20210713181758929.PNG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center"></p>
 <ul>
 <li>Allocation Failure：由于之前伊甸园中已经使用了一些，剩余内存不足以存放7MB，所以触发了一次minor gc。新生代的内存占用变化1576K-&gt;891K，清除掉了一些内存。</li>
 <li>将伊甸园中的存活部分转移到To区，所以看到Eden：1576K -&gt; 0K。</li>
@@ -815,7 +805,7 @@ null null null null null null null null null [B@548c4f57
 &#125;
 </code></pre>
 <p>打印出gc信息：</p>
-<p><img src="/.io//saltfish\JVM\笔记\pics\72vm3.PNG"></p>
+<p><img src="https://img-blog.csdnimg.cn/20210713181800788.PNG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center"></p>
 <ul>
 <li>触发了两次垃圾回收。第一次过程上面分析过了。</li>
 <li>第二次加入1MB时发现Eden区域不够放，于是又一次垃圾回收。新生代总体使用情况：8392K(9216K)-&gt;21K(9216K)</li>
@@ -833,7 +823,7 @@ null null null null null null null null null [B@548c4f57
 &#125;
 </code></pre>
 <p>打印出gc信息：</p>
-<p><img src="/.io//saltfish\JVM\笔记\pics\72vm4.PNG"></p>
+<p><img src="https://img-blog.csdnimg.cn/20210713181753722.PNG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center"></p>
 <p>可以看到并没有发生垃圾回收，而是直接把8MB的大对象加入到了老年代中。</p>
 </li>
 </ul>
@@ -952,9 +942,9 @@ null null null null null null null null null [B@548c4f57
 <img src="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151229.png" style="zoom: 67%;"></li>
 <li><p>对象消失问题</p>
 <p>一个正在处理中的对象的一个引用被切断，同时该被切断的对象与已经扫描过的黑色对象建立了引用关系。</p>
-<img src="/.io//saltfish\JVM\笔记\pics\7.4original.PNG" style="zoom:50%;">
+<img src="https://img-blog.csdnimg.cn/20210713181758915.PNG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center" style="zoom:50%;">
 
-<img src="/.io//saltfish\JVM\笔记\pics\7.4new.PNG" style="zoom:50%;"></li>
+<img src="https://img-blog.csdnimg.cn/20210713181758874.PNG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center" style="zoom:50%;"></li>
 <li><p>写屏障</p>
 <ul>
 <li><strong>增量更新</strong> Incremental Update：当黑色对象<strong>插入新的</strong>指向白色对象的引用关系时，把黑色对象<strong>重新标记为灰色对象</strong>。在本次并发标记阶段结束后，<strong>重新标记阶段会 STW</strong>，对这些灰色对象重新扫描。<strong>CMS</strong>基于增量更新来做并发标记。</li>
@@ -984,7 +974,7 @@ private int hash;
 <li>回收时被优先考虑</li>
 <li>G1会跟踪老年代所有incoming引用，如果老年代incoming引用为0的巨型对象就可以在 新生代垃圾回收时处理掉</li>
 </ul>
-<p><a target="_blank" rel="noopener" href="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151249.png"><img src="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151249.png" alt="img"></a></p>
+<p><img src="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151249.png"></p>
 <h5 id="JDK-9-并发标记起始时间调整"><a href="#JDK-9-并发标记起始时间调整" class="headerlink" title="JDK 9 并发标记起始时间调整"></a>JDK 9 并发标记起始时间调整</h5><p><code>-XX:InitiatingHeapOccupancyPercent</code></p>
 <p>并发标记必须在堆空间占满前完成，否则退化为 FulGC。</p>
 <ul>
@@ -1161,7 +1151,7 @@ private int hash;
 <h4 id="Field信息"><a href="#Field信息" class="headerlink" title="Field信息"></a>Field信息</h4><pre><code>0000660 29 56 00 21 00 05 00 06 00 00 00 00 00 02 00 01
 </code></pre>
 <p>本类中成员变量的数量为 00 00 （0）</p>
-<p><img src="/.io//saltfish\JVM\笔记\pics\Field信息.PNG"></p>
+<p><img src="https://img-blog.csdnimg.cn/20210713183812997.PNG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center"></p>
 <h4 id="Method信息"><a href="#Method信息" class="headerlink" title="Method信息"></a>Method信息</h4><pre><code>0000660 29 56 00 21 00 05 00 06 00 00 00 00 00 02 00 01
 </code></pre>
 <p>本类中方法的数量为 00 02 （2）</p>
@@ -1250,10 +1240,10 @@ Constant pool:
 </code></pre>
 <h5 id="常量池载入运行时常量池"><a href="#常量池载入运行时常量池" class="headerlink" title="常量池载入运行时常量池"></a>常量池载入运行时常量池</h5><p>常量池也属于方法区，只不过这里单独提出来了。</p>
 <p>当数值<strong>超过short的最大值（32767）</strong>，就会被放入常量池，否则和方法字节码放在一起。</p>
-<p><img src="/.io//saltfish\JVM\笔记\pics\图解-运行时常量池.PNG"></p>
-<h5 id="方法字节码载入方法区"><a href="#方法字节码载入方法区" class="headerlink" title="方法字节码载入方法区"></a>方法字节码载入方法区</h5><p><img src="/.io//saltfish\JVM\笔记\pics\图解-方法区.PNG"></p>
+<p><img src="https://img-blog.csdnimg.cn/20210713181804203.PNG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center"></p>
+<h5 id="方法字节码载入方法区"><a href="#方法字节码载入方法区" class="headerlink" title="方法字节码载入方法区"></a>方法字节码载入方法区</h5><p><img src="https://img-blog.csdnimg.cn/20210713183308458.PNG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center"></p>
 <h5 id="main线程开始运行，分配栈帧内存"><a href="#main线程开始运行，分配栈帧内存" class="headerlink" title="main线程开始运行，分配栈帧内存"></a>main线程开始运行，分配栈帧内存</h5><p>（stack=2，locals=4） 对应操作数栈有2个空间（每个空间4个字节），局部变量表中有4个槽位</p>
-<p><img src="/.io//saltfish\JVM\笔记\pics\图解-main.PNG"></p>
+<p><img src="https://img-blog.csdnimg.cn/20210713184123859.PNG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center"></p>
 <h5 id="执行引擎开始执行字节码"><a href="#执行引擎开始执行字节码" class="headerlink" title="执行引擎开始执行字节码"></a>执行引擎开始执行字节码</h5><p><strong>bipush 10</strong></p>
 <ul>
 <li>将一个 byte 压入操作数栈（其长度会补齐 4 个字节），类似的指令还有：<ul>
@@ -1264,12 +1254,12 @@ Constant pool:
 </ul>
 </li>
 </ul>
-<p><a target="_blank" rel="noopener" href="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151336.png"><img src="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151336.png" alt="img"></a></p>
+<p><img src="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151336.png" alt="img"></p>
 <p><strong>istore 1</strong></p>
 <p>将操作数栈栈顶元素弹出，放入局部变量表的slot 1中</p>
 <p>对应代码中的<code>a = 10Copy</code></p>
-<p><a target="_blank" rel="noopener" href="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151346.png"><img src="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151346.png" alt="img"></a></p>
-<p><a target="_blank" rel="noopener" href="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151412.png"><img src="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151412.png" alt="img"></a></p>
+<p><img src="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151346.png" alt="img"></p>
+<p><img src="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151412.png" alt="img"></p>
 <p><strong>ldc #3</strong></p>
 <ul>
 <li><p>读取运行时常量池中#3，即32768(超过short最大值范围的数会被放到运行时常量池中)，将其加载到操作数栈中</p>
@@ -1277,11 +1267,11 @@ Constant pool:
 <li><p>注意： Short.MAX_VALUE 是 32767，所以 32768 = Short.MAX_VALUE + 1 实际是在编译期间计算好的，<strong>编译期优化</strong></p>
 </li>
 </ul>
-<p><a target="_blank" rel="noopener" href="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151421.png"><img src="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151421.png" alt="img"></a></p>
+<p><img src="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151421.png" alt="img"></p>
 <p><strong>istore 2</strong></p>
 <p>将操作数栈中的元素弹出，放到局部变量表的2号位置</p>
-<p><a target="_blank" rel="noopener" href="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151432.png"><img src="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151432.png" alt="img"></a></p>
-<p><a target="_blank" rel="noopener" href="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151441.png"><img src="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151441.png" alt="img"></a></p>
+<p><img src="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151432.png" alt="img"></p>
+<p><img src="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151441.png" alt="img"></p>
 <p><strong>iload1 iload2</strong></p>
 <ul>
 <li><p>将局部变量表中1号位置和2号位置的元素放入操作数栈中</p>
@@ -1289,16 +1279,16 @@ Constant pool:
 <li><p>因为<strong>只能在操作数栈中执行运算操作</strong></p>
 </li>
 </ul>
-<p><a target="_blank" rel="noopener" href="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151450.png"><img src="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151450.png" alt="img"></a></p>
-<p><a target="_blank" rel="noopener" href="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151459.png"><img src="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151459.png" alt="img"></a></p>
+<p><img src="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151450.png" alt="img"></p>
+<p><img src="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151459.png" alt="img"></p>
 <p><strong>iadd</strong></p>
 <p>将操作数栈中的两个元素<strong>弹出栈</strong>并相加，结果在压入操作数栈中</p>
-<p><a target="_blank" rel="noopener" href="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151508.png"><img src="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151508.png" alt="img"></a></p>
-<p><a target="_blank" rel="noopener" href="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151523.png"><img src="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151523.png" alt="img"></a></p>
+<p><img src="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151508.png" alt="img"></p>
+<p><img src="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151523.png" alt="img"></p>
 <p><strong>istore 3</strong></p>
 <p>将操作数栈中的元素弹出，放入局部变量表的3号位置</p>
-<p><a target="_blank" rel="noopener" href="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151547.png"><img src="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151547.png" alt="img"></a></p>
-<p><a target="_blank" rel="noopener" href="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151555.png"><img src="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151555.png" alt="img"></a></p>
+<p><img src="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151547.png" alt="img"></p>
+<p><img src="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151555.png" alt="img"></p>
 <p><strong>getstatic #4</strong></p>
 <ul>
 <li><p>加载静态成员变量：在运行时常量池中找到#4，发现是一个对象</p>
@@ -1306,11 +1296,11 @@ Constant pool:
 <li><p>在堆内存中找到该对象，并将其<strong>引用</strong>放入操作数栈中</p>
 </li>
 </ul>
-<p><a target="_blank" rel="noopener" href="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151605.png"><img src="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151605.png" alt="img"></a></p>
-<p><a target="_blank" rel="noopener" href="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151613.png"><img src="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151613.png" alt="img"></a></p>
+<p><img src="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151605.png" alt="img"></p>
+<p><img src="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151613.png" alt="img"></p>
 <p><strong>iload 3</strong></p>
 <p>将局部变量表中3号位置的元素压入操作数栈中</p>
-<p><a target="_blank" rel="noopener" href="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151624.png"><img src="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151624.png" alt="img"></a></p>
+<p><img src="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151624.png" alt="img"></p>
 <p><strong>invokevirtual 5</strong></p>
 <ul>
 <li><p>找到常量池 #5 项，定位到方法区 java/io/PrintStream.println:(I)V 方法</p>
@@ -1320,14 +1310,14 @@ Constant pool:
 <li><p>传递参数，执行新栈帧中的字节码</p>
 </li>
 </ul>
-<p><a target="_blank" rel="noopener" href="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151632.png"><img src="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151632.png" alt="img"></a></p>
+<p><img src="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151632.png" alt="img"></p>
 <ul>
 <li><p>执行完毕，弹出栈帧</p>
 </li>
 <li><p>清除 main 操作数栈内容</p>
 </li>
 </ul>
-<p><a target="_blank" rel="noopener" href="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151640.png"><img src="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151640.png" alt="img"></a></p>
+<p><img src="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151640.png" alt="img"></p>
 <p><strong>return</strong><br>完成 main 方法调用，弹出 main 栈帧，程序结束</p>
 <h4 id="通过字节码指令来分析问题"><a href="#通过字节码指令来分析问题" class="headerlink" title="通过字节码指令来分析问题"></a>通过字节码指令来分析问题</h4><p>代码：</p>
 <pre><code class="java">public class Demo3_2 &#123; 
@@ -1343,13 +1333,13 @@ Constant pool:
 <li>执行自增的是<code>iinc</code>指令，直接在局部变量 slot 上进行运算，不是利用操作数栈执行的</li>
 <li>a++ 和 ++a 的区别就在于是先执行<code>iload</code>还是先执行<code>iinc</code></li>
 </ul>
-<p><img src="/.io//saltfish\JVM\笔记\pics\图解-a++.PNG"></p>
-<p><img src="/.io//saltfish\JVM\笔记\pics\图解-a++(2).PNG"></p>
+<p><img src="https://img-blog.csdnimg.cn/20210713181759356.PNG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center"></p>
+<p><img src="https://img-blog.csdnimg.cn/20210713181759251.PNG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center"></p>
 <p>执行++操作，对槽进行。</p>
-<p><img src="/.io//saltfish\JVM\笔记\pics\图解-a++(1).PNG"></p>
+<p><img src="https://img-blog.csdnimg.cn/20210713183307473.PNG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center"></p>
 <p>执行++操作，对槽进行。</p>
-<p><img src="/.io//saltfish\JVM\笔记\pics\图解-a++(3).PNG"></p>
-<p><img src="/.io//saltfish\JVM\笔记\pics\图解-a++(4).PNG"></p>
+<p><img src="https://img-blog.csdnimg.cn/202107131833083.PNG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center"></p>
+<p><img src="https://img-blog.csdnimg.cn/2021071318330850.PNG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center"></p>
 <h4 id="循环控制指令"><a href="#循环控制指令" class="headerlink" title="循环控制指令"></a>循环控制指令</h4><p>代码</p>
 <pre><code class="java">public class Demo2 &#123;
     public static void main(String[] args) &#123;
@@ -1860,7 +1850,7 @@ Constant pool:
 </code></pre>
 <p>泛型擦除是擦除<strong>在字节码中的方法部分</strong>的泛型信息，但在 <strong>LocalVariableTypeTable</strong> 是保留了的。</p>
 <p>反射是只能用于得到方法参数和返回值上的信息，而对于上面代码中的泛型是无法得到的。</p>
-<p><img src="/.io//saltfish\JVM\笔记\pics\反射.PNG"></p>
+<p><img src="https://img-blog.csdnimg.cn/20210713183310548.PNG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center"></p>
 <h4 id="可变参数"><a href="#可变参数" class="headerlink" title="可变参数"></a>可变参数</h4><p>在 JDK 5 之后加入的特性。</p>
 <pre><code class="java">public class Demo4 &#123;
    public static void foo(String... args) &#123;
@@ -2448,17 +2438,6 @@ class E &#123;
     <div class="article-info article-info-index">
       
       
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">JAVA</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
       
 
       
@@ -2532,11 +2511,6 @@ class E &#123;
       </div>
     </a>
   
-  
-    <a href="/2021/07/10/testpicture/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">testpicture</div>
-      <i class="icon-circle-right"></i>
-    </a>
   
 </nav>
 
