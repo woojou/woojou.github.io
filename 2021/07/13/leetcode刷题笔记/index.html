@@ -6,90 +6,22 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://woojou.github.io">
-  <title>JVM | woojou&#39;s blog</title>
+  <title>leetcode刷题笔记 | woojou&#39;s blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="本文章来源于B站黑马JVM课程。">
+  <meta name="description" content="本笔记里所有题目来源于力扣网站，使用语言为 Java。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="JVM">
-<meta property="og:url" content="http://woojou.github.io/2021/07/12/JVM/index.html">
+<meta property="og:title" content="leetcode刷题笔记">
+<meta property="og:url" content="http://woojou.github.io/2021/07/13/leetcode%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B0/index.html">
 <meta property="og:site_name" content="woojou&#39;s blog">
-<meta property="og:description" content="本文章来源于B站黑马JVM课程。">
+<meta property="og:description" content="本笔记里所有题目来源于力扣网站，使用语言为 Java。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608150547.png">
-<meta property="og:image" content="http://woojou.github.io/.io//saltfish/JVM/笔记/pics/javap-v1.PNG">
-<meta property="og:image" content="http://woojou.github.io/.io//saltfish/JVM/笔记/pics/javap-v2.PNG">
-<meta property="og:image" content="http://woojou.github.io/.io//saltfish/JVM/笔记/pics/javap-v3.PNG">
-<meta property="og:image" content="http://woojou.github.io/.io//saltfish/JVM/笔记/pics/javap-v4.PNG">
-<meta property="og:image" content="http://woojou.github.io/.io//saltfish/JVM/笔记/pics/demo1_22_1.PNG">
-<meta property="og:image" content="http://woojou.github.io/.io//saltfish/JVM/笔记/pics/demo1_22_2.PNG">
-<meta property="og:image" content="http://woojou.github.io/.io//saltfish/JVM/笔记/pics/jvm1.8&1.6.PNG">
-<meta property="og:image" content="http://woojou.github.io/.io//saltfish/JVM/笔记/pics/6.29heap.PNG">
-<meta property="og:image" content="http://woojou.github.io/.io//saltfish/JVM/笔记/pics/6.29symboltable.PNG">
-<meta property="og:image" content="http://woojou.github.io/.io//saltfish/JVM/笔记/pics/6.29stringtablestatistics.PNG">
-<meta property="og:image" content="http://woojou.github.io/.io//saltfish/JVM/笔记/pics/6.29stringtablestatistics1.PNG">
-<meta property="og:image" content="http://woojou.github.io/.io//saltfish/JVM/笔记/pics/6.29stringtablestatistics2.PNG">
-<meta property="og:image" content="http://woojou.github.io/.io//saltfish/JVM/笔记/pics/6.29directmemory1.PNG">
-<meta property="og:image" content="http://woojou.github.io/.io//saltfish/JVM/笔记/pics/6.29directmemory2.PNG">
-<meta property="og:image" content="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608150750.png">
-<meta property="og:image" content="http://woojou.github.io/.io//saltfish/JVM/笔记/pics/7.1fivereferences.PNG">
-<meta property="og:image" content="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608150813.png">
-<meta property="og:image" content="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608150827.png">
-<meta property="og:image" content="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608150842.png">
-<meta property="og:image" content="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608150931.png">
-<meta property="og:image" content="http://woojou.github.io/.io//saltfish/JVM/笔记/pics/vm.PNG">
-<meta property="og:image" content="http://woojou.github.io/.io//saltfish/JVM/笔记/pics/72vm1.PNG">
-<meta property="og:image" content="http://woojou.github.io/.io//saltfish/JVM/笔记/pics/72vm2.PNG">
-<meta property="og:image" content="http://woojou.github.io/.io//saltfish/JVM/笔记/pics/72vm3.PNG">
-<meta property="og:image" content="http://woojou.github.io/.io//saltfish/JVM/笔记/pics/72vm4.PNG">
-<meta property="og:image" content="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151027.png">
-<meta property="og:image" content="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151039.png">
-<meta property="og:image" content="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151052.png">
-<meta property="og:image" content="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151109.png">
-<meta property="og:image" content="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151129.png">
-<meta property="og:image" content="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151140.png">
-<meta property="og:image" content="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151150.png">
-<meta property="og:image" content="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151201.png">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/20191114203926403.jpeg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM4NTU3MTk0,size_16,color_FFFFFF,t_70">
-<meta property="og:image" content="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151229.png">
-<meta property="og:image" content="http://woojou.github.io/.io//saltfish/JVM/笔记/pics/7.4original.PNG">
-<meta property="og:image" content="http://woojou.github.io/.io//saltfish/JVM/笔记/pics/7.4new.PNG">
-<meta property="og:image" content="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151249.png">
-<meta property="og:image" content="https://pic1.zhimg.com/v2-d627f33b6e850bc2efe0fac63c241280_r.jpg">
-<meta property="og:image" content="https://img-blog.csdn.net/20180803172812278?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3E5ODIxNTE3NTY=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
-<meta property="og:image" content="https://pic2.zhimg.com/80/v2-285f678a8c1b330ab5f5d8a6c4ead635_720w.jpg">
-<meta property="og:image" content="http://woojou.github.io/.io//saltfish/JVM/笔记/pics/Field信息.PNG">
-<meta property="og:image" content="http://woojou.github.io/.io//saltfish/JVM/笔记/pics/图解-运行时常量池.PNG">
-<meta property="og:image" content="http://woojou.github.io/.io//saltfish/JVM/笔记/pics/图解-方法区.PNG">
-<meta property="og:image" content="http://woojou.github.io/.io//saltfish/JVM/笔记/pics/图解-main.PNG">
-<meta property="og:image" content="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151336.png">
-<meta property="og:image" content="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151346.png">
-<meta property="og:image" content="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151412.png">
-<meta property="og:image" content="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151421.png">
-<meta property="og:image" content="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151432.png">
-<meta property="og:image" content="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151441.png">
-<meta property="og:image" content="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151450.png">
-<meta property="og:image" content="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151459.png">
-<meta property="og:image" content="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151508.png">
-<meta property="og:image" content="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151523.png">
-<meta property="og:image" content="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151547.png">
-<meta property="og:image" content="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151555.png">
-<meta property="og:image" content="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151605.png">
-<meta property="og:image" content="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151613.png">
-<meta property="og:image" content="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151624.png">
-<meta property="og:image" content="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151632.png">
-<meta property="og:image" content="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151640.png">
-<meta property="og:image" content="http://woojou.github.io/.io//saltfish/JVM/笔记/pics/图解-a++.PNG">
-<meta property="og:image" content="http://woojou.github.io/.io//saltfish/JVM/笔记/pics/图解-a++(2).PNG">
-<meta property="og:image" content="http://woojou.github.io/.io//saltfish/JVM/笔记/pics/图解-a++(1).PNG">
-<meta property="og:image" content="http://woojou.github.io/.io//saltfish/JVM/笔记/pics/图解-a++(3).PNG">
-<meta property="og:image" content="http://woojou.github.io/.io//saltfish/JVM/笔记/pics/图解-a++(4).PNG">
-<meta property="og:image" content="http://woojou.github.io/.io//saltfish/JVM/笔记/pics/反射.PNG">
-<meta property="article:published_time" content="2021-07-12T11:14:50.000Z">
-<meta property="article:modified_time" content="2021-07-12T11:58:51.552Z">
+<meta property="og:image" content="http://windliang.oss-cn-beijing.aliyuncs.com/6_3.jpg">
+<meta property="article:published_time" content="2021-07-13T00:30:29.000Z">
+<meta property="article:modified_time" content="2021-07-13T00:36:50.381Z">
 <meta property="article:author" content="Woojou">
 <meta property="article:tag" content="JAVA">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608150547.png">
+<meta name="twitter:image" content="http://windliang.oss-cn-beijing.aliyuncs.com/6_3.jpg">
   
     <link rel="alternative" href="/atom.xml" title="woojou&#39;s blog" type="application/atom+xml">
   
@@ -229,1863 +161,1005 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-JVM" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-leetcode刷题笔记" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      JVM
+      leetcode刷题笔记
     </h1>
   
 
         
-        <a href="/2021/07/12/JVM/" class="archive-article-date">
-  	<time datetime="2021-07-12T11:14:50.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-07-12</time>
+        <a href="/2021/07/13/leetcode%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B0/" class="archive-article-date">
+  	<time datetime="2021-07-13T00:30:29.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-07-13</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>本文章来源于B站黑马JVM课程。</p>
+        <p>本笔记里所有题目来源于力扣网站，使用语言为 Java。</p>
 <span id="more"></span>
 
-<h2 id="内存结构"><a href="#内存结构" class="headerlink" title="内存结构"></a>内存结构</h2><h3 id="方法区"><a href="#方法区" class="headerlink" title="方法区"></a>方法区</h3><h4 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h4><p>线程<strong>共享</strong>，存储与类结构相关的信息，包含<strong>运行时常量池</strong>，类的<strong>成员变量</strong>，<strong>方法数据</strong>以及成员方法和构造器 方法代码。 </p>
-<p>在虚拟机被启动时创建，逻辑上是堆的组成部分，这只是个概念，不同厂商实现不同。HotSpot  JDK1.8之前使用的都是永久代，即方法区的管理方式和堆一样（有默认的上限大小），都是在 JVM 的内存结构中。后来使用的是<strong>元空间</strong>，使用的是<strong>操作系统的内存</strong>（即本地内存，默认没有内存上限 大小，只要本地有内存空间），而不是堆内存。 方法区内存溢出错误会报错OutofMemoryError。</p>
-<p><img src="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608150547.png"></p>
-<h4 id="方法区溢出"><a href="#方法区溢出" class="headerlink" title="方法区溢出"></a>方法区溢出</h4><ul>
-<li><p>1.8以前会导致<strong>永久代</strong>内存溢出</p>
-<p>用 -XX:MaxPermSize 来设置方法区的大小 </p>
-<p>溢出报错：java.lang.OutOfMemoryError: <strong>PermGen Space</strong></p>
-</li>
-<li><p>1.8以后会导致<strong>元空间</strong>内存溢出</p>
-<p>演示元空间内存溢出 java.lang.OutOfMemoryError: <strong>Metaspace</strong> </p>
-<p>-XX:MaxMetaspaceSize=8m</p>
-</li>
-</ul>
-<h4 id="常量池"><a href="#常量池" class="headerlink" title="常量池"></a>常量池</h4><p>二进制字节码的组成：类基本信息、常量池、类方法定义（包含了虚拟机指令）</p>
-<p>但是二进制字节码是我们看不懂的，可以通过反编译指令<code>javap -v 类的绝对路径</code>。</p>
-<ul>
-<li><p>第一部分是<strong>类的基本信息</strong>。可以看到类文件、修改时间、签名、版本、自身类this_class和父类super_class、还有接口信息interfaces</p>
-<p><img src="/.io//saltfish\JVM\笔记\pics\javap-v1.PNG" alt="javap-v1"></p>
-</li>
-<li><p>第二部分是<strong>常量池</strong></p>
-<p>#2 Fieldref 指引用的成员变量</p>
-<p><img src="/.io//saltfish\JVM\笔记\pics\javap-v2.PNG" alt="javap-v2"></p>
-<img src="/.io//saltfish\JVM\笔记\pics\javap-v3.PNG" alt="javap-v3" style="zoom:67%;"></li>
-<li><p>第三部分是<strong>类的方法定义</strong>。</p>
-<p>第一行<code>public Main();</code>是编译器自动产生的无参构造方法</p>
-<p>Main方法后面的Code部分就对应着<strong>虚拟机指令</strong>。<code>getstatic</code>就是获取静态变量，<code>ldc</code>找到引用地址加载参数，<code>invokevirtual</code>执行区方法调用。#2、#3、#4对应着常量池里的位置</p>
-<p><img src="/.io//saltfish\JVM\笔记\pics\javap-v4.PNG" alt="javap-v4"></p>
-</li>
-</ul>
-<p>常量池就是一张表，虚拟机指令根据这张常量表找到要执行的<strong>类名</strong>、<strong>方法名</strong>、<strong>参数类型</strong>、<strong>字面量</strong>等信息。</p>
-<h4 id="运行常量池"><a href="#运行常量池" class="headerlink" title="运行常量池"></a>运行常量池</h4><p>常量池是*.class文件中的，当该<strong>类被加载</strong>，它的常量池信息就会被放入运行时常量池，并把里面的符号地址（#1、#2…）变为真实的地址。</p>
-<h4 id="StringTable"><a href="#StringTable" class="headerlink" title="StringTable"></a>StringTable</h4><p>也叫串池，是<strong>运行时常量池的一部分</strong>。在jdk1.8中是<strong>在堆里</strong>的。</p>
-<p><strong>特征</strong></p>
-<ul>
-<li>常量池中的字符串仅是符号，只有<strong>在被用到时才会转化为对象</strong></li>
-<li>利用串池的机制，来避免重复创建字符串对象</li>
-<li>字符串 <strong>变 量</strong> 拼接的原理是<strong>StringBuilder</strong></li>
-<li>字符串 <strong>常 量 <strong>拼接的原理是</strong>编译期优化</strong></li>
-<li>可以使用<strong>intern方法</strong>，主动将串池中还没有的字符串对象放入串池中</li>
-<li><strong>注意</strong>：无论是串池还是堆里面的字符串，都是对象</li>
-</ul>
-<p>看一个例子：</p>
-<pre><code class="java">// StringTable [ &quot;a&quot;, &quot;b&quot; ,&quot;ab&quot; ]  hashtable 结构，不能扩容
-public class Demo1_22 &#123;
-    // 常量池中的信息，都会被加载到运行时常量池中， 这时 a b ab 都是常量池中的符号，还没有变为 java 字符串对象
-    // ldc #2 会把 a 符号变为 &quot;a&quot; 字符串对象
-    // ldc #3 会把 b 符号变为 &quot;b&quot; 字符串对象
-    // ldc #4 会把 ab 符号变为 &quot;ab&quot; 字符串对象
-
-    public static void main(String[] args) &#123;
-        String s1 = &quot;a&quot;; // 懒惰的行为，遇到才会放入串池
-        String s2 = &quot;b&quot;;
-        String s3 = &quot;ab&quot;;
-        String s4 = s1 + s2; // new StringBuilder().append(&quot;a&quot;).append(&quot;b&quot;).toString()  new String(&quot;ab&quot;)
-        String s5 = &quot;a&quot; + &quot;b&quot;;  // javac 在编译期间的优化，结果已经在编译期确定为ab
-
-        System.out.println(s3 == s5);
+<h3 id="1-两数之和"><a href="#1-两数之和" class="headerlink" title="1. 两数之和"></a>1. 两数之和</h3><p>给定一个整数数组 nums 和一个整数目标值 target，请你在该数组中找出 和为目标值 的那 两个 整数，并返回它们的数组下标。</p>
+<p>你可以假设每种输入只会对应一个答案。但是，数组中同一个元素在答案里不能重复出现。</p>
+<p>你可以按任意顺序返回答案。</p>
+<p><strong>示例 1：</strong></p>
+<pre><code>输入：nums = [2,7,11,15], target = 9
+输出：[0,1]
+解释：因为 nums[0] + nums[1] == 9 ，返回 [0, 1] 。
+</code></pre>
+<p><strong>示例 2：</strong></p>
+<pre><code>输入：nums = [3,2,4], target = 6
+输出：[1,2]
+</code></pre>
+<p><strong>示例 3：</strong></p>
+<pre><code>输入：nums = [3,3], target = 6
+输出：[0,1]
+</code></pre>
+<p>链接：<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/two-sum">https://leetcode-cn.com/problems/two-sum</a></p>
+<h4 id="解法一：暴力"><a href="#解法一：暴力" class="headerlink" title="解法一：暴力"></a>解法一：暴力</h4><pre><code class="java">class Solution &#123;
+    public int[] twoSum(int[] nums, int target) &#123;
+        int n = nums.length;
+        for (int i = 0; i &lt; n; ++i) &#123;
+            //以i+1为起始搜索地址，避免返回结果里有重复元素
+            for (int j = i + 1; j &lt; n; ++j) &#123;
+                if (nums[i] + nums[j] == target) &#123;
+                    return new int[]&#123;i, j&#125;;
+                &#125;
+            &#125;
+        &#125;
+        return null;    
     &#125;
 &#125;
 </code></pre>
-<p>反编译以后看它的虚拟机指令部分</p>
-<p><img src="/.io//saltfish\JVM\笔记\pics\demo1_22_1.PNG"></p>
-<ul>
-<li><p><code>ldc #2</code>把a符号变成字符串对象”a”，在StringTable中查找是否有这个对象，如果没有就会把它放入StringTable中。串池中的字符串对象都是唯一的。</p>
-</li>
-<li><p><code>2: astore_1</code>是把加载好的字符串对象<code>a</code>存入Slot=1的局部变量。局部变量表如下：</p>
-<p><img src="/.io//saltfish\JVM\笔记\pics\demo1_22_2.PNG"></p>
-</li>
-<li><p><code>new #5</code>创建一个StringBuilder对象</p>
-</li>
-<li><p><code>invokevirtual #6</code>调用<init>方法即构造方法，后面的()表示无参构造</init></p>
-</li>
-<li><p><code>aload1</code>从slot=1取得变量。<code>invokevirtual #7</code>调用append方法。合在一起就是<code>append(&quot;a&quot;)</code>，后面也是同理<code>append(&quot;b&quot;)</code>。</p>
-</li>
-<li><p><code>invokevirtual #8</code>调用<code>toString()</code>方法（查看jdk源码，发现toString方法就是new了一个String），new了一个字符串对象。存放在堆中。所以s3指向常量池中StringTable里的字符串对象，而s4指向堆中的对象实例，因此<code>s3 != s4</code>。</p>
-</li>
-<li><p><code>ldc #4</code>从常量池#4位置，找到了字符串对象”ab”，然后通过<code>astore 5</code>把它存放到了slot=5。因此s5指向的就是串池中的对象，所以<code>s3 == s5</code>。这是javac的一个优化，由于”a”和”b”都是常量，所以可以认为是在编译期就能够确定的，不需要用StringBuilder来做拼接。</p>
-</li>
-</ul>
-<p><strong>jdk 1.8中运行的 intern</strong> </p>
-<p>调用字符串对象的intern方法，会将该字符串对象尝试放入到串池中</p>
-<ul>
-<li>如果串池中没有该字符串对象，则放入成功</li>
-<li>如果有该字符串对象，则放入失败</li>
-</ul>
-<p>无论放入是否成功，都会返回<strong>串池中</strong>的字符串对象</p>
-<p><strong>注意</strong>：此时如果调用intern方法成功，堆内存与串池中的字符串对象是同一个对象；如果失败，则不是同一个对象。可以看下面的例子：</p>
-<pre><code class="java">public class Demo1_23 &#123;
-    public static void main(String[] args) &#123;
-        String s = new String(&quot;a&quot;) + new String(&quot;b&quot;);
-        // 堆  new String(&quot;a&quot;)   new String(&quot;b&quot;) new String(&quot;ab&quot;) 
-        //注意因为&quot;a&quot;和&quot;b&quot;都是以常量形式出现的，所以它们会被放在串池中，由于用了new所以堆中也会有这两个对象。但是s并不会被放入串池，仍指向堆中的对象“ab”
-        //但用StringBuilder拼接创建得到的字符串对象&quot;ab&quot;是不会被放入串池中的，该对象只会存在于堆中。
-        String s2 = s.intern(); // 将这个字符串对象尝试放入串池，如果有则并不会放入，如果没有则放入串池。还会把串池中的对象返回
-
-        System.out.println( s2 == &quot;ab&quot;);//true
-        System.out.println( s == &quot;ab&quot;);//true
-        
-        String s1 = &quot;ac&quot;;
-        String s3 = new String(&quot;a&quot;) + new String(&quot;c&quot;);
-        String s4 = s3.intern();
-        //此时不会把s3对象放入串池，会直接返回串池中已有的对象
-        System.out.println( s4 == s1);//true
-        System.out.println( s3 == s1);//false
+<p>时间复杂度：两层 for 循环，O（n²）</p>
+<p>空间复杂度：O（1）</p>
+<h4 id="解法二：哈希表"><a href="#解法二：哈希表" class="headerlink" title="解法二：哈希表"></a>解法二：哈希表</h4><pre><code class="java">class Solution &#123;
+    public int[] twoSum(int[] nums, int target) &#123;
+        HashMap&lt;Integer, Integer&gt; table = new HashMap&lt;&gt;();
+        int n = nums.length;
+        for(int i = 0; i &lt; n; i++) &#123;
+            //将所有元素与其对应的位置存入哈希表
+            table.put(nums[i],i);
+        &#125;
+        for (int i = 0; i &lt; n; i++) &#123;
+            int toFind = target-nums[i];
+            //如果哈希表中有我们需要寻找的数
+            if(table.containsKey(toFind)) &#123;
+                //并且这个数并不是nums[i]本身
+                int pos = table.get(toFind);
+                if(pos != i) return new int[] &#123;i,pos&#125;;
+            &#125;
+        &#125;
+        return null;    
     &#125;
 &#125;
 </code></pre>
-<p><strong>jdk 1.6中运行的 intern</strong> </p>
-<p>调用字符串对象的intern方法，会将该字符串对象尝试放入到串池中</p>
-<ul>
-<li>如果串池中没有该字符串对象，会将该字符串对象<strong>复制</strong>一份，再放入到串池中</li>
-<li>如果有该字符串对象，则放入失败</li>
-</ul>
-<p>无论放入是否成功，都会返回<strong>串池中</strong>的字符串对象</p>
-<p><strong>注意</strong>：此时无论调用intern方法成功与否，串池中的字符串对象和堆内存中的字符串对象<strong>都不是同一个对象</strong></p>
-<pre><code class="java">public class Demo1_23 &#123;
-    public static void main(String[] args) &#123;
-        String s = new String(&quot;a&quot;) + new String(&quot;b&quot;);
-        // 堆  new String(&quot;a&quot;)   new String(&quot;b&quot;) new String(&quot;ab&quot;)
-        //注意因为&quot;a&quot;和&quot;b&quot;都是以常量形式出现的，所以它们会被放在串池中，由于用了new所以堆中也会有这两个对象。但用StringBuilder拼接创建得到的字符串对象&quot;ab&quot;是不会被放入串池中的，该对象只会存在于堆中。
-        String s2 = s.intern(); // 将这个字符串对象拷贝后放入串池，返回串池中的对象，但是s对象并没有被放入串池
-
-        System.out.println( s2 == &quot;ab&quot;);//true
-        System.out.println( s == &quot;ab&quot;);//false
-        
-        String s1 = &quot;ac&quot;;
-        String s3 = new String(&quot;a&quot;) + new String(&quot;c&quot;);
-        String s4 = s3.intern();
-        //此时不会把s3对象放入串池，会直接返回串池中已有的对象
-        System.out.println( s4 == s1);//true
-        System.out.println( s3 == s1);//false
+<p>时间复杂度：O（n），但是在leetcode上提交时，时间效率并不如暴力解法好</p>
+<p>空间复杂度：O（n）</p>
+<h4 id="解法三：哈希表优化"><a href="#解法三：哈希表优化" class="headerlink" title="解法三：哈希表优化"></a>解法三：哈希表优化</h4><p>解法二用到的是两个for循环，可以只用一个for循环解决这道题。可以避免重复元素的判断，因为是先搜索再添加，保证找到的元素一定不是自己本身。</p>
+<pre><code class="java">class Solution &#123;
+    public int[] twoSum(int[] nums, int target) &#123;
+        HashMap&lt;Integer, Integer&gt; table = new HashMap&lt;&gt;();
+        int n = nums.length;
+        for(int i = 0; i &lt; n; i++) &#123;
+            if(table.containsKey(nums[i])) &#123;
+                //如果包含当前指针所在元素，那么说明已经找到，返回结果
+                return new int[]&#123;table.get(nums[i]),i&#125;;
+            &#125;
+            //注意这里不是存放(nums[i],i)，而是(target-nums[i],i)
+            //这样等循环遍历到了数组中某个等于target-nums[i]的数时
+            //可以通过哈希表搜索直接获取到i
+            table.put(target-nums[i],i);
+        &#125;
+        return null;    
     &#125;
 &#125;
 </code></pre>
-<p><strong>1.8 和 1.6 的位置对比</strong></p>
-<p><img src="/.io//saltfish\JVM\笔记\pics\jvm1.8&1.6.PNG" alt="jvm1.8&amp;1.6"></p>
-<p>永久代的内存效率比较低，只有在full GC的时候（老年代）才会触发垃圾回收。堆里的年轻代就会触发垃圾回收。</p>
-<p><strong>StringTable垃圾回收</strong></p>
-<p>StringTable底层实现是哈希表（数组加链表的结构，数组的个数叫做桶）来做的。</p>
-<p>通过一个案例来看：</p>
+<p>时间复杂度：O（n）</p>
+<p>空间复杂度：O（n）</p>
+<h3 id="2-两数相加"><a href="#2-两数相加" class="headerlink" title="2. 两数相加"></a>2. 两数相加</h3><p>给你两个 非空 的链表，表示两个非负的整数。它们每位数字都是按照 逆序 的方式存储的，并且每个节点只能存储 一位 数字。</p>
+<p>请你将两个数相加，并以相同形式返回一个表示和的链表。</p>
+<p>你可以假设除了数字 0 之外，这两个数都不会以 0 开头。 </p>
+<p><strong>示例 1：</strong></p>
+<pre><code>输入：l1 = [2,4,3], l2 = [5,6,4]
+输出：[7,0,8]
+解释：342 + 465 = 807.
+</code></pre>
+<p><strong>示例 2：</strong></p>
+<pre><code>输入：l1 = [0], l2 = [0]
+输出：[0]
+</code></pre>
+<p><strong>示例 3：</strong></p>
+<pre><code>输入：l1 = [9,9,9,9,9,9,9], l2 = [9,9,9,9]
+输出：[8,9,9,9,0,0,0,1]
+</code></pre>
+<p>链接：<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/add-two-numbers">https://leetcode-cn.com/problems/add-two-numbers</a></p>
+<h4 id="解法一：双指针迭代"><a href="#解法一：双指针迭代" class="headerlink" title="解法一：双指针迭代"></a>解法一：双指针迭代</h4><p>思路：</p>
+<p>用两个指针指向两条链表同一位置元素，将它们相加，如有进位则将jinWei标记为1。</p>
+<p>如此遍历直到两条链表尾且jinWei为0。</p>
 <pre><code class="java">/**
- * 演示 StringTable 垃圾回收
- * -Xmx10m -XX:+PrintStringTableStatistics -XX:+PrintGCDetails -verbose:gc
- * 上面的-XX:+PrintGCDetails 已经不用了要换成下面的这个
- * -Xmx10m -XX:+PrintStringTableStatistics -Xlog:gc* -verbose:gc
+ * Definition for singly-linked list.
+ * public class ListNode &#123;
+ *     int val;
+ *     ListNode next;
+ *     ListNode() &#123;&#125;
+ *     ListNode(int val) &#123; this.val = val; &#125;
+ *     ListNode(int val, ListNode next) &#123; this.val = val; this.next = next; &#125;
+ * &#125;
  */
-public class Demo1_7 &#123;
-    public static void main(String[] args) throws InterruptedException &#123;
-        int i = 0;
-        try &#123;
-            //整个代码什么都没做，只是为了打印出信息
-        &#125; catch (Throwable e) &#123;
-            e.printStackTrace();
-        &#125; finally &#123;
-            System.out.println(i);
-        &#125;
-
-    &#125;
-&#125;
-</code></pre>
-<ul>
-<li><p>打印的堆信息</p>
-<p><img src="/.io//saltfish\JVM\笔记\pics\6.29heap.PNG" alt="6.29heap"></p>
-</li>
-<li><p>打印出的变量表</p>
-<p><img src="/.io//saltfish\JVM\笔记\pics\6.29symboltable.PNG" alt="6.29symboltable"></p>
-</li>
-<li><p>打印出的串池统计信息：buckets是桶，entries是键值对，literals是字符串常量。</p>
-<p>现在还没有做什么就已经有很多字符串常量了，这是因为Java的各种类名、方法名都是以字符串常量形式存储的。</p>
-<p><img src="/.io//saltfish\JVM\笔记\pics\6.29stringtablestatistics.PNG" alt="6.29stringtablestatistics"></p>
-</li>
-</ul>
-<p>如果现在把一百个字符串加入串池。</p>
-<pre><code class="java">public class Demo1_7 &#123;
-    public static void main(String[] args) throws InterruptedException &#123;
-        int i = 0;
-        try &#123;
-            for (int j = 0; j &lt; 100; j++) &#123; // j=100, j=10000
-                String.valueOf(j).intern();
-                i++;
+class Solution &#123;
+    public ListNode addTwoNumbers(ListNode l1, ListNode l2) &#123;
+        int jinWei = 0;
+        ListNode head = null, p = null;
+        //三个条件联合判断
+        while(l1 != null || l2 != null || jinWei != 0) &#123;
+            int num = 0;
+            if(l1 != null) &#123;
+                num += l1.val;
+                l1 = l1.next;
             &#125;
-        &#125; catch (Throwable e) &#123;
-            e.printStackTrace();
-        &#125; finally &#123;
-            System.out.println(i);
-        &#125;
-
-    &#125;
-&#125;
-</code></pre>
-<p>打印出串池的信息：</p>
-<p><img src="/.io//saltfish\JVM\笔记\pics\6.29stringtablestatistics1.PNG"></p>
-<p>可以看到明显的literals的数量增加了一百多个。</p>
-<p>如果要存入十万个呢？打印出结果：</p>
-<p><img src="/.io//saltfish\JVM\笔记\pics\6.29stringtablestatistics2.PNG"></p>
-<p>可以看到数量并没有像我们想象的增加到十万多个，这是因为触发了垃圾回收机制。</p>
-<p><strong>StringTable性能调优</strong></p>
-<ul>
-<li><p>因为实现原理是哈希表，在<strong>桶个数比较多</strong>的情况下，数据相对会比较分散，哈希碰撞几率低，查找速率会变快。</p>
-<p><code>-XX:StringTableSize=xxxx</code>可以用来规定StringTable中的桶个数。</p>
-</li>
-<li><p>考虑将字符串对象是否入池。用intern()方法。</p>
-</li>
-</ul>
-<h3 id="直接内存"><a href="#直接内存" class="headerlink" title="直接内存"></a>直接内存</h3><ul>
-<li>用于NIO操作，数据读写时的缓冲区内存，属于操作系统内存。</li>
-<li>分配回收成本较高，但读写性能高。</li>
-<li>不受JVM内存回收管理</li>
-</ul>
-<h4 id="基本应用"><a href="#基本应用" class="headerlink" title="基本应用"></a>基本应用</h4><p><strong>不用直接内存的读写原理</strong></p>
-<p><strong>Java本身并不具有读写的能力</strong>，它要进行磁盘读写必须要调用操作系统提供的函数，即本地方法，从用户态切入到内核态。</p>
-<p>切换到内核态后，磁盘文件在操作系统中划出一块缓冲区，磁盘文件的内容先读一部分入到缓存区中，而在系统内存中Java代码是不可以运行的，所以要把系统缓存区中的内容读到java缓冲区中。于是就又从内核态进入到了用户态。</p>
-<p>这样做的结果就是，数据做了<strong>两次拷贝缓存</strong>。</p>
-<p><img src="/.io//saltfish\JVM\笔记\pics\6.29directmemory1.PNG"></p>
-<p><strong>使用直接内存Direct Memory</strong></p>
-<p>依然是要在<strong>操作系统中划出一块缓冲区</strong>，但不同的是<strong>Java代码可以直接访问</strong>。无需将代码从系统内存复制到Java堆内存，从而提高了效率</p>
-<p><img src="/.io//saltfish\JVM\笔记\pics\6.29directmemory2.PNG" alt="6.29directmemory2"></p>
-<h4 id="内存溢出"><a href="#内存溢出" class="headerlink" title="内存溢出"></a>内存溢出</h4><p>会报出错误：java.lang.OutOfMemoryError: Direct buffer memory</p>
-<h4 id="释放原理"><a href="#释放原理" class="headerlink" title="释放原理"></a>释放原理</h4><p>直接内存的回收不是通过JVM的垃圾回收来释放的，而是必须通过调用 <strong>unsafe.freeMemory 手动释放</strong>。</p>
-<ul>
-<li><p>分配内存：</p>
-<pre><code class="java">long base = unsafe.allocateMemory(_1Gb); //base是地址
-unsafe.setMemory(base, _1Gb, (byte) 0);
-</code></pre>
-</li>
-<li><p>释放内存：</p>
-<pre><code class="java">unsafe.freeMemory(base);
-</code></pre>
-</li>
-</ul>
-<p><strong>allocateDirect是如何实现的？</strong></p>
-<pre><code class="java">public static ByteBuffer allocateDirect(int capacity) &#123;
-    return new DirectByteBuffer(capacity);
-&#125;
-</code></pre>
-<pre><code class="java">DirectByteBuffer(int cap) &#123;   // package-private
-   
-    super(-1, 0, cap, cap);
-    boolean pa = VM.isDirectMemoryPageAligned();
-    int ps = Bits.pageSize();
-    long size = Math.max(1L, (long)cap + (pa ? ps : 0));
-    Bits.reserveMemory(size, cap);
-
-    long base = 0;
-    try &#123;
-        base = unsafe.allocateMemory(size); //申请内存
-    &#125; catch (OutOfMemoryError x) &#123;
-        Bits.unreserveMemory(size, cap);
-        throw x;
-    &#125;
-    unsafe.setMemory(base, size, (byte) 0);
-    if (pa &amp;&amp; (base % ps != 0)) &#123;
-        // Round up to page boundary
-        address = base + ps - (base &amp; (ps - 1));
-    &#125; else &#123;
-        address = base;
-    &#125;
-    cleaner = Cleaner.create(this, new Deallocator(base, size, cap)); //通过虚引用，来实现直接内存的释放，this为虚引用的实际对象
-    att = null;
-&#125;
-</code></pre>
-<p>这里调用了一个Cleaner的create方法，且后台线程还会对虚引用的对象监测，Cleaner是一个<strong>虚引用</strong>类型，如果虚引用的实际对象（这里是ByteBuffer类型）被回收以后，就会调用Cleaner的clean()方法，来清除直接内存中占用的内存。</p>
-<p><strong>禁用显式回收内存</strong></p>
-<p>JVM调优时经常会使用<code>-XX:+DisableExplicitGC</code>禁止显式回收垃圾，也就是对<code>System.gc()</code>禁用。</p>
-<p>当遇到下面的代码时：</p>
-<pre><code class="java">public class Demo1_26 &#123;
-    static int _1Gb = 1024 * 1024 * 1024;
-    /*
-     * -XX:+DisableExplicitGC 显式的
-     */
-    public static void main(String[] args) throws IOException &#123;
-        ByteBuffer byteBuffer = ByteBuffer.allocateDirect(_1Gb);
-        System.out.println(&quot;分配完毕...&quot;);
-        System.in.read();
-        System.out.println(&quot;开始释放...&quot;);
-        byteBuffer = null;
-        System.gc(); // 禁用：显式的垃圾回收，Full GC
-        System.in.read();
-    &#125;
-&#125;
-</code></pre>
-<p>由于内存还很充裕，所以不会对byteBuffer进行回收。观察任务管理器，发现Java程序占用的直接内存仍然没有被释放。所以在实际用的时候可以直接调用unsafe的freeMemory方法。如下所示：</p>
-<pre><code class="java">    static int _1Gb = 1024 * 1024 * 1024;
-
-    public static void main(String[] args) throws IOException &#123;
-        Unsafe unsafe = getUnsafe();
-        // 分配内存
-        long base = unsafe.allocateMemory(_1Gb);
-        unsafe.setMemory(base, _1Gb, (byte) 0);
-        System.in.read();
-
-        // 释放内存
-        unsafe.freeMemory(base);
-        System.in.read();
-    &#125;
-</code></pre>
-<h2 id="垃圾回收"><a href="#垃圾回收" class="headerlink" title="垃圾回收"></a>垃圾回收</h2><h3 id="如何判断对象可以回收"><a href="#如何判断对象可以回收" class="headerlink" title="如何判断对象可以回收"></a>如何判断对象可以回收</h3><h4 id="引用计数法"><a href="#引用计数法" class="headerlink" title="引用计数法"></a>引用计数法</h4><p>每个对象有一个专门的计数器，对象<strong>引用一次计数器加一</strong>，<strong>引用失效就减一</strong>，当计数器变成0的时候就可以进行回收。</p>
-<p><strong>弊端：</strong>如果两个对象相互循环引用，即使这两个对象再没有被引用过，他们的计数器也永远不为0。</p>
-<p><img src="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608150750.png"></p>
-<h4 id="可达性分析算法"><a href="#可达性分析算法" class="headerlink" title="可达性分析算法"></a>可达性分析算法</h4><p>Java虚拟机中的垃圾回收期采用可达性分析来探索所有存活对象。</p>
-<p>对堆中的所有对象进行一次扫描，看是否有被<strong>GC Root根对象（肯定不能被垃圾回收的对象）直接或间接引用</strong>，如果没有就可以被回收。</p>
-<p><strong>哪些对象可以作为根对象？</strong></p>
-<p>首先要明确GC Root是被引用的对象，而不是引用变量。</p>
-<ul>
-<li><p>虚拟机<strong>栈</strong>（栈帧中的本地变量表）中引用的对象。　</p>
-</li>
-<li><p>方法区中<strong>类静态属性</strong>引用的对象</p>
-</li>
-<li><p>方法区中<strong>常量</strong>引用的对象</p>
-</li>
-<li><p>本地方法栈中JNI（即一般说的<strong>Native方法</strong>）引用的对象</p>
-</li>
-</ul>
-<h4 id="五种引用"><a href="#五种引用" class="headerlink" title="五种引用"></a>五种引用</h4><p><img src="/.io//saltfish\JVM\笔记\pics\7.1fivereferences.PNG" alt="7.1fivereferences"></p>
-<p><em>上图实线箭头的就是强引用</em>。</p>
-<p>可以<a target="_blank" rel="noopener" href="https://www.cnblogs.com/liyutian/p/9690974.html">参考</a></p>
-<h5 id="强引用"><a href="#强引用" class="headerlink" title="强引用"></a><strong>强引用</strong></h5><p>具有<code>Object object = new Object()</code>引用关系的叫做强引用。只要被GCRoot强引用了，就不会被垃圾回收。</p>
-<h5 id="软引用-amp-弱引用"><a href="#软引用-amp-弱引用" class="headerlink" title="软引用&amp;弱引用"></a><strong>软引用&amp;弱引用</strong></h5><p>软引用和弱引用不是被直接强引用的。</p>
-<ul>
-<li>被<strong>软引用</strong>关联的对象，当垃圾回收执行一次后发现<strong>内存仍然不够</strong>时，会被垃圾回收掉。当这个被软引用关联的对象被回收后，软引用可以进入引用队列（后序可以通过引用队列来找到软引用，并做释放）。</li>
-<li>而被<strong>弱引用</strong>关联的对象，当垃圾回收执行一次后，第二次垃圾回收时，<strong>不论内存够不够</strong>，都会回收弱引用。当这个被弱引用关联的对象被回收后，弱引用可以进入引用队列。</li>
-</ul>
-<p><strong>软引用的应用：</strong></p>
-<p>如果是强引用的话下面这一段代码会直接报错OutofMemory。</p>
-<pre><code class="java">//-Xmx20m：指定内存分配池的最大大小
-public class Demo1 &#123;
-    public static void main(String[] args) &#123;
-        final int _4M = 4*1024*1024;
-        List&lt;byte[]&gt; list = new ArrayList&lt;&gt;();
-        for(int i = 0; i &lt; 5; i++) &#123;
-            list.add(new byte[_4M]);
-        &#125;
-    &#125;
-&#125;
-</code></pre>
-<p>如果我们处理的一些数据是不太重要的资源，允许当内存不够的时候直接释放掉，就可以用软引用。</p>
-<pre><code class="java"> // -Xmx20m
-public class Demo1 &#123;
-    public static void main(String[] args) &#123;
-        final int _4M = 4*1024*1024;
-        //使用软引用对象 list对SoftReference是强引用，而SoftReference对byte数组则是软引用
-        // list --&gt; SoftReference --&gt; byte[]
-        List&lt;SoftReference&lt;byte[]&gt;&gt; list = new ArrayList&lt;&gt;();
-        for (int i = 0; i &lt; 5; i++) &#123;
-            SoftReference&lt;byte[]&gt; ref = new SoftReference&lt;&gt;(new byte[_4MB]);
-            System.out.println(ref.get());
-            list.add(ref);
-            System.out.println(list.size());
-        &#125;
-    &#125;
-&#125;
-</code></pre>
-<p>可以输出每一次添加的结果。</p>
-<p><strong>软引用的垃圾回收：</strong></p>
-<pre><code class="java"> // -Xmx20m -XX:+PrintGCDetails -verbose:gc
-public class Demo1 &#123;
-    public static void main(String[] args) &#123;
-        final int _4M = 4*1024*1024;
-        //使用软引用对象 list对SoftReference是强引用，而SoftReference对byte数组则是软引用
-        // list --&gt; SoftReference --&gt; byte[]
-        List&lt;SoftReference&lt;byte[]&gt;&gt; list = new ArrayList&lt;&gt;();
-        for (int i = 0; i &lt; 5; i++) &#123;
-            SoftReference&lt;byte[]&gt; ref = new SoftReference&lt;&gt;(new byte[_4MB]);
-            System.out.println(ref.get());
-            list.add(ref);
-            System.out.println(list.size());
-
-        &#125;
-        System.out.println(&quot;循环结束：&quot; + list.size());
-        for (SoftReference&lt;byte[]&gt; ref : list) &#123;
-            System.out.println(ref.get());
-        &#125;
-    &#125;
-&#125;
-</code></pre>
-<p>上面一段代码的运行结果：</p>
-<pre><code class="java">[B@33c7353a
-1
-[B@681a9515
-2
-[B@3af49f1c
-3
-[B@19469ea2
-4
-[B@13221655
-5
-循环结束：5
-null
-null
-null
-[B@19469ea2
-[B@13221655
-</code></pre>
-<p>可以发现重新打印信息的时候数组前三个内容变成了null。垃圾回收的操作是，在要添加第四个的时候，发现内存已经不足了，触发了一次垃圾回收，但是回收后发现内存仍然不够，又触发了一次垃圾回收，这次就把软引用的前三个对象给释放了。</p>
-<p>如果在垃圾回收时发现内存不足，在回收软引用所指向的对象时，<strong>软引用本身不会被清理</strong>。如果想要<strong>清理软引用</strong>，需要使<strong>用引用队列</strong>。</p>
-<pre><code class="java">public class Demo2_4 &#123;
-    private static final int _4MB = 4 * 1024 * 1024;
-
-    public static void main(String[] args) &#123;
-        List&lt;SoftReference&lt;byte[]&gt;&gt; list = new ArrayList&lt;&gt;();
-
-        // 引用队列
-        ReferenceQueue&lt;byte[]&gt; queue = new ReferenceQueue&lt;&gt;();
-
-        for (int i = 0; i &lt; 5; i++) &#123;
-            // 关联了引用队列， 当软引用所关联的 byte[]被回收时，软引用自己会加入到 queue 中去
-            SoftReference&lt;byte[]&gt; ref = new SoftReference&lt;&gt;(new byte[_4MB], queue);
-            System.out.println(ref.get());
-            list.add(ref);
-            System.out.println(list.size());
-        &#125;
-
-        // 从队列中获取无用的 软引用对象，并移除
-        //Reference是SoftReference的一个父类型
-        Reference&lt;? extends byte[]&gt; poll = queue.poll();
-        while( poll != null) &#123;
-            list.remove(poll);
-            poll = queue.poll();
-        &#125;
-
-        System.out.println(&quot;============软引用清理后===============&quot;);
-        for (SoftReference&lt;byte[]&gt; reference : list) &#123;
-            System.out.println(reference.get());
-        &#125;
-
-    &#125;
-&#125;
-</code></pre>
-<p>输出结果中不再有null。</p>
-<pre><code>[B@33c7353a
-1
-[B@681a9515
-2
-[B@3af49f1c
-3
-[B@19469ea2
-4
-[B@13221655
-5
-============软引用清理后===============
-[B@19469ea2
-[B@13221655
-</code></pre>
-<p><strong>弱引用的应用</strong></p>
-<p>和软引用非常类似。</p>
-<pre><code class="java">public class Demo2_5 &#123;
-    private static final int _4MB = 4 * 1024 * 1024;
-
-    public static void main(String[] args) &#123;
-        //  list --&gt; WeakReference --&gt; byte[]
-        List&lt;WeakReference&lt;byte[]&gt;&gt; list = new ArrayList&lt;&gt;();
-        for (int i = 0; i &lt; 10; i++) &#123;
-            WeakReference&lt;byte[]&gt; ref = new WeakReference&lt;&gt;(new byte[_4MB]);
-            list.add(ref);
-            for (WeakReference&lt;byte[]&gt; w : list) &#123;
-                System.out.print(w.get()+&quot; &quot;);
+            if(l2 != null) &#123;
+                num += l2.val;
+                l2 = l2.next;
             &#125;
-            System.out.println();
-
-        &#125;
-        System.out.println(&quot;循环结束：&quot; + list.size());
-    &#125;
-&#125;
-</code></pre>
-<p>输出的结果如下：</p>
-<pre><code>[B@33c7353a 
-[B@33c7353a [B@681a9515 
-[B@33c7353a [B@681a9515 [B@3af49f1c 
-null null null [B@19469ea2 
-null null null [B@19469ea2 [B@13221655 
-null null null [B@19469ea2 [B@13221655 [B@2f2c9b19 
-null null null null null null [B@31befd9f 
-null null null null null null [B@31befd9f [B@1c20c684 
-null null null null null null [B@31befd9f [B@1c20c684 [B@1fb3ebeb 
-null null null null null null null null null [B@548c4f57 
-循环结束：10
-</code></pre>
-<h5 id="虚引用-amp-终结器引用"><a href="#虚引用-amp-终结器引用" class="headerlink" title="虚引用&amp;终结器引用"></a><strong>虚引用&amp;终结器引用</strong></h5><p>软引用和弱引用不一定要配合引用队列，但是虚引用和终结器引用<strong>必须配合引用队列</strong>使用。</p>
-<ul>
-<li><p>举例虚引用：直接内存不在JVM中，没有办法被垃圾回收，因此用虚引用Cleaner（内含直接内存的地址）关联一个ByteBuffer对象，当这个对象被回收时，虚引用直接进入引用队列，本地方法根据引用队列中的地址信息调用Unsafe的freeMemory方法清除本地内存。</p>
-</li>
-<li><p>举例终结器引用：所有的类都继承自Object父类，这个类里有一个<strong>finalize()终结器方法</strong>。当对象重写了该方法，且没有强引用关联这个对象（该对象可以被回收了），虚拟器会创建一个终结器引用，加入引用队列。由一个优先级很低的<strong>Finalizer线程</strong>处理该引用，根据终结器引用对象找到它所引用的对象，然后<strong>调用该对象的finalize方法</strong>。调用以后，<strong>第二次GC</strong>才能回收该对象。</p>
-<p>因为处理的线程优先级很低，所以可能导致该对象一直不能被回收。这也是不提倡使用finalize()的原因。</p>
-</li>
-</ul>
-<h3 id="垃圾回收算法"><a href="#垃圾回收算法" class="headerlink" title="垃圾回收算法"></a>垃圾回收算法</h3><h4 id="标记清除"><a href="#标记清除" class="headerlink" title="标记清除"></a>标记清除</h4><p><img src="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608150813.png"></p>
-<p><strong>定义：</strong>在堆中从头到尾扫描，找到可以被垃圾回收的对象并标记，标记完成后同意回收掉所有被标记的对象。或者可以标记存活的对象，统一回收所有没有被标记的对象。</p>
-<ul>
-<li>这里的腾出内存空间并不是将内存空间的字节清0，而是记录下这段内存的起始结束地址，下次分配内存的时候，会直接<strong>覆盖</strong>这段内存</li>
-</ul>
-<p><strong>优点：</strong>速度快。</p>
-<p><strong>缺点：</strong>容易产生<strong>大量的内存碎片</strong>，可能无法满足大对象的内存分配，一旦导致无法分配对象，那就会导致jvm启动gc，一旦启动gc，我们的应用程序就会暂停，这就导致应用的响应速度变慢</p>
-<h4 id="标记整理"><a href="#标记整理" class="headerlink" title="标记整理"></a>标记整理</h4><p><img src="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608150827.png"></p>
-<p><strong>定义：</strong>先标记可以被回收的垃圾，在清除的过程中，把存活的对象向内存空间的一端移动，然后直接清理掉边界以外的内存。</p>
-<p><strong>优点：</strong>没有内存碎片</p>
-<p><strong>缺点：</strong>牵扯到对象的移动，需要暂停用户应用程序才能进行，导致速度较慢。</p>
-<h4 id="标记复制"><a href="#标记复制" class="headerlink" title="标记复制"></a>标记复制</h4><p><img src="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608150842.png"></p>
-<p><strong>定义：</strong>把内存空间划分成两个大小相等的空间，对空间From进行回收的时候，先标记，然后把<strong>存活的对象复制</strong>到<strong>另一块空间</strong>To上。这样To空间的内存就是连续无碎片的，然后再<strong>清理From</strong>空间。<strong>交换两个空间</strong>，原To空间变成From空间。</p>
-<p><strong>优点：</strong>没有内存碎片。</p>
-<p><strong>缺点：</strong>可用内存减小了一半，复制过程效率低。</p>
-<h3 id="分代垃圾回收机制"><a href="#分代垃圾回收机制" class="headerlink" title="分代垃圾回收机制"></a>分代垃圾回收机制</h3><p><img src="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608150931.png"></p>
-<p>内存区域划分为<strong>新生代</strong>（Young Generation）和<strong>老年代</strong>（Old Generation）两部分。</p>
-<ul>
-<li><p>新生代包含Eden、幸存区From和幸存区To。处理朝生夕死的对象。采用<strong>标记复制</strong>算法。</p>
-<ul>
-<li><p>对象首先分配在<strong>伊甸园区</strong>。</p>
-</li>
-<li><p>新生代空间不足时，触发<strong>minor gc</strong>，伊甸园和From中存活的对象每复制一次到To中，存活的年龄对象就要加1，并且交换From和To。</p>
-</li>
-<li><p>minor gc 会引发 <strong>stop the world</strong>，暂停其他所有用户线程，垃圾回收结束后，才会恢复运行。</p>
-</li>
-<li><p>当对象寿命超过阈值时，会<strong>晋升到老年代</strong>。最大寿命是15，也就是4bit 1111，在不同的垃圾回收器中阈值会不一样。有时候空间紧张，对象寿命还没有达到阈值就会被送入老年代。</p>
-</li>
-<li><p>触发minor gc后发现<strong>新生代仍然内存不足</strong>，这说明老年代空间不足导致新生代的对象无法被放入老年代。然后，会触发 <strong>full gc</strong>，STW 的时间会比较长</p>
-</li>
-</ul>
-</li>
-<li><p>老年代存储长时间存活的对象。采用<strong>标记清除或标记整理</strong>算法</p>
-</li>
-</ul>
-<h4 id="相关VM参数"><a href="#相关VM参数" class="headerlink" title="相关VM参数"></a>相关VM参数</h4><p><img src="/.io//saltfish\JVM\笔记\pics\vm.PNG"></p>
-<h4 id="GC分析"><a href="#GC分析" class="headerlink" title="GC分析"></a>GC分析</h4><p>设置初始堆大小20M，新生代10M，打印信息：</p>
-<p><img src="/.io//saltfish\JVM\笔记\pics\72vm1.PNG"></p>
-<p>可以看到图中新生代显示共有9216K，这是因为幸存区的To区域是不可用的，没有把它算进去。即使我们的main()方法没做任何操作也会有Eden区的使用，这是因为Java代码运行本身就需要内存。老年代（tenured generation）共有10M。还有元空间（Metaspace）的信息。</p>
-<ul>
-<li><p>添加7MB的对象。</p>
-<pre><code class="java">public class Demo2_1 &#123;
-    private static final int _7MB = 7 * 1024 * 1024;
-    // -Xms20M -Xmx20M -Xmn10M -XX:+UseSerialGC -XX:+PrintGCDetails -verbose:gc -XX:-ScavengeBeforeFullGC
-    public static void main(String[] args) throws InterruptedException &#123;
-        ArrayList&lt;byte[]&gt; list = new ArrayList&lt;&gt;();
-        list.add(new byte[_7MB]);
-    &#125;
-&#125;
-</code></pre>
-<p>打印出信息如下：</p>
-<p><img src="/.io//saltfish\JVM\笔记\pics\72vm2.PNG"></p>
-<ul>
-<li>Allocation Failure：由于之前伊甸园中已经使用了一些，剩余内存不足以存放7MB，所以触发了一次minor gc。新生代的内存占用变化1576K-&gt;891K，清除掉了一些内存。</li>
-<li>将伊甸园中的存活部分转移到To区，所以看到Eden：1576K -&gt; 0K。</li>
-<li>交换后To区变成了From区0K -&gt; 891K。</li>
-<li>将7Mb的对象放入Eden，最后Eden区使用了92%。</li>
-<li>老年代没有被使用过。</li>
-</ul>
-</li>
-<li><p>再添加1Mb对象。</p>
-<pre><code class="java">public class Demo2_1 &#123;
-    private static final int _7MB = 7 * 1024 * 1024;
-    private static final int _1MB = 1 * 1024 * 1024;
-    // -Xms20M -Xmx20M -Xmn10M -XX:+UseSerialGC -XX:+PrintGCDetails -verbose:gc -XX:-ScavengeBeforeFullGC
-    public static void main(String[] args) throws InterruptedException &#123;
-        ArrayList&lt;byte[]&gt; list = new ArrayList&lt;&gt;();
-        list.add(new byte[_7MB]);
-        list.add(new byte[_1MB]);
-    &#125;
-&#125;
-</code></pre>
-<p>打印出gc信息：</p>
-<p><img src="/.io//saltfish\JVM\笔记\pics\72vm3.PNG"></p>
-<ul>
-<li>触发了两次垃圾回收。第一次过程上面分析过了。</li>
-<li>第二次加入1MB时发现Eden区域不够放，于是又一次垃圾回收。新生代总体使用情况：8392K(9216K)-&gt;21K(9216K)</li>
-<li>Eden区的存活对象被加入老年代，所以Tenured: 0K(10240K)-&gt;8064K(10240K)。</li>
-</ul>
-</li>
-<li><p>添加8MB对象——大对象直接晋升老年代：</p>
-<pre><code class="java">public class Demo2_1 &#123;
-    private static final int _8MB = 8 * 1024 * 1024;
-    // -Xms20M -Xmx20M -Xmn10M -XX:+UseSerialGC -XX:+PrintGCDetails -verbose:gc -XX:-ScavengeBeforeFullGC
-    public static void main(String[] args) throws InterruptedException &#123;
-        ArrayList&lt;byte[]&gt; list = new ArrayList&lt;&gt;();
-        list.add(new byte[_8MB]);
-    &#125;
-&#125;
-</code></pre>
-<p>打印出gc信息：</p>
-<p><img src="/.io//saltfish\JVM\笔记\pics\72vm4.PNG"></p>
-<p>可以看到并没有发生垃圾回收，而是直接把8MB的大对象加入到了老年代中。</p>
-</li>
-</ul>
-<p>某个线程的内存溢出了而抛异常（out of memory），不会让其他的线程结束运行.这是因为当一个线程<strong>抛出OOM异常后</strong>，<strong>它所占据的内存资源会全部被释放掉</strong>，从而不会影响其他线程的运行，<strong>进程依然正常</strong>。</p>
-<h3 id="垃圾回收器"><a href="#垃圾回收器" class="headerlink" title="垃圾回收器"></a>垃圾回收器</h3><h4 id="串行"><a href="#串行" class="headerlink" title="串行"></a>串行</h4><p><strong>特点</strong></p>
-<ul>
-<li>单线程：<strong>单一垃圾回收线程</strong>执行时其他线程都暂停。</li>
-<li>适用于堆内存较小，个人电脑</li>
-</ul>
-<p><strong>开启串行的VM参数</strong></p>
-<p><code>-XX:+UseSerialGC</code>：这个参数会使新生代和老年代都使用串行回收器，<strong>新生代</strong>使用<strong>复制</strong>算法，<strong>老年代</strong>使用<strong>标记-整理</strong>算法</p>
-<p><img src="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151027.png"></p>
-<h4 id="吞吐量优先"><a href="#吞吐量优先" class="headerlink" title="吞吐量优先"></a>吞吐量优先</h4><p><strong>特点</strong></p>
-<ul>
-<li>多线程<strong>并行</strong></li>
-<li>适合堆内存较大，需要多核CPU支持</li>
-<li><strong>单位时间内</strong> STW 的时间最短</li>
-<li><strong>JDK1.8默认使用</strong>的垃圾回收器</li>
-</ul>
-<p><strong>VM参数</strong></p>
-<p><code>-XX:+UseParallelGC</code>和<code>-XX:UseParallelOldGC</code>：Parallell是<strong>并行</strong>，用于开启并行垃圾回收。这两个参数开启任何一个都会连带开启另一个。</p>
-<p><code>-XX:ParallelGCThreads=n</code>：控制同时进行垃圾回收的线程数量。</p>
-<p><code>-XX:+UseAdaptiveSizePolicy</code>：自适应地动态调整新生代大小。</p>
-<p><code>-XX:GCTimeRatio=ratio</code>：垃圾回收时间不能超过总时间的$1/(1+ratio)$。</p>
-<p><code>-XX:MaxGCPauseMillis=ms</code>：调整暂停时间，默认值是200ms。与调整ratio是冲突的，一次只可以用一个。</p>
-<p><img src="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151039.png"></p>
-<h4 id="响应时间优先"><a href="#响应时间优先" class="headerlink" title="响应时间优先"></a>响应时间优先</h4><p><strong>特点</strong></p>
-<ul>
-<li>多线程，<strong>并发</strong></li>
-<li>适合堆内存较大，需要多核CPU支持</li>
-<li>尽可能让 <strong>单次</strong> STW 的时间最短</li>
-</ul>
-<p><strong>VM参数</strong></p>
-<p><code>-XX:UseConcMarkSweepGC</code>：<strong>Concurrent Mark Sweep(CMS)</strong> 指<strong>采用标记-清除算法</strong>，即垃圾回收线程和用户线程<strong>并发</strong>执行，与并行不同（并行要求垃圾回收线程执行时不能有其他用户线程，本质上并行是多个处理器处理多个任务，并发是同一个处理器在时间上分段执行不同的任务）。由于采用的是标记清除算法，会造成大量的<strong>内存碎片</strong>，最后会无法执行CMS GC，进而<strong>退化</strong>成为SerialOld。</p>
-<p><code>-XX:ConGCThreads=threads</code>：设置可以并行的线程数量，建议设置为CPU数量的四分之一。</p>
-<p><code>-XX:CMSInitiatingOccupancyFraction=percent</code>：控制CMS垃圾回收的时机，当老年代内存占用达到percent时就要回收，因为要预留空间给浮动垃圾。</p>
-<p><code>-XX:+CMSScavengeBeforeRemark</code>：在重新标记前让新生代进行垃圾回收。这样新生代中剩余待标记的对象数量就会下降很多，remark 的工作量也会减少很多。</p>
-<p><img src="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151052.png"></p>
-<p>Concurrent Mark Sweep，一种以获取<strong>最短回收停顿时间</strong>为目标的<strong>老年代</strong>收集器</p>
-<p><strong>特点</strong>：基于<strong>标记-清除算法</strong>实现。<strong>并发</strong>收集、低停顿，但是会产生内存碎片</p>
-<p><strong>应用场景</strong>：适用于注重服务的响应速度，希望系统停顿时间最短，给用户带来更好的体验等场景下。如web程序、b/s服务</p>
-<p><strong>CMS收集器的运行过程分为下列4步：</strong></p>
-<ul>
-<li><p><strong>初始标记</strong>：标记<strong>GC Roots</strong>能直接关联到的老年代对象，遍历被新生代存活对象所引用的老年代对象。速度很快但是<strong>仍存在Stop The World问题</strong></p>
-</li>
-<li><p><strong>并发标记</strong>：进行<strong>GC Roots Tracing</strong> 的过程，通过遍历第一个阶段（Initial Mark）标记出来的存活对象，继续递归遍历老年代，并标记可直接或间接到达的所有老年代存活对象 。用户线程可<strong>并发执行，不需要STW</strong>。</p>
-</li>
-<li><p><strong>重新标记</strong>：扫描整个堆，为了<strong>修正并发标记期间</strong>因用户程序继续运行而导致标记产生变动的那一部分对象的标记记录。仍然存在Stop The World问题</p>
-</li>
-<li><p><strong>并发清除</strong>：对标记的对象进行清除回收。</p>
-</li>
-</ul>
-<p><strong>浮动垃圾</strong>：在垃圾回收的标记过程中，其他一些用户线程由于没有停止，会产生一些可以被清除的垃圾，但是因为标记操作没有将它们标记进去所以只能留到下一次垃圾回收再清理。</p>
-<h4 id="Garbage-First-收集器"><a href="#Garbage-First-收集器" class="headerlink" title="Garbage First 收集器"></a>Garbage First 收集器</h4><p>JDK 9以后默认使用，废弃了CMS 收集器。</p>
-<p><strong>使用场景</strong></p>
-<ul>
-<li>注重吞吐量（Throughput）和低延迟（Low Latency），默认暂停目标是200ms。</li>
-<li>超大堆内存，会将堆划分为多个大小相等的 Region，每个区域都可以独立地作为Eden、Survivor或老年代。</li>
-<li>整体上是<strong>标记整理</strong>算法，两个区域之间是<strong>复制</strong>算法</li>
-</ul>
-<p><strong>VM参数</strong></p>
-<p><code>-XX:+UseG1GC</code>：开启G1，JDK9之后默认使用，不需要这个开关</p>
-<p><code>-XX:MaxGCPauseMillis=time</code>：设置最大暂停时间</p>
-<p><code>-XX:G1HeapRegionSize=size</code>：设置区域大小，必须是2的指数倍大小</p>
-<p><strong>垃圾回收阶段</strong></p>
-<img src="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151109.png" style="zoom:80%;">
-
-<h5 id="Young-Collection（会STW）"><a href="#Young-Collection（会STW）" class="headerlink" title="Young Collection（会STW）"></a>Young Collection（会STW）</h5><ul>
-<li><p>当Eden区内存不够用的时候就会触发一次新生代垃圾回收 young GC，将它们移动到幸存区。</p>
-<img src="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151129.png" style="zoom:67%;"></li>
-<li><p>当幸存区内存不够，或者达到寿命最大值，再一次触发 young GC，幸存区中的一些对象<strong>晋升到老年代</strong>，其他存活对象移动到另一个幸存区。</p>
-<img src="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151140.png" style="zoom:67%;"></li>
-</ul>
-<h5 id="Young-Collection-CM（Concurrent-Mark）"><a href="#Young-Collection-CM（Concurrent-Mark）" class="headerlink" title="Young Collection + CM（Concurrent Mark）"></a>Young Collection + CM（Concurrent Mark）</h5><ul>
-<li><p>前提：在Young GC的时候会进行GC Root的初始标记。</p>
-</li>
-<li><p>在<strong>老年代占用堆内存的比例</strong>达到一定阈值时，进行并发标记（不会STW），默认45%。可以用<code>-XX:InitiatingHeapOccupancyPercent=percent</code> 进行调整。</p>
-<img src="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151150.png" style="zoom:67%;"></li>
-</ul>
-<h5 id="Mixed-Collection（会STW）"><a href="#Mixed-Collection（会STW）" class="headerlink" title="Mixed Collection（会STW）"></a>Mixed Collection（会STW）</h5><ul>
-<li><p>经过CM后，对Eden、Survivor、Old进行全面回收。<strong>最终标记</strong>和<strong>拷贝存活对象</strong>都会 <strong>STW</strong> 。</p>
-</li>
-<li><p>Eden区和Survivor区的存活对象被移动到另一个Survivor区，原Survivor区一些对象晋升到Old区。</p>
-</li>
-<li><p>由于老年代的回收时长比较长，按照最大暂停时间的限制，不能一次性对所有Old区都进行处理，一些 <strong>垃圾最多、优先级最高</strong> 的Old区会被<strong>优先处理</strong>，将存活对象复制合并到另一个Old区。</p>
-<img src="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151201.png" style="zoom:67%;"></li>
-</ul>
-<h5 id="Full-GC"><a href="#Full-GC" class="headerlink" title="Full GC"></a>Full GC</h5><ul>
-<li>Serial GC<ul>
-<li>新生代内存不足发生的垃圾收集 - minor gc</li>
-<li>老年代内存不足发生的垃圾收集 - full gc</li>
-</ul>
-</li>
-<li>Parallel GC<ul>
-<li>新生代内存不足发生的垃圾收集 - minor gc</li>
-<li>老年代内存不足发生的垃圾收集 - full gc</li>
-</ul>
-</li>
-<li>CMS<ul>
-<li>新生代内存不足发生的垃圾收集 - minor gc</li>
-<li>老年代内存不足</li>
-</ul>
-</li>
-<li>G1<ul>
-<li>新生代内存不足发生的垃圾收集 - minor gc</li>
-<li>老年代内存不足：老年代内存占堆内存的45%会先触发标记和混合收集。如果回收速度慢于新垃圾产生的速度，此时并发收集失败，退化成串行垃圾收集，也就是full GC。</li>
-</ul>
-</li>
-</ul>
-<h5 id="Young-Collection-跨代引用"><a href="#Young-Collection-跨代引用" class="headerlink" title="Young Collection 跨代引用"></a>Young Collection 跨代引用</h5><p>如果老年代中的对象对新生代有引用，在找新生代中的根对象时会先去遍历老年代中大量的存活根对象，花费很多时间。</p>
-<p>为了加快时间，使用卡表与Remembered Set。老年代有一个<strong>卡表</strong>，被划分成了多个区域，每个区域512K。其中粉红色区域即为存在跨代引用的区域，称之为<strong>脏卡 Dirty Card</strong>。在新生代，有一个<strong>Remembered Set</strong>记录incoming reference，在对新生代进行垃圾回收时，即可通过Remembered Set找到脏卡，然后根据脏卡进行GC Root，节省了时间。</p>
-<p><img src="https://img-blog.csdnimg.cn/20191114203926403.jpeg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM4NTU3MTk0,size_16,color_FFFFFF,t_70"></p>
-<h5 id="Remark"><a href="#Remark" class="headerlink" title="Remark"></a>Remark</h5><ul>
-<li><p>三色标记法</p>
-<p>黑色：已被处理，存活的 灰色：正在处理中的 白色：还未处理的</p>
-<img src="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151229.png" style="zoom: 67%;"></li>
-<li><p>对象消失问题</p>
-<p>一个正在处理中的对象的一个引用被切断，同时该被切断的对象与已经扫描过的黑色对象建立了引用关系。</p>
-<img src="/.io//saltfish\JVM\笔记\pics\7.4original.PNG" style="zoom:50%;">
-
-<img src="/.io//saltfish\JVM\笔记\pics\7.4new.PNG" style="zoom:50%;"></li>
-<li><p>写屏障</p>
-<ul>
-<li><strong>增量更新</strong> Incremental Update：当黑色对象<strong>插入新的</strong>指向白色对象的引用关系时，把黑色对象<strong>重新标记为灰色对象</strong>。在本次并发标记阶段结束后，<strong>重新标记阶段会 STW</strong>，对这些灰色对象重新扫描。<strong>CMS</strong>基于增量更新来做并发标记。</li>
-<li><strong>原始快照</strong> Snap At  The Beginning：当灰色对象要删除指向白色对象的引用关系时，把<strong>原引用保存</strong>到 satb mark queue 中，在本次并发标记阶段结束后，<strong>重新标记阶段会 STW</strong>，会依次处理 satb mark queue 中的对象，确保这部分对象在本轮 GC 是存活的。<strong>G1</strong>采用SATB来做并发标记。</li>
-</ul>
-</li>
-</ul>
-<h5 id="JDK-8u20-字符串去重"><a href="#JDK-8u20-字符串去重" class="headerlink" title="JDK 8u20 字符串去重"></a>JDK 8u20 字符串去重</h5><p><code>XX:+UseStringDeduplication</code></p>
-<pre><code class="java">String string1 = new String(&quot;Hello World&quot;);//char[]
-String string2 = new String(&quot;Hello World&quot;);//char[]
-</code></pre>
-<p>上面定义了两个字符串对象string1和string2，它们的内容是一样的，都是Hello World，但是string1和string2是两个不同的char数组对象。</p>
-<p>观察源码，java.lang.String有2个成员变量：</p>
-<pre><code class="java">private final char[] value;
-private int hash;
-</code></pre>
-<p><code>-XX:+UseStringDeduplication</code>并不会消除重复字符串的引用本身，它只会**替换底层的char[]**，只需要对value字段进行重新引用赋值即可， 即：aString.value = anotherString.value。</p>
-<ul>
-<li>优点：节省大量内存</li>
-<li>缺点：新生代回收时，G1并发检查是否有字符串重复情况，导致GC时间变长。</li>
-</ul>
-<h5 id="JDK-8u40-并发标记类卸载"><a href="#JDK-8u40-并发标记类卸载" class="headerlink" title="JDK 8u40 并发标记类卸载"></a>JDK 8u40 并发标记类卸载</h5><p><code>-XX:+ClassUnloadingWithConcurrentMark</code> 默认启用</p>
-<p>所有对象都经过并发标记后，就可以知道哪些类不再被使用。当一个类加载器的所有类都不再使用，就卸载它加载的所有类。</p>
-<h5 id="JDK-8u60-回收巨型对象"><a href="#JDK-8u60-回收巨型对象" class="headerlink" title="JDK 8u60 回收巨型对象"></a>JDK 8u60 回收巨型对象</h5><ul>
-<li>一个对象大于region的一半时，就称为巨型对象，区别于普通的年轻代和老年代</li>
-<li>G1不会对巨型对象进行拷贝</li>
-<li>回收时被优先考虑</li>
-<li>G1会跟踪老年代所有incoming引用，如果老年代incoming引用为0的巨型对象就可以在 新生代垃圾回收时处理掉</li>
-</ul>
-<p><a target="_blank" rel="noopener" href="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151249.png"><img src="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151249.png" alt="img"></a></p>
-<h5 id="JDK-9-并发标记起始时间调整"><a href="#JDK-9-并发标记起始时间调整" class="headerlink" title="JDK 9 并发标记起始时间调整"></a>JDK 9 并发标记起始时间调整</h5><p><code>-XX:InitiatingHeapOccupancyPercent</code></p>
-<p>并发标记必须在堆空间占满前完成，否则退化为 FulGC。</p>
-<ul>
-<li>JDK 9 之前需要使用 -XX:InitiatingHeapOccupancyPercent 调整老年代和整个堆内存的占比阈值。</li>
-<li>JDK 9 可以动态调整<ul>
-<li>-XX:InitiatingHeapOccupancyPercent 用来设置初始值</li>
-<li>进行数据采样并动态调整</li>
-<li>总会添加一个安全的空挡空间</li>
-</ul>
-</li>
-</ul>
-<h3 id="垃圾回收调优"><a href="#垃圾回收调优" class="headerlink" title="垃圾回收调优"></a>垃圾回收调优</h3><p><code>java -XX:+PrintFlagsFinal -version</code> 会打印所有的JVM参数</p>
-<p><code>java -XX:+PrintFlagsFinal -version | findstr &quot;GC&quot;</code>  会打印所有的GC参数</p>
-<h4 id="调优领域"><a href="#调优领域" class="headerlink" title="调优领域"></a>调优领域</h4><ul>
-<li>内存</li>
-<li>锁竞争</li>
-<li>CPU占用</li>
-<li>IO</li>
-<li>GC</li>
-</ul>
-<h4 id="确定目标"><a href="#确定目标" class="headerlink" title="确定目标"></a>确定目标</h4><ul>
-<li>是要<strong>低延迟</strong>还是要<strong>高吞吐量</strong>，从而选择合适的回收器</li>
-<li>低延迟：CMS（JDK 14 已经将其移除）、G1、ZGC（实际上吞吐量也很高）</li>
-<li>高吞吐量：ParallelGC</li>
-</ul>
-<p>最快的GC是不发生GC</p>
-<ul>
-<li><p>数据是否太多？</p>
-</li>
-<li><p>数据表示是否太臃肿？</p>
-<ul>
-<li>对象图</li>
-<li>对象大小</li>
-</ul>
-</li>
-<li><p>是否存在内存泄漏？</p>
-<p>定义了静态的Map，不断向里面加入对象。这种需要长时间存活的大对象，最好使用软、弱引用，或第三方缓存实现例如Redis</p>
-</li>
-</ul>
-<h4 id="新生代调优"><a href="#新生代调优" class="headerlink" title="新生代调优"></a>新生代调优</h4><p>做垃圾回收调优一般从新生代做起。</p>
-<p><strong>新生代的特点</strong></p>
-<ul>
-<li>每个线程会在伊甸园中分配一个私有的区域 <strong>TLAB（thread-local allocation buffer）</strong>，创建效率很高。</li>
-<li>死亡对象的回收代价是0。</li>
-<li>新生代中大部分对象用过即死</li>
-<li>所以 Minor GC的时间远远低于 Full GC</li>
-</ul>
-<p><strong>新生代越大越好吗？</strong></p>
-<p><code>-Xmn</code>：设置新生代大小。</p>
-<ul>
-<li>新生代内存太小：频繁触发Minor GC，会STW，会使得吞吐量下降</li>
-<li>新生代内存太大：老年代内存占比有所降低，会更频繁地触发Full GC。而且触发Minor GC时，清理新生代所花费的时间会更长</li>
-<li>建议：新生代占堆的 25% ~ 50% 。</li>
-<li>新生代内存设置为内容纳[并发量*(请求-响应)]的数据为宜。</li>
-</ul>
-<p>幸存区：</p>
-<ul>
-<li>幸存区要能满足保留 当前活跃对象 + 需要晋升的对象。</li>
-<li>晋升阈值配置得当，让长时间存活的对象尽快晋升<ul>
-<li><code>-XX:+PrintTenuringDistribution</code>：JVM 在每次新生代GC时，打印出幸存区中对象的年龄分布</li>
-<li><code>-XX:MaxTenurigThreshold</code>：设置晋升的阈值</li>
-</ul>
-</li>
-</ul>
-<h4 id="老年代调优"><a href="#老年代调优" class="headerlink" title="老年代调优"></a>老年代调优</h4><p><strong>以CMS为例</strong></p>
-<ul>
-<li><p>CMS的老年代内存越大越好，因为浮动垃圾会导致可分配的连续内存空间变少</p>
-</li>
-<li><p>在不调优的情况下，如果没有发生 Full GC，则不用调优。否则要进行老年代调优</p>
-</li>
-<li><p>观察发生 Full GC 时老年代内存占用，将老年代的内存调大1/4~1/3</p>
-<p><code>-XX:CMSInitiatingOccupancyFraction=percent</code>：设置老年代中触发垃圾回收时的垃圾占比阈值</p>
-</li>
-</ul>
-<h4 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h4><ul>
-<li><p>Full GC 和 Minor GC 频繁</p>
-<p>新生代内存小，导致频繁发生Minor GC，且由于幸存区内存不够，所以晋升阈值小，而很容易晋升到老年代，引发老年代需要频繁回收，即Full GC 频繁。</p>
-</li>
-<li><p>请求高峰发生Full GC，单次暂停时间特别长（CMS）</p>
-<p>CMS分为初始标记、并发标记、重新标记和并发清理四个阶段，其中初始标记和重新标记是需要暂停的，但初始标记一般速度都非常快，重新标记要<strong>扫描全堆内存</strong>。可以用<code>-XX:+CMSScavengeBeforeRemark</code>在重新标记前对新生代垃圾进行清理，所以重新标记阶段需要被扫描的对象就变少了。</p>
-</li>
-<li><p>老年代充裕情况下，发生Full GC（CMS jdk 1.7）</p>
-<p>永久代空间不足导致的。</p>
-</li>
-</ul>
-<h2 id="类加载与字节码技术"><a href="#类加载与字节码技术" class="headerlink" title="类加载与字节码技术"></a>类加载与字节码技术</h2><h3 id="类文件结构"><a href="#类文件结构" class="headerlink" title="类文件结构"></a>类文件结构</h3><p>利用 <code>javac</code> 编译一个 .java 文件，得到：</p>
-<p>每一行最前面七位数字是标号</p>
-<pre><code>0000000 ca fe ba be 00 00 00 34 00 23 0a 00 06 00 15 09 
-0000020 00 16 00 17 08 00 18 0a 00 19 00 1a 07 00 1b 07 
-0000040 00 1c 01 00 06 3c 69 6e 69 74 3e 01 00 03 28 29 
-0000060 56 01 00 04 43 6f 64 65 01 00 0f 4c 69 6e 65 4e 
-0000100 75 6d 62 65 72 54 61 62 6c 65 01 00 12 4c 6f 63 
-0000120 61 6c 56 61 72 69 61 62 6c 65 54 61 62 6c 65 01 
-0000140 00 04 74 68 69 73 01 00 1d 4c 63 6e 2f 69 74 63 
-0000160 61 73 74 2f 6a 76 6d 2f 74 35 2f 48 65 6c 6c 6f 
-0000200 57 6f 72 6c 64 3b 01 00 04 6d 61 69 6e 01 00 16 
-0000220 28 5b 4c 6a 61 76 61 2f 6c 61 6e 67 2f 53 74 72 
-0000240 69 6e 67 3b 29 56 01 00 04 61 72 67 73 01 00 13 
-0000260 5b 4c 6a 61 76 61 2f 6c 61 6e 67 2f 53 74 72 69 
-0000300 6e 67 3b 01 00 10 4d 65 74 68 6f 64 50 61 72 61 
-0000320 6d 65 74 65 72 73 01 00 0a 53 6f 75 72 63 65 46 
-0000340 69 6c 65 01 00 0f 48 65 6c 6c 6f 57 6f 72 6c 64
-0000360 2e 6a 61 76 61 0c 00 07 00 08 07 00 1d 0c 00 1e 
-0000400 00 1f 01 00 0b 68 65 6c 6c 6f 20 77 6f 72 6c 64 
-0000420 07 00 20 0c 00 21 00 22 01 00 1b 63 6e 2f 69 74 
-0000440 63 61 73 74 2f 6a 76 6d 2f 74 35 2f 48 65 6c 6c 
-0000460 6f 57 6f 72 6c 64 01 00 10 6a 61 76 61 2f 6c 61 
-0000500 6e 67 2f 4f 62 6a 65 63 74 01 00 10 6a 61 76 61 
-0000520 2f 6c 61 6e 67 2f 53 79 73 74 65 6d 01 00 03 6f 
-0000540 75 74 01 00 15 4c 6a 61 76 61 2f 69 6f 2f 50 72 
-0000560 69 6e 74 53 74 72 65 61 6d 3b 01 00 13 6a 61 76 
-0000600 61 2f 69 6f 2f 50 72 69 6e 74 53 74 72 65 61 6d 
-0000620 01 00 07 70 72 69 6e 74 6c 6e 01 00 15 28 4c 6a 
-0000640 61 76 61 2f 6c 61 6e 67 2f 53 74 72 69 6e 67 3b 
-0000660 29 56 00 21 00 05 00 06 00 00 00 00 00 02 00 01 
-0000700 00 07 00 08 00 01 00 09 00 00 00 2f 00 01 00 01 
-0000720 00 00 00 05 2a b7 00 01 b1 00 00 00 02 00 0a 00 
-0000740 00 00 06 00 01 00 00 00 04 00 0b 00 00 00 0c 00 
-0000760 01 00 00 00 05 00 0c 00 0d 00 00 00 09 00 0e 00 
-0001000 0f 00 02 00 09 00 00 00 37 00 02 00 01 00 00 00 
-0001020 09 b2 00 02 12 03 b6 00 04 b1 00 00 00 02 00 0a 
-0001040 00 00 00 0a 00 02 00 00 00 06 00 08 00 07 00 0b 
-0001060 00 00 00 0c 00 01 00 00 00 09 00 10 00 11 00 00 
-0001100 00 12 00 00 00 05 01 00 10 00 00 00 01 00 13 00 
-0001120 00 00 02 00 14
-</code></pre>
-<p>根据 JVM 规范，<strong>类文件结构</strong>如下：</p>
-<pre><code>ClassFile &#123;
-// 字节数           类型
-    u4                magic;
-    u2             minor_version;    
-    u2             major_version;    
-    u2             constant_pool_count;    
-    cp_info        constant_pool[constant_pool_count-1];    
-    u2             access_flags;    
-    u2             this_class;    
-    u2             super_class;   
-    u2             interfaces_count;    
-    u2             interfaces[interfaces_count];   
-    u2             fields_count;    
-    field_info     fields[fields_count];   
-    u2             methods_count;    
-    method_info    methods[methods_count];    
-    u2             attributes_count;    
-    attribute_info attributes[attributes_count];
-&#125;
-</code></pre>
-<p><img src="https://pic1.zhimg.com/v2-d627f33b6e850bc2efe0fac63c241280_r.jpg"></p>
-<h4 id="魔数"><a href="#魔数" class="headerlink" title="魔数"></a>魔数</h4><p>以上面字节码文件的第一行为例</p>
-<pre><code>0000000 ca fe ba be 00 00 00 34 00 23 0a 00 06 00 15 09
-</code></pre>
-<p>（去除标号）头4个字节，唯一作用是确定文件是否为一个可被虚拟机接受的<strong>Class文件</strong>，固定为“0 x CA FE BA BE”。</p>
-<h4 id="版本"><a href="#版本" class="headerlink" title="版本"></a>版本</h4><p>以上面字节码文件的第一行为例</p>
-<pre><code>0000000 ca fe ba be 00 00 00 34 00 23 0a 00 06 00 15 09
-</code></pre>
-<p>（去除标号）4~7 字节，表示<strong>类的版本</strong>：00 00 00 34（十进制为52，对应JDK版本1.8）</p>
-<h4 id="常量池-1"><a href="#常量池-1" class="headerlink" title="常量池"></a>常量池</h4><p><img src="https://img-blog.csdn.net/20180803172812278?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3E5ODIxNTE3NTY=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70"></p>
-<p>以上面字节码文件的第一行为例</p>
-<pre><code>0000000 ca fe ba be 00 00 00 34 00 23 0a 00 06 00 15 09
-</code></pre>
-<ul>
-<li>8~9 字节，表示常量池长度，00  23（35）表示常量池有 #1 ~ #34 项，注意#0不计入，也没有值。</li>
-<li>#1：0a 表示一个 Method 信息，00 06 和 00 15 表示它引用了常量池 #6 和 #21 项来获得该方法的 所属类 和 方法名 。 </li>
-</ul>
-<h4 id="访问标识"><a href="#访问标识" class="headerlink" title="访问标识"></a>访问标识</h4><p>用来标记类或接口的访问信息，是类还是接口，是否是public类型，是否定义为final，是否是abstract类型等。</p>
-<p><img src="https://pic2.zhimg.com/80/v2-285f678a8c1b330ab5f5d8a6c4ead635_720w.jpg"></p>
-<pre><code>0000660 29 56 00 21 00 05 00 06 00 00 00 00 00 02 00 01 
-</code></pre>
-<ul>
-<li>0021 = 0020 + 0001 表示该class是一个类，公共的</li>
-<li>根据 00 05 即常量池中的 #5 找到本类全限定名，根据 00 06 即常量池中的 #6 找到父类全限定名</li>
-<li>00 00 表示接口的数量，本类为0</li>
-</ul>
-<h4 id="Field信息"><a href="#Field信息" class="headerlink" title="Field信息"></a>Field信息</h4><pre><code>0000660 29 56 00 21 00 05 00 06 00 00 00 00 00 02 00 01
-</code></pre>
-<p>本类中成员变量的数量为 00 00 （0）</p>
-<p><img src="/.io//saltfish\JVM\笔记\pics\Field信息.PNG"></p>
-<h4 id="Method信息"><a href="#Method信息" class="headerlink" title="Method信息"></a>Method信息</h4><pre><code>0000660 29 56 00 21 00 05 00 06 00 00 00 00 00 02 00 01
-</code></pre>
-<p>本类中方法的数量为 00 02 （2）</p>
-<h3 id="字节码指令"><a href="#字节码指令" class="headerlink" title="字节码指令"></a>字节码指令</h3><p>参考：<a target="_blank" rel="noopener" href="https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-6.html#jvms-6.5">https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-6.html#jvms-6.5</a></p>
-<h4 id="javap工具"><a href="#javap工具" class="headerlink" title="javap工具"></a>javap工具</h4><p>Oracle 提供了 <strong>javap</strong> 工具来反编译 class 文件</p>
-<pre><code>javap -v F:\Thread_study\src\com\nyima\JVM\day01\Main.class
-</code></pre>
-<pre><code>F:\Thread_study&gt;javap -v F:\Thread_study\src\com\nyima\JVM\day5\Demo1.class
-Classfile /F:/Thread_study/src/com/nyima/JVM/day5/Demo1.class
-  Last modified 2020-6-6; size 434 bytes
-  MD5 checksum df1dce65bf6fb0b4c1de318051f4a67e
-  Compiled from &quot;Demo1.java&quot;
-public class com.nyima.JVM.day5.Demo1
-  minor version: 0
-  major version: 52
-  flags: ACC_PUBLIC, ACC_SUPER            /*类的访问修饰符是public的*/
-Constant pool:
-    /*方法引用*/
-   #1 = Methodref          #6.#15         // java/lang/Object.&quot;&lt;init&gt;&quot;:()V
-   /*引用 System.out 成员变量*/
-   #2 = Fieldref           #16.#17        // java/lang/System.out:Ljava/io/PrintStream;
-   /*字符串常量*/
-   #3 = String             #18            // hello world
-   #4 = Methodref          #19.#20        // java/io/PrintStream.println:(Ljava/lang/String;)V
-   #5 = Class              #21            // com/nyima/JVM/day5/Demo1
-   #6 = Class              #22            // java/lang/Object
-   #7 = Utf8               &lt;init&gt;
-   #8 = Utf8               ()V
-   #9 = Utf8               Code
-  #10 = Utf8               LineNumberTable
-  #11 = Utf8               main
-  #12 = Utf8               ([Ljava/lang/String;)V
-  #13 = Utf8               SourceFile
-  #14 = Utf8               Demo1.java
-  #15 = NameAndType        #7:#8          // &quot;&lt;init&gt;&quot;:()V
-  #16 = Class              #23            // java/lang/System
-  #17 = NameAndType        #24:#25        // out:Ljava/io/PrintStream;
-  #18 = Utf8               hello world
-  #19 = Class              #26            // java/io/PrintStream
-  #20 = NameAndType        #27:#28        // println:(Ljava/lang/String;)V
-  #21 = Utf8               com/nyima/JVM/day5/Demo1
-  #22 = Utf8               java/lang/Object
-  #23 = Utf8               java/lang/System
-  #24 = Utf8               out
-  #25 = Utf8               Ljava/io/PrintStream;
-  #26 = Utf8               java/io/PrintStream
-  #27 = Utf8               println
-  #28 = Utf8               (Ljava/lang/String;)V
-&#123;
-/************ 构造方法 ***************/
-  public com.nyima.JVM.day5.Demo1();
-    descriptor: ()V
-    flags: ACC_PUBLIC
-    Code:
-      stack=1, locals=1, args_size=1
-         0: aload_0
-         1: invokespecial #1                  // Method java/lang/Object.&quot;&lt;init&gt;&quot;:()V
-         4: return
-      LineNumberTable:
-        line 7: 0
-/***********************************/
-  public static void main(java.lang.String[]);
-    descriptor: ([Ljava/lang/String;)V
-    flags: ACC_PUBLIC, ACC_STATIC
-    Code:
-      stack=2, locals=1, args_size=1
-         0: getstatic     #2                  // Field java/lang/System.out:Ljava/io/PrintStream;
-         //加载常量池中的常量
-         3: ldc           #3                  // String hello world
-         5: invokevirtual #4                  // Method java/io/PrintStream.println:(Ljava/lang/String;)V
-
-         8: return
-      LineNumberTable:
-        line 9: 0
-        line 10: 8
-&#125;
-</code></pre>
-<h4 id="图解方法执行流程"><a href="#图解方法执行流程" class="headerlink" title="图解方法执行流程"></a>图解方法执行流程</h4><h5 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h5><pre><code class="java">public class Demo3_1 &#123;    
-    public static void main(String[] args) &#123;        
-        int a = 10;        
-        int b = Short.MAX_VALUE + 1;        
-        int c = a + b;        
-        System.out.println(c);   
-    &#125; 
-&#125;
-</code></pre>
-<h5 id="常量池载入运行时常量池"><a href="#常量池载入运行时常量池" class="headerlink" title="常量池载入运行时常量池"></a>常量池载入运行时常量池</h5><p>常量池也属于方法区，只不过这里单独提出来了。</p>
-<p>当数值<strong>超过short的最大值（32767）</strong>，就会被放入常量池，否则和方法字节码放在一起。</p>
-<p><img src="/.io//saltfish\JVM\笔记\pics\图解-运行时常量池.PNG"></p>
-<h5 id="方法字节码载入方法区"><a href="#方法字节码载入方法区" class="headerlink" title="方法字节码载入方法区"></a>方法字节码载入方法区</h5><p><img src="/.io//saltfish\JVM\笔记\pics\图解-方法区.PNG"></p>
-<h5 id="main线程开始运行，分配栈帧内存"><a href="#main线程开始运行，分配栈帧内存" class="headerlink" title="main线程开始运行，分配栈帧内存"></a>main线程开始运行，分配栈帧内存</h5><p>（stack=2，locals=4） 对应操作数栈有2个空间（每个空间4个字节），局部变量表中有4个槽位</p>
-<p><img src="/.io//saltfish\JVM\笔记\pics\图解-main.PNG"></p>
-<h5 id="执行引擎开始执行字节码"><a href="#执行引擎开始执行字节码" class="headerlink" title="执行引擎开始执行字节码"></a>执行引擎开始执行字节码</h5><p><strong>bipush 10</strong></p>
-<ul>
-<li>将一个 byte 压入操作数栈（其长度会补齐 4 个字节），类似的指令还有：<ul>
-<li><code>sipush</code> 将一个 short 压入操作数栈（其长度会补齐 4 个字节）</li>
-<li><code>ldc</code> 将一个 int 压入操作数栈</li>
-<li><code>ldc2_w</code> 将一个 long 压入操作数栈（<strong>分两次压入</strong>，因为 long 是 8 个字节）</li>
-<li>这里小的数字都是和字节码指令存在一起，<strong>超过 short 范围的数字存入了常量池</strong></li>
-</ul>
-</li>
-</ul>
-<p><a target="_blank" rel="noopener" href="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151336.png"><img src="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151336.png" alt="img"></a></p>
-<p><strong>istore 1</strong></p>
-<p>将操作数栈栈顶元素弹出，放入局部变量表的slot 1中</p>
-<p>对应代码中的<code>a = 10Copy</code></p>
-<p><a target="_blank" rel="noopener" href="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151346.png"><img src="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151346.png" alt="img"></a></p>
-<p><a target="_blank" rel="noopener" href="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151412.png"><img src="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151412.png" alt="img"></a></p>
-<p><strong>ldc #3</strong></p>
-<ul>
-<li><p>读取运行时常量池中#3，即32768(超过short最大值范围的数会被放到运行时常量池中)，将其加载到操作数栈中</p>
-</li>
-<li><p>注意： Short.MAX_VALUE 是 32767，所以 32768 = Short.MAX_VALUE + 1 实际是在编译期间计算好的，<strong>编译期优化</strong></p>
-</li>
-</ul>
-<p><a target="_blank" rel="noopener" href="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151421.png"><img src="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151421.png" alt="img"></a></p>
-<p><strong>istore 2</strong></p>
-<p>将操作数栈中的元素弹出，放到局部变量表的2号位置</p>
-<p><a target="_blank" rel="noopener" href="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151432.png"><img src="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151432.png" alt="img"></a></p>
-<p><a target="_blank" rel="noopener" href="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151441.png"><img src="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151441.png" alt="img"></a></p>
-<p><strong>iload1 iload2</strong></p>
-<ul>
-<li><p>将局部变量表中1号位置和2号位置的元素放入操作数栈中</p>
-</li>
-<li><p>因为<strong>只能在操作数栈中执行运算操作</strong></p>
-</li>
-</ul>
-<p><a target="_blank" rel="noopener" href="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151450.png"><img src="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151450.png" alt="img"></a></p>
-<p><a target="_blank" rel="noopener" href="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151459.png"><img src="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151459.png" alt="img"></a></p>
-<p><strong>iadd</strong></p>
-<p>将操作数栈中的两个元素<strong>弹出栈</strong>并相加，结果在压入操作数栈中</p>
-<p><a target="_blank" rel="noopener" href="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151508.png"><img src="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151508.png" alt="img"></a></p>
-<p><a target="_blank" rel="noopener" href="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151523.png"><img src="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151523.png" alt="img"></a></p>
-<p><strong>istore 3</strong></p>
-<p>将操作数栈中的元素弹出，放入局部变量表的3号位置</p>
-<p><a target="_blank" rel="noopener" href="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151547.png"><img src="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151547.png" alt="img"></a></p>
-<p><a target="_blank" rel="noopener" href="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151555.png"><img src="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151555.png" alt="img"></a></p>
-<p><strong>getstatic #4</strong></p>
-<ul>
-<li><p>加载静态成员变量：在运行时常量池中找到#4，发现是一个对象</p>
-</li>
-<li><p>在堆内存中找到该对象，并将其<strong>引用</strong>放入操作数栈中</p>
-</li>
-</ul>
-<p><a target="_blank" rel="noopener" href="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151605.png"><img src="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151605.png" alt="img"></a></p>
-<p><a target="_blank" rel="noopener" href="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151613.png"><img src="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151613.png" alt="img"></a></p>
-<p><strong>iload 3</strong></p>
-<p>将局部变量表中3号位置的元素压入操作数栈中</p>
-<p><a target="_blank" rel="noopener" href="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151624.png"><img src="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151624.png" alt="img"></a></p>
-<p><strong>invokevirtual 5</strong></p>
-<ul>
-<li><p>找到常量池 #5 项，定位到方法区 java/io/PrintStream.println:(I)V 方法</p>
-</li>
-<li><p>生成新的栈帧（分配 locals、stack等）</p>
-</li>
-<li><p>传递参数，执行新栈帧中的字节码</p>
-</li>
-</ul>
-<p><a target="_blank" rel="noopener" href="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151632.png"><img src="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151632.png" alt="img"></a></p>
-<ul>
-<li><p>执行完毕，弹出栈帧</p>
-</li>
-<li><p>清除 main 操作数栈内容</p>
-</li>
-</ul>
-<p><a target="_blank" rel="noopener" href="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151640.png"><img src="https://nyimapicture.oss-cn-beijing.aliyuncs.com/img/20200608151640.png" alt="img"></a></p>
-<p><strong>return</strong><br>完成 main 方法调用，弹出 main 栈帧，程序结束</p>
-<h4 id="通过字节码指令来分析问题"><a href="#通过字节码指令来分析问题" class="headerlink" title="通过字节码指令来分析问题"></a>通过字节码指令来分析问题</h4><p>代码：</p>
-<pre><code class="java">public class Demo3_2 &#123; 
-    public static void main(String[] args) &#123; 
-        int a = 10; 
-        int b = a++ + ++a + a--; 
-        System.out.println(a); System.out.println(b); 
-    &#125; 
-&#125;
-</code></pre>
-<p>分析：</p>
-<ul>
-<li>执行自增的是<code>iinc</code>指令，直接在局部变量 slot 上进行运算，不是利用操作数栈执行的</li>
-<li>a++ 和 ++a 的区别就在于是先执行<code>iload</code>还是先执行<code>iinc</code></li>
-</ul>
-<p><img src="/.io//saltfish\JVM\笔记\pics\图解-a++.PNG"></p>
-<p><img src="/.io//saltfish\JVM\笔记\pics\图解-a++(2).PNG"></p>
-<p>执行++操作，对槽进行。</p>
-<p><img src="/.io//saltfish\JVM\笔记\pics\图解-a++(1).PNG"></p>
-<p>执行++操作，对槽进行。</p>
-<p><img src="/.io//saltfish\JVM\笔记\pics\图解-a++(3).PNG"></p>
-<p><img src="/.io//saltfish\JVM\笔记\pics\图解-a++(4).PNG"></p>
-<h4 id="循环控制指令"><a href="#循环控制指令" class="headerlink" title="循环控制指令"></a>循环控制指令</h4><p>代码</p>
-<pre><code class="java">public class Demo2 &#123;
-    public static void main(String[] args) &#123;
-        int i=0;
-        int x=0;
-        while(i&lt;10) &#123;
-            x = x++;
-            i++;
-        &#125;
-        System.out.println(x); //接过为0
-    &#125;
-&#125;
-</code></pre>
-<p>为什么最终的x结果为0呢？ 通过分析字节码指令即可知晓</p>
-<pre><code>Code:
-     stack=2, locals=3, args_size=1    //操作数栈分配2个空间，局部变量表分配3个空间
-        0: iconst_0    //准备一个常数0
-        1: istore_1    //将常数0放入局部变量表的1号槽位 i=0
-        2: iconst_0    //准备一个常数0
-        3: istore_2    //将常数0放入局部变量的2号槽位 x=0    
-        4: iload_1        //将局部变量表1号槽位的数放入操作数栈中
-        5: bipush        10    //将数字10放入操作数栈中，此时操作数栈中有2个数
-        7: if_icmpge     21    //比较操作数栈中的两个数，如果下面的数大于上面的数，就跳转到21。这里的比较是将两个数做减法。因为涉及运算操作，所以会将两个数弹出操作数栈来进行运算。运算结束后操作数栈为空
-       10: iload_2        //将局部变量2号槽位的数放入操作数栈中，放入的值是0
-       11: iinc          2, 1    //将局部变量2号槽位的数加1，自增后，槽位中的值为1
-       14: istore_2    //将操作数栈中的数放入到局部变量表的2号槽位，2号槽位的值又变为了0
-       15: iinc          1, 1 //1号槽位的值自增1
-       18: goto          4 //跳转到第4条指令
-       21: getstatic     #2                  // Field java/lang/System.out:Ljava/io/PrintStream;
-       24: iload_2
-       25: invokevirtual #3                  // Method java/io/PrintStream.println:(I)V
-       28: return
-</code></pre>
-<p>while和for循环的字节码指令是一样的。</p>
-<h4 id="构造方法"><a href="#构造方法" class="headerlink" title="构造方法"></a>构造方法</h4><h5 id="lt-cinit-gt-V：整个类的构造方法"><a href="#lt-cinit-gt-V：整个类的构造方法" class="headerlink" title="&lt; cinit &gt;()V：整个类的构造方法"></a>&lt; cinit &gt;()V：整个类的构造方法</h5><p>该方法会在类加载的初始化阶段被调用。</p>
-<pre><code class="java">public class Demo3 &#123;
-    static int i = 10;
-
-    static &#123;
-        i = 20;
-    &#125;
-
-    static &#123;
-        i = 30;
-    &#125;
-
-    public static void main(String[] args) &#123;
-        System.out.println(i); //结果为30
-    &#125;
-&#125;
-</code></pre>
-<p>编译器会按<strong>从上至下</strong>的顺序，收集所有 static 静态代码块和静态成员赋值的代码，<strong>合并</strong>为一个特殊的方法 cinit()V ：</p>
-<pre><code>stack=1, locals=0, args_size=0
-         0: bipush        10
-         //放入常量池#3的位置
-         2: putstatic     #3                  // Field i:I
-         5: bipush        20
-         7: putstatic     #3                  // Field i:I
-        10: bipush        30
-        12: putstatic     #3                  // Field i:I
-        15: returnCopy
-</code></pre>
-<h5 id="lt-init-gt-V：实例的构造方法"><a href="#lt-init-gt-V：实例的构造方法" class="headerlink" title="&lt; init() &gt;V：实例的构造方法"></a>&lt; init() &gt;V：实例的构造方法</h5><pre><code class="java">public class Demo4 &#123;
-    private String a = &quot;s1&quot;;
-
-    &#123;//初始化代码块
-        b = 20;
-    &#125;
-
-    private int b = 10;
-
-    &#123;
-        a = &quot;s2&quot;;
-    &#125;
-
-    public Demo4(String a, int b) &#123;
-        this.a = a;
-        this.b = b;
-    &#125;
-
-    public static void main(String[] args) &#123;
-        Demo4 d = new Demo4(&quot;s3&quot;, 30);
-        System.out.println(d.a);
-        System.out.println(d.b);
-    &#125;
-&#125;
-</code></pre>
-<p>编译器会按<strong>从上至下</strong>的顺序，收集所有 {} 代码块和成员变量赋值的代码，<strong>形成新的构造方法</strong>，先执行那些静态代码块，再执行非静态代码块，<strong>原始构造方法</strong>内的代码<strong>总是在最后</strong>。</p>
-<pre><code>Code:
-     stack=2, locals=3, args_size=3
-        0: aload_0
-        1: invokespecial #1                  // Method java/lang/Object.&quot;&lt;init&gt;&quot;:()V
-        4: aload_0 //加载this
-        5: ldc           #2                  // String s1
-        7: putfield      #3                  // Field a:Ljava/lang/String;  把s1赋给this.a
-       10: aload_0
-       11: bipush        20
-       13: putfield      #4                  // Field b:I 把20赋给this.b
-       16: aload_0
-       17: bipush        10
-       19: putfield      #4                  // Field b:I
-       22: aload_0
-       23: ldc           #5                  // String s2
-       25: putfield      #3                  // Field a:Ljava/lang/String;
-       //原始构造方法在最后执行
-       28: aload_0
-       29: aload_1
-       30: putfield      #3                  // Field a:Ljava/lang/String;
-       33: aload_0
-       34: iload_2
-       35: putfield      #4                  // Field b:I
-       38: return
-</code></pre>
-<h4 id="方法调用"><a href="#方法调用" class="headerlink" title="方法调用"></a>方法调用</h4><p>看一下几种不同的方法调用对应的字节码指令</p>
-<pre><code class="java">public class Demo5 &#123;
-    public Demo5() &#123;
-
-    &#125;
-
-    private void test1() &#123;
-
-    &#125;
-
-    private final void test2() &#123;
-
-    &#125;
-
-    public void test3() &#123;
-
-    &#125;
-
-    public static void test4() &#123;
-
-    &#125;
-
-    public static void main(String[] args) &#123;
-        Demo5 demo5 = new Demo5();
-        demo5.test1();
-        demo5.test2();
-        demo5.test3();
-        demo5.test4();//通过对象调用静态方法
-        Demo5.test4();//通过类调用
-    &#125;
-&#125;
-</code></pre>
-<p>不同方法在调用时，对应的虚拟机指令有所区别</p>
-<ul>
-<li>私有、构造、final修饰的方法，在调用时都使用<strong>invokespecial</strong>指令</li>
-<li>普通成员方法在调用时，使用<strong>invokevirtual</strong>指令。</li>
-<li>静态方法在调用时使用<strong>invokestatic</strong>指令</li>
-<li>invokespecial 和 invokestatic 是<strong>静态绑定</strong>的，在字节码指令生成时，就已经知道是哪个类了。invokevirtual 因为可能存在方法重写的情况，所以编译期间无法确定调用的是哪个对象的方法，只有在运行期间才能确定，称为<strong>动态绑定</strong>。</li>
-</ul>
-<pre><code>Code:
-      stack=2, locals=2, args_size=1
-         0: new           #2                  // class com/nyima/JVM/day5/Demo5 分配堆空间内存，分配成功会把对象的引用放入操作数栈
-         3: dup  //duplication，把栈里的内容复制一份，这样栈里就有两个刚刚创建的对象的引用
-         4: invokespecial #3                  // Method &quot;&lt;init&gt;&quot;:()V  弹出栈顶的对象引用调用其构造方法
-         7: astore_1  //把栈顶的元素弹出存储到局部变量d中
-         8: aload_1   //找到d引用压入操作数栈
-         9: invokespecial #4                  // Method test1:()V
-        12: aload_1
-        13: invokespecial #5                  // Method test2:()V
-        16: aload_1
-        17: invokevirtual #6                  // Method test3:()V
-        20: aload_1
-        21: pop  //静态方法不需要用到对象的引用所以又弹栈
-        22: invokestatic  #7                  // Method test4:()V
-        //这里没有用对象调用静态方法，所以并没有再执行aload_1和pop
-        25: invokestatic  #7                  // Method test4:()V
-        28: return
-</code></pre>
-<h4 id="多态原理"><a href="#多态原理" class="headerlink" title="多态原理"></a>多态原理</h4><h5 id="vtable"><a href="#vtable" class="headerlink" title="vtable"></a>vtable</h5><ul>
-<li>多态方法（直接继承的和改写的方法）的实际<strong>入口地址</strong>存在于 vitable 虚方法表中，静态方法、final方法和私有方法不会在vitable中。</li>
-<li>在类元信息 <strong>instanceKlass</strong> 中，不在对象或Class类中。</li>
-<li>在<strong>类加载链接阶段</strong>生成</li>
-</ul>
-<h5 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h5><p>在执行invokevirtual指令时，经历了以下几个步骤</p>
-<ul>
-<li>先通过栈帧中对象的引用找到对象</li>
-<li>分析对象头，找到对象<strong>类元信息的地址</strong></li>
-<li>找到 vtable，查询vtable找到<strong>方法的具体地址</strong></li>
-<li>执行方法的字节码</li>
-</ul>
-<p>频繁调用的方法地址会被缓存，以加快运行速度。</p>
-<h4 id="异常处理"><a href="#异常处理" class="headerlink" title="异常处理"></a>异常处理</h4><h5 id="try-catch"><a href="#try-catch" class="headerlink" title="try-catch"></a>try-catch</h5><pre><code class="java">public class Demo1 &#123;
-    public static void main(String[] args) &#123;
-        int i = 0;
-        try &#123;
-            i = 10;
-        &#125;catch (Exception e) &#123;
-            i = 20;
-        &#125;
-    &#125;
-&#125;
-</code></pre>
-<p>字节码：</p>
-<pre><code>Code:
-     stack=1, locals=3, args_size=1
-        0: iconst_0
-        1: istore_1
-        2: bipush        10
-        4: istore_1
-        5: goto          12
-        8: astore_2
-        9: bipush        20
-       11: istore_1
-       12: return
-     //多出来一个异常表
-     Exception table:
-        from    to  target type
-            2     5     8   Class java/lang/Exception
-</code></pre>
-<ul>
-<li>异常表用来监测[from,to)的代码，看发生的异常和type中的异常是否一致，一致则进入target行</li>
-<li>8行的字节码指令 astore_2 是将异常对象引用存入局部变量表的2号位置（为e）</li>
-</ul>
-<h5 id="多个single-catch"><a href="#多个single-catch" class="headerlink" title="多个single-catch"></a>多个single-catch</h5><pre><code class="java">public class Demo1 &#123;
-    public static void main(String[] args) &#123;
-        int i = 0;
-        try &#123;
-            i = 10;
-        &#125;catch (ArithmeticException e) &#123;
-            i = 20;
-        &#125;catch (Exception e) &#123;
-            i = 30;
-        &#125;
-    &#125;
-&#125;
-</code></pre>
-<p>字节码</p>
-<pre><code>Code:
-     stack=1, locals=3, args_size=1
-        0: iconst_0
-        1: istore_1
-        2: bipush        10
-        4: istore_1
-        5: goto          19
-        8: astore_2
-        9: bipush        20
-       11: istore_1
-       12: goto          19
-       15: astore_2
-       16: bipush        30
-       18: istore_1
-       19: return
-     Exception table:
-        from    to  target type
-            2     5     8   Class java/lang/ArithmeticException
-            2     5    15   Class java/lang/NullPointerException
-            2      5    22   Class java/lang/Exception
-</code></pre>
-<ul>
-<li>异常表里会有多项不同类型的异常监测</li>
-<li>因为异常出现时，<strong>只能进入</strong> Exception table 中<strong>一个分支</strong>，所以局部变量表只用一个槽位 Slot 2 被<strong>复用</strong>来存储不同类型的异常</li>
-</ul>
-<h5 id="multi-catch的情况"><a href="#multi-catch的情况" class="headerlink" title="multi-catch的情况"></a>multi-catch的情况</h5><pre><code class="java">public static void main(String[] args) &#123; 
-    try &#123;
-        Method test = Demo3_11_3.class.getMethod(&quot;test&quot;);
-        test.invoke(null); 
-    &#125; catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) &#123; 
-        e.printStackTrace(); 
-    &#125; 
-&#125;
-</code></pre>
-<p>异常表：</p>
-<p>![](F:\saltfish\JVM\笔记\pics\exception table.PNG)</p>
-<h5 id="finally"><a href="#finally" class="headerlink" title="finally"></a>finally</h5><pre><code class="java">public class Demo2 &#123;
-    public static void main(String[] args) &#123;
-        int i = 0;
-        try &#123;
-            i = 10;
-        &#125; catch (Exception e) &#123;
-            i = 20;
-        &#125; finally &#123;
-            i = 30;
-        &#125;
-    &#125;
-&#125;
-</code></pre>
-<p>字节码</p>
-<pre><code>Code:
-     stack=1, locals=4, args_size=1
-        0: iconst_0
-        1: istore_1
-        //try块
-        2: bipush        10
-        4: istore_1
-        //try块执行完后，没有异常的话会直接向下执行finally    
-        5: bipush        30
-        7: istore_1
-        8: goto          27
-       //catch块     
-       11: astore_2 //异常信息放入局部变量表的2号槽位
-       12: bipush        20
-       14: istore_1
-       //catch块执行完后，有异常会执行finally        
-       15: bipush        30
-       17: istore_1
-       18: goto          27
-       //出现异常，但未被Exception捕获，会抛出其他异常，这时也需要执行finally块中的代码   
-       21: astore_3   //用于存储try其他类型和catch中任意的异常
-       22: bipush        30
-       24: istore_1
-       25: aload_3
-       26: athrow  //要抛出异常
-       27: return
-     Exception table:
-        from    to  target type
-            2     5    11   Class java/lang/Exception
-            2     5    21   any //监测try块的异常
-           11    15    21   any //监测catch块的异常
-</code></pre>
-<ul>
-<li> ﬁnally 中的代码被<strong>复制了 2 份，一共 3 份</strong>，分别放入 try 流程，catch 流程以及 catch 剩余的异常类型流程。当出现了其他类型的异常时，finally执行完后还要抛出异常。</li>
-<li>异常表中不仅有对 try 指定类型的监测，还有对 try 和 catch 其他任意异常类型的监测。</li>
-</ul>
-<h5 id="finally-出现了-return"><a href="#finally-出现了-return" class="headerlink" title="finally 出现了 return"></a>finally 出现了 return</h5><pre><code class="java">public class Demo3 &#123;
-    public static void main(String[] args) &#123;
-        int i = Demo3.test();  //结果为20
-        System.out.println(i);
-    &#125;
-
-    public static int test() &#123;
-        int i;
-        try &#123;
-            i = 10;
-            return i;
-        &#125; finally &#123;
-            i = 20;
-            return i;
-        &#125;
-    &#125;
-&#125;
-</code></pre>
-<p>字节码：</p>
-<pre><code>Code:
-     stack=1, locals=3, args_size=0
-        0: bipush        10
-        2: istore_0        //把操作数10存入slot0中
-        3: iload_0    //加载slot0到栈中
-        4: istore_1  //暂存返回值，将栈中的数暂存到slot1
-        5: bipush        20
-        7: istore_0
-        8: iload_0
-        9: ireturn    //ireturn会返回操作数 栈顶 的整型值20
-       //如果出现异常，还是会执行finally块中的内容，没有抛出异常
-       10: astore_2  //存储异常
-       11: bipush        20
-       13: istore_0        //把操作数10存入slot0中
-       14: iload_0
-       15: ireturn    //这里没有athrow了，也就是如果在finally块中如果有返回操作的话，且try块中出现异常，会吞掉异常！
-     Exception table:
-        from    to  target type
-            0     5    10   any
-</code></pre>
-<ul>
-<li><strong>ireturn</strong> 是返回操作数栈顶的数。</li>
-<li>由于 ﬁnally 中的 <strong>ireturn</strong> 被插入了所有可能的流程，因此返回<strong>结果肯定以 ﬁnally</strong> 的为准</li>
-<li>至于字节码中第 2 行，似乎没啥用，且留个伏笔，看下个例子</li>
-<li>跟上例中的 ﬁnally 相比，发现<strong>没有 athrow 了</strong>，这告诉我们：如果在 ﬁnally 中出现了 return，会<strong>吞掉异常</strong>，所以<strong>不要在finally中进行返回操作</strong></li>
-</ul>
-<h5 id="finally-对返回值影响"><a href="#finally-对返回值影响" class="headerlink" title="finally 对返回值影响"></a>finally 对返回值影响</h5><pre><code class="java">public class Demo3 &#123;
-    public static void main(String[] args) &#123;
-        int i = Demo3.test();  //结果为10
-        System.out.println(i);
-    &#125;
-
-    public static int test() &#123;
-        int i;
-        try &#123;
-            i = 10;
-            return i;
-        &#125; finally &#123;
-            i = 20;
-        &#125;
-    &#125;
-&#125;
-</code></pre>
-<p>字节码：</p>
-<pre><code class="java">Code:
-      stack=1, locals=3, args_size=0
-         0: bipush        10 // &lt;- 10 放入栈顶
-         2: istore_0         // 10 -&gt; i
-         3: iload_0             // &lt;- i(10)
-         4: istore_1         // 10 -&gt; slot 1，暂存至 slot 1，目的是为了固定返回值
-         5: bipush        20 // &lt;- 20 放入栈顶
-         7: istore_0         // 20 -&gt; i
-         8: iload_1          // &lt;- slot 1(10) 载入 slot 1 暂存的值
-         9: ireturn             // 返回栈顶的 int(10)
-        10: astore_2
-        11: bipush        20
-        13: istore_0
-        14: aload_2
-        15: athrow   //不会吞掉异常，try中发生异常会抛出
-      Exception table:
-         from    to  target type
-             0     5    10   any
-</code></pre>
-<h4 id="synchronized"><a href="#synchronized" class="headerlink" title="synchronized"></a>synchronized</h4><pre><code class="java">public class Demo3 &#123;
-    public static void main(String[] args) &#123;
-        Object lock = new Object();
-        synchronized (lock) &#123;
-            System.out.println(&quot;ok&quot;);
-        &#125;
-    &#125;
-&#125;
-</code></pre>
-<p>字节码：</p>
-<pre><code class="java">Code:
-      stack=2, locals=4, args_size=1
-         0: new           #2                  // class java/lang/Object
-         3: dup //复制一份，放到操作数栈顶，一个用于构造函数，一个用于赋值
-         4: invokespecial #1                  // Method java/lang/Object.&quot;&lt;init&gt;&quot;:()V
-         7: astore_1  //把lock引用赋值给了局部变量表中的lock
-         8: aload_1  //对象引用加载到操作数栈
-         9: dup  //复制，一个用于monitorenter（加锁），一个用于monitorexit（解锁）
-        10: astore_2  //lock引用放到slot2
-        11: monitorenter  //对操作数栈中lock引用加锁
-        12: getstatic     #3                  // Field java/lang/System.out:Ljava/io/PrintStream;
-        15: ldc           #4                  // String ok
-        17: invokevirtual #5                  // Method java/io/PrintStream.println:(Ljava/lang/String;)V
-        20: aload_2  //slot2加载到操作数栈顶
-        21: monitorexit  //解锁
-        22: goto          30  //没有异常就会跳转到30
-        25: astore_3  //把异常引用存入slot3
-        26: aload_2  //slot2加载到操作数栈顶
-        27: monitorexit  //解锁
-        28: aload_3  //把异常引用加载到栈顶
-        29: athrow //抛出异常
-        30: return
-      Exception table:
-         from    to  target type
-            12    22    25   any  //synchronized代码块内部出现问题
-            25    28    25   any
-      LineNumberTable:
-        line 3: 0
-        line 4: 8
-        line 5: 12
-        line 6: 20
-        line 7: 30
-      LocalVariableTable:
-        Start  Length  Slot  Name   Signature
-            0      31     0  args   [Ljava/lang/String;
-            8      23     1  lock   Ljava/lang/Object;
-</code></pre>
-<p>方法级的synchronized不会在字节码指令中有所体现。</p>
-<h3 id="编译期处理"><a href="#编译期处理" class="headerlink" title="编译期处理"></a>编译期处理</h3><p><strong>语法糖</strong>：指 java 编译器把 *.java 源码编译为 *.class 字节码的过程中，<strong>自动生成</strong>和<strong>转换</strong>的一些代码，主要是为了减轻程序员的负担，算是 java 编译器给我们的一个额外福利。</p>
-<p><strong>注意</strong>，以下代码的分析，借助了 javap 工具，idea 的反编译功能，idea 插件 jclasslib 等工具。另外， 编译器转换的<strong>结果直接就是 class 字节码</strong>，只是为了便于阅读，给出了 几乎等价 的 java 源码方式，并不是编译器还会转换出中间的 java 源码，切记。</p>
-<h4 id="默认构造器"><a href="#默认构造器" class="headerlink" title="默认构造器"></a>默认构造器</h4><pre><code class="java">public class Candy1 &#123;
-&#125;
-</code></pre>
-<p>经过编译期优化后</p>
-<pre><code class="java">public class Candy1 &#123;
-   //这个无参构造器是java编译器帮我们加上的
-   public Candy1() &#123;
-      //即调用父类 Object 的无参构造方法，即调用 java/lang/Object.&quot; &lt;init&gt;&quot;:()V
-      super();
-   &#125;
-&#125;
-</code></pre>
-<h4 id="自动拆装箱"><a href="#自动拆装箱" class="headerlink" title="自动拆装箱"></a>自动拆装箱</h4><p>该特性是从 JDK 5 开始加入的。</p>
-<pre><code class="java">public class Candy2 &#123;
-   public static void main(String[] args) &#123;
-      Integer x = 1;
-      int y = x;
-   &#125;
-&#125;
-</code></pre>
-<p>JDK 5 之前上面的代码是无法编译通过的，必须使用拆箱和装箱的函数。</p>
-<pre><code class="java">public class Candy2 &#123;
-   public static void main(String[] args) &#123;
-      Integer x = Integer.valueOf(1);
-      int y = x.intValue();
-   &#125;
-&#125;
-</code></pre>
-<p>JDK 5 之后这些转换的事情都由编译器在编译阶段完成。</p>
-<h4 id="泛型集合取值"><a href="#泛型集合取值" class="headerlink" title="泛型集合取值"></a>泛型集合取值</h4><p>泛型是在 JDK 5 之后加入的特性，但 java 在<strong>编译泛型代码后</strong>会执行 <strong>泛型擦除</strong> 的动作，即泛型信息在编译为字节码之后就<strong>丢失</strong>了，实际的类型都当做了 <strong>Object</strong> 类型来处理：</p>
-<pre><code class="java">public class Candy3 &#123;
-   public static void main(String[] args) &#123;
-      List&lt;Integer&gt; list = new ArrayList&lt;&gt;();
-      list.add(10);  //实际调用的是List类的add(Object e)
-      Integer x = list.get(0); //实际调用的是 Object obj = List.get(int index);
-   &#125;
-&#125;
-</code></pre>
-<p>对应字节码</p>
-<pre><code class="java">Code:
-    stack=2, locals=3, args_size=1
-       0: new           #2                  // class java/util/ArrayList
-       3: dup
-       4: invokespecial #3                  // Method java/util/ArrayList.&quot;&lt;init&gt;&quot;:()V
-       7: astore_1
-       8: aload_1
-       9: bipush        10
-      11: invokestatic  #4                  // Method java/lang/Integer.valueOf:(I)Ljava/lang/Integer;自动装箱，把基本类型变成包装类型
-      //这里可以看到进行了泛型擦除，实际调用的是add(Objcet o)
-      14: invokeinterface #5,  2            // InterfaceMethod java/util/List.add:(Ljava/lang/Object;)Z invokeinterface是接口方法调用，Z表示返回布尔值
-      19: pop
-      20: aload_1
-      21: iconst_0 //设置get的下标0
-      //这里也进行了泛型擦除，实际调用的是get(Object o)   
-      22: invokeinterface #6,  2            // InterfaceMethod java/util/List.get:(I)Ljava/lang/Object;
-      //这里进行了强制类型转换，将Object转换成了Integer
-      27: checkcast     #7                  // class java/lang/Integer
-      30: astore_2
-      31: return
-</code></pre>
-<p>泛型擦除是擦除<strong>在字节码中的方法部分</strong>的泛型信息，但在 <strong>LocalVariableTypeTable</strong> 是保留了的。</p>
-<p>反射是只能用于得到方法参数和返回值上的信息，而对于上面代码中的泛型是无法得到的。</p>
-<p><img src="/.io//saltfish\JVM\笔记\pics\反射.PNG"></p>
-<h4 id="可变参数"><a href="#可变参数" class="headerlink" title="可变参数"></a>可变参数</h4><p>在 JDK 5 之后加入的特性。</p>
-<pre><code class="java">public class Demo4 &#123;
-   public static void foo(String... args) &#123;
-      //将args赋值给arr，可以看出String...实际就是String[] 
-      String[] arr = args;
-      System.out.println(arr.length);
-   &#125;
-
-   public static void main(String[] args) &#123;
-      foo(&quot;hello&quot;, &quot;world&quot;);
-   &#125;
-&#125;
-</code></pre>
-<p>可变参数 <strong>String…</strong> args 其实是一个 <strong>String[]</strong> args ，从代码中的赋值语句中就可以看出来。 同 样 java 编译器会在编译期间将上述代码变换为：</p>
-<pre><code class="java">public class Demo4 &#123;    
-   public Demo4() &#123;&#125;
-    //直接变成String[]
-   public static void foo(String[] args) &#123;
-      String[] arr = args;
-      System.out.println(arr.length);
-   &#125;
-
-   public static void main(String[] args) &#123;
-      foo(new String[]&#123;&quot;hello&quot;, &quot;world&quot;&#125;);
-   &#125;
-&#125;
-</code></pre>
-<p><strong>注意</strong>：如果调用的是无参foo()，即未传递参数时，等价代码为foo(new String[]{})，<strong>创建了一个空数组</strong>，而不是直接传递的null。</p>
-<h4 id="foreach循环"><a href="#foreach循环" class="headerlink" title="foreach循环"></a>foreach循环</h4><p>在 JDK 5 之后加入的特性。</p>
-<pre><code class="java">public class Demo5 &#123;
-    public static void main(String[] args) &#123;
-        //数组赋初值的简化写法也是一种语法糖。
-        int[] arr = &#123;1, 2, 3, 4, 5&#125;;
-        for(int x : arr) &#123; //语法糖
-            System.out.println(x);
-        &#125;
-    &#125;
-&#125;
-</code></pre>
-<p>编译器会帮我们转换为</p>
-<pre><code class="java">public class Demo5 &#123;
-    public Demo5() &#123;&#125;
-    public static void main(String[] args) &#123;
-        int[] arr = new int[]&#123;1, 2, 3, 4, 5&#125;;
-        for(int i=0; i&lt;arr.length; ++i) &#123; //foreach转换成基本的for
-            int x = arr[i];
-            System.out.println(x);
-        &#125;
-    &#125;
-&#125;
-</code></pre>
-<p><strong>如果是集合使用foreach</strong></p>
-<pre><code class="java">public class Demo5 &#123;
-   public static void main(String[] args) &#123;
-      List&lt;Integer&gt; list = Arrays.asList(1, 2, 3, 4, 5);
-      for (Integer x : list) &#123;
-         System.out.println(x);
-      &#125;
-   &#125;
-&#125;
-</code></pre>
-<p>集合要使用foreach，需要该集合类<strong>实现了Iterable接口</strong>，因为集合的遍历需要用到<strong>迭代器Iterator</strong>。编译器将上面的代码转换成为对迭代器的调用。</p>
-<pre><code class="java">public class Demo5 &#123;
-   public Demo5() &#123;&#125;
-    
-   public static void main(String[] args) &#123;
-      List&lt;Integer&gt; list = Arrays.asList(1, 2, 3, 4, 5);
-      //获得该集合的迭代器
-      Iterator&lt;Integer&gt; iterator = list.iterator();
-      while(iterator.hasNext()) &#123;
-         Integer x = iterator.next();
-         System.out.println(x);
-      &#125;
-   &#125;
-&#125;
-</code></pre>
-<h4 id="switch-字符串"><a href="#switch-字符串" class="headerlink" title="switch 字符串"></a>switch 字符串</h4><p>从 JDK 7 开始，switch可以用于字符串拟合枚举类。</p>
-<pre><code class="java">public class Demo6 &#123;
-   public static void main(String[] args) &#123;
-      String str = &quot;hello&quot;;
-      switch (str) &#123;
-         case &quot;hello&quot; :
-            System.out.println(&quot;h&quot;);
-            break;
-         case &quot;world&quot; :
-            System.out.println(&quot;w&quot;);
-            break;
-         default:
-            break;
-      &#125;
-   &#125;
-&#125;
-</code></pre>
-<p>被编译器转换为：</p>
-<pre><code class="java">public class Demo6 &#123;
-   public Demo6() &#123;
-   &#125;
-    
-   public static void main(String[] args) &#123;
-      String str = &quot;hello&quot;;
-      byte x = -1;
-      //通过字符串的hashCode+value来判断是否匹配
-      switch (str.hashCode()) &#123;
-         
-         case 99162322 : //hello的hashCode
-            //再次比较，因为字符串的hashCode有可能相等
-            if(str.equals(&quot;hello&quot;)) &#123;
-               x = 0;
+            num += jinWei;
+            if(head == null) &#123;                
+                head = new ListNode(num%10);
+                p = head;
+            &#125; else&#123;
+                p.next = new ListNode(num%10);
+                p = p.next;
+            &#125;            
+            if(num &gt;= 10) &#123;
+                jinWei = 1;
+            &#125;else &#123;
+                jinWei = 0;
             &#125;
-            break;
-         
-         case 11331880 : //world的hashCode
-            if(str.equals(&quot;world&quot;)) &#123;
-               x = 1;
+        &#125; 
+        return head;           
+    &#125;
+&#125;
+</code></pre>
+<h4 id="解法二：双指针递归"><a href="#解法二：双指针递归" class="headerlink" title="解法二：双指针递归"></a>解法二：双指针递归</h4><p>和上面的思路是一样的，只不过把迭代改成了递归。</p>
+<pre><code class="java">class Solution &#123;
+    int jinWei = 0;
+    public ListNode addTwoNumbers(ListNode l1, ListNode l2) &#123;
+        if(l1 == null &amp;&amp; l2 == null &amp;&amp; jinWei == 0) return null;
+        int sum = 0;
+        if(l1 != null) sum += l1.val;
+        if(l2 != null) sum += l2.val;
+        sum += jinWei;
+        if(sum &gt;= 10) &#123;
+            jinWei = 1;
+            sum = sum%10;
+        &#125;else &#123;
+            jinWei = 0;
+        &#125;
+        ListNode head = new ListNode(sum);
+        head.next = addTwoNumbers(l1 != null ? l1.next : null, l2 != null ? l2.next : null);
+        return head;           
+    &#125;
+&#125;
+</code></pre>
+<h3 id="3-无重复字符的最长子串"><a href="#3-无重复字符的最长子串" class="headerlink" title="3. 无重复字符的最长子串"></a>3. 无重复字符的最长子串</h3><p>给定一个字符串，请你找出其中不含有重复字符的 最长子串 的长度。 </p>
+<p><strong>示例 1:</strong></p>
+<pre><code>输入: s = &quot;abcabcbb&quot;
+输出: 3 
+解释: 因为无重复字符的最长子串是 &quot;abc&quot;，所以其长度为 3。
+</code></pre>
+<p><strong>示例 2:</strong></p>
+<pre><code>输入: s = &quot;bbbbb&quot;
+输出: 1
+解释: 因为无重复字符的最长子串是 &quot;b&quot;，所以其长度为 1。
+</code></pre>
+<p><strong>示例 3:</strong></p>
+<pre><code>输入: s = &quot;pwwkew&quot;
+输出: 3
+解释: 因为无重复字符的最长子串是 &quot;wke&quot;，所以其长度为 3。
+     请注意，你的答案必须是 子串 的长度，&quot;pwke&quot; 是一个子序列，不是子串。
+</code></pre>
+<p><strong>示例 4:</strong></p>
+<pre><code>输入: s = &quot;&quot;输出: 0
+</code></pre>
+<p>链接：<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/longest-substring-without-repeating-characters">https://leetcode-cn.com/problems/longest-substring-without-repeating-characters</a></p>
+<h4 id="解法一：哈希表"><a href="#解法一：哈希表" class="headerlink" title="解法一：哈希表"></a>解法一：哈希表</h4><p>很容易想到用哈希表记录字符和其对应的位置。</p>
+<pre><code class="java">class Solution &#123;    
+    public int lengthOfLongestSubstring(String s) &#123;        
+        int ans = 0;        
+        int start = 0; //从哪里开始截断重新开始计数        
+        if(s.length() == 0) return ans;        
+        HashMap&lt;Character,Integer&gt; hm = new HashMap&lt;&gt;();        
+        for(int i = 0; i &lt; s.length(); i++) &#123;            
+            char now = s.charAt(i);            
+            if(hm.containsKey(now)) &#123;                
+                start = Math.max(start,hm.get(now)+1);            
+            &#125;            
+            hm.put(now,i);            
+            ans = Math.max(ans,i-start+1);        
+        &#125;        
+        return ans;    
+    &#125;
+&#125;
+</code></pre>
+<p>时间复杂度：O（n）</p>
+<p>空间复杂度：使用了一个哈希表，判断子串中有没有重复的字符。由于 hm 中没有重复的字符，所以最长就是整个字符集，假设字符集的大小为 m ，那么 hm最长就是 m 。另一方面，如果字符串的长度小于 m ，是 n 。那么 hm 最长也就是 n 了。综上，空间复杂度为 O（min（m，n））。</p>
+<h4 id="解法二：数组"><a href="#解法二：数组" class="headerlink" title="解法二：数组"></a>解法二：数组</h4><p>哈希表的搜索方式本质上也是遍历搜寻，可以将哈希表优化为一个数组。字符的 ASCII 码值作为数组的下标，数组存储该字符所在字符串的位置。</p>
+<pre><code class="java">class Solution &#123;
+    public int lengthOfLongestSubstring(String s) &#123;
+        if(s.length() == 0) return 0;
+        int ans = 0;
+        int start = 0;
+        int[] map = new int[128];
+        char[] chars = s.toCharArray();//这里转换成char数组有利于提高速度
+        
+        for(int i = 0; i &lt; chars.length; i++) &#123;
+            int cur = chars[i];
+            if(map[cur] != 0) &#123;
+                start = Math.max(map[cur],start);      
             &#125;
-            break;
-         default:
-            break;
-      &#125;
-
-      //用第二个switch在进行输出判断
-      switch (x) &#123;
-         case 0:
-            System.out.println(&quot;h&quot;);
-            break;
-         case 1:
-            System.out.println(&quot;w&quot;);
-            break;
-         default://-1 不进行任何操作
-            break;
-      &#125;
-   &#125;
-&#125;
-</code></pre>
-<p>在编译期间，单个的switch被分为了两个</p>
-<ul>
-<li>第一个用来匹配字符串，并给x赋值<ul>
-<li>字符串的匹配用到了字符串的hashCode，还用到了equals方法</li>
-<li>使用hashCode是为了提高比较效率，使用equals是防止有hashCode冲突（如<code>BM</code>和<code>C.</code>，这两个字符串的HashCode都是2133）</li>
-</ul>
-</li>
-<li>第二个用来根据x的值来决定输出语句</li>
-</ul>
-<h4 id="switch-枚举"><a href="#switch-枚举" class="headerlink" title="switch 枚举"></a>switch 枚举</h4><pre><code class="java">public class Demo7 &#123;
-   public static void main(String[] args) &#123;
-      SEX sex = SEX.MALE; //sex类有male和female两个
-      switch (sex) &#123;
-         case MALE:
-            System.out.println(&quot;man&quot;);
-            break;
-         case FEMALE:
-            System.out.println(&quot;woman&quot;);
-            break;
-         default:
-            break;
-      &#125;
-   &#125;
-&#125;
-
-enum SEX &#123;
-   MALE, FEMALE;
-&#125;
-</code></pre>
-<p>转换后</p>
-<pre><code class="java">public class Demo7 &#123;
-   /**     
-    * 定义一个合成类（仅 jvm 使用，对我们不可见）     
-    * 用来映射枚举的 ordinal 与数组元素的关系     
-    * 枚举的 ordinal 表示枚举对象的序号，从 0 开始     
-    * 即 MALE 的 ordinal()=0，FEMALE 的 ordinal()=1     
-    */ 
-   static class $MAP &#123;
-      //数组大小即为枚举元素个数，里面存放了case用于比较的数字
-      static int[] map = new int[2];
-      static &#123;
-         //ordinal即枚举元素对应所在的位置，MALE下标为0，FEMALE下标为1
-         map[SEX.MALE.ordinal()] = 1;
-         map[SEX.FEMALE.ordinal()] = 2;
-      &#125;
-   &#125;
-
-   public static void main(String[] args) &#123;
-      SEX sex = SEX.MALE;
-      //将对应位置枚举元素的值赋给x，用于case操作
-      int x = $MAP.map[sex.ordinal()];
-      switch (x) &#123;
-         case 1:
-            System.out.println(&quot;man&quot;);
-            break;
-         case 2:
-            System.out.println(&quot;woman&quot;);
-            break;
-         default:
-            break;
-      &#125;
-   &#125;
-&#125;
-</code></pre>
-<h4 id="枚举类"><a href="#枚举类" class="headerlink" title="枚举类"></a>枚举类</h4><p>JDK 7 新增了枚举类。</p>
-<pre><code class="java">enum SEX &#123;
-   MALE, FEMALE;
-&#125;
-</code></pre>
-<p>转换后的代码</p>
-<pre><code class="java">public final class Sex extends Enum&lt;Sex&gt; &#123; //final表示枚举类不能被继承
-   //两个静态常量对应枚举类中的元素
-   public static final Sex MALE;    
-   public static final Sex FEMALE;    
-   private static final Sex[] $VALUES;
-   
-    static &#123;       
-        //调用构造函数，传入枚举元素的值及ordinal
-        MALE = new Sex(&quot;MALE&quot;, 0);    
-        FEMALE = new Sex(&quot;FEMALE&quot;, 1);   
-        $VALUES = new Sex[]&#123;MALE, FEMALE&#125;; 
-   &#125;
-     
-   //构造方法
-    private Sex(String name, int ordinal) &#123;     
-        super(name, ordinal); //调用父类中的方法
+            map[cur] = i+1;
+            ans = Math.max(ans, i-start+1);
+        &#125;
+        return ans;
     &#125;
-   
-    public static Sex[] values() &#123;  
-        return $VALUES.clone();  //枚举实例的数组进行克隆后返回
+&#125;
+</code></pre>
+<p>时间复杂度：O（n）。</p>
+<p>空间复杂度：O（1）。开辟的数组空间大小是不变的。</p>
+<h3 id="4-寻找两个正序数组的中位数"><a href="#4-寻找两个正序数组的中位数" class="headerlink" title="4. 寻找两个正序数组的中位数"></a>4. 寻找两个正序数组的中位数</h3><p>给定两个大小分别为 m 和 n 的正序（从小到大）数组 nums1 和 nums2。请你找出并返回这两个正序数组的 中位数 。</p>
+<p><strong>示例 1：</strong></p>
+<pre><code>输入：nums1 = [1,3], nums2 = [2]
+输出：2.00000
+解释：合并数组 = [1,2,3] ，中位数 2
+</code></pre>
+<p><strong>示例 2：</strong></p>
+<pre><code>输入：nums1 = [1,2], nums2 = [3,4]
+输出：2.50000
+解释：合并数组 = [1,2,3,4] ，中位数 (2 + 3) / 2 = 2.5
+</code></pre>
+<p><strong>示例 3：</strong></p>
+<pre><code>输入：nums1 = [0,0], nums2 = [0,0]
+输出：0.00000
+</code></pre>
+<p><strong>示例 4：</strong></p>
+<pre><code>输入：nums1 = [], nums2 = [1]
+输出：1.00000
+</code></pre>
+<p><strong>示例 5：</strong></p>
+<pre><code>输入：nums1 = [2], nums2 = []
+输出：2.00000
+</code></pre>
+<p>链接：<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/median-of-two-sorted-arrays">https://leetcode-cn.com/problems/median-of-two-sorted-arrays</a></p>
+<h4 id="解法一："><a href="#解法一：" class="headerlink" title="解法一："></a>解法一：</h4><p>因为是寻找中位数，所以可知实际上就是寻找第K小的数。</p>
+<p>可以分别给两个数组两个指针，移动指向比较小的那个数的指针</p>
+<pre><code class="java">class Solution &#123;
+    public double findMedianSortedArrays(int[] nums1, int[] nums2) &#123;
+        int m = nums1.length, n = nums2.length;
+        if((m+n)%2 == 0) return ((double)getK(nums1,nums2,(m+n+1)/2) + (double)getK(nums1, nums2, (m+n+2)/2))/2;        
+        return getK(nums1,nums2,(m+n+1)/2);
     &#125;
-    public static Sex valueOf(String name) &#123; 
-        return Enum.valueOf(Sex.class, name); //调用父类中的方法  
+    private int getK(int[] nums1, int[] nums2, int k) &#123;
+        int p1 = 0, p2 = 0;
+        int m = nums1.length, n = nums2.length;
+        while(p1 &lt; m || p2 &lt; n) &#123;
+            if(p1+p2+1 == k) &#123;
+                if(p1 == m) &#123;//如果第一个指针已经越界
+                    return nums2[p2];//直接返回数组二里的数
+                &#125;else if(p2 == n) &#123;//如果第二个指针越界
+                    return nums1[p1];//返回数组一中的数
+                &#125;else &#123;
+                    //如果两个指针都没越界，那么返回较小的那个
+                    return Math.min(nums1[p1],nums2[p2]);
+                &#125;
+            &#125;
+
+            if(p1 == m) &#123;//如果第一个数组已经遍历完
+                p2++;//移动数组二的指针
+            &#125;else if(p2 == n)&#123;//如果第二个数组已经遍历完
+                p1++;//移动数组一的指针
+            &#125;else &#123;//如果两个数组都还没遍历完
+                //比较大小
+                if(nums1[p1] &lt; nums2[p2]) &#123;
+                    p1++;
+                &#125;else &#123;
+                    p2++;
+                &#125;
+            &#125;
+        &#125;
+        return -1;
+    &#125;
+&#125;
+</code></pre>
+<p>时间复杂度：O（m+n），达不到题目中要求的O（log（m+n））。</p>
+<p>空间复杂度： O（1）。</p>
+<h4 id="解法二：二分法"><a href="#解法二：二分法" class="headerlink" title="解法二：二分法"></a>解法二：二分法</h4><p>题目要求的时间复杂度是O（log（m+n）），很自然会联想到二分查找法。其实就是在解法一的基础上运用了二分查找法来筛查到第K小的数。</p>
+<pre><code class="java">class Solution &#123;    
+    public double findMedianSortedArrays(int[] nums1, int[] nums2) &#123;        
+        int m = nums1.length, n = nums2.length;        
+        if((m+n)%2 == 1) return getK(nums1,0,nums2,0,(m+n+1)/2);        
+        return ((double)getK(nums1,0,nums2,0,(m+n+1)/2) + (double)getK(nums1,0,nums2,0,(m+n+2)/2))/2;    
     &#125;    
+    private int getK(int[] nums1, int start1, int[] nums2, int start2, int k) &#123;        
+        if(start1 == nums1.length) return nums2[start2 + k - 1];        
+        if(start2 == nums2.length) return nums1[start1 + k - 1];        
+        if(k == 1) return nums1[start1] &lt;= nums2[start2] ? nums1[start1] : nums2[start2];        //防止数组越界        
+        int len1 = Math.min(start1 + k/2 - 1, nums1.length - 1);        
+        int len2 = Math.min(start2 + k/2 - 1, nums2.length - 1);        
+        if(nums1[len1] &lt;= nums2[len2]) &#123;            
+            //舍弃掉nums1[len1]及之前的所有数，从len1+1位置开始搜寻            
+            //剩下的所有数中要找寻第k-(len1-start1+1)小的数            
+            return getK(nums1, len1 + 1, nums2, start2, k-(len1-start1+1));        
+        &#125;        
+        return getK(nums1, start1, nums2, len2 + 1, k-(len2-start2+1));    
+    &#125;
 &#125;
 </code></pre>
+<h3 id="5-最长回文子串"><a href="#5-最长回文子串" class="headerlink" title="5. 最长回文子串"></a>5. 最长回文子串</h3><p>给你一个字符串 s，找到 s 中最长的回文子串。</p>
+<p><strong>示例 1：</strong></p>
+<pre><code>输入：s = &quot;babad&quot;输出：&quot;bab&quot;解释：&quot;aba&quot; 同样是符合题意的答案。
+</code></pre>
+<p><strong>示例 2：</strong></p>
+<pre><code>输入：s = &quot;cbbd&quot;输出：&quot;bb&quot;
+</code></pre>
+<p><strong>示例 3：</strong></p>
+<pre><code>输入：s = &quot;a&quot;输出：&quot;a&quot;
+</code></pre>
+<p><strong>示例 4：</strong></p>
+<pre><code>输入：s = &quot;ac&quot;输出：&quot;a&quot;
+</code></pre>
+<p>链接：<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/longest-palindromic-substring">https://leetcode-cn.com/problems/longest-palindromic-substring</a></p>
+<h4 id="解法一：暴力解"><a href="#解法一：暴力解" class="headerlink" title="解法一：暴力解"></a>解法一：暴力解</h4><p>暴力求解，列举所有的子串，判断是否为回文串。</p>
+<pre><code class="java">class Solution &#123;    
+    public String longestPalindrome(String s) &#123;        
+        if(s.length() == 1) return s;        
+        char[] array = s.toCharArray();        
+        int longest = 1;//因为每单个字符一定是回文串，所以可以确定的是最长的回文串一定大于等于1        
+        int left = 0, right = 0;        
+        for(int i = 0; i &lt; array.length - longest; i++) &#123;            
+            //一点简单的剪枝操作            
+            for(int j = i+longest; j &lt; array.length; j++) &#123;                
+                if(isPalindrome(array, i, j)) &#123;                    
+                    longest = j - i + 1;                    
+                    left = i;                    
+                    right = j;                
+                &#125;            
+            &#125;        
+        &#125;        
+        return s.substring(left,right+1);    
+    &#125;    
+    private boolean isPalindrome(char[] array, int left, int right) &#123;        
+        while(left &lt; right) &#123;            
+            if(array[left] == array[right]) &#123;                
+                left++;               
+                right--;            
+            &#125;else &#123;                
+                return false;            
+            &#125;       
+        &#125;        
+        return true;    
+    &#125;
+&#125;
+</code></pre>
+<p>时间复杂度：两层 for 循环 O（n²），for 循环里边判断是否为回文，O（n），所以时间复杂度为 O（n³）。</p>
+<p>空间复杂度：O（n），如果不将字符串转化成char数组则只需要O（1）。</p>
+<h4 id="解法二：暴力优化（动态规划）"><a href="#解法二：暴力优化（动态规划）" class="headerlink" title="解法二：暴力优化（动态规划）"></a>解法二：暴力优化（动态规划）</h4><p>用一个二维布尔数组isP[i] [j] 表示从位置i到j是否为回文串，如果i位置和j位置的字符相同，且isP[i+1] [j-1]为真，那么可以得出isP[i] [j]为真。</p>
+<pre><code class="java">class Solution&#123;    
+    public String longestPalindrome(String s) &#123;        
+        if(s.length() == 1) return s;        
+        int length = s.length();        
+        boolean[][] isP = new boolean[length][length];        
+        char[] chars = s.toCharArray();       
+        int left = 0, right = 0;       
+        for(int i = 0; i &lt; length; i++) &#123;        
+            isP[i][i] = true;       
+        &#125;        
+        for(int len = 2; len &lt;= length; len++) &#123;           
+            for(int start = 0; start &lt;= length - len; start++)&#123;              
+                int end = start + len - 1;                
+                isP[start][end] = (chars[start] == chars[end]) &amp;&amp; (len == 2 || isP[start+1][end-1]);
+                if(isP[start][end]) &#123;                    
+                    left = start;                    
+                    right = end;              
+                &#125;          
+            &#125;       
+        &#125;      
+        return s.substring(left,right+1);    
+    &#125;
+&#125;
+</code></pre>
+<p>时间复杂度：两层循环，O（n²）。</p>
+<p>空间复杂度：用二维数组保存每个子串的情况，O（n²）。</p>
+<p>这里的空间复杂度还可以优化，可以尝试用一维数组来表示isP[j]表示。由于isP[i] [j]是从isP[i+1] [j-1]得到的，所以知道以i为起始的isP必须要先得到i+1的isP。遍历顺序应当是倒序。</p>
+<pre><code class="java">class Solution&#123;    
+    public String longestPalindrome(String s) &#123;     
+        if(s.length() == 1) return s;   
+        int length = s.length();   
+        boolean[] isP = new boolean[length];    
+        char[] chars = s.toCharArray();     
+        int left = 0, right = 0, longest = 1;   
+        for(int i = length - 1; i &gt;= 0; i--) &#123;   
+            for(int j = length - 1; j &gt;= i; j--)&#123;            
+                isP[j] = (chars[i] == chars[j]) &amp;&amp; (j - i &lt;= 2 || isP[j-1]);        
+                if(isP[j] &amp;&amp; j - i + 1 &gt; longest) &#123;           
+                    left = i;                
+                    right = j;               
+                    longest = j - i + 1;        
+                &#125;         
+            &#125;    
+        &#125;      
+        return s.substring(left,right+1);   
+    &#125;
+&#125;
+</code></pre>
+<p>时间复杂度：两层循环，O（n²）。</p>
+<p>空间复杂度：O（n）。</p>
+<h4 id="解法三：中心扩展"><a href="#解法三：中心扩展" class="headerlink" title="解法三：中心扩展"></a>解法三：中心扩展</h4><p>以中间为搜寻起点，如果是回文子串则向两边散开。</p>
+<pre><code class="java">class Solution &#123;   
+    public String longestPalindrome(String s) &#123;       
+        if(s.length() == 1) return s;  
+        char[] array = s.toCharArray();    
+        int[] memo = &#123;0,0,0&#125;;//保存最长回文长度，左边界索引，右边界索引      
+        for(int i = 1; i &lt; array.length - memo[0]/2; i++) &#123;      
+            countPalindrome(array, i, i, memo);       
+            countPalindrome(array, i-1, i, memo);    
+        &#125;      
+        return s.substring(memo[1],memo[2]+1);  
+    &#125;  
+    private void countPalindrome(char[] a, int left, int right, int[] memo) &#123;      
+        while(left &gt;= 0 &amp;&amp; right &lt; a.length &amp;&amp; a[left] == a[right]) &#123;        
+            left--;        
+            right++;      
+        &#125;      
+        if(right - left - 1 &gt; memo[0]) &#123;       
+            memo[0] = right - left - 1;        
+            memo[1] = left + 1;       
+            memo[2] = right - 1;     
+        &#125;   
+    &#125;
+&#125;
+</code></pre>
+<p>时间复杂度：一层 for 循环 O（n），for 循环里边判断是否为回文，O（n），所以时间复杂度为 O（n²）。</p>
+<p>空间复杂度：O（n），如果不将字符串转化成char数组则只需要O（1）。</p>
+<h4 id="解法四：动态规划"><a href="#解法四：动态规划" class="headerlink" title="解法四：动态规划"></a>解法四：动态规划</h4><p>如果一个字符串是回文串，那么其正序和倒序读起来都是一样的，以字符串“caba“为例，将其倒过来是”abac”，最长公共子串是”aba”，所以”aba”就是我们要寻找的最长回文子串。</p>
+<p>把两个字符串分别以行和列组成一个二维矩阵，如果字符串1的i位置和字符串2的j位置相等，那么就用dp[i] [j]=1 +dp[i-1] [j-1]更新。</p>
+<pre><code class="java">class Solution &#123;  
+    public String longestPalindrome(String s) &#123;      
+        if(s.length() == 1) return s;      
+        char[] array = s.toCharArray();   
+        int longest = 1;//因为每单个字符一定是回文串，所以可以确定的是最长的回文串一定大于等于1       
+        int left = 0, right = 0;       
+        int[][] dp = new int[array.length][array.length];       
+        //以逆序数组为行，正序数组为列        
+        for(int i = 0; i &lt; array.length; i++) &#123;    
+            for(int j = 0; j &lt; array.length; j++) &#123;             
+                if(array[j] == array[array.length - 1 - i]) &#123;          
+                    dp[i][j] = ((i &gt; 0 &amp;&amp; j &gt; 0) ? dp[i-1][j-1] : 0) + 1;              
+                    if(dp[i][j] &gt; longest) &#123;               
+                        if(j - dp[i][j] + 1 == array.length - 1 - i) &#123;            
+                            //确认一下下标无误，即正序开始时的下标等于array.length - 1减去逆序位置i   
+                            //如果不加这一步确认那么遇到例如&quot;aacabdkacaa&quot;时，会出现dp[3][3]最大，left=7，right = 3  
+                            longest = dp[i][j];                         
+                            right = j;                        
+                            left = array.length - 1 - i;    
+                        &#125;               
+                    &#125;           
+                &#125;        
+            &#125;      
+        &#125;       
+        return s.substring(left,right+1);    
+    &#125;
+&#125;
+</code></pre>
+<p>时间复杂度：两层循环，O（n²）。但是不如中心扩展效率好，因为中心扩展法有剪枝操作，而利用动态规划无法这么做。</p>
+<p>空间复杂度：一个二维数组，O（n²）。</p>
+<p>可以只用一维数组来优化空间复杂度。</p>
+<pre><code class="java">class Solution &#123;    
+    public String longestPalindrome(String s) &#123;    
+        int length = s.length();     
+        if(length == 1) return s;           
+        char[] array = s.toCharArray();   
+        int longest = 1;//因为每单个字符一定是回文串，所以可以确定的是最长的回文串一定大于等于1     
+        int left = 0, right = 0;     
+        int[] dp = new int[length];     
+        //以逆序数组为行，正序数组为列     
+        for(int i = 0; i &lt; length; i++) &#123;          
+            for(int j = length - 1; j &gt;= 0; j--) &#123;        
+                if(array[j] == array[array.length - 1 - i]) &#123;    
+                    dp[j] = ((j &gt; 0) ? dp[j-1] : 0) + 1;          
+                    if(dp[j] &gt; longest) &#123;                    
+                        if(j - dp[j] + 1 == array.length - 1 - i) &#123;           
+                            //确认一下下标无误，即正序开始时的下标等于array.length - 1减去逆序位置     
+                            longest = dp[j];                     
+                            right = j;               
+                            left = array.length - 1 - i;    
+                        &#125;                                
+                    &#125;             
+                &#125;else &#123;             
+                    //之前二维数组，每次用的是不同的列，所以不用置 0 。        
+                    dp[j] = 0;         
+                &#125;       
+            &#125;
+        &#125;
+        return s.substring(left,right+1);   
+    &#125;
+&#125;
+</code></pre>
+<h3 id="6-Z-字形变换"><a href="#6-Z-字形变换" class="headerlink" title="6. Z 字形变换"></a>6. Z 字形变换</h3><p>将一个给定字符串 s 根据给定的行数 numRows ，以从上往下、从左到右进行 Z 字形排列。</p>
+<p>比如输入字符串为 “PAYPALISHIRING” 行数为 3 时，排列如下：</p>
+<pre><code>P    A    H    N
+A P L S  I  I  G
+Y     I     R
+</code></pre>
+<p>之后，你的输出需要从左往右逐行读取，产生出一个新的字符串，比如：”PAHNAPLSIIGYIR”。</p>
+<p>请你实现这个将字符串进行指定行数变换的函数：</p>
+<pre><code>string convert(string s, int numRows);
+</code></pre>
+<p><strong>示例 1：</strong></p>
+<pre><code>输入：s = &quot;PAYPALISHIRING&quot;, numRows = 3
+输出：&quot;PAHNAPLSIIGYIR&quot;
+</code></pre>
+<p><strong>示例 2：</strong></p>
+<pre><code>输入：s = &quot;PAYPALISHIRING&quot;, numRows = 4
+输出：&quot;PINALSIGYAHRPI&quot;
+解释：
+P     I    N
+A   L S  I G
+Y A   H R
+P     I
+</code></pre>
+<p><strong>示例 3：</strong></p>
+<pre><code>输入：s = &quot;A&quot;, numRows = 1
+输出：&quot;A&quot;
+</code></pre>
+<p>链接：<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/zigzag-conversion">https://leetcode-cn.com/problems/zigzag-conversion</a></p>
+<h4 id="解法一：找规律，求通项"><a href="#解法一：找规律，求通项" class="headerlink" title="解法一：找规律，求通项"></a>解法一：找规律，求通项</h4><p>当输入numRows = 5时：</p>
+<p>可以看到第0行间隔是8（（numRows - 1）*2）</p>
+<p>第一行间隔是6（（numRows - 1 - 1）*2）和2（1 * 2）</p>
+<p>第二行间隔是4（（numRows - 1 - 2）*2）和4（2 * 2）</p>
+<p>第三行间隔是2（（numRows - 1 - 3）*2）和6（3 * 2）</p>
+<p>第四行间隔是8（4 * 2）</p>
+<p><img src="http://windliang.oss-cn-beijing.aliyuncs.com/6_3.jpg"></p>
+<pre><code class="java">class Solution &#123;   
+    public String convert(String s, int numRows) &#123;      
+        if(numRows == 1 || s.length() &lt;= numRows) return s;      
+        char[] chars = s.toCharArray();      
+        int row = 0;       
+        StringBuilder sb = new StringBuilder();     
+        while(row &lt; numRows) &#123;            
+            int pos = row;        
+            //当step1和step2为0时要特殊处理         
+            int step1 = (numRows - row - 1) * 2 == 0 ? row * 2 : (numRows - row - 1) * 2;     
+            int step2 = row * 2 == 0 ? step1 : row * 2;          
+            boolean isS1 = true;         
+            while(pos &lt; chars.length) &#123;      
+                sb.append(chars[pos]);       
+                if(isS1)&#123;                    
+                    pos += step1;                 
+                    isS1 = false;           
+                &#125;else &#123;              
+                    pos += step2;         
+                    isS1 = true;           
+                &#125;           
+            &#125;           
+            row++;        
+        &#125;
+        return sb.toString();    
+    &#125;
+&#125;
+</code></pre>
+<h4 id="解法二：Z字存储"><a href="#解法二：Z字存储" class="headerlink" title="解法二：Z字存储"></a>解法二：Z字存储</h4><p>按照写 Z 的过程，遍历每个字符，然后将字符存到对应的行中。用upNotDown表示当前进行方向，如果为false代表要往下写，所以row要加一；如果为true，row要减一。</p>
+<pre><code class="java">class Solution &#123;    
+    public String convert(String s, int numRows) &#123;    
+        if(numRows == 1 || s.length() &lt;= numRows) return s;     
+        char[] chars = s.toCharArray();      
+        List&lt;StringBuilder&gt; rows = new ArrayList&lt;StringBuilder&gt;();      
+        boolean upNotDown = false;        
+        int row = 0;      
+        for(int i = 0; i &lt; numRows; i++) &#123;         
+            rows.add(new StringBuilder());      
+        &#125;       
+        for(char c : chars) &#123;       
+            rows.get(row).append(c);        
+            if(upNotDown) &#123;             
+                row--;             
+                if(row == 0) upNotDown = false;        
+            &#125;else &#123;            
+                row++;               
+                if(row == numRows - 1) upNotDown = true;           
+            &#125;
+        &#125;        
+        StringBuilder sb = new StringBuilder();      
+        for (StringBuilder r : rows) sb.append(r);     
+        return sb.toString();   
+    &#125;
+&#125;
+</code></pre>
+<h3 id="7-整数反转"><a href="#7-整数反转" class="headerlink" title="7.  整数反转"></a>7.  整数反转</h3><p>给你一个 32 位的有符号整数 x ，返回将 x 中的数字部分反转后的结果。</p>
+<p>如果反转后整数超过 32 位的有符号整数的范围 [−2^31^,  2^31^ − 1] ，就返回 0。</p>
+<p>假设环境不允许存储 64 位整数（有符号或无符号）。</p>
+<p><strong>示例 1：</strong></p>
+<pre><code>输入：x = 123
+输出：321
+</code></pre>
+<p><strong>示例 2：</strong></p>
+<pre><code>输入：x = -123
+输出：-321
+</code></pre>
+<p><strong>示例 3：</strong></p>
+<pre><code>输入：x = 120
+输出：21
+</code></pre>
+<p>链接：<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/reverse-integer">https://leetcode-cn.com/problems/reverse-integer</a></p>
+<h4 id="解法一：使用long"><a href="#解法一：使用long" class="headerlink" title="解法一：使用long"></a>解法一：使用long</h4><p>本题唯一的难点就在于溢出，例如若输入为1534236469，倒置过来不应该是 9646324351 吗。其实题目里讲了，int 的范围是[-2^31^ , 2^31^-1]。也就是 [ -2147483648 , 2147483647 ] 。明显 9646324351 超出了范围，造成了溢出。所以我们需要在输出前，判断是否溢出。可以直接将保存数据类型int改为long，返回数值时直接利用强转int即可。</p>
+<pre><code class="java">class Solution &#123;
+    public int reverse(int x) &#123;
+        //个位数单独处理，直接返回即可
+        if((x &gt;= 0 &amp;&amp; x &lt;= 9) || (x &lt; 0 &amp;&amp; x &gt; -10)) return x;
+        boolean negative = false;
+        if(x &lt; 0) &#123;
+            negative = true;
+            x = Math.abs(x);
+        &#125;
+        long res = 0;
+        while(x &gt; 0) &#123;
+            res = res * 10 + x % 10;
+            if (res &gt; Integer.MAX_VALUE || res &lt; Integer.MIN_VALUE) return 0;
+            x /= 10;
+        &#125;
+        if(negative) res = - res;
+        return (int)res;
+    &#125;
+&#125;
+</code></pre>
+<h4 id="解法二：溢出后判断"><a href="#解法二：溢出后判断" class="headerlink" title="解法二：溢出后判断"></a>解法二：溢出后判断</h4><p>注意下面的写法不适用于C++。</p>
+<pre><code class="java">class Solution &#123;
+    public int reverse(int x) &#123;
+        int tmp = 0;
+        int res = 0;
+        while(x != 0) &#123;
+            tmp = res;
+            res = res * 10 + x % 10;
+            // 将计算之后的结果 / 10，判断是否与计算之前相同，如果不同，证明发生溢出，返回0
+            if (res/10 != tmp) return 0;
+            x /= 10;
+        &#125;
+        return res;
+    &#125;
+&#125;
+</code></pre>
+<h4 id="解法三：溢出前判断"><a href="#解法三：溢出前判断" class="headerlink" title="解法三：溢出前判断"></a>解法三：溢出前判断</h4><pre><code class="java">class Solution &#123;
+    public int reverse(int x) &#123;
+        int res = 0;
+        while(x!=0) &#123;
+            //每次取末尾数字
+            int tmp = x%10;
+            //判断是否 大于 最大32位整数
+            if (res&gt;214748364 || (res==214748364 &amp;&amp; tmp&gt;7)) &#123;
+                return 0;
+            &#125;
+            //判断是否 小于 最小32位整数
+            if (res&lt;-214748364 || (res==-214748364 &amp;&amp; tmp&lt;-8)) &#123;
+                return 0;
+            &#125;
+            res = res*10 + tmp;
+            x /= 10;
+        &#125;
+        return res;
+    &#125;
+&#125;
+</code></pre>
+<p>但实际上的判断条件可以写的再简洁一点。因为原来的数就是一个int型的，不可能会出现res == 21454836 且 tmp&gt;7 的状况。</p>
+<pre><code class="java">class Solution &#123;
+    public int reverse(int x) &#123;
+        int rev = 0;
+        while (x != 0) &#123;
+            if (rev &lt; Integer.MIN_VALUE / 10 || rev &gt; Integer.MAX_VALUE / 10) &#123;
+                return 0;
+            &#125;
+            int digit = x % 10;
+            x /= 10;
+            rev = rev * 10 + digit;
+        &#125;
+        return rev;
+    &#125;
+&#125;
+</code></pre>
+<h3 id="8-字符串转换整数-atoi"><a href="#8-字符串转换整数-atoi" class="headerlink" title="8. 字符串转换整数 (atoi)"></a>8. 字符串转换整数 (atoi)</h3><p>请你来实现一个 myAtoi(string s) 函数，使其能将字符串转换成一个 32 位有符号整数（类似 C/C++ 中的 atoi 函数）。</p>
+<p>函数 myAtoi(string s) 的算法如下：</p>
+<p>读入字符串并丢弃无用的前导空格<br>检查下一个字符（假设还未到字符末尾）为正还是负号，读取该字符（如果有）。 确定最终结果是负数还是正数。 如果两者都不存在，则假定结果为正。<br>读入下一个字符，直到到达下一个非数字字符或到达输入的结尾。字符串的其余部分将被忽略。<br>将前面步骤读入的这些数字转换为整数（即，”123” -&gt; 123， “0032” -&gt; 32）。如果没有读入数字，则整数为 0 。必要时更改符号（从步骤 2 开始）。</p>
+<p>如果整数数超过 32 位有符号整数范围 [−2^31^,  2^31^ − 1] ，需要截断这个整数，使其保持在这个范围内。具体来说，小于 −2^31^ 的整数应该被固定为 −2^31^ ，大于 2^31^ − 1 的整数应该被固定为 2^31^ − 1 。<br>返回整数作为最终结果。</p>
+<p>注意：</p>
+<p>本题中的空白字符只包括空格字符 ‘ ‘ 。<br>除前导空格或数字后的其余字符串外，请勿忽略 任何其他字符。</p>
+<p><strong>示例 1：</strong></p>
+<pre><code>输入：s = &quot;42&quot;
+输出：42
+解释：加粗的字符串为已经读入的字符，插入符号是当前读取的字符。
+第 1 步：&quot;42&quot;（当前没有读入字符，因为没有前导空格）
+         ^
+第 2 步：&quot;42&quot;（当前没有读入字符，因为这里不存在 &#39;-&#39; 或者 &#39;+&#39;）
+         ^
+第 3 步：&quot;42&quot;（读入 &quot;42&quot;）
+           ^
+解析得到整数 42 。
+由于 &quot;42&quot; 在范围 [-231, 231 - 1] 内，最终结果为 42 。
+</code></pre>
+<p><strong>示例 2：</strong></p>
+<pre><code>输入：s = &quot;   -42&quot;
+输出：-42
+解释：
+第 1 步：&quot;   -42&quot;（读入前导空格，但忽视掉）
+            ^
+第 2 步：&quot;   -42&quot;（读入 &#39;-&#39; 字符，所以结果应该是负数）
+             ^
+第 3 步：&quot;   -42&quot;（读入 &quot;42&quot;）
+               ^
+解析得到整数 -42 。
+由于 &quot;-42&quot; 在范围 [-231, 231 - 1] 内，最终结果为 -42 。
+</code></pre>
+<p><strong>示例 3：</strong></p>
+<pre><code>输入：s = &quot;4193 with words&quot;
+输出：4193
+解释：
+第 1 步：&quot;4193 with words&quot;（当前没有读入字符，因为没有前导空格）
+         ^
+第 2 步：&quot;4193 with words&quot;（当前没有读入字符，因为这里不存在 &#39;-&#39; 或者 &#39;+&#39;）
+         ^
+第 3 步：&quot;4193 with words&quot;（读入 &quot;4193&quot;；由于下一个字符不是一个数字，所以读入停止）
+             ^
+解析得到整数 4193 。
+由于 &quot;4193&quot; 在范围 [-231, 231 - 1] 内，最终结果为 4193 。
+</code></pre>
+<p><strong>示例 4：</strong></p>
+<pre><code>输入：s = &quot;words and 987&quot;
+输出：0
+解释：
+第 1 步：&quot;words and 987&quot;（当前没有读入字符，因为没有前导空格）
+         ^
+第 2 步：&quot;words and 987&quot;（当前没有读入字符，因为这里不存在 &#39;-&#39; 或者 &#39;+&#39;）
+         ^
+第 3 步：&quot;words and 987&quot;（由于当前字符 &#39;w&#39; 不是一个数字，所以读入停止）
+         ^
+解析得到整数 0 ，因为没有读入任何数字。
+由于 0 在范围 [-231, 231 - 1] 内，最终结果为 0 。
+</code></pre>
+<p><strong>示例 5：</strong></p>
+<pre><code>输入：s = &quot;-91283472332&quot;
+输出：-2147483648
+解释：
+第 1 步：&quot;-91283472332&quot;（当前没有读入字符，因为没有前导空格）
+         ^
+第 2 步：&quot;-91283472332&quot;（读入 &#39;-&#39; 字符，所以结果应该是负数）
+          ^
+第 3 步：&quot;-91283472332&quot;（读入 &quot;91283472332&quot;）
+                     ^
+解析得到整数 -91283472332 。
+由于 -91283472332 小于范围 [-231, 231 - 1] 的下界，最终结果被截断为 -231 = -2147483648 。
+</code></pre>
+<p>链接：<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/string-to-integer-atoi">https://leetcode-cn.com/problems/string-to-integer-atoi</a></p>
+<p>本题要尤其注意测试样例 “  +4” 、“+-12”、”00000-42a1234”。这代表除了‘-’，’+‘也要考虑，且一旦前面出现了有效的字符后面再出现除数字以外的任何字符都是不作数的。</p>
+<pre><code class="java">class Solution &#123;    
+    public int myAtoi(String s) &#123;     
+        if(s.length() == 0) return 0;       
+        char[] chars = s.toCharArray();     
+        long res = 0; //结果用long防止溢出      
+        boolean negative = false; //表示是否为负数     
+        boolean hasMet = false; //表示之前已经遇到了有效字符      
+        for(char c : chars) &#123;           
+            if(!hasMet &amp;&amp; c == &#39;-&#39; &amp;&amp; res == 0) &#123;       
+                negative = true;              
+                hasMet = true;          
+            &#125;else if(!hasMet &amp;&amp; c == &#39;+&#39; &amp;&amp; res == 0)&#123;         
+                negative = false;          
+                hasMet = true;        
+            &#125;else if(!hasMet &amp;&amp; c == &#39; &#39; &amp;&amp; res == 0)&#123;         
+                continue;      
+            &#125;else&#123;            
+                int cur = c - 48;           
+                if(cur &gt;= 0 &amp;&amp; cur &lt;= 9)&#123;   
+                    hasMet = true;                 
+                    res = res * 10 + cur;          
+                &#125;else &#123;                   
+                    break;             
+                &#125;               
+                if(negative &amp;&amp; res &gt; 2147483648L) return -2147483648;         
+                if(!negative &amp;&amp; res &gt;= 2147483648L) return 2147483647;        
+            &#125;       
+        &#125;      
+        if(negative) res = -res;         
+        return (int)res;   
+    &#125;
+&#125;
+</code></pre>
+<h3 id="9-回文数"><a href="#9-回文数" class="headerlink" title="9. 回文数"></a>9. 回文数</h3><p>给你一个整数 x ，如果 x 是一个回文整数，返回 true ；否则，返回 false 。</p>
+<p>回文数是指正序（从左向右）和倒序（从右向左）读都是一样的整数。例如，121 是回文，而 123 不是。</p>
+<p><strong>示例 1：</strong></p>
+<pre><code>输入：x = 121
+输出：true
+</code></pre>
+<p><strong>示例 2：</strong></p>
+<pre><code>输入：x = -121
+输出：false
+解释：从左向右读, 为 -121 。 从右向左读, 为 121- 。因此它不是一个回文数。
+</code></pre>
+<p><strong>示例 3：</strong></p>
+<pre><code>输入：x = 10
+输出：false
+解释：从右向左读, 为 01 。因此它不是一个回文数。
+</code></pre>
+<p><strong>示例 4：</strong></p>
+<pre><code>输入：x = -101
+输出：false
+</code></pre>
+<p>链接：<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/palindrome-number/">https://leetcode-cn.com/problems/palindrome-number/</a></p>
+<h4 id="解法一：整数反转"><a href="#解法一：整数反转" class="headerlink" title="解法一：整数反转"></a>解法一：整数反转</h4><p>题目要求了不能用将int转成string的方法来写这题，那么可以用第七题整数反转的方法。</p>
+<pre><code class="java">class Solution &#123;
+    public boolean isPalindrome(int x) &#123;
+        if(x &gt;= 0 &amp;&amp; x &lt; 10) return true; //只有个位数一定是回文
+        if(x &lt; 0 || x%10 == 0) return false; //负数或者是末尾为0的情况都排除
+        int reverse = 0, tmp = x;
+        while(tmp &gt; 0) &#123;
+            reverse = reverse * 10 + tmp % 10;
+            tmp /= 10;
+        &#125;
+        return (x == reverse);
+    &#125;
+&#125;
+</code></pre>
+<p>时间复杂度：和求转置一样，x 有多少位，就循环多少次，所以是 O（log（x）） 。</p>
+<p>空间复杂度：O（1）。</p>
+<h4 id="解法二：整数反转一半"><a href="#解法二：整数反转一半" class="headerlink" title="解法二：整数反转一半"></a>解法二：整数反转一半</h4><p>其实，我们只需要将右半部分倒置然后和左半部比较就可以了。</p>
+<pre><code class="java">class Solution &#123;
+    public boolean isPalindrome(int x) &#123;
+        if(x &gt;= 0 &amp;&amp; x &lt; 10) return true; //只有个位数一定是回文
+        if(x &lt; 0 || x%10 == 0) return false; //负数或者是末尾为0的情况都排除
+        
+        int right_reverse = 0;
+        int left = x;
+        while(left &gt; right_reverse) &#123;            
+            right_reverse = right_reverse*10 + left%10;//右侧翻转
+            left = left/10;            
+        &#125;
+        return left == right_reverse || left == right_reverse/10;
+    &#125;
+&#125;
+</code></pre>
+<p>时间复杂度： O（log（x）） </p>
+<p>空间复杂度：O（1）</p>
+<h3 id="10-正则表达式匹配"><a href="#10-正则表达式匹配" class="headerlink" title="10. 正则表达式匹配*"></a>10. 正则表达式匹配*</h3><p>给你一个字符串 s 和一个字符规律 p，请你来实现一个支持 ‘.’ 和 ‘*’ 的正则表达式匹配。</p>
+<p>‘.’ 匹配任意单个字符<br>‘*’ 匹配零个或多个前面的那一个元素<br>所谓匹配，是要涵盖 整个 字符串 s的，而不是部分字符串。</p>
+<p><strong>示例 1：</strong></p>
+<pre><code>输入：s = &quot;aa&quot; p = &quot;a&quot;
+输出：false
+解释：&quot;a&quot; 无法匹配 &quot;aa&quot; 整个字符串。
+</code></pre>
+<p><strong>示例 2:</strong></p>
+<pre><code>输入：s = &quot;aa&quot; p = &quot;a*&quot;
+输出：true
+解释：因为 &#39;*&#39; 代表可以匹配零个或多个前面的那一个元素, 在这里前面的元素就是 &#39;a&#39;。因此，字符串 &quot;aa&quot; 可被视为 &#39;a&#39; 重复了一次。
+</code></pre>
+<p><strong>示例 3：</strong></p>
+<pre><code>输入：s = &quot;ab&quot; p = &quot;.*&quot;
+输出：true
+解释：&quot;.*&quot; 表示可匹配零个或多个（&#39;*&#39;）任意字符（&#39;.&#39;）。
+</code></pre>
+<p><strong>示例 4：</strong></p>
+<pre><code>输入：s = &quot;aab&quot; p = &quot;c*a*b&quot;
+输出：true
+解释：因为 &#39;*&#39; 表示零个或多个，这里 &#39;c&#39; 为 0 个, &#39;a&#39; 被重复一次。因此可以匹配字符串 &quot;aab&quot;。
+</code></pre>
+<p>示例 5：</p>
+<pre><code>输入：s = &quot;mississippi&quot; p = &quot;mis*is*p*.&quot;
+输出：false
+</code></pre>
+<p>链接：<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/regular-expression-matching">https://leetcode-cn.com/problems/regular-expression-matching</a></p>
+<h4 id="解法一：递归"><a href="#解法一：递归" class="headerlink" title="解法一：递归"></a>解法一：递归</h4><pre><code class="java">class Solution &#123;
+    public boolean isMatch(String s, String p) &#123;
+        //转char数组是为了加快速度
+        char[] as = s.toCharArray();
+        char[] ap = p.toCharArray();
+        return match(as,0,ap,0);
+    &#125;
+    private boolean match(char[] as, int start1, char[] ap, int start2) &#123;
+        //这里不用if(as.length - start1 == 0) return ap.length - start2 == 0
+        //的原因是，&quot;*&quot;可以匹配零个或者多个，所以p的长度可以长于s也可以短于s，
+        //但是当s到达末尾时，p必须到达末尾。反之，若p到达末尾，s还可以有若干个相同字符待匹配。
+        if(ap.length - start2 == 0) return as.length - start1 == 0;
+
+        boolean firstMatch = (as.length - start1 != 0 &amp;&amp; (as[start1] == ap[start2] || ap[start2] == &#39;.&#39;));
+
+        if(ap.length - start2 &gt;= 2 &amp;&amp; ap[start2+1] == &#39;*&#39;) &#123;
+            //两种情况
+            //1. pattern 直接跳过两个字符。表示 * 前边的字符出现 0 次
+            //2. pattern 不变，例如 text = aa ，pattern = a*，第一个 a 匹配，
+            //然后 text 的第二个 a 接着和 pattern 的第一个 a 进行匹配。表示 * 用前一个字符替代。
+            return match(as, start1, ap, start2+2) || (firstMatch &amp;&amp; match(as, start1+1, ap, start2));
+        &#125;else &#123;
+            return firstMatch &amp;&amp; match(as, start1+1, ap, start2+1);
+        &#125;
+    &#125;
+&#125;
+</code></pre>
+<h4 id="解法二：动态规划"><a href="#解法二：动态规划" class="headerlink" title="解法二：动态规划"></a>解法二：动态规划</h4><p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/regular-expression-matching/solution/shou-hui-tu-jie-wo-tai-nan-liao-by-hyj8/">按照题解来的</a></p>
+<p>一个常用的trick就是申请多一维的空间，例如对于长度为m和n的字符串，dp数组就要申请[m+1] [n+1]，这样会避免掉很多麻烦。</p>
+<pre><code class="java">class Solution &#123;
+    public boolean isMatch(String s, String p) &#123;
+        if(p.length() == 0) return s.length() == 0;
+        //转char数组是为了加快速度
+        char[] as = s.toCharArray();
+        char[] ap = p.toCharArray();
+        //dp[i][j]表示s的前i位置与p的前j位置相匹配
+        boolean[][] dp = new boolean[as.length+1][ap.length+1];
+        //字符串都是空必然匹配得上
+        dp[0][0] = true;
+        //如果p为空，s不为空必然匹配不上
+        //如果s为空，p不为空
+        for(int i = 1; i &lt;= ap.length; i++) &#123;
+           if(ap[i-1] == &#39;*&#39;) &#123;
+               dp[0][i] = dp[0][i-2];
+           &#125;
+        &#125;        
+        for(int i = 1; i &lt;= as.length; i++) &#123;
+            for(int j = 1; j &lt;= ap.length; j++) &#123;
+                if(ap[j-1] == as[i-1] || ap[j-1] == &#39;.&#39;) &#123;
+                    //当前字符匹配上了或者是p当前字符是&#39;.&#39;
+                    dp[i][j] = dp[i-1][j-1];
+                &#125;else if(ap[j-1] == &#39;*&#39;) &#123;
+                    if(ap[j-2] == as[i-1] || ap[j-2] == &#39;.&#39;) &#123;//这里尤其需要注意很容易出错
+                        //如果p在*之前的那个字符和s的当前字符相同
+                        //那么可能是该字符出现0次或1次及以上
+                        
+                        //实际上dp[i-1][j-2]这一项可以不要，
+                        //因为在计算dp[i-1][j]的时候是用dp[i-1][j-2]||dp[i-2][j]包含这一项在内了
+                        dp[i][j] = dp[i][j - 2] || dp[i - 1][j - 2] || dp[i - 1][j];
+                    &#125;else &#123;
+                        //如果p在*之前的那个字符和s的当前字符不同
+                        //那么只可能是该字符出现0次
+                        dp[i][j] = dp[i][j-2];
+                    &#125;
+                &#125;
+            &#125;
+        &#125;
+        return dp[as.length][ap.length];
+    &#125;
+&#125;
+</code></pre>
+<p>时间复杂度：O（mn）。</p>
+<p>空间复杂度：O（mn）。</p>
+<p>上面的方法是从前往后遍历，也可以从后往前遍历。就是当前位置要根据之后位置的状态来决定。其实可以看成和递归是一个道理，代码也很像递归的代码。</p>
+<pre><code class="java">class Solution &#123;
+    public boolean isMatch(String s, String p) &#123;
+        if(p.length() == 0) return s.length() == 0;
+        //转char数组是为了加快速度
+        char[] as = s.toCharArray();
+        char[] ap = p.toCharArray();
+        //dp[i][j]表示s的前i位置与p的前j位置相匹配
+        boolean[][] dp = new boolean[as.length+1][ap.length+1];
+        //从后往前遍历时，字符串尾部的位置表示字符串都是空，必然匹配得上
+        dp[as.length][ap.length] = true;
+        
+        for(int i = as.length; i &gt;= 0; i--) &#123;
+            for(int j = ap.length; j &gt;= 0; j--) &#123;
+                if(i == as.length &amp;&amp; j == ap.length) continue;
+                boolean firstMatch = (i != as.length &amp;&amp; j != ap.length &amp;&amp; (as[i] == ap[j] || ap[j] == &#39;.&#39;));
+                if(j + 1 &lt; ap.length &amp;&amp; ap[j+1] == &#39;*&#39;) &#123;
+                    dp[i][j] = dp[i][j+2] || (firstMatch &amp;&amp; dp[i+1][j]);
+                &#125;else &#123;
+                    dp[i][j] = firstMatch &amp;&amp; dp[i+1][j+1];
+                &#125;
+            &#125;
+        &#125;
+        return dp[0][0];
+    &#125;
+&#125;
+</code></pre>
+<p>时间复杂度：O（mn）。</p>
+<p>空间复杂度：O（mn）。</p>
+<p>本题的动态规划方法是没有办法优化成一维数组的，但是可以把二维数组优化得小一点。懒得写了。</p>
 
       
 
@@ -2176,7 +1250,7 @@ enum SEX &#123;
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://woojou.github.io/2021/07/12/JVM/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://woojou.github.io/2021/07/13/leetcode%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B0/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -2190,18 +1264,9 @@ enum SEX &#123;
   
 <nav id="article-nav">
   
-    <a href="/2021/07/13/leetcode%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B0/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          leetcode刷题笔记
-        
-      </div>
-    </a>
   
-  
-    <a href="/2021/07/12/hello-world/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">Hello World</div>
+    <a href="/2021/07/12/JVM/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">JVM</div>
       <i class="icon-circle-right"></i>
     </a>
   
