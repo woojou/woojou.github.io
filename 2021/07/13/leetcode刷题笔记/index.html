@@ -16,8 +16,22 @@
 <meta property="og:description" content="本笔记里所有题目来源于力扣网站，使用语言为 Java。">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://windliang.oss-cn-beijing.aliyuncs.com/6_3.jpg">
+<meta property="og:image" content="https://aliyun-lc-upload.oss-cn-hangzhou.aliyuncs.com/aliyun-lc-upload/uploads/2018/07/25/question_11.jpg">
+<meta property="og:image" content="https://assets.leetcode-cn.com/aliyun-lc-upload/original_images/17_telephone_keypad.png">
+<meta property="og:image" content="https://assets.leetcode.com/uploads/2020/10/03/remove_ex1.jpg">
+<meta property="og:image" content="https://assets.leetcode.com/uploads/2020/10/03/merge_ex1.jpg">
+<meta property="og:image" content="https://pic.leetcode-cn.com/efbe574e5e6addcd1c9dc5c13a50c6f162a2b14a95d6aed2c394e18287a067fa-image.png">
+<meta property="og:image" content="https://windliang.oss-cn-beijing.aliyuncs.com/23_4.jpg">
+<meta property="og:image" content="https://assets.leetcode.com/uploads/2020/10/03/swap_ex1.jpg">
+<meta property="og:image" content="https://assets.leetcode.com/uploads/2020/10/03/reverse_ex1.jpg">
+<meta property="og:image" content="https://assets.leetcode.com/uploads/2020/10/03/reverse_ex2.jpg">
+<meta property="og:image" content="https://images0.cnblogs.com/blog/416010/201308/17083828-cdb207f5460f4645982171e58571a741.png">
+<meta property="og:image" content="https://images0.cnblogs.com/blog/416010/201308/17083929-a9ccfb08833e4cf1a42c30f05608f8f5.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190322134050593.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2RhcmtfY3k=,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190322194629884.png">
+<meta property="og:image" content="https://windliang.oss-cn-beijing.aliyuncs.com/32_1.jpg">
 <meta property="article:published_time" content="2021-07-13T00:30:29.000Z">
-<meta property="article:modified_time" content="2021-07-13T00:36:50.381Z">
+<meta property="article:modified_time" content="2021-07-13T00:44:17.443Z">
 <meta property="article:author" content="Woojou">
 <meta property="article:tag" content="JAVA">
 <meta name="twitter:card" content="summary">
@@ -1160,6 +1174,2087 @@ P     I
 <p>时间复杂度：O（mn）。</p>
 <p>空间复杂度：O（mn）。</p>
 <p>本题的动态规划方法是没有办法优化成一维数组的，但是可以把二维数组优化得小一点。懒得写了。</p>
+<h3 id="11-盛最多水的容器"><a href="#11-盛最多水的容器" class="headerlink" title="11. 盛最多水的容器"></a>11. 盛最多水的容器</h3><p>给你 n 个非负整数 a<del>1</del>，a<del>2</del>，…，a<del>n</del>，每个数代表坐标中的一个点 (i, a<del>i</del>) 。在坐标内画 n 条垂直线，垂直线 i 的两个端点分别为 (i, a<del>i</del>) 和 (i, 0) 。找出其中的两条线，使得它们与 x 轴共同构成的容器可以容纳最多的水。</p>
+<p>说明：你不能倾斜容器。</p>
+<p><strong>示例 1：</strong></p>
+<img src="https://aliyun-lc-upload.oss-cn-hangzhou.aliyuncs.com/aliyun-lc-upload/uploads/2018/07/25/question_11.jpg" style="zoom:67%;">
+
+<pre><code>输入：[1,8,6,2,5,4,8,3,7]
+输出：49 
+解释：图中垂直线代表输入数组 [1,8,6,2,5,4,8,3,7]。在此情况下，容器能够容纳水（表示为蓝色部分）的最大值为 49。
+</code></pre>
+<p><strong>示例 2：</strong></p>
+<pre><code>输入：height = [1,1]
+输出：1
+</code></pre>
+<p><strong>示例 3：</strong></p>
+<pre><code>输入：height = [4,3,2,1,4]
+输出：16
+</code></pre>
+<p><strong>示例 4：</strong></p>
+<pre><code>输入：height = [1,2,1]
+输出：2
+</code></pre>
+<p>链接：<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/container-with-most-water">https://leetcode-cn.com/problems/container-with-most-water</a></p>
+<h4 id="解法一：暴力解法"><a href="#解法一：暴力解法" class="headerlink" title="解法一：暴力解法"></a>解法一：暴力解法</h4><p>遍历所有的柱子组合，求出最大的。</p>
+<pre><code class="java">class Solution &#123;
+    public int maxArea(int[] height) &#123;
+        int vel = 0;
+        for(int i = 0; i &lt; height.length; i++) &#123;
+            for(int j = i+1; j &lt; height.length; j++) &#123;
+                vel = Math.max(vel,Math.min(height[i],height[j])*(j-i));
+            &#125;
+        &#125;
+        return vel;
+    &#125;
+&#125;
+</code></pre>
+<p>时间复杂度：O（n^2^）超出时间限制</p>
+<p>空间复杂度：O（1）</p>
+<h4 id="解法二：双指针"><a href="#解法二：双指针" class="headerlink" title="解法二：双指针"></a>解法二：双指针</h4><p>用双指针一个从头开始往后移动，一个从尾部开始往前移动。</p>
+<p>为了使容量大，要么是容器很宽，要么是容器很高，那么为了弥补容器底变小，就需要让高度变高，所以移动高度较为矮的那个指针。</p>
+<pre><code class="java">class Solution &#123;
+    public int maxArea(int[] height) &#123;
+        int l = 0, r = height.length - 1, vel = 0;
+        while(l &lt; r) &#123;
+            vel = Math.max((r - l) * Math.min(height[l],height[r]), vel);
+            if(height[l] &lt; height[r]) &#123;
+                l++;
+            &#125;else &#123;
+                r--;
+            &#125;
+        &#125;
+        return vel;
+    &#125;
+&#125;
+</code></pre>
+<p>时间复杂度：O（n）</p>
+<p>空间复杂度：O（1）</p>
+<h3 id="12-整数转罗马数字"><a href="#12-整数转罗马数字" class="headerlink" title="12. 整数转罗马数字"></a>12. 整数转罗马数字</h3><p>罗马数字包含以下七种字符： I， V， X， L，C，D 和 M。</p>
+<table>
+<thead>
+<tr>
+<th>字符</th>
+<th>数值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>I</td>
+<td>1</td>
+</tr>
+<tr>
+<td>V</td>
+<td>5</td>
+</tr>
+<tr>
+<td>X</td>
+<td>10</td>
+</tr>
+<tr>
+<td>L</td>
+<td>50</td>
+</tr>
+<tr>
+<td>C</td>
+<td>100</td>
+</tr>
+<tr>
+<td>D</td>
+<td>500</td>
+</tr>
+<tr>
+<td>M</td>
+<td>1000</td>
+</tr>
+</tbody></table>
+<p>例如， 罗马数字 2 写做 II ，即为两个并列的 1。12 写做 XII ，即为 X + II 。 27 写做  XXVII, 即为 XX + V + II 。</p>
+<p>通常情况下，罗马数字中小的数字在大的数字的右边。但也存在特例，例如 4 不写做 IIII，而是 IV。数字 1 在数字 5 的左边，所表示的数等于大数 5 减小数 1 得到的数值 4 。同样地，数字 9 表示为 IX。这个特殊的规则只适用于以下六种情况：</p>
+<ul>
+<li>I 可以放在 V (5) 和 X (10) 的左边，来表示 4 和 9。</li>
+<li>X 可以放在 L (50) 和 C (100) 的左边，来表示 40 和 90。 </li>
+<li>C 可以放在 D (500) 和 M (1000) 的左边，来表示 400 和 900。</li>
+</ul>
+<p>给定一个整数，将其转为罗马数字。输入确保在 1 到 3999 的范围内。</p>
+<p><strong>示例 1:</strong></p>
+<pre><code>输入: 3
+输出: &quot;III&quot;
+</code></pre>
+<p><strong>示例 2:</strong></p>
+<pre><code>输入: 4
+输出: &quot;IV&quot;
+</code></pre>
+<p><strong>示例 3:</strong></p>
+<pre><code>输入: 9
+输出: &quot;IX&quot;
+</code></pre>
+<p><strong>示例 4:</strong></p>
+<pre><code>输入: 58
+输出: &quot;LVIII&quot;
+解释: L = 50, V = 5, III = 3.
+</code></pre>
+<p><strong>示例 5:</strong></p>
+<pre><code>输入: 1994
+输出: &quot;MCMXCIV&quot;
+解释: M = 1000, CM = 900, XC = 90, IV = 4.
+</code></pre>
+<p>链接：<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/integer-to-roman">https://leetcode-cn.com/problems/integer-to-roman</a></p>
+<p>把所有的表示单元（1、5、9等）列在数组中，将4、9、40、90…这些数也作为表示单元，存入数组。</p>
+<pre><code class="java">class Solution &#123;
+    public String intToRoman(int num) &#123;
+        int yuShu = 0;
+        int[] nums = &#123;1,4,5,9,10,40,50,90,100,400,500,900,1000&#125;;
+        String[] s = &#123;&quot;I&quot;,&quot;IV&quot;,&quot;V&quot;,&quot;IX&quot;,&quot;X&quot;,&quot;XL&quot;,&quot;L&quot;,&quot;XC&quot;,&quot;C&quot;,&quot;CD&quot;,&quot;D&quot;,&quot;CM&quot;,&quot;M&quot;&#125;;
+        StringBuilder res = new StringBuilder();
+        for(int i = 12; i &gt;= 0; i--) &#123;
+            yuShu = num / nums[i];
+            num = num % nums[i]; 
+            while(yuShu-- &gt; 0) &#123;
+                res.append(s[i]);
+            &#125;
+        &#125;
+        return res.toString();
+    &#125;
+&#125;
+</code></pre>
+<p>时间复杂度：O（1）</p>
+<p>空间复杂度：O（1）</p>
+<p>这题感觉还是比较简单的，很快就能有思路。</p>
+<h3 id="13-罗马数字转整数"><a href="#13-罗马数字转整数" class="headerlink" title="13. 罗马数字转整数"></a>13. 罗马数字转整数</h3><p>罗马数字包含以下七种字符： I， V， X， L，C，D 和 M。</p>
+<table>
+<thead>
+<tr>
+<th>字符</th>
+<th>数值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>I</td>
+<td>1</td>
+</tr>
+<tr>
+<td>V</td>
+<td>5</td>
+</tr>
+<tr>
+<td>X</td>
+<td>10</td>
+</tr>
+<tr>
+<td>L</td>
+<td>50</td>
+</tr>
+<tr>
+<td>C</td>
+<td>100</td>
+</tr>
+<tr>
+<td>D</td>
+<td>500</td>
+</tr>
+<tr>
+<td>M</td>
+<td>1000</td>
+</tr>
+</tbody></table>
+<p>例如， 罗马数字 2 写做 II ，即为两个并列的 1。12 写做 XII ，即为 X + II 。 27 写做  XXVII, 即为 XX + V + II 。</p>
+<p>通常情况下，罗马数字中小的数字在大的数字的右边。但也存在特例，例如 4 不写做 IIII，而是 IV。数字 1 在数字 5 的左边，所表示的数等于大数 5 减小数 1 得到的数值 4 。同样地，数字 9 表示为 IX。这个特殊的规则只适用于以下六种情况：</p>
+<ul>
+<li>I 可以放在 V (5) 和 X (10) 的左边，来表示 4 和 9。</li>
+<li>X 可以放在 L (50) 和 C (100) 的左边，来表示 40 和 90。 </li>
+<li>C 可以放在 D (500) 和 M (1000) 的左边，来表示 400 和 900。</li>
+</ul>
+<p>给定一个罗马数字，将其转换成整数。输入确保在 1 到 3999 的范围内。</p>
+<p><strong>示例 1:</strong></p>
+<pre><code>输入: &quot;III&quot;
+输出: 3
+</code></pre>
+<p><strong>示例 2:</strong></p>
+<pre><code>输入: &quot;IV&quot;
+输出: 4
+</code></pre>
+<p><strong>示例 3:</strong></p>
+<pre><code>输入: &quot;IX&quot;
+输出: 9
+</code></pre>
+<p><strong>示例 4:</strong></p>
+<pre><code>输入: &quot;LVIII&quot;
+输出: 58
+解释: L = 50, V= 5, III = 3.
+</code></pre>
+<p><strong>示例 5:</strong></p>
+<pre><code>输入: &quot;MCMXCIV&quot;
+输出: 1994
+解释: M = 1000, CM = 900, XC = 90, IV = 4.
+</code></pre>
+<p>链接：<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/roman-to-integer">https://leetcode-cn.com/problems/roman-to-integer</a></p>
+<h4 id="解法一"><a href="#解法一" class="headerlink" title="解法一:"></a>解法一:</h4><p>与上一题不同的是，这里没有将4、9等特殊情况也存入，所有的对应字母都是以char型数组存储的。当遇到’I’、’X’、’C’时要判断下一位字母是否会与当前字幕构成特殊情况组合。</p>
+<pre><code class="java">class Solution &#123;
+    public int romanToInt(String s) &#123;
+        int[] nums = &#123;1,5,10,50,100,500,1000&#125;;
+        char[] map = &#123;&#39;I&#39;,&#39;V&#39;,&#39;X&#39;,&#39;L&#39;,&#39;C&#39;,&#39;D&#39;,&#39;M&#39;&#125;;
+        int res = 0, index = map.length - 1;
+        char[] chars = s.toCharArray();
+        for(int i = 0; i &lt; chars.length; i++) &#123;
+            int cur = 0;
+            while(index &gt; 0 &amp;&amp; chars[i] != map[index]) &#123;
+                index--;
+            &#125;
+            cur = nums[index];
+            if(i &lt; chars.length - 1 &amp;&amp; (index == 0 || index == 2 || index == 4)) &#123;
+                if(chars[i+1] == map[index+1]) &#123;
+                    i++;
+                    cur = nums[index+1] - cur;
+                &#125;else if(chars[i+1] == map[index+2]) &#123;
+                    i++;
+                    cur = nums[index+2] - cur;
+                &#125;
+            &#125;
+            res += cur;
+        &#125;
+        return res;
+    &#125;
+&#125;
+</code></pre>
+<p>时间复杂度：O（n），n为字符串s的长度</p>
+<p>空间复杂度：O（1）</p>
+<h4 id="解法二"><a href="#解法二" class="headerlink" title="解法二"></a>解法二</h4><p>提前减去两倍该减的部分。<a target="_blank" rel="noopener" href="https://leetcode.com/problems/roman-to-integer/description/">按照题解来</a></p>
+<pre><code class="java">class Solution &#123;
+    public int romanToInt(String s) &#123;
+        int sum=0;
+        if(s.indexOf(&quot;IV&quot;)!=-1)&#123;sum-=2;&#125;
+        if(s.indexOf(&quot;IX&quot;)!=-1)&#123;sum-=2;&#125;
+        if(s.indexOf(&quot;XL&quot;)!=-1)&#123;sum-=20;&#125;
+        if(s.indexOf(&quot;XC&quot;)!=-1)&#123;sum-=20;&#125;
+        if(s.indexOf(&quot;CD&quot;)!=-1)&#123;sum-=200;&#125;
+        if(s.indexOf(&quot;CM&quot;)!=-1)&#123;sum-=200;&#125;
+
+        char c[]=s.toCharArray();
+        int count=0;
+        for(;count&lt;=s.length()-1;count++)&#123;
+            if(c[count]==&#39;M&#39;) sum+=1000;
+            if(c[count]==&#39;D&#39;) sum+=500;
+            if(c[count]==&#39;C&#39;) sum+=100;
+            if(c[count]==&#39;L&#39;) sum+=50;
+            if(c[count]==&#39;X&#39;) sum+=10;
+            if(c[count]==&#39;V&#39;) sum+=5;
+            if(c[count]==&#39;I&#39;) sum+=1;
+
+        &#125;
+        return sum;
+    &#125;
+&#125;
+</code></pre>
+<p>时间复杂度：O（n），n为字符串s的长度</p>
+<p>空间复杂度：O（1）</p>
+<h4 id="解法三"><a href="#解法三" class="headerlink" title="解法三"></a>解法三</h4><p>记录下前一个值与当前值，若当前值大于前一个值，那么代表sum要减去前一个值，否则是加。</p>
+<pre><code class="java">class Solution &#123;
+    public int romanToInt(String s) &#123;
+        char[] c=s.toCharArray();
+        int pre = getVal(c[0]);
+        int sum = 0;
+        int cur = 0;
+        for(int i = 1; i &lt; c.length; i++)&#123;
+            cur = getVal(c[i]);
+            if(pre &lt; cur) &#123;
+                sum -= pre;
+            &#125;else &#123;
+                sum += pre;
+            &#125;
+            pre = cur;
+        &#125;
+        sum += pre;
+        return sum;
+    &#125;
+    private int getVal(char c) &#123;
+        switch(c) &#123;
+            case &#39;M&#39; : return 1000;
+            case &#39;D&#39; : return 500;
+            case &#39;C&#39; : return 100;
+            case &#39;L&#39; : return 50;
+            case &#39;X&#39; : return 10;
+            case &#39;V&#39; : return 5;
+            case &#39;I&#39; : return 1;
+            default : return -1;
+        &#125;
+    &#125;
+&#125;
+</code></pre>
+<p>时间复杂度：O（n）</p>
+<p>空间复杂度：O（1）</p>
+<h3 id="14-最长公共前缀"><a href="#14-最长公共前缀" class="headerlink" title="14. 最长公共前缀"></a>14. 最长公共前缀</h3><p>编写一个函数来查找字符串数组中的最长公共前缀。</p>
+<p>如果不存在公共前缀，返回空字符串 “”。</p>
+<p><strong>示例 1：</strong></p>
+<pre><code>输入：strs = [&quot;flower&quot;,&quot;flow&quot;,&quot;flight&quot;]
+输出：&quot;fl&quot;
+</code></pre>
+<p><strong>示例 2：</strong></p>
+<pre><code>输入：strs = [&quot;dog&quot;,&quot;racecar&quot;,&quot;car&quot;]
+输出：&quot;&quot;
+解释：输入不存在公共前缀。
+</code></pre>
+<p>链接：<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/longest-common-prefix">https://leetcode-cn.com/problems/longest-common-prefix</a></p>
+<h4 id="解法一：纵向扫描"><a href="#解法一：纵向扫描" class="headerlink" title="解法一：纵向扫描"></a>解法一：纵向扫描</h4><p>从下标0开始，判断每一个字符串的下标0，判断是否全部相同。直到遇到不全部相同的下标，或是下标超出了字符串的边界。</p>
+<pre><code class="java">class Solution &#123;
+    public String longestCommonPrefix(String[] strs) &#123;
+        if(strs.length == 0) return &quot;&quot;;
+        if(strs.length == 1) return strs[0];
+        StringBuilder path = new StringBuilder();
+        int[] map = new int[26];
+        int index = 0;
+        boolean end = false;//标志位，是否结束while循环
+        while(!end) &#123;
+            for(int i = 0; i &lt; strs.length; i++) &#123;
+                //如果index超过了当前的字符串长度那么必然要停止while循环
+                if(index &gt;= strs[i].length()) &#123;
+                    end = true;
+                    break;
+                &#125;
+                //如果当前字符串的index字母数对应不上也要停止循环
+                if(++map[strs[i].charAt(index)-&#39;a&#39;] != i+1) &#123;
+                    end = true;
+                    break;
+                &#125;
+            &#125;
+            if(!end) &#123;
+                path.append(strs[0].charAt(index));
+                map[strs[0].charAt(index)-&#39;a&#39;] = 0;//对index字母数量复位0
+                index++;
+            &#125;            
+        &#125;
+        return path.toString();
+    &#125;
+&#125;
+</code></pre>
+<p>时间复杂度：O（n*m）</p>
+<p>空间复杂度：O（m），主要是path大小会随着给的输入不同而变化</p>
+<p>其实这里也并不一定需要用数组来存储对应关系，有些空间浪费了，其实只需要用一个char变量来保存前一个字符串index对应的字母即可。作了修改后如下。</p>
+<pre><code class="java">class Solution &#123;
+    public String longestCommonPrefix(String[] strs) &#123;
+        if(strs.length == 0) return &quot;&quot;;
+        if(strs.length == 1) return strs[0];
+        StringBuilder path = new StringBuilder();
+        char prev = &#39; &#39;;
+        int index = 0;
+        boolean end = false;//标志位，是否结束while循环
+        while(!end) &#123;
+            for(int i = 0; i &lt; strs.length; i++) &#123;
+                //如果index超过了当前的字符串长度那么必然要停止while循环
+                if(index &gt;= strs[i].length()) &#123;
+                    end = true;
+                    break;
+                &#125;
+                if(i == 0) &#123;
+                    prev = strs[0].charAt(index);
+                &#125;else if(prev != strs[i].charAt(index)) &#123;//如果当前字符串index指向的字母与prev不同
+                    end = true;
+                    break;
+                &#125;
+            &#125;
+            if(!end) &#123;
+                path.append(strs[0].charAt(index));
+                index++;
+            &#125;            
+        &#125;
+        return path.toString();
+    &#125;
+&#125;
+</code></pre>
+<p>时间复杂度：O（n*m）</p>
+<p>空间复杂度：O（m）</p>
+<h4 id="解法二：横向扫描"><a href="#解法二：横向扫描" class="headerlink" title="解法二：横向扫描"></a>解法二：横向扫描</h4><p>任选一个字符串作为公共前缀，然后到下一个字符串判断是否以该字符串为开头，若不是，就删减到符合要求为止。用到了String里自带的startsWith()方法，其实有点作弊的意思了。要是自己写也是可以的，但肯定没有库函数来的速度快。</p>
+<pre><code class="java">class Solution &#123;
+    public String longestCommonPrefix(String[] strs) &#123;
+        if(strs.length==0)return &quot;&quot;;
+        //先任选一个作为公共前缀
+        String s=strs[0];
+        for (String string : strs) &#123;
+            while(!string.startsWith(s))&#123;
+                if(s.length()==0)return &quot;&quot;;
+                //公共前缀不匹配就删减一位
+                s=s.substring(0,s.length()-1);
+            &#125;
+        &#125;
+        return s;
+    &#125;
+&#125;
+</code></pre>
+<p>时间复杂度：O（n*m）</p>
+<p>空间复杂度：O（m）</p>
+<p>不作弊的写法：</p>
+<pre><code class="java">class Solution &#123;
+    public String longestCommonPrefix(String[] strs) &#123;
+        if(strs.length == 0) return &quot;&quot;;
+        StringBuilder sb = new StringBuilder(strs[0]);
+        for(int i = 1; i &lt; strs.length; i++) &#123;
+            int size = Math.min(sb.length(), strs[i].length());
+            int j = 0;
+            while(j &lt; size) &#123;
+                if(strs[i].charAt(j) != sb.charAt(j)) &#123;
+                    if(j == 0) return &quot;&quot;;
+                    sb.delete(j, sb.length());
+                    break;
+                &#125;
+                j++;
+            &#125;
+            if(j == size &amp;&amp; size &lt; sb.length()) sb.delete(j, sb.length());//删除多余的未判断字符
+        &#125;
+        return sb.toString();
+    &#125;
+&#125;
+</code></pre>
+<h3 id="15-三数之和"><a href="#15-三数之和" class="headerlink" title="15. 三数之和"></a>15. 三数之和</h3><p>给你一个包含 n 个整数的数组 nums，判断 nums 中是否存在三个元素 a，b，c ，使得 a + b + c = 0 ？请你找出所有和为 0 且不重复的三元组。</p>
+<p>注意：答案中不可以包含重复的三元组。</p>
+<p> <strong>示例 1：</strong></p>
+<pre><code>输入：nums = [-1,0,1,2,-1,-4]
+输出：[[-1,-1,2],[-1,0,1]]
+</code></pre>
+<p><strong>示例 2：</strong></p>
+<pre><code>输入：nums = []
+输出：[]
+</code></pre>
+<p><strong>示例 3：</strong></p>
+<pre><code>输入：nums = [0]
+输出：[]
+</code></pre>
+<p>链接：<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/3sum">https://leetcode-cn.com/problems/3sum</a></p>
+<h4 id="解法一：哈希表-1"><a href="#解法一：哈希表-1" class="headerlink" title="解法一：哈希表"></a>解法一：哈希表</h4><p>这题如果用暴力解法必然是会超时的，想着用哈希表来存储两个数的和与他们的最大坐标。</p>
+<pre><code class="java">class Solution &#123;
+    public List&lt;List&lt;Integer&gt;&gt; threeSum(int[] nums) &#123;
+        List&lt;List&lt;Integer&gt;&gt; res = new ArrayList&lt;&gt;();
+        if(nums.length &lt; 3) return res;
+        Arrays.sort(nums);
+        HashMap&lt;Integer,List&lt;List&lt;Integer&gt;&gt;&gt; hm= new HashMap&lt;&gt;();
+        for(int i = 0; i &lt; nums.length; i++) &#123;
+            if(i &lt; nums.length-2 &amp;&amp; nums[i] == nums[i+1] &amp;&amp; nums[i] == nums[i+2]) continue;
+            for(int j = i+1; j &lt; nums.length; j++) &#123;
+                if(j &lt; nums.length-1 &amp;&amp; nums[j] == nums[j+1]) continue;
+                int sum = nums[i] + nums[j];
+                if(hm.containsKey(sum)) &#123;
+                    //如果包含sum
+                    List&lt;List&lt;Integer&gt;&gt; cur = hm.get(sum);
+                    boolean chongFu = true;
+                    int m = 0;
+                    for(m = 0; m &lt; cur.size(); m++) &#123;
+                        List&lt;Integer&gt; c = cur.get(m);
+                        if((nums[j] != nums[c.get(0)] &amp;&amp; nums[j] != nums[c.get(1)])) &#123;
+                            //如果没有重复元素
+                            chongFu = false;
+                        &#125;else &#123;
+                            //如果有重复的元素
+                            chongFu = true;
+                            break;
+                        &#125;
+                    &#125;
+                    if(chongFu) &#123;
+                        cur.set(m,Arrays.asList(i,j));
+                    &#125;else &#123;
+                        cur.add(Arrays.asList(i, j));
+                    &#125;
+                &#125;else &#123;
+                    //如果不包含sum这个键，需要new对象加入
+                    List&lt;List&lt;Integer&gt;&gt; r = new ArrayList&lt;&gt;();
+                    r.add(Arrays.asList(i, j));
+                    hm.put(sum, r);
+                &#125;
+            &#125;
+        &#125;
+        for(int i = 0; i &lt; nums.length; i++) &#123;
+            //去重
+            if(i &gt; 0 &amp;&amp; nums[i] == nums[i-1]) continue;
+
+            if(hm.containsKey(-nums[i])) &#123;
+                List&lt;List&lt;Integer&gt;&gt; cur = hm.get(-nums[i]);
+                for(int j = 0; j &lt; cur.size(); j++) &#123;
+                    List&lt;Integer&gt; c = cur.get(j);
+                    if(i &lt; c.get(0) &amp;&amp; i &lt; c.get(1)) &#123;
+                        //保证不会有重复的元素
+                        res.add(Arrays.asList(nums[i],nums[c.get(0)],nums[c.get(1)]));
+                    &#125;
+                &#125;
+            &#125;
+        &#125;
+        return res;
+    &#125;
+&#125;
+</code></pre>
+<p>时间复杂度：O（n^2^）</p>
+<p>但是提交后发现超时，可能是因为对哈希表的查询也是较大的时间开销，所以不能用哈希表。</p>
+<h4 id="解法二：双指针-1"><a href="#解法二：双指针-1" class="headerlink" title="解法二：双指针"></a>解法二：双指针</h4><p>使用双指针法来解决这道题。为了防止重复问题首先要将数组排列成有序的，这是许多对重复元素有要求的题目中的惯用伎俩。</p>
+<pre><code class="java">class Solution &#123;
+    public List&lt;List&lt;Integer&gt;&gt; threeSum(int[] nums) &#123;
+        List&lt;List&lt;Integer&gt;&gt; res = new ArrayList&lt;&gt;();
+        if(nums.length &lt; 3) return res;
+        Arrays.sort(nums);
+        for(int i = 0; i &lt; nums.length-2; i++) &#123;
+            if (nums[i] &gt; 0) break; // 第一个数大于 0，后面的数都比它大，肯定不成立了
+            if(i &gt; 0 &amp;&amp; nums[i] == nums[i - 1]) continue;
+            int left = i + 1;
+            int right = nums.length - 1;
+            while(left &lt; right) &#123;
+                int newSum = nums[i]+nums[left]+nums[right];
+                if(newSum == 0) &#123;
+                    res.add(Arrays.asList(nums[i], nums[left++], nums[right--]));
+                &#125;else if(newSum &gt; 0) &#123;
+                    right--;
+                &#125;else if(newSum &lt; 0) &#123;
+                    left++;
+                &#125;
+                while(left &gt; i + 1 &amp;&amp; left &lt; nums.length-1 &amp;&amp; nums[left] == nums[left - 1]) &#123; 
+                    //如果当前left指针指向元素与前一个元素相同那么要一直移动left直到不同
+                    left++;
+                &#125;
+                while(right &lt; nums.length - 1 &amp;&amp; right &gt; left &amp;&amp; nums[right] == nums[right + 1]) &#123; //同理上面left指针的操作
+                    right--;
+                &#125;
+            &#125;
+        &#125;
+        return res;
+    &#125;
+&#125;
+</code></pre>
+<p>时间复杂度：O（n²）</p>
+<p>空间复杂度：O（N），最坏情况，即 N 是指 n 个元素的排列组合个数，即 N=C^3^<del>n</del>，用来保存结果。</p>
+<h3 id="16-最接近的三数之和"><a href="#16-最接近的三数之和" class="headerlink" title="16. 最接近的三数之和"></a>16. 最接近的三数之和</h3><p>给定一个包括 n 个整数的数组 nums 和 一个目标值 target。找出 nums 中的三个整数，使得它们的和与 target 最接近。返回这三个数的和。假定每组输入只存在唯一答案。</p>
+<p><strong>示例：</strong></p>
+<pre><code>输入：nums = [-1,2,1,-4], target = 1
+输出：2
+解释：与 target 最接近的和是 2 (-1 + 2 + 1 = 2) 。
+</code></pre>
+<p>链接：<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/3sum-closest">https://leetcode-cn.com/problems/3sum-closest</a></p>
+<h4 id="解法一：双指针"><a href="#解法一：双指针" class="headerlink" title="解法一：双指针"></a>解法一：双指针</h4><p>与15题一样的思路</p>
+<pre><code class="java">class Solution &#123;
+    public int threeSumClosest(int[] nums, int target) &#123;
+        //sum保存结果，r保存绝对值差
+        int sum = 0, r = Integer.MAX_VALUE;
+        Arrays.sort(nums);
+        for(int i = 0; i &lt; nums.length - 2; i++) &#123;
+            int left = i+1, right = nums.length - 1;
+            int curSum = 0;
+            while(left &lt; right) &#123;
+                curSum = nums[i]+ nums[left] + nums[right];
+                int remain = curSum - target;
+                if(remain == 0) &#123;
+                    return curSum;
+                &#125;else if(remain &gt; 0)&#123;
+                    if(remain &lt; r) &#123;//差值更小，更接近答案
+                        r = remain;
+                        sum = curSum;
+                    &#125;
+                    right--;
+                &#125;else &#123;
+                    if(-remain &lt; r) &#123;//差值更小，更接近答案
+                        r = -remain;
+                        sum = curSum;
+                    &#125;
+                    left++;
+                &#125;
+            &#125;
+        &#125;
+        return sum;
+    &#125;
+&#125;
+</code></pre>
+<p>时间复杂度：O（n^2^）</p>
+<p>空间复杂度：O（1）</p>
+<h4 id="解法二：暴力解法"><a href="#解法二：暴力解法" class="headerlink" title="解法二：暴力解法"></a>解法二：暴力解法</h4><p>这题用暴力解法竟然也能通过。</p>
+<pre><code class="java">class Solution &#123;
+    public int threeSumClosest(int[] nums, int target) &#123;
+        int sum = 0, r = Integer.MAX_VALUE;
+        for(int i = 0; i &lt; nums.length - 2; i++) &#123;
+            for(int j = i + 1; j &lt; nums.length - 1; j++) &#123;
+                for(int m = j + 1; m &lt; nums.length; m++) &#123;
+                    if(Math.abs(target - nums[i] - nums[j] - nums[m]) &lt; r) &#123;
+                        r = Math.abs(target - nums[i] - nums[j] - nums[m]);
+                        sum = nums[i] + nums[j] + nums[m];
+                    &#125;
+                &#125;
+            &#125;
+        &#125;
+        return sum;
+    &#125;
+&#125;
+</code></pre>
+<p>时间复杂度：O（n^3^）</p>
+<p>空间复杂度：O（1） </p>
+<h3 id="17-电话号码的字母组合"><a href="#17-电话号码的字母组合" class="headerlink" title="17. 电话号码的字母组合"></a>17. 电话号码的字母组合</h3><p>给定一个仅包含数字 2-9 的字符串，返回所有它能表示的字母组合。答案可以按 任意顺序 返回。</p>
+<p>给出数字到字母的映射如下（与电话按键相同）。注意 1 不对应任何字母。</p>
+<img src="https://assets.leetcode-cn.com/aliyun-lc-upload/original_images/17_telephone_keypad.png" style="zoom:50%;">
+
+<p><strong>示例 1：</strong></p>
+<pre><code>输入：digits = &quot;23&quot;
+输出：[&quot;ad&quot;,&quot;ae&quot;,&quot;af&quot;,&quot;bd&quot;,&quot;be&quot;,&quot;bf&quot;,&quot;cd&quot;,&quot;ce&quot;,&quot;cf&quot;]
+</code></pre>
+<p><strong>示例 2：</strong></p>
+<pre><code>输入：digits = &quot;&quot;
+输出：[]
+</code></pre>
+<p><strong>示例 3：</strong></p>
+<pre><code>输入：digits = &quot;2&quot;
+输出：[&quot;a&quot;,&quot;b&quot;,&quot;c&quot;]
+</code></pre>
+<p>链接：<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/letter-combinations-of-a-phone-number">https://leetcode-cn.com/problems/letter-combinations-of-a-phone-number</a></p>
+<h4 id="解法一：回溯法"><a href="#解法一：回溯法" class="headerlink" title="解法一：回溯法"></a>解法一：回溯法</h4><p>这题是很典型的回溯法，所谓回溯法就是带有撤销状态的深度遍历法。</p>
+<pre><code class="java">class Solution &#123;
+    //用全局变量，是为了避免函数需要传递参数的麻烦
+    List&lt;String&gt; result = new ArrayList&lt;&gt;();
+    String[] str = &#123;&quot;!@#&quot;,&quot;abc&quot;,&quot;def&quot;,&quot;ghi&quot;,&quot;jkl&quot;,&quot;mno&quot;,&quot;pqrs&quot;,&quot;tuv&quot;,&quot;wxyz&quot;&#125;;//存储字母对应数字
+    int len;
+    StringBuilder path = new StringBuilder();
+    public List&lt;String&gt; letterCombinations(String digits) &#123;
+        len = digits.length();
+        if(len == 0) return result;
+        backTracking(digits,0);
+        return result;
+    &#125;
+    private void backTracking(String digits, int depth) &#123;
+        if(depth == len)&#123;//当path存储的字符数达到要求就加入result中并弹栈
+            //path数据类型是StringBuilder，必须要转成String
+            result.add(path.toString());
+            return;
+        &#125;
+        //获取digits中的数字，减1的操作是为了方便str数组查找
+        int startDigit = Character.getNumericValue(digits.charAt(depth)) -1;
+        //str[startDigit].length()是该键对应的字符数
+        for(int i = 0; i &lt; str[startDigit].length(); i++) &#123;
+            //选取当前数字键的一个字母
+            path.append(str[startDigit].charAt(i));
+            //调用更深一层的递归
+            backTracking(digits,depth+1);
+            //撤销当前数字键选用的字母，进入下次循环
+            path.setLength(path.length() - 1);
+        &#125;
+    &#125;
+&#125;
+</code></pre>
+<p>执行用时0 ms。</p>
+<h4 id="解法二：队列迭代"><a href="#解法二：队列迭代" class="headerlink" title="解法二：队列迭代"></a>解法二：队列迭代</h4><p>既然可以用递归法解决这道题，那么相应的也可以尝试是否可以用迭代来解决。</p>
+<pre><code class="java">class Solution &#123;
+    public List&lt;String&gt; letterCombinations(String digits) &#123;
+        LinkedList&lt;String&gt; result = new LinkedList&lt;&gt;();
+        int len = digits.length();
+        if(len == 0) return result;
+        result.add(&quot;&quot;);
+        String[] str = &#123;&quot;!@#&quot;,&quot;abc&quot;,&quot;def&quot;,&quot;ghi&quot;,&quot;jkl&quot;,&quot;mno&quot;,&quot;pqrs&quot;,&quot;tuv&quot;,&quot;wxyz&quot;&#125;;//存储字母对应数字
+        //将原digits字符串转换成char数组是为了方便快速取出
+        char[] chars = digits.toCharArray();
+        for(int i = 0; i &lt; len; i++) &#123;
+            int num = Character.getNumericValue(chars[i]) - 1;
+            while(result.peek().length() == i) &#123;
+                //取出队首元素
+                String pre = result.remove(); 
+                for(int j = 0; j &lt; str[num].length(); j++) &#123;
+                    result.add(pre + str[num].charAt(j));
+                &#125;
+            &#125;
+        &#125;
+        return result;
+    &#125;
+&#125;
+</code></pre>
+<p>实际提交代码的时间效率是不如上面的回溯法的，思考原因，有可能是因为力扣上的代码解析系统本身就会做递归更快，也有可能是这里用到的是字符串直接相加拼接而不是用StringBuilder做字符串拼接，时间开销会比较大。</p>
+<p>于是用StringBuilder对代码作修改，如下。</p>
+<pre><code class="java">class Solution &#123;
+    public List&lt;String&gt; letterCombinations(String digits) &#123;
+        LinkedList&lt;String&gt; result = new LinkedList&lt;&gt;();
+        int len = digits.length();
+        if(len == 0) return result;
+        result.add(&quot;&quot;);
+        String[] str = &#123;&quot;!@#&quot;,&quot;abc&quot;,&quot;def&quot;,&quot;ghi&quot;,&quot;jkl&quot;,&quot;mno&quot;,&quot;pqrs&quot;,&quot;tuv&quot;,&quot;wxyz&quot;&#125;;//存储字母对应数字
+        //将原digits字符串转换成char数组是为了方便快速取出
+        char[] chars = digits.toCharArray();
+        
+        for(int i = 0; i &lt; len; i++) &#123;
+            int num = Character.getNumericValue(chars[i]) - 1;
+            while(result.peek().length() == i) &#123;
+                //取出队首元素
+                StringBuilder path = new StringBuilder(result.remove());
+                for(int j = 0; j &lt; str[num].length(); j++) &#123;
+                    path.append(str[num].charAt(j));
+                    result.add(path.toString());
+                    path.deleteCharAt(path.length() - 1);
+                &#125;
+            &#125;
+        &#125;
+        return result;
+    &#125;
+&#125;
+</code></pre>
+<p>明显速度快了很多，执行用时只用了1 ms。看来用StringBuilder和用String直接做字符串拼接速度还是差很多的。</p>
+<h3 id="18-四数之和"><a href="#18-四数之和" class="headerlink" title="18. 四数之和"></a>18. 四数之和</h3><p>给定一个包含 n 个整数的数组 nums 和一个目标值 target，判断 nums 中是否存在四个元素 a，b，c 和 d ，使得 a + b + c + d 的值与 target 相等？找出所有满足条件且不重复的四元组。</p>
+<p>注意：答案中不可以包含重复的四元组。</p>
+<p><strong>示例 1：</strong></p>
+<pre><code>输入：nums = [1,0,-1,0,-2,2], target = 0
+输出：[[-2,-1,1,2],[-2,0,0,2],[-1,0,0,1]]
+</code></pre>
+<p><strong>示例 2：</strong></p>
+<pre><code>输入：nums = [], target = 0
+输出：[]
+</code></pre>
+<p>链接：<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/4sum">https://leetcode-cn.com/problems/4sum</a></p>
+<h4 id="解法：双指针"><a href="#解法：双指针" class="headerlink" title="解法：双指针"></a>解法：双指针</h4><p>这题和15题三数之和都是同样的思路同样的解法，用双指针，没啥好说的。</p>
+<pre><code class="java">class Solution &#123;
+    public List&lt;List&lt;Integer&gt;&gt; fourSum(int[] nums, int target) &#123;
+        List&lt;List&lt;Integer&gt;&gt; res = new ArrayList&lt;&gt;();
+        if(nums.length &lt; 4) return res;
+        Arrays.sort(nums);
+        
+        for(int i = 0; i &lt; nums.length-3; i++) &#123;
+            if(i &gt; 0 &amp;&amp; nums[i-1] == nums[i]) continue;
+            for(int j = i+1; j &lt; nums.length-2; j++) &#123;                
+                if(j &gt; i+1 &amp;&amp; nums[j] == nums[j-1]) continue;
+                int sum = nums[i]+nums[j];
+                int left = j+1, right = nums.length - 1;
+                while(left &lt; right) &#123;
+                    if(left &gt; j + 1 &amp;&amp; nums[left] == nums[left - 1]) &#123;
+                        left++;
+                        continue;
+                    &#125;
+                    if(right &lt; nums.length - 1 &amp;&amp; nums[right] == nums[right + 1]) &#123;
+                        right--;
+                        continue;
+                    &#125;
+                    int newSum = sum + nums[left] + nums[right];
+                    if(newSum == target) &#123;
+                        res.add(Arrays.asList(nums[i], nums[j], nums[left++], nums[right--]));
+                    &#125;else if(newSum &gt; target) &#123;
+                        right--;
+                    &#125;else&#123;
+                        left++;
+                    &#125;
+                &#125;
+            &#125;
+        &#125;
+        return res;
+    &#125;
+&#125;
+</code></pre>
+<p>但是具体还是可以继续剪枝的，比如遇到最小和大于target和时，就可以停止循环，而遇到最大和小于target，就可以继续下一轮。</p>
+<pre><code class="java">class Solution &#123;
+    public List&lt;List&lt;Integer&gt;&gt; fourSum(int[] nums, int target) &#123;
+        List&lt;List&lt;Integer&gt;&gt; res = new ArrayList&lt;&gt;();
+        if(nums.length &lt; 4) return res;
+        Arrays.sort(nums);        
+        for(int i = 0; i &lt; nums.length-3; i++) &#123;
+            //排除相同的重复元素
+            if(i &gt; 0 &amp;&amp; nums[i-1] == nums[i]) continue;
+            //如果最小的元素都大于target 那么就没有这四个数
+            if(nums[i] + nums[i+1] + nums[i+2] + nums[i+3] &gt; target) break;
+            //如果最大之和小于target，那么就要进行下一轮
+            if(nums[i] + nums[nums.length-1] + nums[nums.length-2] + nums[nums.length-3] &lt; target) continue;
+            for(int j = i+1; j &lt; nums.length-2; j++) &#123;  
+                //排除相同的重复元素              
+                if(j &gt; i+1 &amp;&amp; nums[j] == nums[j-1]) continue;
+                //如果最小的元素都大于target 那么就没有这四个数
+                if(nums[i] + nums[j] + nums[j+1] + nums[j+2] &gt; target) break;
+                //如果最大之和小于target，那么就要进行下一轮
+                if(nums[i] + nums[j] + nums[nums.length-1] + nums[nums.length-2] &lt; target) continue;
+                int sum = nums[i]+nums[j];
+                int left = j+1, right = nums.length - 1;
+                //双指针法
+                while(left &lt; right) &#123;
+                    int newSum = sum + nums[left] + nums[right];
+                    if(newSum == target) &#123;
+                        res.add(Arrays.asList(nums[i], nums[j], nums[left++], nums[right--]));
+                    &#125;else if(newSum &gt; target) &#123;
+                        right--;
+                        
+                    &#125;else&#123;
+                        left++;
+                        
+                    &#125;
+                    while(left &lt; right &amp;&amp; right &lt; nums.length - 1 &amp;&amp; nums[right] == nums[right + 1]) right--;
+                    while(left &lt; right &amp;&amp; left &gt; j + 1 &amp;&amp; nums[left] == nums[left - 1]) left++;
+                &#125;
+            &#125;
+        &#125;
+        return res;
+    &#125;
+&#125;
+</code></pre>
+<h3 id="19-删除链表的倒数第N个结点"><a href="#19-删除链表的倒数第N个结点" class="headerlink" title="19. 删除链表的倒数第N个结点"></a>19. 删除链表的倒数第N个结点</h3><p>给你一个链表，删除链表的倒数第 <code>n</code> 个结点，并且返回链表的头结点。</p>
+<p><strong>进阶：</strong>你能尝试使用一趟扫描实现吗？</p>
+<p><strong>示例 1：</strong></p>
+<p><img src="https://assets.leetcode.com/uploads/2020/10/03/remove_ex1.jpg"></p>
+<pre><code>输入：head = [1,2,3,4,5], n = 2
+输出：[1,2,3,5]
+</code></pre>
+<p><strong>示例 2：</strong></p>
+<pre><code>输入：head = [1], n = 1
+输出：[]
+</code></pre>
+<p><strong>示例 3：</strong></p>
+<pre><code>输入：head = [1,2], n = 1
+输出：[1]
+</code></pre>
+<p>链接：<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/remove-nth-node-from-end-of-list">https://leetcode-cn.com/problems/remove-nth-node-from-end-of-list</a></p>
+<h4 id="解法一：顺序扫描两次"><a href="#解法一：顺序扫描两次" class="headerlink" title="解法一：顺序扫描两次"></a>解法一：顺序扫描两次</h4><p>先扫描一遍得出总结点数，再进行第二次扫描找到sz-n的节点。</p>
+<pre><code class="java">/**
+ * Definition for singly-linked list.
+ * public class ListNode &#123;
+ *     int val;
+ *     ListNode next;
+ *     ListNode() &#123;&#125;
+ *     ListNode(int val) &#123; this.val = val; &#125;
+ *     ListNode(int val, ListNode next) &#123; this.val = val; this.next = next; &#125;
+ * &#125;
+ */
+class Solution &#123;
+    public ListNode removeNthFromEnd(ListNode head, int n) &#123;
+        int sz = 0;
+        ListNode p = head;
+        while(p != null) &#123;
+            sz++;
+            p = p.next;
+        &#125;
+        if(sz == n) return head.next;
+        int N = 1;
+        p = head;
+        while(N &lt; sz-n) &#123;
+            N++;
+            p = p.next;
+        &#125;
+        p.next = p.next.next;
+        return head;
+    &#125;
+&#125;
+</code></pre>
+<p>时间复杂度：O（sz）。</p>
+<p>空间复杂度：O（1）。</p>
+<h4 id="解法二：递归"><a href="#解法二：递归" class="headerlink" title="解法二：递归"></a>解法二：递归</h4><p>上一种解法是两次正向的遍历，这种解法可以看成是一种触底回退操作。</p>
+<pre><code class="java">class Solution &#123;
+    int N = 0;
+    public ListNode removeNthFromEnd(ListNode head, int n) &#123;
+        N = n;
+        ListNode fakeHead = new ListNode(0, head);
+        removeNthFromEnd(fakeHead);
+        return fakeHead.next;
+    &#125;
+    public ListNode removeNthFromEnd(ListNode head) &#123;
+        if(head == null) return head;
+        head.next = removeNthFromEnd(head.next);
+        if(--N == 0) &#123;
+            return head.next;
+        &#125;
+        return head;
+    &#125;
+&#125;
+</code></pre>
+<p>时间复杂度：O（sz）。</p>
+<p>空间复杂度：O（1）。</p>
+<h4 id="解法三：双指针"><a href="#解法三：双指针" class="headerlink" title="解法三：双指针*"></a>解法三：双指针*</h4><p>上面两种解法执行时间都是0 ms，但是并不满足进阶要求中的“只遍历一次”。可以利用双指针达到要求。<strong>先将第一个指针移动n步</strong>，保证了第一个指针和第二个指针之间相差了n个，然后两个指针再一起同步移动，直到第一个指针移动到了队尾，此时第二个指针所在位置的下一个节点就是我们要删除的那个。</p>
+<pre><code class="java">class Solution &#123;
+    public ListNode removeNthFromEnd(ListNode head, int n) &#123;
+        ListNode fakeHead = new ListNode(0,head);
+        ListNode first = fakeHead, second = fakeHead;
+        for(int i = 0; i &lt; n; i++) &#123;
+            first = first.next;
+        &#125;
+        while(first.next != null) &#123;
+            first = first.next;
+            second = second.next;
+        &#125;
+        second.next = second.next.next;
+        return fakeHead.next;
+    &#125;
+&#125;
+</code></pre>
+<p>时间复杂度：O（sz）。</p>
+<p>空间复杂度：O（1）。</p>
+<h4 id="解法四：空间换时间"><a href="#解法四：空间换时间" class="headerlink" title="解法四：空间换时间"></a>解法四：空间换时间</h4><p>看到一种相对来说比较骚的写法，就是遍历把每个节点都加入到一个列表中，然后直接取出在列表中位置为sz-n-1的节点。</p>
+<pre><code class="java">class Solution &#123;
+    public ListNode removeNthFromEnd(ListNode head, int n) &#123;
+        List&lt;ListNode&gt; list = new ArrayList&lt;ListNode&gt;();
+        int sz = 0;
+        ListNode p = head;
+        while(p != null) &#123;
+            list.add(p);
+            sz++;
+            p = p.next;
+        &#125;
+        if(sz == n) return head.next;
+        p = list.get(sz - n - 1);
+        p.next = p.next.next;
+        return head;
+    &#125;
+&#125;
+</code></pre>
+<p>时间复杂度：O（sz）。</p>
+<p>空间复杂度：O（sz）。</p>
+<p>不过实际提交的时候执行时间反而比前几种解法要差。</p>
+<h3 id="20-有效的括号"><a href="#20-有效的括号" class="headerlink" title="20. 有效的括号"></a>20. 有效的括号</h3><p>给定一个只包括 ‘(‘，’)’，’{‘，’}’，’[‘，’]’ 的字符串 s ，判断字符串是否有效。</p>
+<p>有效字符串需满足：</p>
+<p>左括号必须用相同类型的右括号闭合。<br>左括号必须以正确的顺序闭合。</p>
+<p><strong>示例 1：</strong></p>
+<pre><code>输入：s = &quot;()&quot;
+输出：true
+</code></pre>
+<p><strong>示例 2：</strong></p>
+<pre><code>输入：s = &quot;()[]&#123;&#125;&quot;
+输出：true
+</code></pre>
+<p><strong>示例 3：</strong></p>
+<pre><code>输入：s = &quot;(]&quot;
+输出：false
+</code></pre>
+<p><strong>示例 4：</strong></p>
+<pre><code>输入：s = &quot;([)]&quot;
+输出：false
+</code></pre>
+<p><strong>示例 5：</strong></p>
+<pre><code>输入：s = &quot;&#123;[]&#125;&quot;
+输出：true
+</code></pre>
+<p>链接：<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/valid-parentheses">https://leetcode-cn.com/problems/valid-parentheses</a></p>
+<p>这道题利用栈就可以轻松解决</p>
+<pre><code class="java">class Solution &#123;
+    public boolean isValid(String s) &#123;
+        if(s.length()%2 != 0) return false;
+        Stack&lt;Character&gt; st = new Stack&lt;&gt;();
+        for(int i = 0; i &lt; s.length(); i++) &#123;
+            char now = s.charAt(i);
+            if(now == &#39;(&#39; || now == &#39;&#123;&#39; || now == &#39;[&#39;) &#123;
+                st.push(now);
+            &#125;else &#123;
+                if(st.isEmpty()) return false;
+                if(now == &#39;)&#39;) &#123;
+                    if(st.peek() != &#39;(&#39;) return false;
+                    st.pop();
+                &#125;else if(now == &#39;&#125;&#39;) &#123;
+                    if(st.peek() != &#39;&#123;&#39;) return false;
+                    st.pop();
+                &#125;else if(now == &#39;]&#39;) &#123;
+                    if(st.peek() != &#39;[&#39;) return false;
+                    st.pop();
+                &#125;
+            &#125;                        
+        &#125;
+        return st.isEmpty();
+    &#125;
+&#125;
+</code></pre>
+<p>时间复杂度：O（n）。</p>
+<p>空间复杂度：O（n）。</p>
+<h3 id="21-合并两个有序链表"><a href="#21-合并两个有序链表" class="headerlink" title="21. 合并两个有序链表"></a>21. 合并两个有序链表</h3><p>将两个升序链表合并为一个新的 升序 链表并返回。新链表是通过拼接给定的两个链表的所有节点组成的。 </p>
+<p><strong>示例 1：</strong></p>
+<p><img src="https://assets.leetcode.com/uploads/2020/10/03/merge_ex1.jpg"></p>
+<pre><code>输入：l1 = [1,2,4], l2 = [1,3,4]
+输出：[1,1,2,3,4,4]
+</code></pre>
+<p><strong>示例 2：</strong></p>
+<pre><code>输入：l1 = [], l2 = []
+输出：[]
+</code></pre>
+<p><strong>示例 3：</strong></p>
+<pre><code>输入：l1 = [], l2 = [0]
+输出：[0]
+</code></pre>
+<p>链接：<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/merge-two-sorted-lists">https://leetcode-cn.com/problems/merge-two-sorted-lists</a></p>
+<h4 id="解法一：迭代"><a href="#解法一：迭代" class="headerlink" title="解法一：迭代"></a>解法一：迭代</h4><p>两条链表各有一指针，指向较小val值的指针节点接入当前要返回链表指针处。</p>
+<pre><code class="java">/**
+ * Definition for singly-linked list.
+ * public class ListNode &#123;
+ *     int val;
+ *     ListNode next;
+ *     ListNode() &#123;&#125;
+ *     ListNode(int val) &#123; this.val = val; &#125;
+ *     ListNode(int val, ListNode next) &#123; this.val = val; this.next = next; &#125;
+ * &#125;
+ */
+class Solution &#123;
+    public ListNode mergeTwoLists(ListNode l1, ListNode l2) &#123;
+        if(l1 == null) return l2;
+        if(l2 == null) return l1;
+        ListNode head;//要返回链表的头节点
+        int num1 = l1.val, num2 = l2.val;
+        //确定头节点是两个链表中的哪一个的头节点
+        if(num1 &lt;= num2) &#123;
+            head = new ListNode(num1);
+            l1 = l1.next;
+        &#125;else &#123;
+            head = new ListNode(num2);
+            l2 = l2.next;
+        &#125;
+        
+        ListNode p = head;
+        while(l1 != null &amp;&amp; l2 != null)&#123;
+            num1 = l1.val;
+            num2 = l2.val;
+            //创建以较小值为val的ListNode连接到链表中
+            if(num1 &lt;= num2) &#123;
+                p.next = new ListNode(num1);
+                l1 = l1.next;
+            &#125;else &#123;
+                p.next = new ListNode(num2);
+                l2 = l2.next;
+            &#125;
+            p = p.next;
+        &#125;
+        //当一个链表到结尾时，另一个未必也同步到达结尾，需要将另一个的剩余部分连接到链表中
+        if(l1 == null)&#123;
+            p.next = l2;
+        &#125;else if(l2 == null) &#123;
+            p.next = l1;
+        &#125;
+        return head;
+    &#125;
+&#125;
+</code></pre>
+<p>时间复杂度：O（n），n是两个链表的最短长度</p>
+<p>空间复杂度：O（1）</p>
+<p>上面的代码首先要确定头节点，代码显得多少有些啰嗦了，可以利用创建一个虚拟头节点来避免这样的麻烦。</p>
+<pre><code class="java">class Solution &#123;
+    public ListNode mergeTwoLists(ListNode l1, ListNode l2) &#123;
+        if(l1 == null) return l2;
+        if(l2 == null) return l1;
+        //创建虚拟头节点
+        ListNode fakeHead = new ListNode(0);
+        int num1, num2;
+        ListNode p = fakeHead;
+        while(l1 != null &amp;&amp; l2 != null)&#123;
+            num1 = l1.val;
+            num2 = l2.val;
+            //创建以较小值为val的ListNode连接到链表中
+            if(num1 &lt;= num2) &#123;
+                p.next = new ListNode(num1);
+                l1 = l1.next;
+            &#125;else &#123;
+                p.next = new ListNode(num2);
+                l2 = l2.next;
+            &#125;
+            p = p.next;
+        &#125;
+        //当一个链表到结尾时，另一个未必也同步到达结尾，需要将另一个的剩余部分连接到链表中
+        if(l1 == null)&#123;
+            p.next = l2;
+        &#125;else if(l2 == null) &#123;
+            p.next = l1;
+        &#125;
+        return fakeHead.next;
+    &#125;
+&#125;
+</code></pre>
+<p>时间复杂度：O（n），n是两个链表的最短长度</p>
+<p>空间复杂度：O（1）</p>
+<p>也可以不用创建新的节点。</p>
+<pre><code class="java">class Solution &#123;
+    public ListNode mergeTwoLists(ListNode l1, ListNode l2) &#123;
+        ListNode fakeHead = new ListNode(0);
+        ListNode prev = fakeHead;
+        while(l1 != null &amp;&amp; l2 != null) &#123;
+            if(l1.val &lt;= l2.val) &#123;
+                prev.next = l1;
+                prev = l1;
+                l1 = l1.next;
+            &#125;else &#123;
+                prev.next = l2;
+                prev = l2;
+                l2 = l2.next;
+            &#125;
+        &#125;
+        if(l1 != null) &#123;
+            prev.next = l1;
+        &#125;else &#123;
+            prev.next = l2;
+        &#125;
+        return fakeHead.next;
+    &#125;
+&#125;
+</code></pre>
+<h4 id="解法二：递归-1"><a href="#解法二：递归-1" class="headerlink" title="解法二：递归"></a>解法二：递归</h4><p>首先确定递归函数的终止条件是l1和l2中某一个为null。</p>
+<p>如果都不是null，那么自然是要比较l1和l2的val值，以较小的值为val创建新节点，那么next是谁呢？这就要通过递归调用自身函数来获取了。</p>
+<pre><code class="java">class Solution &#123;
+    public ListNode mergeTwoLists(ListNode l1, ListNode l2) &#123;
+        if(l1 == null) return l2;
+        if(l2 == null) return l1;
+        int num1 = l1.val, num2 = l2.val;
+        if(num1 &lt;= num2) &#123;
+            return new ListNode(num1, mergeTwoLists(l1.next, l2));
+        &#125;else &#123;
+            return new ListNode(num2, mergeTwoLists(l1,l2.next));
+        &#125;
+    &#125;
+&#125;
+</code></pre>
+<h3 id="22-括号生成"><a href="#22-括号生成" class="headerlink" title="22. 括号生成"></a>22. 括号生成</h3><p>数字 n 代表生成括号的对数，请你设计一个函数，用于能够生成所有可能的并且有效的括号组合。</p>
+<p><strong>示例 1：</strong></p>
+<pre><code>输入：n = 3
+输出：[&quot;((()))&quot;,&quot;(()())&quot;,&quot;(())()&quot;,&quot;()(())&quot;,&quot;()()()&quot;]
+</code></pre>
+<p><strong>示例 2：</strong></p>
+<pre><code>输入：n = 1
+输出：[&quot;()&quot;]
+</code></pre>
+<p>链接：<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/generate-parentheses">https://leetcode-cn.com/problems/generate-parentheses</a></p>
+<h4 id="解法一：回溯"><a href="#解法一：回溯" class="headerlink" title="解法一：回溯"></a>解法一：回溯</h4><p>一看到组合，就会想到用回溯算法了。</p>
+<pre><code class="java">class Solution &#123;
+    List&lt;String&gt; result = new ArrayList&lt;&gt;();//最后返回的结果
+    int all;//需要生成的括号对数
+    char[] ch;//存放括号
+    public List&lt;String&gt; generateParenthesis(int n) &#123;
+        all=n;
+        ch = new char[2*all];
+        backTracking(0,0);
+        return result;
+    &#125;
+    private void backTracking(int i, int j)&#123;        
+        if(i==all &amp;&amp; j==all) &#123;
+            result.add(new String(ch));//可以直接用char数组来生成String
+            return;
+        &#125;
+        if(i&lt;all) &#123;
+            //左括号还可以放
+            ch[i+j] = &#39;(&#39;;
+            backTracking(i+1,j);
+        &#125;
+        if(j&lt;i) &#123;
+            //只有当剩余的右括号数大于左括号数时才可以加入
+            ch[i+j] = &#39;)&#39;;
+            backTracking(i,j+1);
+        &#125;
+    &#125;
+&#125;
+</code></pre>
+<h4 id="解法二：广度优先"><a href="#解法二：广度优先" class="headerlink" title="解法二：广度优先"></a>解法二：广度优先</h4><p>回溯法的本质是深度优先搜索，如果用广度优先搜索，需要自定义一个结构。就像在构建一个如下图的树：</p>
+<p><img src="https://pic.leetcode-cn.com/efbe574e5e6addcd1c9dc5c13a50c6f162a2b14a95d6aed2c394e18287a067fa-image.png"></p>
+<pre><code class="java">class Solution &#123;    
+    class Node &#123;
+        //当前得到的字符串
+        private StringBuilder sb;
+        //剩余左括号数量
+        private int left;
+        //剩余右括号数量
+        private int right;
+        public Node() &#123;
+            this.sb = new StringBuilder();
+            this.left = 0;
+            this.right = 0;
+        &#125;
+        public Node(int left, int right) &#123;
+            this.sb = new StringBuilder();
+            this.left = left;
+            this.right = right;
+        &#125;
+        public Node(StringBuilder sb, int left, int right) &#123;
+            this.sb = sb;
+            this.left = left;
+            this.right = right;
+        &#125;
+    &#125;
+    public List&lt;String&gt; generateParenthesis(int n) &#123;        
+        List&lt;String&gt; result = new ArrayList&lt;&gt;();//最后返回的结果
+        Queue&lt;Node&gt; queue = new LinkedList&lt;&gt;();
+        Node node = new Node(n,n);
+        queue.offer(node);
+        while(!queue.isEmpty()) &#123;
+            node = queue.poll();
+            int left = node.left, right = node.right;
+            String str = node.sb.toString();
+            if(left == 0 &amp;&amp; right == 0) &#123;
+                result.add(str);
+            &#125;
+            if(left != 0) &#123;
+                //还有剩余左括号
+                StringBuilder sb = new StringBuilder(str);
+                sb.append(&quot;(&quot;);
+                node = new Node(sb, left-1, right);
+                queue.offer(node);
+            &#125;
+            if(left &lt; right) &#123;
+                //剩余右括号的数量大于左括号，可以加入右括号抵消一个左括号
+                StringBuilder sb = new StringBuilder(str);
+                sb.append(&quot;)&quot;);
+                node = new Node(sb, left, right-1);
+                queue.offer(node);
+            &#125;
+        &#125;
+        return result;
+    &#125;
+&#125;
+</code></pre>
+<h4 id="解法三：分治"><a href="#解法三：分治" class="headerlink" title="解法三：分治"></a>解法三：分治</h4><p>由于题目中说了n是大于等于1的，所以括号必然会有一对。题目可以看成需要知道这一对括号里有多少种组合，且这一对括号外又会有多少种组合，即（left）+ right，而left和right又都是用该函数来求解完成的，所以递归调用即可。</p>
+<pre><code class="java">class Solution &#123;    
+    public List&lt;String&gt; generateParenthesis(int n) &#123;        
+        List&lt;String&gt; result = new ArrayList&lt;&gt;();//最后返回的结果
+        if(n == 0) &#123;
+            result.add(&quot;&quot;);
+        &#125;else &#123;
+            for(int i = 0; i &lt; n; i++) &#123;
+                for(String left : generateParenthesis(i)) &#123;
+                    for(String right : generateParenthesis(n - 1 - i)) &#123;
+                        result.add(&quot;(&quot; + left + &quot;)&quot; + right);
+                    &#125;
+                &#125;
+            &#125;
+        &#125;                
+        return result;
+    &#125;
+&#125;
+</code></pre>
+<p>用String做字符串拼接过于耗时，改成StringBuilder之后执行时间从11 ms降至4 ms</p>
+<pre><code class="java">class Solution &#123;    
+    public List&lt;String&gt; generateParenthesis(int n) &#123;        
+        List&lt;String&gt; result = new ArrayList&lt;&gt;();//最后返回的结果
+        if(n == 0) &#123;
+            result.add(&quot;&quot;);
+        &#125;else &#123;
+            for(int i = 0; i &lt; n; i++) &#123;
+                for(String left : generateParenthesis(i)) &#123;
+                    for(String right : generateParenthesis(n - 1 - i)) &#123;
+                        StringBuilder sb = new StringBuilder(&quot;(&quot;);
+                        sb.append(left);
+                        sb.append(&quot;)&quot;);
+                        sb.append(right);
+                        result.add(sb.toString());
+                    &#125;
+                &#125;
+            &#125;
+        &#125;                
+        return result;
+    &#125;
+&#125;
+</code></pre>
+<h3 id="23-合并K个升序链表"><a href="#23-合并K个升序链表" class="headerlink" title="23. 合并K个升序链表"></a>23. 合并K个升序链表</h3><p>给你一个链表数组，每个链表都已经按升序排列。</p>
+<p>请你将所有链表合并到一个升序链表中，返回合并后的链表。</p>
+<p><strong>示例 1：</strong></p>
+<pre><code>输入：lists = [[1,4,5],[1,3,4],[2,6]]
+输出：[1,1,2,3,4,4,5,6]
+解释：链表数组如下：
+[
+  1-&gt;4-&gt;5,
+  1-&gt;3-&gt;4,
+  2-&gt;6
+]
+将它们合并到一个有序链表中得到。
+1-&gt;1-&gt;2-&gt;3-&gt;4-&gt;4-&gt;5-&gt;6
+</code></pre>
+<p><strong>示例 2：</strong></p>
+<pre><code>输入：lists = []
+输出：[]
+</code></pre>
+<p><strong>示例 3：</strong></p>
+<pre><code>输入：lists = [[]]
+输出：[]
+</code></pre>
+<p>链接：<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/merge-k-sorted-lists">https://leetcode-cn.com/problems/merge-k-sorted-lists</a></p>
+<h4 id="解法一：纵向比较"><a href="#解法一：纵向比较" class="headerlink" title="解法一：纵向比较"></a>解法一：纵向比较</h4><p>就是一列一列的比较，创建以最小值为val的节点连接到要返回的链表上，并将值最小的那个节点指针移向它的下一个。</p>
+<pre><code class="java">/**
+ * Definition for singly-linked list.
+ * public class ListNode &#123;
+ *     int val;
+ *     ListNode next;
+ *     ListNode() &#123;&#125;
+ *     ListNode(int val) &#123; this.val = val; &#125;
+ *     ListNode(int val, ListNode next) &#123; this.val = val; this.next = next; &#125;
+ * &#125;
+ */
+class Solution &#123;
+    public ListNode mergeKLists(ListNode[] lists) &#123;
+        int count = lists.length;
+        if(count == 0) return null;
+        if(count == 1) return lists[0];
+
+        ListNode fakeHead = new ListNode(0);
+        ListNode p = fakeHead;
+        int min = Integer.MAX_VALUE, pos = -1;
+        while(true) &#123;
+            for(int i = 0; i &lt; count; i++) &#123;
+                if(lists[i] == null) continue;//遇到空节点就跳过这一轮循环
+                if(lists[i].val &lt; min) &#123;
+                    min = lists[i].val;
+                    pos = i;//记录下最小值节点的位置
+                &#125;
+            &#125;
+            if(pos == -1) break; //代表链表中节点全是null
+            p.next = new ListNode(min);
+            p = p.next;
+            lists[pos] = lists[pos].next;
+            //pos和min一定要复位
+            pos = -1;
+            min = Integer.MAX_VALUE;
+        &#125;
+        return fakeHead.next;
+    &#125;
+&#125;
+</code></pre>
+<p>时间复杂度：O（kn），k是数组的长度，n是最长链表节点数。</p>
+<p>空间复杂度： O（N），N 表示最终链表的长度</p>
+<p> 看了其他人的解法，发现其实并不需要创建新的节点，改一下指针指向即可</p>
+<pre><code class="java">class Solution &#123;
+    public ListNode mergeKLists(ListNode[] lists) &#123;
+        int count = lists.length;
+        if(count == 0) return null;
+        if(count == 1) return lists[0];
+
+        ListNode fakeHead = new ListNode(0);
+        ListNode p = fakeHead;
+        int min = Integer.MAX_VALUE, pos = -1;
+        while(true) &#123;
+            for(int i = 0; i &lt; count; i++) &#123;
+                if(lists[i] == null) continue;//遇到空节点就跳过这一轮循环
+                if(lists[i].val &lt; min) &#123;
+                    min = lists[i].val;
+                    pos = i;//记录下最小值节点的位置
+                &#125;
+            &#125;
+            if(pos == -1) break; //代表链表中节点全是null
+            p.next = lists[pos];//此处作了修改，不再创建新节点
+            p = p.next;
+            lists[pos] = lists[pos].next;
+            //pos和min一定要复位
+            pos = -1;
+            min = Integer.MAX_VALUE;
+        &#125;
+        return fakeHead.next;
+    &#125;
+&#125;
+</code></pre>
+<p>时间复杂度和空间复杂度都是和上面一样的。</p>
+<h4 id="解法二：暴力"><a href="#解法二：暴力" class="headerlink" title="解法二：暴力"></a>解法二：暴力</h4><p>遍历所有的链表，将所有的值加入ArrayList中，然后排序，再从小到大按顺序创建新节点连入链表。</p>
+<pre><code class="java">class Solution &#123;
+    public ListNode mergeKLists(ListNode[] lists) &#123;
+        int count = lists.length;
+        if(count == 0) return null;
+        if(count == 1) return lists[0];
+        List&lt;Integer&gt; valList = new ArrayList&lt;Integer&gt;();
+        for(ListNode l : lists) &#123;
+            while(l != null) &#123;
+                valList.add(l.val);
+                l = l.next;
+            &#125;
+        &#125;
+        Collections.sort(valList);
+        ListNode fakeHead = new ListNode(0);
+        ListNode p = fakeHead;
+        for(Integer val : valList) &#123;
+            p.next = new ListNode(val);
+            p = p.next;
+        &#125;
+        return fakeHead.next;
+    &#125;
+&#125;
+</code></pre>
+<p>时间复杂度： O（NlogN）， N 是所有值的个数，排序如果是用快速排序就是 O(NlogN)</p>
+<p>空间复杂度：O（N）。</p>
+<h4 id="解法三：分治-1"><a href="#解法三：分治-1" class="headerlink" title="解法三：分治"></a>解法三：分治</h4><p>可以将链表两两合并，利用之前21题合并两个链表的代码。先以步长为1两两合并列表，再以步长为2，再以步长为4……</p>
+<img src="https://windliang.oss-cn-beijing.aliyuncs.com/23_4.jpg" style="zoom:80%;">
+
+<pre><code class="java">class Solution &#123;
+    public ListNode mergeKLists(ListNode[] lists) &#123;
+        int count = lists.length;
+        if(count == 0) return null;
+        if(count == 1) return lists[0];
+
+        int step = 1;
+        while(count &gt; step) &#123;
+            for(int i = 0; i + step &lt; count; i+=(step*2)) &#123;
+                lists[i] = mergeTwoLists(lists[i], lists[i+step]);
+            &#125;
+            step *= 2;
+        &#125;
+        return lists[0];
+    &#125;
+    public ListNode mergeTwoLists(ListNode l1, ListNode l2) &#123;
+        if(l1 == null) return l2;
+        if(l2 == null) return l1;
+        int num1 = l1.val, num2 = l2.val;
+        if(num1 &lt;= num2) &#123;
+            return new ListNode(num1, mergeTwoLists(l1.next, l2));
+        &#125;else &#123;
+            return new ListNode(num2, mergeTwoLists(l1,l2.next));
+        &#125;
+    &#125;
+&#125;
+</code></pre>
+<p>时间复杂度：O（n logk）合并 log（k）次，每次合并需要的时间复杂度是O（n）</p>
+<p>空间复杂度：O（N）</p>
+<h3 id="24-两两交换链表中的节点"><a href="#24-两两交换链表中的节点" class="headerlink" title="24. 两两交换链表中的节点"></a>24. 两两交换链表中的节点</h3><p>给定一个链表，两两交换其中相邻的节点，并返回交换后的链表。</p>
+<p><strong>你不能只是单纯的改变节点内部的值</strong>，而是需要实际的进行节点交换。</p>
+<p><strong>示例 1：</strong></p>
+<p><img src="https://assets.leetcode.com/uploads/2020/10/03/swap_ex1.jpg"></p>
+<pre><code>输入：head = [1,2,3,4]
+输出：[2,1,4,3]
+</code></pre>
+<p><strong>示例 2：</strong></p>
+<pre><code>输入：head = []
+输出：[]
+</code></pre>
+<p><strong>示例 3：</strong></p>
+<pre><code>输入：head = [1]
+输出：[1]
+</code></pre>
+<h4 id="解法一：递归-1"><a href="#解法一：递归-1" class="headerlink" title="解法一：递归"></a>解法一：递归</h4><pre><code class="java">class Solution &#123;
+    public ListNode swapPairs(ListNode head) &#123;
+        //没有成对可以交换的节点
+        if(head == null || head.next == null) return head;
+        //得到本对节点的后序节点
+        ListNode next = swapPairs(head.next.next);
+        //存下后面一个节点
+        ListNode tmp = head.next;
+        //将后面节点的下一个指向本节点
+        tmp.next = head;
+        //本节点的下一个指向后续节点
+        head.next = next;
+        return tmp;
+    &#125;
+&#125;
+</code></pre>
+<h4 id="解法二：迭代"><a href="#解法二：迭代" class="headerlink" title="解法二：迭代"></a>解法二：迭代</h4><p>需要用到一个伪头节点，然后逐次往后交换最先遇到的两个节点。</p>
+<pre><code class="java">class Solution &#123;
+    public ListNode swapPairs(ListNode head) &#123;
+        ListNode fakeHead = new ListNode(0,head);
+        head = fakeHead;
+        while(head.next != null &amp;&amp; head.next.next != null) &#123;
+            ListNode l1 = head.next;
+            ListNode l2 = head.next.next;
+            ListNode l3 = head.next.next.next;
+            l2.next = l1;
+            l1.next = l3;
+            head.next = l2;
+            head = l1;
+        &#125;
+        return fakeHead.next;
+    &#125;
+&#125;
+</code></pre>
+<h3 id="25-K个一组翻转链表"><a href="#25-K个一组翻转链表" class="headerlink" title="25. K个一组翻转链表"></a>25. K个一组翻转链表</h3><p>给你一个链表，每 k 个节点一组进行翻转，请你返回翻转后的链表。</p>
+<p>k 是一个正整数，它的值小于或等于链表的长度。</p>
+<p>如果节点总数不是 k 的整数倍，那么请将最后剩余的节点保持原有顺序。</p>
+<p><strong>进阶：</strong></p>
+<ul>
+<li>你可以设计一个只使用常数额外空间的算法来解决此问题吗？</li>
+<li><strong>你不能只是单纯的改变节点内部的值</strong>，而是需要实际进行节点交换。</li>
+</ul>
+<p><strong>示例 1：</strong></p>
+<p><img src="https://assets.leetcode.com/uploads/2020/10/03/reverse_ex1.jpg"></p>
+<pre><code>输入：head = [1,2,3,4,5], k = 2
+输出：[2,1,4,3,5]
+</code></pre>
+<p><strong>示例 2：</strong></p>
+<p><img src="https://assets.leetcode.com/uploads/2020/10/03/reverse_ex2.jpg"></p>
+<pre><code>输入：head = [1,2,3,4,5], k = 3
+输出：[3,2,1,4,5]
+</code></pre>
+<p><strong>示例 3：</strong></p>
+<pre><code>输入：head = [1,2,3,4,5], k = 1
+输出：[1,2,3,4,5]
+</code></pre>
+<p><strong>示例 4：</strong></p>
+<pre><code>输入：head = [1], k = 1
+输出：[1]
+</code></pre>
+<p>链接：<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/reverse-nodes-in-k-group">https://leetcode-cn.com/problems/reverse-nodes-in-k-group</a></p>
+<h4 id="解法：分次递归翻转"><a href="#解法：分次递归翻转" class="headerlink" title="解法：分次递归翻转"></a>解法：分次递归翻转</h4><p>分k个一组进行反转，如果节点不够就不能反转。用两个全局变量记录反转后的头节点，和反转后尾节点的下一个。</p>
+<pre><code class="java">class Solution &#123;
+    ListNode curHead;//反转后的头节点
+    ListNode curNext;//下一阶段的链表
+    public ListNode reverseKGroup(ListNode head, int k) &#123;
+        ListNode fakeHead = new ListNode(0, head);
+        head = fakeHead;
+        while(head != null) &#123;
+            ListNode tmp = reverseKPart(head.next, k);
+            if(tmp == null) break;//后面不需要反转
+            head.next = curHead;//连上头部
+            tmp.next = curNext;//连上尾部
+            head = tmp;
+        &#125;
+        return fakeHead.next;
+    &#125;
+    private ListNode reverseKPart(ListNode head, int k) &#123;
+        if(head == null || k == 0) return head;
+        ListNode tmp = reverseKPart(head.next, k-1);
+        if(tmp == null &amp;&amp; k &gt; 1) &#123;
+            //节点数不够k
+            return null;
+        &#125;else if(k == 1)&#123;
+            //当前在未反转链表部分的尾节点
+            curHead = head;//设置全局头节点
+            curNext = tmp;//设置全局尾节点的下一个
+        &#125;else &#123;
+            //反转指针
+            tmp.next = head;
+        &#125;
+        return head;
+    &#125;
+&#125;
+</code></pre>
+<h3 id="26-删除有序数组中的重复项"><a href="#26-删除有序数组中的重复项" class="headerlink" title="26. 删除有序数组中的重复项"></a>26. 删除有序数组中的重复项</h3><p>给你一个有序数组 nums ，请你 原地 删除重复出现的元素，使每个元素 只出现一次 ，返回删除后数组的新长度。</p>
+<p>不要使用额外的数组空间，你必须在 原地 修改输入数组 并在使用 O(1) 额外空间的条件下完成。</p>
+<p><strong>示例 1：</strong></p>
+<pre><code>输入：nums = [1,1,2]
+输出：2, nums = [1,2]
+解释：函数应该返回新的长度 2 ，并且原数组 nums 的前两个元素被修改为 1, 2 。不需要考虑数组中超出新长度后面的元素。
+</code></pre>
+<p><strong>示例 2：</strong></p>
+<pre><code>输入：nums = [0,0,1,1,1,2,2,3,3,4]
+输出：5, nums = [0,1,2,3,4]
+解释：函数应该返回新的长度 5 ， 并且原数组 nums 的前五个元素被修改为 0, 1, 2, 3, 4 。不需要考虑数组中超出新长度后面的元素。
+</code></pre>
+<p>链接：<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/remove-duplicates-from-sorted-array">https://leetcode-cn.com/problems/remove-duplicates-from-sorted-array</a></p>
+<p>可以理解为设置了快慢两个指针，快指针一直向前移动，慢指针只有在快指针遇到了不同值时才向前移动，并将快指针处的值作修改。</p>
+<pre><code class="java">class Solution &#123;
+    public int removeDuplicates(int[] nums) &#123;
+        if(nums.length == 0) return 0;
+        if(nums.length == 1) return 1;
+        int prev = nums[0], count = 1;
+        for(int i = 1; i &lt; nums.length; i++) &#123;
+            if(nums[i] != prev)&#123;
+                nums[count] = nums[i];
+                count++;
+                prev = nums[i];
+            &#125;
+        &#125;
+        return count;
+    &#125;
+&#125;
+</code></pre>
+<p>时间复杂度：O（n）</p>
+<p>空间复杂度：O（1）</p>
+<h3 id="27-移除元素"><a href="#27-移除元素" class="headerlink" title="27. 移除元素"></a>27. 移除元素</h3><p>给你一个数组 nums 和一个值 val，你需要 原地 移除所有数值等于 val 的元素，并返回移除后数组的新长度。</p>
+<p>不要使用额外的数组空间，你必须仅使用 O(1) 额外空间并 原地 修改输入数组。</p>
+<p>元素的顺序可以改变。你不需要考虑数组中超出新长度后面的元素。</p>
+<p> <strong>示例 1：</strong></p>
+<pre><code>输入：nums = [3,2,2,3], val = 3
+输出：2, nums = [2,2]
+解释：函数应该返回新的长度 2, 并且 nums 中的前两个元素均为 2。你不需要考虑数组中超出新长度后面的元素。例如，函数返回的新长度为 2 ，而 nums = [2,2,3,3] 或 nums = [2,2,0,0]，也会被视作正确答案。
+</code></pre>
+<p><strong>示例 2：</strong></p>
+<pre><code>输入：nums = [0,1,2,2,3,0,4,2], val = 2
+输出：5, nums = [0,1,4,0,3]
+解释：函数应该返回新的长度 5, 并且 nums 中的前五个元素为 0, 1, 3, 0, 4。注意这五个元素可为任意顺序。你不需要考虑数组中超出新长度后面的元素。
+</code></pre>
+<p>链接：<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/remove-element">https://leetcode-cn.com/problems/remove-element</a></p>
+<h4 id="解法一-1"><a href="#解法一-1" class="headerlink" title="解法一"></a>解法一</h4><p>这一题和上面是非常像了，用上一题的思路可以直接掰扯出代码。</p>
+<pre><code class="java">class Solution &#123;
+    public int removeElement(int[] nums, int val) &#123;
+        int low = 0;
+        for(int i = 0; i &lt; nums.length; i++) &#123;
+            if(nums[i] != val) &#123;
+                nums[low++] = nums[i];
+            &#125;            
+        &#125;
+        return low;
+    &#125;
+&#125;
+</code></pre>
+<p>时间复杂度：O（n）</p>
+<p>空间复杂度：O（1）</p>
+<h4 id="解法二-1"><a href="#解法二-1" class="headerlink" title="解法二"></a>解法二</h4><p>因为题目说元素顺序可以不一样，所以可以通过不停地交换元素来实现。</p>
+<p>一个指针 i 进行数组遍历，另外一个指针 j 指向有效数组的最后一个位置。</p>
+<p>只有当 i 所指向的值和 j 不一致（不重复），才将 i 的值添加到 j 的下一位置。</p>
+<p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/remove-duplicates-from-sorted-array/solution/shua-chuan-lc-jian-ji-shuang-zhi-zhen-ji-2eg8/">参考题解</a></p>
+<pre><code class="java">class Solution &#123;
+    public int removeElement(int[] nums, int val) &#123;
+        int j = nums.length - 1;
+        for(int i = 0; i &lt;= j; i++) &#123;
+            if(nums[i] == val) &#123;
+                nums[i--] = nums[j--];
+            &#125;            
+        &#125;
+        return j + 1;
+    &#125;
+&#125;
+</code></pre>
+<p>时间复杂度：O（n）</p>
+<p>空间复杂度：O（1）</p>
+<h3 id="28-实现-strStr"><a href="#28-实现-strStr" class="headerlink" title="28. 实现 strStr()"></a>28. 实现 strStr()</h3><p>实现 <a target="_blank" rel="noopener" href="https://baike.baidu.com/item/strstr/811469">strStr()</a> 函数。给你两个字符串 <code>haystack</code> 和 <code>needle</code> ，请你在 <code>haystack</code> 字符串中找出 <code>needle</code> 字符串出现的第一个位置（下标从 0 开始）。如果不存在，则返回 <code>-1</code> 。</p>
+<p><strong>说明：</strong></p>
+<p>当 <code>needle</code> 是空字符串时，我们应当返回什么值呢？这是一个在面试中很好的问题。对于本题而言，当 <code>needle</code> 是空字符串时我们应当返回 0 。这与 C 语言的 <a target="_blank" rel="noopener" href="https://baike.baidu.com/item/strstr/811469">strstr()</a> 以及 Java 的 <a target="_blank" rel="noopener" href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html#indexOf(java.lang.String)">indexOf()</a> 定义相符。</p>
+<p><strong>示例 1：</strong></p>
+<pre><code>输入：haystack = &quot;hello&quot;, needle = &quot;ll&quot;
+输出：2
+</code></pre>
+<p><strong>示例 2：</strong></p>
+<pre><code>输入：haystack = &quot;aaaaa&quot;, needle = &quot;bba&quot;
+输出：-1
+</code></pre>
+<p><strong>示例 3：</strong></p>
+<pre><code>输入：haystack = &quot;&quot;, needle = &quot;&quot;
+输出：0
+</code></pre>
+<h4 id="解法一：暴力法"><a href="#解法一：暴力法" class="headerlink" title="解法一：暴力法"></a>解法一：暴力法</h4><p>两个字符串从头开始匹配，一旦遇到了不同的值，就回溯再从头开始找。</p>
+<pre><code class="java">class Solution &#123;
+    public int strStr(String haystack, String needle) &#123;
+        if(needle.length() == 0) return 0;
+        if(needle.length() &gt; haystack.length()) return -1;
+        char[] hay = haystack.toCharArray(), need = needle.toCharArray();
+        for(int i = 0; i &lt;= haystack.length()-needle.length(); i++) &#123;
+            if(hay[i] != need[j]) continue;
+            int tmp = i;
+            int j = 0;
+            while(j &lt; needle.length()) &#123;
+                if(hay[i] != need[j]) break;
+                i++;
+                j++;
+            &#125;
+            if(j == needle.length()) return tmp;
+            i = tmp;
+        &#125;
+        return -1;
+    &#125;
+&#125;
+</code></pre>
+<p>时间复杂度：O（m*n）</p>
+<h4 id="解法二：KMP"><a href="#解法二：KMP" class="headerlink" title="解法二：KMP"></a>解法二：KMP</h4><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/dusf/p/kmp.html">具体看</a></p>
+<p>如果是人为来寻找的话，肯定不会再把i移动回第1位，<strong>因为主串匹配失败的位置前面除了第一个A之外再也没有A了</strong>，我们为什么能知道主串前面只有一个A？<strong>因为我们已经知道前面三个字符都是匹配的！（这很重要）</strong>。移动过去肯定也是不匹配的！有一个想法，<strong>i</strong>可以不动，我们只需要移动<strong>j</strong>即可，如下图：</p>
+<p> <img src="https://images0.cnblogs.com/blog/416010/201308/17083828-cdb207f5460f4645982171e58571a741.png" alt="img"></p>
+<p>上面的这种情况还是比较理想的情况。但假如是在主串“SSSSSSSSSSSSSA”中查找“SSSSB”，比较到最后一个才知道不匹配，然后i回溯，这个的效率是显然是最低的。</p>
+<p>所以需要创建一个<code>next[i]</code>数组，当<code>haystack[j] != needle[i]</code>的时候，<code>i</code>指针要移到<code>next[i-1]</code>的位置。</p>
+<p><img src="https://images0.cnblogs.com/blog/416010/201308/17083929-a9ccfb08833e4cf1a42c30f05608f8f5.png"></p>
+<p>以上面的图为例，从头开始比较到第四个字符的时候，发现C和D不同，所以指向<code>needle</code>的<code>j</code>指针要移动到一个满足 “ 前缀字符子串 与 当前<code>haystack</code>的<code>i</code>指针指向位置 前面一小段子串 相同” 的位置。发现C前面的字符子串”A”和<code>needle</code>的前缀字符串“A”是相同的，所以将<code>j</code>移动到“B”的位置。</p>
+<p>知道了<code>next[i]</code>的作用，具体该如何求是个问题。</p>
+<ul>
+<li><p>特殊情况：</p>
+<p>初始化设定<code>next[0]=-1</code>，因为<code>next[i]</code>是在前面<code>i</code>个字符都匹配的情况下唯独索引位置在<code>i</code>的位置不匹配时需要移动指针所达的位置，<code>next[0]</code>代表前面有<code>0</code>个字符相匹配，自然初始化为一个非法下标。</p>
+<p><code>next[1]=0</code>，因为前面只有一个字符相匹配，而当前这个字符不匹配，只能将其移动到初始位置。</p>
+</li>
+<li><p><code>t[j] == t[k]</code> 的情况：</p>
+<p>举个栗子<img src="https://img-blog.csdnimg.cn/20190322134050593.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2RhcmtfY3k=,size_16,color_FFFFFF,t_70">观察上图可知，当 t[j] == t[k] 时，必然有<code>t[0…k-1]&quot; == &quot; t[j-k…j-1]</code>，此时的 k 即是相同子串的长度。因为<code> t[j] == t[k]</code>，则有”t[0]…t[k]” == “ t[j-k]…t[j]”，这样也就得出了next[j+1]=k+1。</p>
+</li>
+<li><p>当<code>t[j] != t[k]</code> 的情况：</p>
+<p>看下图：</p>
+<p><img src="https://img-blog.csdnimg.cn/20190322194629884.png"></p>
+<p>能够保证的是，<code>j</code>前面的一段<code>[j-k...j-1]</code>与<code>[0...k-1]</code>的子串是一样的，对应上图就是：此时<code>k</code>前面的ABA与<code>j</code>前面的ABA是重合的，求<code>next[j]</code>就相当于求 <code>next[k]</code>，因此<code>next[j] = next[k]</code>。</p>
+</li>
+</ul>
+<pre><code class="java">class Solution &#123;
+    public int strStr(String haystack, String needle) &#123;
+        if(needle.length() == 0) return 0;
+        if(needle.length() &gt; haystack.length()) return -1;
+        char[] h = haystack.toCharArray(), n = needle.toCharArray();        
+        int[] next = new int[n.length];
+        getNext(n, next);
+        int i = 0, j = 0;
+        while(i &lt; h.length &amp;&amp; j &lt; n.length) &#123;
+            if(j == -1 || h[i] == n[j]) &#123;
+                j++;
+                i++;
+            &#125;else &#123;
+                j = next[j];
+            &#125;
+        &#125;
+        if(j == n.length) return i-j;
+        return -1;
+    &#125;
+    private void getNext(char[] pattern, int[] next) &#123;
+        next[0] = -1;
+        int j = 0, k = -1;
+        while(j &lt; pattern.length-1) &#123;
+            if(k == -1 || pattern[j] == pattern[k]) &#123;
+                j++;
+                k++;
+                if(pattern[k] == pattern[j]) &#123;//当两个字符相同时特殊处理
+                    next[j] = next[k];
+                &#125;else &#123;
+                    next[j] = k;
+                &#125;                
+            &#125;else &#123;
+                k = next[k];
+            &#125;
+        &#125;
+    &#125;
+&#125;
+</code></pre>
+<h4 id="解法三：内置函数"><a href="#解法三：内置函数" class="headerlink" title="解法三：内置函数"></a>解法三：内置函数</h4><pre><code class="java">class Solution &#123;
+    public int strStr(String haystack, String needle) &#123;
+        return haystack.indexOf(needle);
+    &#125;
+&#125;
+</code></pre>
+<h3 id="29-两数相除"><a href="#29-两数相除" class="headerlink" title="29. 两数相除"></a>29. 两数相除</h3><p>给定两个整数，被除数 <code>dividend</code> 和除数 <code>divisor</code>。将两数相除，要求不使用乘法、除法和 mod 运算符。返回被除数 <code>dividend</code> 除以除数 <code>divisor</code> 得到的商。整数除法的结果应当截去（<code>truncate</code>）其小数部分，例如：<code>truncate(8.345) = 8</code> 以及 <code>truncate(-2.7335) = -2</code></p>
+<p><strong>示例 1:</strong></p>
+<pre><code>输入: dividend = 10, divisor = 3
+输出: 3
+解释: 10/3 = truncate(3.33333..) = truncate(3) = 3
+</code></pre>
+<p><strong>示例 2:</strong></p>
+<pre><code>输入: dividend = 7, divisor = -3
+输出: -2
+解释: 7/-3 = truncate(-2.33333..) = -2
+</code></pre>
+<p>链接：<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/divide-two-integers">https://leetcode-cn.com/problems/divide-two-integers</a></p>
+<h4 id="解法："><a href="#解法：" class="headerlink" title="解法："></a>解法：</h4><p>原始想法，是列出那些特殊情况以外，以<code>divisor</code>递增直到大于<code>dividend</code>，次数就是答案。特殊情况如下：</p>
+<ul>
+<li><code>divisor == -1 &amp;&amp; dividend == -2147483648</code>，返回2147483647</li>
+<li><code>dividend == 0</code>，返回0</li>
+</ul>
+<p>但是遇到了超时问题。所以换个思路，想到<code>divisor</code>以指数倍增长，并且<code>ans</code>也以指数级增长。举例：11 除以 3，首先11比3大，结果至少是1， 然后我让3翻倍，就是6，发现11比3翻倍后还要大，那么结果就至少是2了，那我让这个6再翻倍，得12，11不比12大，所以跳出循环。所以实际上还需要知道 11-6得到5，除以3的结果。</p>
+<p>为了防止取绝对值的时候超出了int范围，采用long。</p>
+<pre><code class="java">class Solution &#123;
+    public int divide(int dividend, int divisor) &#123;
+        if(divisor == -1 &amp;&amp; dividend == -2147483648) return 2147483647;
+        if(divisor == -1) return -dividend;
+        if(divisor == 1 || dividend == 0) return dividend;
+        boolean negative = false;
+        if((dividend &lt; 0 &amp;&amp; divisor &gt; 0) || (dividend &gt; 0 &amp;&amp; divisor &lt; 0)) &#123;
+            negative = true;
+        &#125;
+        long b = Math.abs((long)divisor);
+        long a = Math.abs((long)dividend);     
+        int res = div(a, b);   
+        if(negative) res = - res;
+        return res;
+    &#125;
+    private int div(long a, long b) &#123;
+        if(b &gt; a) return 0;
+        long b1 = b;
+        int res = 1; //因为res是从1开始所以一定要先判断等于0 的情况
+        while(b+b &lt;= a) &#123;
+            b += b;
+            res += res;
+        &#125;
+        res += div(a-b, b1);
+        return res;
+    &#125;
+&#125;
+</code></pre>
+<p>有人提出了不使用long，而是把所有正数都转换成负数，这样就不会出现求绝对值时超出范围的情况。但实际上在while循环里面也会出现溢出，除非在判断的时候把两个数先转换成long类型，不过这样做属实找麻烦。虽然这个想法本身倒是挺值得学习的。</p>
+<h3 id="30-串联所有单词的子串"><a href="#30-串联所有单词的子串" class="headerlink" title="30. 串联所有单词的子串"></a>30. 串联所有单词的子串</h3><p>给定一个字符串 <code>s</code> 和一些 <strong>长度相同</strong> 的单词 <code>words</code> <strong>。</strong>找出 <code>s</code> 中恰好可以由 <code>words</code> 中所有单词串联形成的子串的起始位置。注意子串要与 <code>words</code> 中的单词完全匹配，<strong>中间不能有其他字符</strong> ，但不需要考虑 <code>words</code> 中单词串联的顺序。</p>
+<p><strong>示例 1：</strong></p>
+<pre><code>输入：s = &quot;barfoothefoobarman&quot;, words = [&quot;foo&quot;,&quot;bar&quot;]
+输出：[0,9]
+解释：
+从索引 0 和 9 开始的子串分别是 &quot;barfoo&quot; 和 &quot;foobar&quot; 。
+输出的顺序不重要, [9,0] 也是有效答案。
+</code></pre>
+<p><strong>示例 2：</strong></p>
+<pre><code>输入：s = &quot;wordgoodgoodgoodbestword&quot;, words = [&quot;word&quot;,&quot;good&quot;,&quot;best&quot;,&quot;word&quot;]
+输出：[]
+</code></pre>
+<p><strong>示例 3：</strong></p>
+<pre><code>输入：s = &quot;barfoofoobarthefoobarman&quot;, words = [&quot;bar&quot;,&quot;foo&quot;,&quot;the&quot;]
+输出：[6,9,12]
+</code></pre>
+<h4 id="解法一：哈希表-2"><a href="#解法一：哈希表-2" class="headerlink" title="解法一：哈希表"></a>解法一：哈希表</h4><p>用一个哈希表存储单词表中的单词和它们出现的频次，另一个哈希表用于存储搜寻子串中的单词和它们出现的频次。</p>
+<p>需要注意到，题目给出了单词长度相同的规定。否则一定会超时的！！！</p>
+<pre><code class="java">class Solution &#123;
+    public List&lt;Integer&gt; findSubstring(String s, String[] words) &#123;
+        List&lt;Integer&gt; res = new ArrayList&lt;Integer&gt;();
+        int wordNum = words.length;
+        if (wordNum == 0) return res;
+        int sLen = s.length();
+        int wordLen = words[0].length();
+        char[] S = s.toCharArray();
+        if(sLen &lt; wordLen) return res;
+        HashMap&lt;String,Integer&gt; map1 = new HashMap&lt;&gt;();
+        for(String w : words) &#123;
+            map1.put(w, map1.getOrDefault(w,0)+1);
+        &#125;
+        for(int i = 0; i &lt;= sLen - wordLen*wordNum; i++) &#123;
+            HashMap&lt;String, Integer&gt; map2 = new HashMap&lt;&gt;();
+            StringBuilder sb = new StringBuilder();
+            int count = 0;
+            for(int j = i; j &lt; sLen; j++) &#123;
+                sb.append(S[j]);
+                if(sb.length() &lt; wordLen) continue;
+                String curStr = sb.toString();
+                if(map1.containsKey(curStr)) &#123;
+                    int n = map2.getOrDefault(curStr,0);
+                    if(n &lt; map1.get(curStr)) &#123;
+                        map2.put(curStr, n+1);
+                        count++;
+                        sb.delete(0,sb.length());//清空
+                        if(count == wordNum) &#123;
+                            res.add(i);
+                            break;
+                        &#125;
+                    &#125;else &#123;
+                        break;
+                    &#125;
+                &#125;else &#123;
+                    break;
+                &#125;
+            &#125;
+        &#125;
+        return res;
+    &#125;
+&#125;
+</code></pre>
+<p>时间复杂度：假设 s 的长度是 n，words 里有 m 个单词，那么时间复杂度就是 O（n * m）。</p>
+<p>空间复杂度：两个 HashMap，假设 words 里有 m 个单词，就是 O（m）。</p>
+<h4 id="解法二：哈希表-滑动窗口"><a href="#解法二：哈希表-滑动窗口" class="headerlink" title="解法二：哈希表+滑动窗口*"></a>解法二：哈希表+滑动窗口*</h4><p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/substring-with-concatenation-of-all-words/solution/xiang-xi-tong-su-de-si-lu-fen-xi-duo-jie-fa-by-w-6/">参考题解</a></p>
+<p>能想出来的也是个神人，虽然不会特别难但是真的好烦。没有图形的话这个思路不好理解，不贴过来了直接看链接题解里的解法二吧，写的挺好的。</p>
+<pre><code class="java">class Solution &#123;
+public List&lt;Integer&gt; findSubstring(String s, String[] words) &#123;
+    List&lt;Integer&gt; res = new ArrayList&lt;Integer&gt;();
+    int wordNum = words.length;
+    if (wordNum == 0) &#123;
+        return res;
+    &#125;
+    int wordLen = words[0].length();
+    HashMap&lt;String, Integer&gt; allWords = new HashMap&lt;String, Integer&gt;();
+    for (String w : words) &#123;
+        int value = allWords.getOrDefault(w, 0);
+        allWords.put(w, value + 1);
+    &#125;
+    //将所有移动分成 wordLen 类情况
+    for (int j = 0; j &lt; wordLen; j++) &#123;
+        HashMap&lt;String, Integer&gt; hasWords = new HashMap&lt;String, Integer&gt;();
+        int num = 0; //记录当前 HashMap2（这里的 hasWords 变量）中有多少个单词
+        //每次移动一个单词长度
+        for (int i = j; i &lt; s.length() - wordNum * wordLen + 1; i = i + wordLen) &#123;
+            boolean hasRemoved = false; //防止情况三移除后，情况一继续移除
+            while (num &lt; wordNum) &#123;
+                String word = s.substring(i + num * wordLen, i + (num + 1) * wordLen);
+                if (allWords.containsKey(word)) &#123;
+                    int value = hasWords.getOrDefault(word, 0);
+                    hasWords.put(word, value + 1);
+                    //出现情况三，遇到了符合的单词，但是次数超了
+                    if (hasWords.get(word) &gt; allWords.get(word)) &#123;
+                        // hasWords.put(word, value);
+                        hasRemoved = true;
+                        int removeNum = 0;
+                        //一直移除单词，直到次数符合了
+                        while (hasWords.get(word) &gt; allWords.get(word)) &#123;
+                            String firstWord = s.substring(i + removeNum * wordLen, i + (removeNum + 1) * wordLen);
+                            int v = hasWords.get(firstWord);
+                            hasWords.put(firstWord, v - 1);
+                            removeNum++;
+                        &#125;
+                        num = num - removeNum + 1; //加 1 是因为我们把当前单词加入到了 HashMap 2 中
+                        i = i + (removeNum - 1) * wordLen; //这里依旧是考虑到了最外层的 for 循环，看情况二的解释
+                        break;
+                    &#125;
+                //出现情况二，遇到了不匹配的单词，直接将 i 移动到该单词的后边（但其实这里
+                //只是移动到了出现问题单词的地方，因为最外层有 for 循环， i 还会移动一个单词
+                //然后刚好就移动到了单词后边）
+                &#125; else &#123;
+                    hasWords.clear();
+                    i = i + num * wordLen;
+                    num = 0;
+                    break;
+                &#125;
+                num++;
+            &#125;
+            if (num == wordNum) &#123;
+                res.add(i);
+
+            &#125;
+            //出现情况一，子串完全匹配，我们将上一个子串的第一个单词从 HashMap2 中移除
+            if (num &gt; 0 &amp;&amp; !hasRemoved) &#123;
+                String firstWord = s.substring(i, i + wordLen);
+                int v = hasWords.get(firstWord);
+                hasWords.put(firstWord, v - 1);
+                num = num - 1;
+            &#125;
+
+        &#125;
+
+    &#125;
+    return res;
+&#125;
+&#125;
+</code></pre>
+<p>时间复杂度：O(n)</p>
+<h3 id="31-下一个排列"><a href="#31-下一个排列" class="headerlink" title="31. 下一个排列"></a>31. 下一个排列</h3><p>实现获取 <strong>下一个排列</strong> 的函数，算法需要将给定数字序列重新排列成字典序中下一个更大的排列。</p>
+<p>如果不存在下一个更大的排列，则将数字重新排列成最小的排列（即升序排列）。</p>
+<p>必须 原地 修改，只允许使用额外常数空间。</p>
+<p><strong>示例 1：</strong></p>
+<pre><code>输入：nums = [1,2,3]
+输出：[1,3,2]
+</code></pre>
+<p><strong>示例 2：</strong></p>
+<pre><code>输入：nums = [3,2,1]
+输出：[1,2,3]
+</code></pre>
+<p><strong>示例 3：</strong></p>
+<pre><code>输入：nums = [1,1,5]
+输出：[1,5,1]
+</code></pre>
+<p><strong>示例 4：</strong></p>
+<pre><code>输入：nums = [1]
+输出：[1]
+</code></pre>
+<p>链接：<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/next-permutation">https://leetcode-cn.com/problems/next-permutation</a></p>
+<h4 id="解法：找规律"><a href="#解法：找规律" class="headerlink" title="解法：找规律"></a>解法：找规律</h4><p>这题当时写的时候在纸上乱写乱画找了很久的规律，以一个例子来解释思路吧。</p>
+<p>以142635为例，首先要找到以数组尾部为结尾的降序子区间，也就是5，因为3是比5小的。然后降序子区间的前一个值是3，要往后找比3大的数并与他交换，就得到了结果142653。</p>
+<p>以124653为例，找到降序子区间是653，将它倒序是356变成升序区间，然后该区间内比4大的值是5，将它们交换，就得到了125346。</p>
+<pre><code class="java">class Solution &#123;
+    public void nextPermutation(int[] nums) &#123;
+        int reverse = findreverse(nums);
+        int left = reverse, right = nums.length - 1;
+        while(left &lt; right) &#123;
+            //逆转降序区间，这里其实也可以直接用Arrays.sort来解决
+            swap(nums, left, right);
+            left++;
+            right--;
+        &#125;
+        int i = reverse, prev = reverse - 1;
+        if(prev &gt;= 0) &#123;
+            //原降序区间前一个值与逆转顺序后的原降序区间现升序区间中第一个比自己大的数交换位置
+            while(nums[i] &lt;= nums[prev]) i++;
+            swap(nums,i,prev);
+        &#125;
+    &#125;
+    private void swap(int[] nums, int i, int j) &#123;
+        int tmp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = tmp;
+    &#125;
+    private int findreverse(int[] nums) &#123; 
+        //找到数组尾部的降序子区间
+        for(int i = nums.length - 1; i &gt;= 1; i--) &#123;
+            if(nums[i] &gt; nums[i - 1]) return i;
+        &#125;
+        return 0;
+    &#125;
+&#125;
+</code></pre>
+<p>时间复杂度：O（n）。</p>
+<p>空间复杂度：O（1）。</p>
+<h3 id="32-最长有效括号"><a href="#32-最长有效括号" class="headerlink" title="32. 最长有效括号"></a>32. 最长有效括号</h3><p>给你一个只包含 ‘(‘ 和 ‘)’ 的字符串，找出最长有效（格式正确且连续）括号子串的长度。</p>
+<p><strong>示例 1：</strong></p>
+<pre><code>输入：s = &quot;(()&quot;
+输出：2
+解释：最长有效括号子串是 &quot;()&quot;
+</code></pre>
+<p><strong>示例 2：</strong></p>
+<pre><code>输入：s = &quot;)()())&quot;
+输出：4
+解释：最长有效括号子串是 &quot;()()&quot;
+</code></pre>
+<p><strong>示例 3：</strong></p>
+<pre><code>输入：s = &quot;&quot;
+输出：0
+</code></pre>
+<p>链接：<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/longest-valid-parentheses">https://leetcode-cn.com/problems/longest-valid-parentheses</a></p>
+<h4 id="解法一：暴力破解"><a href="#解法一：暴力破解" class="headerlink" title="解法一：暴力破解"></a>解法一：暴力破解</h4><p>很暴力，判断每一个子串，是否符合配对。</p>
+<p>但是这种算法必然会超时。</p>
+<h4 id="解法二：优化暴力破解"><a href="#解法二：优化暴力破解" class="headerlink" title="解法二：优化暴力破解"></a>解法二：优化暴力破解</h4><p>其实并不需要对每个子串都检查，例如一段2-7区间是有效括号配对的，如果按照解法一，我们必然会判断2-3、2-5、2-7，但是其实只需要在判断2-3发现的确有效后再往后接着判断就行。</p>
+<pre><code class="java">class Solution &#123;
+    public int longestValidParentheses(String s) &#123;
+        int len = s.length();
+        if(len &lt;= 1) return 0;
+        char[] array = s.toCharArray();
+        int max = 0;
+        for(int i = 0; i &lt; len; i++) &#123;
+            int count = 0;
+            for(int j = i; j &lt; len; j++) &#123;
+                if(array[j] == &#39;(&#39;) &#123;
+                    count++;
+                &#125;else &#123;
+                    count--;
+                &#125;
+                if(count &lt; 0) &#123;
+                    break;
+                &#125;else if(count == 0)&#123;
+                    max = Math.max(max,j-i+1);
+                &#125;
+            &#125;
+            i = j;
+        &#125;
+        return max;
+    &#125;
+&#125;
+</code></pre>
+<p>时间复杂度：O（n^2^）</p>
+<p>空间复杂度：O（n）</p>
+<h4 id="解法三：动态规划"><a href="#解法三：动态规划" class="headerlink" title="解法三：动态规划*"></a>解法三：动态规划*</h4><p>首先明确动态规划的数组代表什么，dp[i]表示<strong>以 i 结尾</strong>有多少对有效括号。</p>
+<p>假如 i 位置是左括号，那么dp[i] = 0</p>
+<p>如果 i 位置是右括号，要看前一位i-1位置是什么。如果是左括号，那么i和i-1是一对有效的括号对，还要看i-2位置有多少对，得到dp[i] = dp[i-2] + 2。如果是右括号，就要看i-1-dp[i-1]位置是否为左括号。</p>
+<p>以下图为例</p>
+<img src="https://windliang.oss-cn-beijing.aliyuncs.com/32_1.jpg" style="zoom:90%;">
+
+<p>index = 3的位置，检查前一位发现是’(‘，所以再往前看一位有多少个有效括号，再加上2得到结果4。</p>
+<p>index = 7的位置，前一位是’)’，dp[6] = 2，所以再从6往前看两位，发现是个左括号，可以与7的右括号配对上，所以已经确定了从i-1-dp[i-1]到i有多少个配对了，但是前面可能还有可以配对的，这时候就要再加上dp[i-2-dp[i-1]] = dp[3] = 4，得到结果8。</p>
+<pre><code class="java">class Solution &#123;
+    public int longestValidParentheses(String s) &#123;
+        int len = s.length();
+        if(len &lt;= 1) return 0;
+        char[] array = s.toCharArray();
+        int[] dp = new int[len];
+        int max = 0;
+        for(int i = 0; i &lt; len; i++) &#123;
+            if(array[i] == &#39;)&#39;) &#123;
+                if(i == 0) continue;
+                if(array[i-1] == &#39;(&#39;) &#123;
+                    dp[i] = (i &gt; 1 ? dp[i-2] : 0) + 2;
+                &#125;else if(i-1-dp[i-1] &gt;= 0 &amp;&amp; array[i-1-dp[i-1]] == &#39;(&#39;)&#123;
+                    dp[i] = ( i-1-dp[i-1] &gt; 0 ? dp[i-2-dp[i-1]] : 0) + dp[i-1] + 2;
+                &#125;
+                max = Math.max(max,dp[i]);
+            &#125;
+        &#125;
+        return max;
+    &#125;
+&#125;
+</code></pre>
+<p>时间复杂度：O（n）</p>
+<p>空间复杂度：O（n）</p>
+<h4 id="解法四：栈"><a href="#解法四：栈" class="headerlink" title="解法四：栈*"></a>解法四：栈*</h4><p>极其巧妙的做法。</p>
+<p>将左括号的位置都压入栈，一旦遇到右括号就弹栈，得到长度。如果弹栈后发现栈空了，就要把当前位置压入栈。</p>
+<p>即保证每次弹栈后，栈顶的元素存入的是”以当前遍历所在位置为结尾的有效配对子串“可以开始的位置的-1位置（方便计算不用再+1了）。</p>
+<pre><code class="java">class Solution &#123;
+    public int longestValidParentheses(String s) &#123;
+        int len = s.length();
+        if(len &lt;= 1) return 0;
+        char[] array = s.toCharArray();
+        int max = 0;
+        Stack&lt;Integer&gt; stack = new Stack&lt;&gt;();
+        stack.push(-1);
+        for(int i = 0; i &lt; len; i++) &#123;
+            if(array[i] == &#39;(&#39;) &#123;
+                stack.push(i);
+            &#125;else &#123;
+                stack.pop();
+                if(stack.isEmpty()) &#123;
+                    stack.push(i);
+                &#125;else &#123;
+                    max = Math.max(max,i-stack.peek());
+                &#125;
+            &#125;
+        &#125;
+        return max;
+    &#125;
+&#125;
+</code></pre>
+<p>时间复杂度：O（n）</p>
+<p>空间复杂度：O（n）</p>
+<h4 id="解法五：正序逆序双重扫描法"><a href="#解法五：正序逆序双重扫描法" class="headerlink" title="解法五：正序逆序双重扫描法*"></a>解法五：正序逆序双重扫描法*</h4><p>分别用left和right来记录左括号和右括号的数量。如果相等就更新max的值。</p>
+<ul>
+<li>先正向扫描，一旦出现<strong>右括号数大于左括号数</strong>的情况，就将左右括号数都置为0。</li>
+<li>正向扫描一遍后再反向扫描，此时，一旦出现<strong>左括号数大于右括号数</strong>的情况，就将左右括号数都置为0。</li>
+</ul>
+<p>之所以要正序反序都来一次，以“（（）”为例，正向扫描left永远大于right，这时候就需要反向来达到right = left的条件。</p>
+<pre><code class="java">class Solution &#123;
+    public int longestValidParentheses(String s) &#123;
+        int len = s.length();
+        if(len &lt;= 1) return 0;
+        char[] array = s.toCharArray();
+        int max = 0, left = 0, right = 0;
+        for(int i = 0; i &lt; len; i++) &#123;
+            if(array[i] == &#39;(&#39;) &#123;
+                left++;
+            &#125;else &#123;
+                right++;
+            &#125;
+            if(left == right) &#123;
+                max = Math.max(max, 2*left);
+            &#125;else if(right &gt; left) &#123;
+                left = 0;
+                right = 0;
+            &#125;
+        &#125;
+        right = 0;
+        left = 0;
+        for(int i = len-1; i &gt;= 0; i--) &#123;
+            if(array[i] == &#39;(&#39;) &#123;
+                left++;
+            &#125;else &#123;
+                right++;
+            &#125;
+            if(left == right) &#123;
+                max = Math.max(max, 2*left);
+            &#125;else if(right &lt; left) &#123;
+                left = 0;
+                right = 0;
+            &#125;
+        &#125;
+        return max;
+    &#125;
+&#125;
+</code></pre>
+<p>时间复杂度：O（n）</p>
+<p>空间复杂度：O（n）</p>
 
       
 
