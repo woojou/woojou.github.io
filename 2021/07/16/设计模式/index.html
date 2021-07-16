@@ -6,15 +6,17 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://woojou.github.io">
-  <title>woojou&#39;s blog</title>
+  <title>设计模式 | woojou&#39;s blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="专注于JAVA后端知识，很菜">
-<meta property="og:type" content="website">
-<meta property="og:title" content="woojou&#39;s blog">
-<meta property="og:url" content="http://woojou.github.io/index.html">
+  <meta name="description" content="本博客是跟着菜鸟教程和https:&#x2F;&#x2F;refactoringguru.cn&#x2F;design-patterns#intro-patterns学习做的笔记摘录。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="设计模式">
+<meta property="og:url" content="http://woojou.github.io/2021/07/16/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/index.html">
 <meta property="og:site_name" content="woojou&#39;s blog">
-<meta property="og:description" content="专注于JAVA后端知识，很菜">
+<meta property="og:description" content="本博客是跟着菜鸟教程和https:&#x2F;&#x2F;refactoringguru.cn&#x2F;design-patterns#intro-patterns学习做的笔记摘录。">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-07-16T07:53:32.000Z">
+<meta property="article:modified_time" content="2021-07-16T12:40:47.903Z">
 <meta property="article:author" content="Woojou">
 <meta property="article:tag" content="程序媛">
 <meta name="twitter:card" content="summary">
@@ -157,16 +159,14 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-    <article id="post-设计模式" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+            <article id="post-设计模式" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/07/16/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a>
+    <h1 class="article-title" itemprop="name">
+      设计模式
     </h1>
   
 
@@ -180,7 +180,309 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>本博客是跟着<a target="_blank" rel="noopener" href="https://www.runoob.com/design-pattern/design-pattern-intro.html">菜鸟教程</a>和<a target="_blank" rel="noopener" href="https://refactoringguru.cn/design-patterns#intro-patterns%E5%AD%A6%E4%B9%A0%E5%81%9A%E7%9A%84%E7%AC%94%E8%AE%B0%E6%91%98%E5%BD%95%E3%80%82">https://refactoringguru.cn/design-patterns#intro-patterns学习做的笔记摘录。</a></p>
-        
+<span id="more"></span>
+
+<h1 id="设计模式简介"><a href="#设计模式简介" class="headerlink" title="设计模式简介"></a>设计模式简介</h1><h2 id="设计模式是什么？"><a href="#设计模式是什么？" class="headerlink" title="设计模式是什么？"></a>设计模式是什么？</h2><p><strong>设计模式</strong>是软件设计中常见问题的典型解决方案。它并不是一套可以被套用的模板或代码，而是用于解决特定问题的一般性概念。</p>
+<p>模式不同于算法：算法像是菜谱， 提供达成目标的明确步骤。 而模式更像是蓝图：，你可以看到最终的结果和模式的功能， 但需要自己确定实现步骤。</p>
+<h2 id="GOF是什么？"><a href="#GOF是什么？" class="headerlink" title="GOF是什么？"></a>GOF是什么？</h2><p>在 1994 年，由 Erich Gamma、Richard Helm、Ralph Johnson 和 John Vlissides 四人合著出版了一本名为 <strong>Design Patterns - Elements of Reusable Object-Oriented Software（中文译名：设计模式 - 可复用的面向对象软件元素）</strong> 的书，该书首次提到了软件开发中设计模式的概念。</p>
+<p>四位作者合称 <strong>GOF（四人帮，全拼 Gang of Four）</strong>。他们所提出的设计模式主要是基于以下的面向对象设计原则。</p>
+<ul>
+<li>对接口编程而不是对实现编程。</li>
+<li>优先使用对象组合而不是继承。</li>
+</ul>
+<h2 id="设计模式的类型"><a href="#设计模式的类型" class="headerlink" title="设计模式的类型"></a>设计模式的类型</h2><table>
+<thead>
+<tr>
+<th align="left">序号</th>
+<th align="left">模式 &amp; 描述</th>
+<th align="left">包括</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">1</td>
+<td align="left"><strong>创建型模式</strong> 这些设计模式提供了一种在创建对象的同时隐藏创建逻辑的方式，而不是使用 new 运算符直接实例化对象，能够提升已有代码的灵活性和可复用性。</td>
+<td align="left">工厂模式（Factory Pattern）抽象工厂模式（Abstract Factory Pattern）单例模式（Singleton Pattern）建造者模式（Builder Pattern）原型模式（Prototype Pattern）</td>
+</tr>
+<tr>
+<td align="left">2</td>
+<td align="left"><strong>结构型模式</strong> 这些设计模式关注类和对象的组合。继承的概念被用来组合接口和定义组合对象获得新功能的方式。</td>
+<td align="left">适配器模式（Adapter Pattern）桥接模式（Bridge Pattern）过滤器模式（Filter、Criteria Pattern）组合模式（Composite Pattern）装饰器模式（Decorator Pattern）外观模式（Facade Pattern）享元模式（Flyweight Pattern）代理模式（Proxy Pattern）</td>
+</tr>
+<tr>
+<td align="left">3</td>
+<td align="left"><strong>行为型模式</strong> 这些设计模式特别关注对象之间的通信。</td>
+<td align="left">责任链模式（Chain of Responsibility Pattern）命令模式（Command Pattern）解释器模式（Interpreter Pattern）迭代器模式（Iterator Pattern）中介者模式（Mediator Pattern）备忘录模式（Memento Pattern）观察者模式（Observer Pattern）状态模式（State Pattern）空对象模式（Null Object Pattern）策略模式（Strategy Pattern）模板模式（Template Pattern）访问者模式（Visitor Pattern）</td>
+</tr>
+<tr>
+<td align="left">4</td>
+<td align="left"><strong>J2EE 模式</strong> 这些设计模式特别关注表示层。这些模式是由 Sun Java Center 鉴定的。</td>
+<td align="left">MVC 模式（MVC Pattern）业务代表模式（Business Delegate Pattern）组合实体模式（Composite Entity Pattern）数据访问对象模式（Data Access Object Pattern）前端控制器模式（Front Controller Pattern）拦截过滤器模式（Intercepting Filter Pattern）服务定位器模式（Service Locator Pattern）传输对象模式（Transfer Object Pattern）</td>
+</tr>
+</tbody></table>
+<h1 id="创建型模式"><a href="#创建型模式" class="headerlink" title="创建型模式"></a>创建型模式</h1><h2 id="工厂方法模式"><a href="#工厂方法模式" class="headerlink" title="工厂方法模式"></a>工厂方法模式</h2><h3 id="意图"><a href="#意图" class="headerlink" title="意图"></a>意图</h3><p>在父类中提供一个创建对象的方法（即创建对象的接口）， 允许子类决定实例化对象的类型。工厂模式使其创建过程延迟到子类进行。</p>
+<p>工厂方法定义了一个方法， 且必须使用该方法<strong>代替通过直接调用构造函数来创建对象</strong> （ <code>new</code>操作符） 的方式。 子类可重写该方法来更改将被创建的对象所属类。</p>
+<h3 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h3><ul>
+<li><p>无法预知对象确切类别及其依赖关系时</p>
+</li>
+<li><p>希望用户能扩展你软件库或框架的内部组件</p>
+</li>
+<li><p>如果你希望复用现有对象来节省系统资源，而不是每次都重新创建对象</p>
+</li>
+</ul>
+<h3 id="示例问题"><a href="#示例问题" class="headerlink" title="示例问题"></a>示例问题</h3><p><a target="_blank" rel="noopener" href="https://www.runoob.com/design-pattern/factory-pattern.html">菜鸟教程</a>中提供了一个画不同形状的例子，看了之后有启发自己想到一个应用：有一个食品工厂，生产不同种类的食品，包括饮料、饼干、冰淇淋，一个商人要去进货，他只需要向工厂提供自己要进货的种类和数量即可，不需要知道工厂是如何生产的。</p>
+<ol>
+<li>创建一个食品接口</li>
+</ol>
+<pre><code class="java">public interface Food &#123;
+    void foodKind(int num);
+&#125;
+</code></pre>
+<ol start="2">
+<li>创建实现接口的实体类</li>
+</ol>
+<pre><code class="java">public class Drinks implements Food &#123;
+    @Override
+    public void foodKind(int num) &#123;
+        System.out.println(&quot;You have got &quot; + num + &quot; drinks&quot;);
+    &#125;
+&#125;
+</code></pre>
+<pre><code class="java">public class Cookies implements Food &#123;
+    @Override
+    public void foodKind(int num) &#123;
+        System.out.println(&quot;You have got &quot; + num + &quot; cookies&quot;);
+    &#125;
+&#125;
+</code></pre>
+<pre><code class="java">public class IceCream implements Food &#123;
+    @Override
+    public void foodKind(int num) &#123;
+        System.out.println(&quot;You have got &quot; + num + &quot; ice-cream&quot;);
+    &#125;
+&#125;
+</code></pre>
+<ol start="3">
+<li>创建一个工厂，生产基于给定信息的实体类的对象</li>
+</ol>
+<pre><code class="java">public class FoodFactory &#123;
+    public Food getFood(String foodType) &#123;
+        if(foodType == null) &#123;
+            return null;
+        &#125;
+        if(foodType.equals(&quot;Drinks&quot;)) &#123;
+            return new Drinks();
+        &#125; else if(foodType.equals(&quot;Cookies&quot;)) &#123;
+            return new Cookies();
+        &#125; else if(foodType.equals(&quot;IceCream&quot;)) &#123;
+            return new IceCream();
+        &#125;
+        return null;
+    &#125;
+&#125;
+</code></pre>
+<p>其实上面的结构已经做了简化，还可以先创建一个基本工厂类，在创建生产不同食品的工厂部门去继承父类工厂。</p>
+<ol start="4">
+<li>商人去工厂进货，通过告知自己所需的食品种类信息来获取实体类的对象</li>
+</ol>
+<pre><code class="java">public class FactoryPatternDemo &#123;
+    public static void main(String[] args) &#123;
+        FoodFactory foodFactory = new FoodFactory();
+        Food food1 = foodFactory.getFood(&quot;Drinks&quot;);
+        Food food2 = foodFactory.getFood(&quot;Cookies&quot;);
+        Food food3 = foodFactory.getFood(&quot;IceCream&quot;);
+        food1.foodKind(10);
+        food2.foodKind(20);
+        food3.foodKind(30);
+    &#125;
+&#125;
+</code></pre>
+<ol start="5">
+<li>输出结果</li>
+</ol>
+<pre><code class="java">You have got 10 drinks
+You have got 20 cookies
+You have got 30 ice-cream
+</code></pre>
+<p>调用工厂方法的代码 （通常被称为 客户端代码） 无需了解不同子类返回实际对象之间的差别。 客户端将所有产品视为抽象的 <code>运输</code> 。 客户端知道所有运输对象都提供 <code>交付</code>方法， 但是并不关心其具体实现方式。</p>
+<h3 id="模式结构"><a href="#模式结构" class="headerlink" title="模式结构"></a>模式结构</h3><ul>
+<li><strong>产品</strong>：会对接口进行声明。 对于所有由创建者及其子类构建的对象， 这些接口都是通用的。</li>
+<li><strong>具体产品</strong>：是产品接口的不同实现。</li>
+<li><strong>生产工厂</strong>：返回产品对象的工厂方法。 </li>
+</ul>
+<h3 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h3><ul>
+<li>一个调用者想创建一个对象，只要知道其名称就可以了。</li>
+<li>扩展性高，如果想增加一个产品，只要扩展一个工厂类就可以。</li>
+<li>屏蔽产品的具体实现，调用者只关心产品的接口。</li>
+</ul>
+<h3 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h3><p>每次增加一个产品时，都需要增加一个具体类和对象实现工厂，使得系统中类的个数成倍增加，在一定程度上增加了系统的复杂度，同时也增加了系统具体类的依赖。</p>
+<h2 id="抽象工厂模式"><a href="#抽象工厂模式" class="headerlink" title="抽象工厂模式"></a>抽象工厂模式</h2><h3 id="意图-1"><a href="#意图-1" class="headerlink" title="意图"></a>意图</h3><p>围绕一个超级工厂创建其他工厂。能创建一系列相关的对象， 而无需指定其具体类。</p>
+<p>在抽象工厂模式中，接口是负责创建一个相关对象的工厂。每个生成的工厂都能按照工厂模式提供对象。</p>
+<h3 id="使用场景-1"><a href="#使用场景-1" class="headerlink" title="使用场景"></a>使用场景</h3><ul>
+<li>如果代码需要与多个不同系列的相关产品交互，但是由于无法提前获取相关信息，或者出于对未来扩展性的考虑，你不希望代码基于产品的具体类进行构建。</li>
+</ul>
+<h3 id="示例问题-1"><a href="#示例问题-1" class="headerlink" title="示例问题"></a>示例问题</h3><p>继续延续上面的例子，食品的包装可以选择袋装或者盒装，由相应的工厂来专门实现。</p>
+<ol>
+<li>创建一个食品接口</li>
+</ol>
+<pre><code class="java">public interface Food &#123;
+    void foodKind(int num);
+&#125;
+</code></pre>
+<ol start="2">
+<li>创建实现接口的实体类</li>
+</ol>
+<pre><code class="java">public class Drinks implements Food &#123;
+    @Override
+    public void foodKind(int num) &#123;
+        System.out.println(&quot;You have got &quot; + num + &quot; drinks&quot;);
+    &#125;
+&#125;
+</code></pre>
+<pre><code class="java">public class Cookies implements Food &#123;
+    @Override
+    public void foodKind(int num) &#123;
+        System.out.println(&quot;You have got &quot; + num + &quot; cookies&quot;);
+    &#125;
+&#125;
+</code></pre>
+<pre><code class="java">public class IceCream implements Food &#123;
+    @Override
+    public void foodKind(int num) &#123;
+        System.out.println(&quot;You have got &quot; + num + &quot; ice-cream&quot;);
+    &#125;
+&#125;
+</code></pre>
+<ol start="3">
+<li>创建一个包装接口</li>
+</ol>
+<pre><code class="java">public interface Package &#123;
+    void getPackage(int num);
+&#125;
+</code></pre>
+<ol start="4">
+<li>创建实现接口的实体类。</li>
+</ol>
+<pre><code class="java">public class Bag implements Package &#123;
+    @Override
+    public void getPackage(int num) &#123;
+        System.out.println(&quot;Packed by&quot; + num + &quot;Bags&quot;);
+    &#125;
+&#125;
+</code></pre>
+<pre><code class="java">public class Box implements Package &#123;
+    @Override
+    public void getPackage(int num) &#123;
+        System.out.println(&quot;Packed by&quot; + num + &quot;Boxes&quot;);
+    &#125;
+&#125;
+</code></pre>
+<ol start="5">
+<li>为食品和包装对象创建 抽象类（也可以设计为接口） 来获取工厂</li>
+</ol>
+<pre><code class="java">public abstract class AbstractFactory &#123;
+    public abstract Food getFood(String food);
+    public abstract Package getPackage(String packages);
+&#125;
+</code></pre>
+<ol start="6">
+<li>创建扩展了 AbstractFactory 的工厂类，基于给定的信息生成实体类的对象。</li>
+</ol>
+<pre><code class="java">public class FoodFactory extends AbstractFactory &#123;
+    public Food getFood(String foodType) &#123;
+        if(foodType == null) &#123;
+            return null;
+        &#125;
+        if(foodType.equals(&quot;Drinks&quot;)) &#123;
+            return new Drinks();
+        &#125; else if(foodType.equals(&quot;Cookies&quot;)) &#123;
+            return new Cookies();
+        &#125; else if(foodType.equals(&quot;IceCream&quot;)) &#123;
+            return new IceCream();
+        &#125;
+        return null;
+    &#125;
+
+    @Override
+    public Package getPackage(String packages) &#123;
+        return null;
+    &#125;
+&#125;
+</code></pre>
+<pre><code class="java">public class PackageFactory extends AbstractFactory &#123;
+    @Override
+    public Package getPackage(String packages) &#123;
+        if(packages == null) return null;
+        if(packages.equals(&quot;Bag&quot;)) &#123;
+            return new Bag();
+        &#125; else if(packages.equals(&quot;Box&quot;)) &#123;
+            return new Box();
+        &#125;
+        return null;
+    &#125;
+
+    @Override
+    public Food getFood(String food) &#123;
+        return null;
+    &#125;
+&#125;
+</code></pre>
+<ol start="7">
+<li>创建一个工厂创造器/生成器类，通过传递食品或包装信息来获取工厂。</li>
+</ol>
+<pre><code class="java">public class FactoryProducer &#123;
+    public static AbstractFactory getFactory(String choice)&#123;
+        if(choice.equalsIgnoreCase(&quot;Food&quot;))&#123;
+            return new FoodFactory();
+        &#125; else if(choice.equalsIgnoreCase(&quot;Package&quot;))&#123;
+            return new PackageFactory();
+        &#125;
+        return null;
+    &#125;
+&#125;
+</code></pre>
+<ol start="8">
+<li>用 <code>FactoryProducer</code> 来获取 <code>AbstractFactory</code>，并通过传递类型信息来获取实体类的对象，生产相应的产品。</li>
+</ol>
+<pre><code class="java">public class AbstractFactoryPatternDemo &#123;
+    public static void main(String[] args) &#123;
+        AbstractFactory foodFactory = FactoryProducer.getFactory(&quot;Food&quot;);
+        Food food1 = foodFactory.getFood(&quot;Drinks&quot;);
+        Food food2 = foodFactory.getFood(&quot;Cookies&quot;);
+
+        AbstractFactory packageFactory = FactoryProducer.getFactory(&quot;Package&quot;);
+        Package package1 = packageFactory.getPackage(&quot;Box&quot;);
+        Package package2 = packageFactory.getPackage(&quot;Bag&quot;);
+
+        food1.foodKind(10);
+        package1.getPackage(10);
+
+        food2.foodKind(20);
+        package2.getPackage(20);
+    &#125;
+&#125;
+</code></pre>
+<ol start="9">
+<li>输出结果</li>
+</ol>
+<pre><code class="java">You have got 10 drinks
+Packed by 10 Boxes
+You have got 20 cookies
+Packed by 20 Bags
+</code></pre>
+<h3 id="模式结构-1"><a href="#模式结构-1" class="headerlink" title="模式结构"></a>模式结构</h3><ul>
+<li><strong>产品</strong>：会对接口进行声明。 对于所有由创建者及其子类构建的对象， 这些接口都是通用的。</li>
+<li><strong>具体产品</strong>：是产品接口的不同实现。</li>
+<li><strong>抽象工厂</strong>：用抽象类或接口声明了一组创建各种抽象产品的方法。</li>
+<li><strong>具体工厂</strong>：实现抽象工厂的构建方法。 每个具体工厂都对应特定产品变体， 且仅创建此种产品变体。</li>
+<li><strong>工厂生产者</strong>：通过传入参数返回具体工厂方法。 </li>
+</ul>
+<h3 id="优点-1"><a href="#优点-1" class="headerlink" title="优点"></a>优点</h3><ul>
+<li>扩展性高，如果想增加一个产品，只要扩展一个工厂类就可以。</li>
+<li>屏蔽产品和工厂的具体实现，调用者只关心产品和工厂的接口。</li>
+<li>确保同一工厂生成的产品相互匹配。</li>
+</ul>
+<h3 id="缺点-1"><a href="#缺点-1" class="headerlink" title="缺点"></a>缺点</h3><p>产品族扩展非常困难，要增加一个系列的某一产品，既要在抽象的 Creator 里加代码，又要在具体的里面加代码。</p>
+
       
 
       
@@ -191,16 +493,75 @@
       
 
       
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2021/07/16/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">展开全文 >></a>
-        </p>
-      
 
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
+        </div>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://woojou.github.io/2021/07/16/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
       
       <div class="clearfix"></div>
     </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
+  
+  
+    <a href="/2021/07/13/JVM/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">JVM</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
 
 <aside class="wrap-side-operation">
     <div class="mod-side-operation">
@@ -215,309 +576,32 @@
         </div>
         
         
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-JVM" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/07/13/JVM/">JVM</a>
-    </h1>
-  
-
-        
-        <a href="/2021/07/13/JVM/" class="archive-article-date">
-  	<time datetime="2021-07-13T11:14:50.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-07-13</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>本文章来源于<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1yE411Z7AP">B站黑马程序员 JVM 课程</a>。参考了<a target="_blank" rel="noopener" href="https://nyimac.gitee.io/">Nyima的笔记</a></p>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">JAVA</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2021/07/13/JVM/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%AE%80%E4%BB%8B"><span class="toc-number">1.</span> <span class="toc-text">设计模式简介</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">1.1.</span> <span class="toc-text">设计模式是什么？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#GOF%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">1.2.</span> <span class="toc-text">GOF是什么？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%9A%84%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.3.</span> <span class="toc-text">设计模式的类型</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F"><span class="toc-number">2.</span> <span class="toc-text">创建型模式</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F"><span class="toc-number">2.1.</span> <span class="toc-text">工厂方法模式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE"><span class="toc-number">2.1.1.</span> <span class="toc-text">意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-number">2.1.2.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E9%97%AE%E9%A2%98"><span class="toc-number">2.1.3.</span> <span class="toc-text">示例问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84"><span class="toc-number">2.1.4.</span> <span class="toc-text">模式结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9"><span class="toc-number">2.1.5.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9"><span class="toc-number">2.1.6.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F"><span class="toc-number">2.2.</span> <span class="toc-text">抽象工厂模式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE-1"><span class="toc-number">2.2.1.</span> <span class="toc-text">意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF-1"><span class="toc-number">2.2.2.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E9%97%AE%E9%A2%98-1"><span class="toc-number">2.2.3.</span> <span class="toc-text">示例问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84-1"><span class="toc-number">2.2.4.</span> <span class="toc-text">模式结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9-1"><span class="toc-number">2.2.5.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9-1"><span class="toc-number">2.2.6.</span> <span class="toc-text">缺点</span></a></li></ol></li></ol></li></ol>
+                    </div>
+                </span>
             </div>
         </div>
         
-        
     </div>
 </aside>
 
 
 
-
   
-    <article id="post-leetcode刷题笔记" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/07/13/leetcode%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B0/">leetcode刷题笔记</a>
-    </h1>
   
 
-        
-        <a href="/2021/07/13/leetcode%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B0/" class="archive-article-date">
-  	<time datetime="2021-07-13T00:30:29.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-07-13</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>本笔记里所有题目来源于力扣网站，使用语言为 Java。</p>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">JAVA</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2021/07/13/leetcode%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B0/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-MySQL" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/07/12/MySQL/">MySQL</a>
-    </h1>
   
 
-        
-        <a href="/2021/07/12/MySQL/" class="archive-article-date">
-  	<time datetime="2021-07-12T12:11:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-07-12</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>本笔记来源于<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1fx411X7BD">B站动力节点MySQL基础入门课程</a></p>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">SQL</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2021/07/12/MySQL/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-2020-07-12-博客网站创建" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/07/12/2020-07-12-%E5%8D%9A%E5%AE%A2%E7%BD%91%E7%AB%99%E5%88%9B%E5%BB%BA/">2020/07/12 博客网站创建</a>
-    </h1>
   
 
-        
-        <a href="/2021/07/12/2020-07-12-%E5%8D%9A%E5%AE%A2%E7%BD%91%E7%AB%99%E5%88%9B%E5%BB%BA/" class="archive-article-date">
-  	<time datetime="2021-07-12T03:23:47.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-07-12</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>本博客是跟随 B站 CodeSheep 大佬的视频一步步完成的。</p>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">随笔</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2021/07/12/2020-07-12-%E5%8D%9A%E5%AE%A2%E7%BD%91%E7%AB%99%E5%88%9B%E5%BB%BA/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
 
 
@@ -540,8 +624,8 @@
     <script>
 	var yiliaConfig = {
 		mathjax: true,
-		isHome: true,
-		isPost: false,
+		isHome: false,
+		isPost: true,
 		isArchive: false,
 		isTag: false,
 		isCategory: false,
