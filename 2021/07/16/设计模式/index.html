@@ -15,11 +15,13 @@
 <meta property="og:site_name" content="woojou&#39;s blog">
 <meta property="og:description" content="本博客是跟着菜鸟教程和 https:&#x2F;&#x2F;refactoringguru.cn&#x2F;design-patterns#intro-patterns 学习做的笔记摘录。">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://refactoringguru.cn/images/patterns/diagrams/builder/example-zh.png">
 <meta property="article:published_time" content="2021-07-16T07:53:32.000Z">
-<meta property="article:modified_time" content="2021-07-17T00:16:11.059Z">
+<meta property="article:modified_time" content="2021-07-17T11:16:15.238Z">
 <meta property="article:author" content="Woojou">
 <meta property="article:tag" content="编程基础">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://refactoringguru.cn/images/patterns/diagrams/builder/example-zh.png">
   
     <link rel="alternative" href="/atom.xml" title="woojou&#39;s blog" type="application/atom+xml">
   
@@ -219,7 +221,7 @@
 <td align="left">MVC 模式（MVC Pattern）业务代表模式（Business Delegate Pattern）组合实体模式（Composite Entity Pattern）数据访问对象模式（Data Access Object Pattern）前端控制器模式（Front Controller Pattern）拦截过滤器模式（Intercepting Filter Pattern）服务定位器模式（Service Locator Pattern）传输对象模式（Transfer Object Pattern）</td>
 </tr>
 </tbody></table>
-<h1 id="创建型模式"><a href="#创建型模式" class="headerlink" title="创建型模式"></a>创建型模式</h1><h2 id="工厂方法模式"><a href="#工厂方法模式" class="headerlink" title="工厂方法模式"></a>工厂方法模式</h2><h3 id="意图"><a href="#意图" class="headerlink" title="意图"></a>意图</h3><p>在父类中提供一个创建对象的方法（即创建对象的接口）， 允许子类决定实例化对象的类型。工厂模式使其创建过程延迟到子类进行。</p>
+<h1 id="创建型模式"><a href="#创建型模式" class="headerlink" title="创建型模式"></a>创建型模式</h1><h2 id="工厂方法模式（Factory-Pattern）"><a href="#工厂方法模式（Factory-Pattern）" class="headerlink" title="工厂方法模式（Factory Pattern）"></a>工厂方法模式（Factory Pattern）</h2><h3 id="意图"><a href="#意图" class="headerlink" title="意图"></a>意图</h3><p>在父类中提供一个创建对象的方法（即创建对象的接口）， 允许子类决定实例化对象的类型。工厂模式使其创建过程延迟到子类进行。</p>
 <p>工厂方法定义了一个方法， 且必须使用该方法<strong>代替通过直接调用构造函数来创建对象</strong> （ <code>new</code>操作符） 的方式。 子类可重写该方法来更改将被创建的对象所属类。</p>
 <h3 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h3><ul>
 <li><p>无法预知对象确切类别及其依赖关系时</p>
@@ -305,7 +307,7 @@ You have got 30 ice-cream
 <li>屏蔽产品的具体实现，调用者只关心产品的接口。</li>
 </ul>
 <h3 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h3><p>每次增加一个产品时，都需要增加一个具体类和对象实现工厂，使得系统中类的个数成倍增加，在一定程度上增加了系统的复杂度，同时也增加了系统具体类的依赖。</p>
-<h2 id="抽象工厂模式"><a href="#抽象工厂模式" class="headerlink" title="抽象工厂模式"></a>抽象工厂模式</h2><h3 id="意图-1"><a href="#意图-1" class="headerlink" title="意图"></a>意图</h3><p>围绕一个超级工厂创建其他工厂。能创建一系列相关的对象， 而无需指定其具体类。</p>
+<h2 id="抽象工厂模式（Abstract-Factory）"><a href="#抽象工厂模式（Abstract-Factory）" class="headerlink" title="抽象工厂模式（Abstract Factory）"></a>抽象工厂模式（Abstract Factory）</h2><h3 id="意图-1"><a href="#意图-1" class="headerlink" title="意图"></a>意图</h3><p>围绕一个超级工厂创建其他工厂。能创建一系列相关的对象， 而无需指定其具体类。</p>
 <p>在抽象工厂模式中，接口是负责创建一个相关对象的工厂。每个生成的工厂都能按照工厂模式提供对象。</p>
 <h3 id="使用场景-1"><a href="#使用场景-1" class="headerlink" title="使用场景"></a>使用场景</h3><ul>
 <li>如果代码需要与多个不同系列的相关产品交互，但是由于无法提前获取相关信息，或者出于对未来扩展性的考虑，你不希望代码基于产品的具体类进行构建。</li>
@@ -450,10 +452,487 @@ Packed by 20 Bags
 </ul>
 <h3 id="优点-1"><a href="#优点-1" class="headerlink" title="优点"></a>优点</h3><ul>
 <li>扩展性高，如果想增加一个产品，只要扩展一个工厂类就可以。</li>
-<li>屏蔽产品和工厂的具体实现，调用者只关心产品和工厂的接口。</li>
+<li>屏蔽产品和工厂的具体实现，调用者只关心产品和工厂的接口，不需要知道具体是哪个工厂以及如何生产产品。</li>
 <li>确保同一工厂生成的产品相互匹配。</li>
 </ul>
 <h3 id="缺点-1"><a href="#缺点-1" class="headerlink" title="缺点"></a>缺点</h3><p>产品族扩展非常困难，要增加一个系列的某一产品，既要在抽象的 Creator 里加代码，又要在具体的里面加代码。</p>
+<h2 id="建造者模式（Builder）"><a href="#建造者模式（Builder）" class="headerlink" title="建造者模式（Builder）"></a>建造者模式（Builder）</h2><h3 id="意图-2"><a href="#意图-2" class="headerlink" title="意图"></a>意图</h3><p>又称为生产者模式，使用多个简单的对象一步一步构建成一个复杂的对象。 该模式允许使用相同的创建代码生成不同类型和形式的对象。</p>
+<h3 id="使用场景-2"><a href="#使用场景-2" class="headerlink" title="使用场景"></a>使用场景</h3><ul>
+<li>一些基本部件不会变，而其组合经常变化的时候。</li>
+</ul>
+<h3 id="示例问题-2"><a href="#示例问题-2" class="headerlink" title="示例问题"></a>示例问题</h3><p>要生产一辆车，需要生产坐垫、引擎等等许多零部件，不同的车还会有一些不同的零部件。</p>
+<p>如果这里采用扩展 汽车 基类，然后创建一系列涵盖各种参数的零部件子类，最终会有数量庞大的子类。如果不采用生成子类的方法，而是在 汽车 基类中创建一个包括所有可能参数的超级构造参数，这使得构造函数的调用十分不简洁，因为有很多构造参数在创建不同种类的汽车时根本用不到。</p>
+<p>使用建造者模型，将对象构造代码从产品类中抽取出来，并将其放在一个名为生成器的独立对象中。</p>
+<p>该模式会将对象构造过程划分为一组步骤。 每次创建对象时， 你都需要通过生成器对象执行一系列步骤。 重点在于你无需调用所有步骤， 而只需调用创建特定对象配置所需的那些步骤即可。 </p>
+<p>还可以进一步将用于创建产品的一系列生成器步骤调用抽取成为单独的<em>主管</em>类。 主管类可定义创建步骤的执行顺序， 而生成器则提供这些步骤的实现。</p>
+<p>代码结构如下：</p>
+<p><img src="https://refactoringguru.cn/images/patterns/diagrams/builder/example-zh.png"></p>
+<p><em>分步骤制造汽车并制作对应型号用户使用手册</em></p>
+<p>1.构建一个生成器的接口，声明创建产品对象不同零部件的方法</p>
+<pre><code class="java">public interface Builder &#123;
+    void setCarType(CarType type);
+    void setSeats(int seats);
+    void setEngine(Engine engine);
+    void setTransmission(Transmission transmission);
+    void setTripComputer(TripComputer tripComputer);
+    void setGPSNavigator(GPSNavigator gpsNavigator);
+&#125;
+</code></pre>
+<p>2.创建具体的生成器类，包括汽车生成器和汽车手册生成器。每个生成器不仅包含生产各个零部件的方法，还要自行提供一个获取结果的方法，除非所有产品都遵循相同的接口，够早的结果可以通过主管类直接获取。 </p>
+<pre><code class="java">public class CarBuilder implements Builder &#123;
+    private CarType type;
+    private int seats;
+    private Engine engine;
+    private Transmission transmission;
+    private TripComputer tripComputer;
+    private GPSNavigator gpsNavigator;
+
+    //所有生成步骤都会与同一个产品实例进行交互。
+    @Override
+    public void setCarType(CarType type) &#123;
+        this.type = type;
+    &#125;
+
+    @Override
+    public void setSeats(int seats) &#123;
+        this.seats = seats;
+    &#125;
+
+    @Override
+    public void setEngine(Engine engine) &#123;
+        this.engine = engine;
+    &#125;
+
+    @Override
+    public void setTransmission(Transmission transmission) &#123;
+        this.transmission = transmission;
+    &#125;
+
+    @Override
+    public void setTripComputer(TripComputer tripComputer) &#123;
+        this.tripComputer = tripComputer;
+    &#125;
+
+    @Override
+    public void setGPSNavigator(GPSNavigator gpsNavigator) &#123;
+        this.gpsNavigator = gpsNavigator;
+    &#125;
+
+    // 具体生成器需要自行提供获取结果的方法。这是因为不同类型的生成器可能
+    // 会创建不遵循相同接口的、完全不同的产品。所以也就无法在生成器接口中
+    // 声明这些方法（至少在静态类型的编程语言中是这样的）。
+    //
+    // 通常在生成器实例将结果返回给客户端后，它们应该做好生成另一个产品的
+    // 准备。因此生成器实例通常会在 `getProduct（获取产品）`方法主体末尾
+    // 调用重置方法。但是该行为并不是必需的，你也可让生成器等待客户端明确
+    // 调用重置方法后再去处理之前的结果。
+    public Car getResult() &#123;
+        return new Car(type, seats, engine, transmission, tripComputer, gpsNavigator);
+    &#125;
+&#125;
+</code></pre>
+<pre><code class="java">public class ManualBuilder implements Builder &#123;
+    private CarType type;
+    private int seats;
+    private Engine engine;
+    private Transmission transmission;
+    private TripComputer tripComputer;
+    private GPSNavigator gpsNavigator;
+
+    @Override
+    public void setCarType(CarType type) &#123;
+        this.type = type;
+    &#125;
+
+    @Override
+    public void setSeats(int seats) &#123;
+        this.seats = seats;
+    &#125;
+
+    @Override
+    public void setEngine(Engine engine) &#123;
+        this.engine = engine;
+    &#125;
+
+    @Override
+    public void setTransmission(Transmission transmission) &#123;
+        this.transmission = transmission;
+    &#125;
+
+    @Override
+    public void setTripComputer(TripComputer tripComputer) &#123;
+        this.tripComputer = tripComputer;
+    &#125;
+
+    @Override
+    public void setGPSNavigator(GPSNavigator gpsNavigator) &#123;
+        this.gpsNavigator = gpsNavigator;
+    &#125;
+
+    public Manual getResult() &#123;
+        return new Manual(type, seats, engine, transmission, tripComputer, gpsNavigator);
+    &#125;
+&#125;
+</code></pre>
+<p>3.创建产品类（包括汽车和使用手册），将所需的零部件作为成员变量</p>
+<pre><code class="java">public class Car &#123;
+    private final CarType carType;
+    private final int seats;
+    private final Engine engine;
+    private final Transmission transmission;
+    private final TripComputer tripComputer;
+    private final GPSNavigator gpsNavigator;
+    private double fuel = 0;
+
+    public Car(CarType carType, int seats, Engine engine, Transmission transmission, TripComputer tripComputer, GPSNavigator gpsNavigator) &#123;
+        this.carType = carType;
+        this.seats = seats;
+        this.engine = engine;
+        this.transmission = transmission;
+        this.tripComputer = tripComputer;
+        if (this.tripComputer != null) &#123;
+            this.tripComputer.setCar(this);
+        &#125;
+        this.gpsNavigator = gpsNavigator;
+    &#125;
+
+    public CarType getCarType() &#123;
+        return carType;
+    &#125;
+
+    public double getFuel() &#123;
+        return fuel;
+    &#125;
+
+    public void setFuel(double fuel) &#123;
+        this.fuel = fuel;
+    &#125;
+
+    public int getSeats() &#123;
+        return seats;
+    &#125;
+
+    public Engine getEngine() &#123;
+        return engine;
+    &#125;
+
+    public Transmission getTransmission() &#123;
+        return transmission;
+    &#125;
+
+    public TripComputer getTripComputer() &#123;
+        return tripComputer;
+    &#125;
+
+    public GPSNavigator getGpsNavigator() &#123;
+        return gpsNavigator;
+    &#125;
+&#125;
+</code></pre>
+<pre><code class="java">public class Manual &#123;
+    private final CarType carType;
+    private final int seats;
+    private final Engine engine;
+    private final Transmission transmission;
+    private final TripComputer tripComputer;
+    private final GPSNavigator gpsNavigator;
+
+    public Manual(CarType carType, int seats, Engine engine, Transmission transmission, TripComputer tripComputer, GPSNavigator gpsNavigator) &#123;
+        this.carType = carType;
+        this.seats = seats;
+        this.engine = engine;
+        this.transmission = transmission;
+        this.tripComputer = tripComputer;
+        this.gpsNavigator = gpsNavigator;
+    &#125;
+    //打印车辆的所有信息
+    public String print() &#123;
+        StringBuilder info = new StringBuilder();
+        info.append(&quot;Type of car: &quot; + carType + &quot;\n&quot;);
+        info.append(&quot;Count of seats: &quot; + seats + &quot;\n&quot;);
+        info.append(&quot;Engine: volume - &quot; + engine.getVolume() + &quot;; mileage - &quot; + engine.getMileage() + &quot;\n&quot;);
+        info.append(&quot;Transmission: &quot; + transmission + &quot;\n&quot;);
+        if (this.tripComputer != null) &#123;
+            info.append(&quot;Trip Computer: Functional&quot; + &quot;\n&quot;);
+        &#125; else &#123;
+            info.append(&quot;Trip Computer: N/A&quot; + &quot;\n&quot;);
+        &#125;
+        if (this.gpsNavigator != null) &#123;
+            info.append(&quot;GPS Navigator: Functional&quot; + &quot;\n&quot;);
+        &#125; else &#123;
+            info.append(&quot;GPS Navigator: N/A&quot; + &quot;\n&quot;);
+        &#125;
+        return info.toString();
+    &#125;
+&#125;
+</code></pre>
+<p>4.创建各个零部件类。</p>
+<pre><code class="java">public class Engine &#123;
+    private final double volume;
+    private double mileage;
+    private boolean started;
+
+    public Engine(double volume, double mileage) &#123;
+        this.volume = volume;
+        this.mileage = mileage;
+    &#125;
+
+    public void on() &#123;
+        started = true;
+    &#125;
+
+    public void off() &#123;
+        started = false;
+    &#125;
+
+    public boolean isStarted() &#123;
+        return started;
+    &#125;
+
+    public void go(double mileage) &#123;
+        if (started) &#123;
+            this.mileage += mileage;
+        &#125; else &#123;
+            System.err.println(&quot;Cannot go(), you must start engine first!&quot;);
+        &#125;
+    &#125;
+
+    public double getVolume() &#123;
+        return volume;
+    &#125;
+
+    public double getMileage() &#123;
+        return mileage;
+    &#125;
+&#125;
+</code></pre>
+<pre><code class="java">public class GPSNavigator &#123;
+    private String route;
+
+    public GPSNavigator() &#123;
+        this.route = &quot;221b, Baker Street, London  to Scotland Yard, 8-10 Broadway, London&quot;;
+    &#125;
+
+    public GPSNavigator(String manualRoute) &#123;
+        this.route = manualRoute;
+    &#125;
+
+    public String getRoute() &#123;
+        return route;
+    &#125;
+&#125;
+</code></pre>
+<pre><code class="java">public class TripComputer &#123;
+    private Car car;
+
+    public void setCar(Car car) &#123;
+        this.car = car;
+    &#125;
+
+    public void showFuelLevel() &#123;
+        System.out.println(&quot;Fuel level: &quot; + car.getFuel());
+    &#125;
+
+    public void showStatus() &#123;
+        if (this.car.getEngine().isStarted()) &#123;
+            System.out.println(&quot;Car is started&quot;);
+        &#125; else &#123;
+            System.out.println(&quot;Car isn&#39;t started&quot;);
+        &#125;
+    &#125;
+&#125;
+</code></pre>
+<pre><code class="java">public enum Transmission &#123;
+    SINGLE_SPEED, MANUAL, AUTOMATIC, SEMI_AUTOMATIC
+&#125;
+</code></pre>
+<p>5.创建主管类，主管只负责按照特定顺序执行生成步骤。主管类并不是必须的。</p>
+<pre><code class="java">public class Director &#123;
+    public void constructSportsCar(Builder builder) &#123;
+        builder.setCarType(CarType.SPORTS_CAR);
+        builder.setSeats(2);
+        builder.setEngine(new Engine(3.0, 0));
+        builder.setTransmission(Transmission.SEMI_AUTOMATIC);
+        builder.setTripComputer(new TripComputer());
+        builder.setGPSNavigator(new GPSNavigator());
+    &#125;
+
+    public void constructCityCar(Builder builder) &#123;
+        builder.setCarType(CarType.CITY_CAR);
+        builder.setSeats(2);
+        builder.setEngine(new Engine(1.2, 0));
+        builder.setTransmission(Transmission.AUTOMATIC);
+        builder.setTripComputer(new TripComputer());
+        builder.setGPSNavigator(new GPSNavigator());
+    &#125;
+
+    public void constructSUV(Builder builder) &#123;
+        builder.setCarType(CarType.SUV);
+        builder.setSeats(4);
+        builder.setEngine(new Engine(2.5, 0));
+        builder.setTransmission(Transmission.MANUAL);
+        builder.setGPSNavigator(new GPSNavigator());
+    &#125;
+&#125;
+</code></pre>
+<p>6.主管类调用具体车辆的生成函数，对传入的生成器对象参数进行构建加工，加工后通过生成器对象调用<code>getResult()</code>获取生成的产品（汽车或手册）。</p>
+<pre><code class="java">public class Demo &#123;
+    public static void main(String[] args) &#123;
+        Director director = new Director();
+        // Director gets the concrete builder object from the client
+        // (application code). That&#39;s because application knows better which
+        // builder to use to get a specific product.
+        CarBuilder builder = new CarBuilder();
+        director.constructSportsCar(builder);
+        Car car = builder.getResult();
+        System.out.println(&quot;Car built:\n&quot; + car.getCarType());
+
+        ManualBuilder manualBuilder = new ManualBuilder();
+        // Director may know several building recipes.
+        director.constructSportsCar(manualBuilder);
+        Manual carManual = manualBuilder.getResult();
+        System.out.println(&quot;\nCar manual built:\n&quot; + carManual.print());
+    &#125;
+&#125;
+</code></pre>
+<p>7.输出结果</p>
+<pre><code class="java">Car built:
+SPORTS_CAR
+
+Car manual built:
+Type of car: SPORTS_CAR
+Count of seats: 2
+Engine: volume - 3.0; mileage - 0.0
+Transmission: SEMI_AUTOMATIC
+Trip Computer: Functional
+GPS Navigator: Functional
+</code></pre>
+<h3 id="模式结构-2"><a href="#模式结构-2" class="headerlink" title="模式结构"></a>模式结构</h3><ul>
+<li><strong>生成器</strong>：会对接口进行声明，清晰地定义通用步骤， 确保它们可以制造所有形式的产品。</li>
+<li><strong>具体生成器</strong>：生成器接口的具体实现，用于生产不同种类的产品，声明步骤。</li>
+<li><strong>零部件组成</strong>：声明所需的部件类。</li>
+<li><strong>产品</strong>：定义产品的成员变量（即所有部件）。</li>
+<li><strong>主管类</strong>：使用生成器封装多种构造产品的方式。并不是必须的。</li>
+</ul>
+<h3 id="优点-2"><a href="#优点-2" class="headerlink" title="优点"></a>优点</h3><ul>
+<li>可以分步创建对象， 暂缓创建步骤或递归运行创建步骤。</li>
+<li>各种生成器独立，易扩展。</li>
+<li>单一职责原则，可以将复杂构造代码从产品的业务逻辑中分离出来。</li>
+</ul>
+<h3 id="缺点-2"><a href="#缺点-2" class="headerlink" title="缺点"></a>缺点</h3><ul>
+<li>由于该模式需要新增多个类， 因此代码整体复杂程度会有所增加。</li>
+<li>产品必须有共同点，范围有限制。</li>
+</ul>
+<h2 id="原型模式（Prototype）"><a href="#原型模式（Prototype）" class="headerlink" title="原型模式（Prototype）"></a>原型模式（Prototype）</h2><h3 id="意图-3"><a href="#意图-3" class="headerlink" title="意图"></a>意图</h3><p>使能够复制已有对象， 而又无需使代码依赖它们所属的类。用原型实例指定创建对象的种类，并且通过拷贝这些原型创建新的对象。</p>
+<h3 id="使用场景-3"><a href="#使用场景-3" class="headerlink" title="使用场景"></a>使用场景</h3><ul>
+<li>如果你需要复制一些对象， 同时又希望代码独立于这些对象所属的具体类， 可以使用原型模式。</li>
+<li>通过 new 产生一个对象需要非常繁琐的数据准备或访问权限，则可以使用原型模式。</li>
+<li>在实际项目中，原型模式很少单独出现，一般是和工厂方法模式一起出现，通过 clone 的方法创建一个对象，然后由工厂方法提供给调用者。原型模式已经与 Java 融为浑然一体，大家可以随手拿来使用。</li>
+</ul>
+<h3 id="示例问题-3"><a href="#示例问题-3" class="headerlink" title="示例问题"></a>示例问题</h3><p>圆形和矩形都是形状，对于任何一个圆形或者矩形的形状，希望可以生成与其完全相同的复制品。</p>
+<p>但是因为对象有一些私有成员变量，在对象以外是不可兼得，所以无法通过遍历原始对象的所有成员变量， 并将成员变量值复制到新对象中的方法来实现。另外，直接复制还有另外一个问题。 因为 <em>你必须知道对象所属的类</em> 以及 <em>它有哪些成员变量</em>  才能创建复制品， 所以代码必须依赖该类。 即使你可以接受额外的依赖性， 那还有另外一个问题： 有时你只知道对象所实现的接口， 而不知道其所属的具体类， 比如可向方法的某个参数传入实现了某个接口的任何对象。</p>
+<p>原型模式为所有支持克隆的对象声明了一个通用接口， 该接口让你能够克隆对象， 同时又无需将代码和对象所属类耦合。</p>
+<p>创建一个抽象类（或者接口）为 形状类，声明了克隆方法。圆形和矩形都是其子类，具体实现克隆方法。</p>
+<p>1.创建通用形状接口/抽象类</p>
+<pre><code class="java">public abstract class Shape &#123;
+    //可以只有一个克隆方法
+    public abstract Shape clone();
+&#125;
+</code></pre>
+<p>2.创建具体的形状类，重写克隆方法</p>
+<pre><code class="java">public class Circle extends Shape &#123;
+    private int radius;
+
+    public Circle(int radius) &#123;
+        this.radius = radius;
+    &#125;
+
+    public Circle(Circle circle) &#123;
+        if(circle != null) &#123;
+            this.radius = circle.radius;
+        &#125;
+    &#125;
+
+    public int getRadius() &#123;
+        return this.radius;
+    &#125;
+
+    @Override
+    public Shape clone() &#123;
+        return new Circle(this);
+    &#125;
+
+    public boolean equals(Object object2) &#123;
+        if (!(object2 instanceof Circle)) return false;
+        Circle shape2 = (Circle) object2;
+        return shape2.getRadius() == radius;
+    &#125;
+&#125;
+</code></pre>
+<pre><code class="java">public class Rectangle extends Shape &#123;
+    private int width;
+    private int height;
+
+    public Rectangle(int width, int height) &#123;
+        this.width = width;
+        this.height = height;
+    &#125;
+
+    public int getWidth() &#123;
+        return this.width;
+    &#125;
+
+    public int getHeight() &#123;
+        return this.height;
+    &#125;
+
+    public Rectangle(Rectangle rectangle) &#123;
+        if (rectangle != null) &#123;
+            this.width = rectangle.width;
+            this.height = rectangle.height;
+        &#125;
+    &#125;
+
+    @Override
+    public Shape clone() &#123;
+        return new Rectangle(this);
+    &#125;
+
+    @Override
+    public boolean equals(Object object2) &#123;
+        if (!(object2 instanceof Rectangle)) return false;
+        Rectangle shape2 = (Rectangle) object2;
+        return (shape2.getWidth() == width) &amp;&amp; (shape2.getHeight() == height);
+    &#125;
+&#125;
+</code></pre>
+<p>3.客户端利用<code>clone()</code>复制对象，并不需要知道它到底是哪个类有那些成员变量。</p>
+<pre><code class="java">public class Demo &#123;
+    public static void main(String[] args) &#123;
+        Rectangle rectangle = new Rectangle(3,4);
+        Object obj1 = rectangle.clone();
+        System.out.println(rectangle.equals(obj1));
+
+        Circle circle = new Circle(2);
+        Object obj2 = circle.clone();
+        System.out.println(circle.equals(obj2));
+    &#125;
+&#125;
+</code></pre>
+<p>4.输出结果</p>
+<pre><code class="java">true
+true
+</code></pre>
+<h3 id="模式结构-3"><a href="#模式结构-3" class="headerlink" title="模式结构"></a>模式结构</h3><ul>
+<li><strong>原型接口</strong>：在接口类中声明克隆方法。</li>
+<li><strong>原型类</strong>：具体的原型实现。必须另行定义一个以该类对象为参数的构造函数。 构造函数必须复制参数对象中的所有成员变量值到新建实体中。</li>
+</ul>
+<h3 id="优点-3"><a href="#优点-3" class="headerlink" title="优点"></a>优点</h3><ul>
+<li>可以克隆对象， 而无需与它们所属的具体类相耦合。</li>
+</ul>
+<h3 id="缺点-3"><a href="#缺点-3" class="headerlink" title="缺点"></a>缺点</h3><ul>
+<li>克隆包含循环引用的复杂对象可能会非常麻烦。</li>
+</ul>
 
       
 
@@ -566,7 +1045,7 @@ Packed by 20 Bags
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%AE%80%E4%BB%8B"><span class="toc-number">1.</span> <span class="toc-text">设计模式简介</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">1.1.</span> <span class="toc-text">设计模式是什么？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#GOF%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">1.2.</span> <span class="toc-text">GOF是什么？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%9A%84%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.3.</span> <span class="toc-text">设计模式的类型</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F"><span class="toc-number">2.</span> <span class="toc-text">创建型模式</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F"><span class="toc-number">2.1.</span> <span class="toc-text">工厂方法模式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE"><span class="toc-number">2.1.1.</span> <span class="toc-text">意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-number">2.1.2.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E9%97%AE%E9%A2%98"><span class="toc-number">2.1.3.</span> <span class="toc-text">示例问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84"><span class="toc-number">2.1.4.</span> <span class="toc-text">模式结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9"><span class="toc-number">2.1.5.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9"><span class="toc-number">2.1.6.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F"><span class="toc-number">2.2.</span> <span class="toc-text">抽象工厂模式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE-1"><span class="toc-number">2.2.1.</span> <span class="toc-text">意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF-1"><span class="toc-number">2.2.2.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E9%97%AE%E9%A2%98-1"><span class="toc-number">2.2.3.</span> <span class="toc-text">示例问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84-1"><span class="toc-number">2.2.4.</span> <span class="toc-text">模式结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9-1"><span class="toc-number">2.2.5.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9-1"><span class="toc-number">2.2.6.</span> <span class="toc-text">缺点</span></a></li></ol></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%AE%80%E4%BB%8B"><span class="toc-number">1.</span> <span class="toc-text">设计模式简介</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">1.1.</span> <span class="toc-text">设计模式是什么？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#GOF%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">1.2.</span> <span class="toc-text">GOF是什么？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%9A%84%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.3.</span> <span class="toc-text">设计模式的类型</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F"><span class="toc-number">2.</span> <span class="toc-text">创建型模式</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F%EF%BC%88Factory-Pattern%EF%BC%89"><span class="toc-number">2.1.</span> <span class="toc-text">工厂方法模式（Factory Pattern）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE"><span class="toc-number">2.1.1.</span> <span class="toc-text">意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-number">2.1.2.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E9%97%AE%E9%A2%98"><span class="toc-number">2.1.3.</span> <span class="toc-text">示例问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84"><span class="toc-number">2.1.4.</span> <span class="toc-text">模式结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9"><span class="toc-number">2.1.5.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9"><span class="toc-number">2.1.6.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F%EF%BC%88Abstract-Factory%EF%BC%89"><span class="toc-number">2.2.</span> <span class="toc-text">抽象工厂模式（Abstract Factory）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE-1"><span class="toc-number">2.2.1.</span> <span class="toc-text">意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF-1"><span class="toc-number">2.2.2.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E9%97%AE%E9%A2%98-1"><span class="toc-number">2.2.3.</span> <span class="toc-text">示例问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84-1"><span class="toc-number">2.2.4.</span> <span class="toc-text">模式结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9-1"><span class="toc-number">2.2.5.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9-1"><span class="toc-number">2.2.6.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F%EF%BC%88Builder%EF%BC%89"><span class="toc-number">2.3.</span> <span class="toc-text">建造者模式（Builder）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE-2"><span class="toc-number">2.3.1.</span> <span class="toc-text">意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF-2"><span class="toc-number">2.3.2.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E9%97%AE%E9%A2%98-2"><span class="toc-number">2.3.3.</span> <span class="toc-text">示例问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84-2"><span class="toc-number">2.3.4.</span> <span class="toc-text">模式结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9-2"><span class="toc-number">2.3.5.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9-2"><span class="toc-number">2.3.6.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F%EF%BC%88Prototype%EF%BC%89"><span class="toc-number">2.4.</span> <span class="toc-text">原型模式（Prototype）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE-3"><span class="toc-number">2.4.1.</span> <span class="toc-text">意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF-3"><span class="toc-number">2.4.2.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E9%97%AE%E9%A2%98-3"><span class="toc-number">2.4.3.</span> <span class="toc-text">示例问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84-3"><span class="toc-number">2.4.4.</span> <span class="toc-text">模式结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9-3"><span class="toc-number">2.4.5.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9-3"><span class="toc-number">2.4.6.</span> <span class="toc-text">缺点</span></a></li></ol></li></ol></li></ol>
                     </div>
                 </span>
             </div>
