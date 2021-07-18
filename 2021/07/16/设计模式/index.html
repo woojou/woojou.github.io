@@ -16,8 +16,9 @@
 <meta property="og:description" content="本博客是跟着菜鸟教程和 https:&#x2F;&#x2F;refactoringguru.cn&#x2F;design-patterns#intro-patterns 学习做的笔记摘录。">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://refactoringguru.cn/images/patterns/diagrams/builder/example-zh.png">
+<meta property="og:image" content="https://www.runoob.com/wp-content/uploads/2014/08/20210223-adapter.png">
 <meta property="article:published_time" content="2021-07-16T07:53:32.000Z">
-<meta property="article:modified_time" content="2021-07-17T11:16:15.238Z">
+<meta property="article:modified_time" content="2021-07-18T10:04:02.042Z">
 <meta property="article:author" content="Woojou">
 <meta property="article:tag" content="编程基础">
 <meta name="twitter:card" content="summary">
@@ -933,6 +934,324 @@ true
 <h3 id="缺点-3"><a href="#缺点-3" class="headerlink" title="缺点"></a>缺点</h3><ul>
 <li>克隆包含循环引用的复杂对象可能会非常麻烦。</li>
 </ul>
+<h2 id="单例模式（Singleton）"><a href="#单例模式（Singleton）" class="headerlink" title="单例模式（Singleton）"></a>单例模式（Singleton）</h2><h3 id="意图-4"><a href="#意图-4" class="headerlink" title="意图"></a>意图</h3><p>这种模式涉及到一个单一的类，该类负责创建自己的对象，同时确保只有单个对象被创建。这个类提供了一种访问其唯一的对象的方式，可以直接访问，不需要实例化该类的对象。</p>
+<p>保证一个类仅有一个实例，并提供一个访问它的全局访问点。</p>
+<h3 id="使用场景-4"><a href="#使用场景-4" class="headerlink" title="使用场景"></a>使用场景</h3><ul>
+<li>如果程序中的某个类对于所有客户端只有一个可用的实例</li>
+<li>如果需要更加严格地控制全局变量，单例模式与全局变量不同， 它保证类只存在一个实例。 除了单例类自己以外， 无法通过任何方式替换缓存的实例。可以随时调整限制并设定生成单例实例的数量， 只需修改 <code>获取实例</code>方法， 即 getInstance 中的代码即可实现。</li>
+</ul>
+<h3 id="示例问题-4"><a href="#示例问题-4" class="headerlink" title="示例问题"></a>示例问题</h3><p>为了控制数据库的访问权限，保证只会有一个数据库，要求一旦数据库对象创建后，后序再创建新的对象返回的是之前已创建的对象。普通构造函数无法实现上述行为， 因为构造函数的设计决定了它<strong>必须</strong>总是返回一个新对象。</p>
+<p>1.创建一个 Singleton 类</p>
+<pre><code class="java">public class Singleton &#123;
+    //创建 Singleton 的一个对象
+    private  static  Singleton instance;
+    public String value;
+
+    //让构造函数为 private，这样该类就不会被实例化
+    private Singleton() &#123;&#125;
+
+    public Singleton(String value) &#123;
+        this.value = value;
+    &#125;
+
+    //获取唯一可用的对象
+    public static Singleton getInstance(String value) &#123;
+        if(instance == null) &#123;
+            instance = new Singleton(value);
+        &#125;
+        return instance;
+    &#125;
+&#125;
+</code></pre>
+<p>2.从 Singleton 类获取唯一的对象</p>
+<pre><code class="java">public class Demo &#123;
+    public static void main(String[] args) &#123;
+        Singleton singleton1 = Singleton.getInstance(&quot;Hey&quot;);
+        Singleton singleton2 = Singleton.getInstance(&quot;Hi&quot;);
+        System.out.println(singleton1.value);
+        System.out.println(singleton2.value);
+    &#125;
+&#125;
+</code></pre>
+<p>3.输出结果</p>
+<pre><code class="java">Hey
+Hey
+</code></pre>
+<h3 id="单例模式的几种实现方式"><a href="#单例模式的几种实现方式" class="headerlink" title="单例模式的几种实现方式"></a>单例模式的几种实现方式</h3><h4 id="1-懒汉式，线程不安全"><a href="#1-懒汉式，线程不安全" class="headerlink" title="1. 懒汉式，线程不安全"></a>1. 懒汉式，线程不安全</h4><p>也就是我们上面用到的这种方式，这种方式是最基本的实现方式，这种实现最大的问题就是<strong>不支持多线程</strong>。因为没有加锁 synchronized，所以严格意义上它并不算单例模式。</p>
+<p>举个例子，给 Singleton 对象创建过程加上一个延迟，再通过多线程调用它，看看输出结果。</p>
+<pre><code class="java">public class Singleton &#123;
+    //创建 Singleton 的一个对象
+    private  static  Singleton instance;
+    public String value;
+
+    //让构造函数为 private，这样该类就不会被实例化
+    private Singleton() &#123;&#125;
+
+    public Singleton(String value) &#123;
+        try &#123;
+            Thread.sleep(1000);
+        &#125; catch (InterruptedException ex) &#123;
+            ex.printStackTrace();
+        &#125;
+        this.value = value;
+    &#125;
+
+    //获取唯一可用的对象
+    public static Singleton getInstance(String value) &#123;
+        if(instance == null) &#123;
+            instance = new Singleton(value);
+        &#125;
+        return instance;
+    &#125;
+&#125;
+</code></pre>
+<pre><code class="java">public class Demo &#123;
+    public static void main(String[] args) &#123;
+        //多线程调用
+        Thread threadhey = new Thread(new ThreadHey());
+        Thread threadhi = new Thread(new ThreadHi());
+        threadhey.start();
+        threadhi.start();
+    &#125;
+    static class ThreadHey implements Runnable &#123;
+        @Override
+        public void run() &#123;
+            Singleton singleton = Singleton.getInstance(&quot;Hey&quot;);
+            System.out.println(singleton.value);
+        &#125;
+    &#125;
+
+    static class ThreadHi implements Runnable &#123;
+        @Override
+        public void run() &#123;
+            Singleton singleton = Singleton.getInstance(&quot;Hi&quot;);
+            System.out.println(singleton.value);
+        &#125;
+    &#125;
+&#125;
+</code></pre>
+<p>输出结果</p>
+<pre><code>Hey
+Hi
+</code></pre>
+<h4 id="2-懒汉式，线程安全"><a href="#2-懒汉式，线程安全" class="headerlink" title="2. 懒汉式，线程安全"></a>2. 懒汉式，线程安全</h4><p>这种方式通过加锁 synchronized 保证单例，能够在多线程中很好的工作，但是，效率很低。</p>
+<pre><code class="java">public class Singleton &#123;
+    //创建 Singleton 的一个对象
+    private  static  Singleton instance;
+    public String value;
+
+    //让构造函数为 private，这样该类就不会被实例化
+    private Singleton() &#123;&#125;
+
+    public Singleton(String value) &#123;
+        //模拟延时
+        try &#123;
+            Thread.sleep(1000);
+        &#125; catch (InterruptedException ex) &#123;
+            ex.printStackTrace();
+        &#125;
+        this.value = value;
+    &#125;
+
+    //给方法加锁
+    public static synchronized Singleton getInstance(String value) &#123;
+        if(instance == null) &#123;
+            instance = new Singleton(value);
+        &#125;
+        return instance;
+    &#125;
+&#125;
+</code></pre>
+<p>通过多线程调用发现输出结果是相同的。</p>
+<h4 id="3-饿汉式"><a href="#3-饿汉式" class="headerlink" title="3. 饿汉式"></a>3. 饿汉式</h4><p>这种方式没有加锁，基于 classloader 机制避免了多线程的同步问题，instance 在类装载时就实例化，容易产生垃圾对象。</p>
+<pre><code class="java">public class Singleton &#123;
+    //创建 Singleton 的一个对象
+    private  static  Singleton instance = new Singleton();
+    public String value;
+
+    //让构造函数为 private，这样该类就不会被实例化
+    private Singleton() &#123;&#125;
+
+    //获取唯一实例
+    public static Singleton getInstance(String value) &#123;
+        //模拟延时
+        try &#123;
+            Thread.sleep(1000);
+        &#125; catch (InterruptedException ex) &#123;
+            ex.printStackTrace();
+        &#125;
+        //如果实例的成员没有被初始化过，那么代表其实该实例之前没有被真正创建
+        if(instance.value == null) instance.value = value;
+        return instance;
+    &#125;
+&#125;
+</code></pre>
+<p>调用多线程代码发现最后输出全是”Hi”而不是”Hey”，这是因为，两个线程都获取到了没有被修改过 <code>value </code> 的实例，线程Hey和线程Hi先后对<code>value</code>做修改，最后value结果是<code>Hi</code>。</p>
+<h4 id="4-双检锁-双重校验锁（DCL，即-double-checked-locking）"><a href="#4-双检锁-双重校验锁（DCL，即-double-checked-locking）" class="headerlink" title="4. 双检锁/双重校验锁（DCL，即 double-checked locking）"></a>4. 双检锁/双重校验锁（DCL，即 double-checked locking）</h4><p>这种方式采用双锁机制，安全且在多线程情况下能保持高性能。</p>
+<p><em>volatile</em> 是 Java 提供的一种轻量级的同步机制。加入volatile关键字时，会多出一个lock前缀指令，lock前缀指令实际上相当于一个内存屏障（也成内存栅栏），内存屏障会提供3个功能：</p>
+<p>（1）它确保指令重排序时不会把其后面的指令排到内存屏障之前的位置，也不会把前面的指令排到内存屏障的后面；即在执行到内存屏障这句指令时，在它前面的操作已经全部完成；</p>
+<p>（2）它会强制将对缓存的修改操作立即写入主存；</p>
+<p>（3）如果是写操作，它会导致其他CPU中对应的缓存行无效。</p>
+<pre><code class="java">public class Singleton &#123;
+    // 必须给实例加上 volatile 才能保证 DCL 正常工作
+    private static volatile Singleton instance;
+
+    public String value;
+
+    private Singleton(String value) &#123;
+        this.value = value;
+    &#125;
+
+    public static Singleton getInstance(String value) &#123;
+        //通过引入一个局部变量
+        Singleton result = instance;
+        //第一遍检查其是否被创建过
+        if (result != null) &#123;
+            return result;
+        &#125;
+        //同步锁
+        synchronized(Singleton.class) &#123;
+            //再次检查
+            if (instance == null) &#123;
+                instance = new Singleton(value);
+            &#125;
+            return instance;
+        &#125;
+    &#125;
+&#125;
+</code></pre>
+<p>调用测试代码，输出是两个”Hey”</p>
+<h4 id="5-枚举"><a href="#5-枚举" class="headerlink" title="5. 枚举"></a>5. 枚举</h4><p>这种实现方式还没有被广泛采用，但这是实现单例模式的最佳方法。它更简洁，能避免多线程同步问题，自动支持序列化机制，绝对防止多次实例化。</p>
+<pre><code class="java">public enum Singleton &#123;  
+    INSTANCE;  
+    public void whateverMethod() &#123;  
+    &#125;  
+&#125;
+</code></pre>
+<h3 id="优点-4"><a href="#优点-4" class="headerlink" title="优点"></a>优点</h3><ul>
+<li>在内存里只有一个实例，减少了内存的开销，尤其是频繁的创建和销毁实例</li>
+<li>避免对资源的多重占用</li>
+</ul>
+<h3 id="缺点-4"><a href="#缺点-4" class="headerlink" title="缺点"></a>缺点</h3><ul>
+<li>违反了单一职责原则。 该模式同时解决了两个问题。</li>
+<li>该模式在多线程环境下需要进行特殊处理， 避免多个线程多次创建单例对象。</li>
+<li>没有接口，不能继承</li>
+</ul>
+<h1 id="结构型模式"><a href="#结构型模式" class="headerlink" title="结构型模式"></a>结构型模式</h1><h2 id="适配器模式（Wrapper-Adapter）"><a href="#适配器模式（Wrapper-Adapter）" class="headerlink" title="适配器模式（Wrapper/Adapter）"></a>适配器模式（Wrapper/Adapter）</h2><h3 id="意图-5"><a href="#意图-5" class="headerlink" title="意图"></a>意图</h3><p>将一个类的接口转换成客户希望的另外一个接口，能使接口不兼容的对象能够相互合作。这种类型的设计模式属于结构型模式，通过适配器实现了其中一个对象的接口， 并对另一个对象进行封装，来达到结合了两个独立接口的功能。</p>
+<p>就相当于一个插座转换器一样。</p>
+<h3 id="使用场景-5"><a href="#使用场景-5" class="headerlink" title="使用场景"></a>使用场景</h3><ul>
+<li>当你希望使用某个类， 但是其接口与其他代码不兼容时， 可以使用适配器类。</li>
+<li>需要复用一些类，它们处于同一个继承体系，但又有一些不同的方法。</li>
+</ul>
+<h3 id="示例问题-5"><a href="#示例问题-5" class="headerlink" title="示例问题"></a>示例问题</h3><p>对比觉得<a target="_blank" rel="noopener" href="https://www.runoob.com/design-pattern/adapter-pattern.html">菜鸟教程</a>中的例子更贴切：</p>
+<p>有一个 <em>MediaPlayer</em> 接口和一个实现了 <em>MediaPlayer</em> 接口的实体类 <em>Mp3Player</em>。默认情况下，<em>Mp3Player</em> 可以播放 mp3 格式的音频文件。</p>
+<p>我们还有另一个接口 <em>AdvancedMediaPlayer</em> 和实现了 <em>AdvancedMediaPlayer</em> 接口的实体类。该类可以播放 vlc 和 mp4 格式的文件。</p>
+<p>我们想要让 <em>Mp3Player</em> 播放其他格式的音频文件。为了实现这个功能，我们需要创建一个实现了 <em>MediaPlayer</em> 接口的适配器类 <em>MediaAdapter</em>，并使用 <em>AdvancedMediaPlayer</em> 对象来播放所需的格式。</p>
+<p><em>Mp3Player</em> 使用适配器类 <em>MediaAdapter</em> 传递所需的音频类型，不需要知道能播放所需格式音频的实际类。<em>AdapterPatternDemo</em> 类使用 <em>Mp3Player</em> 类来播放各种格式。</p>
+<p><img src="https://www.runoob.com/wp-content/uploads/2014/08/20210223-adapter.png"></p>
+<p>1.创建 <em>MediaPlayer</em> 和 <em>AdvancedMediaPlayer</em> 接口</p>
+<pre><code class="java">public interface MediaPlayer &#123;
+    public void play(String audioType, String fileName);
+&#125;
+</code></pre>
+<pre><code class="java">public interface AdvanceMediaPlayer &#123;
+    public void playVlc(String fileName);
+    public void playMp4(String fileName);
+&#125;
+</code></pre>
+<p>2.创建实现 <em>AdvancedMediaPlayer</em> 接口的实体类</p>
+<pre><code class="java">public class Mp4Player implements AdvanceMediaPlayer &#123;
+    @Override
+    public void playMp4(String fileName) &#123;
+        System.out.println(&quot;Playing mp4 file: &quot; + fileName);
+    &#125;
+
+    @Override
+    public void playVlc(String fileName) &#123;
+
+    &#125;
+&#125;
+</code></pre>
+<pre><code class="java">public class VlcPlayer implements AdvanceMediaPlayer &#123;
+    @Override
+    public void playVlc(String fileName) &#123;
+        System.out.println(&quot;Playing vlc file: &quot; + fileName);
+    &#125;
+
+    @Override
+    public void playMp4(String fileName) &#123;
+
+    &#125;
+&#125;
+</code></pre>
+<p>3.为 <em>Mp3Player</em> 创建一个可以使用高级播放功能的适配器，继承<em>MediaPlayer</em>，封装<em>AdvancdMediaPlayer</em>对象。</p>
+<pre><code class="java">public class MediaAdapter implements MediaPlayer &#123;
+    AdvanceMediaPlayer advancedMusicPlayer;
+
+    public MediaAdapter(String audioType) &#123;
+        if(audioType.equals(&quot;vlc&quot;)) &#123;
+            advancedMusicPlayer = new VlcPlayer();
+        &#125;else if(audioType.equals(&quot;mp4&quot;)) &#123;
+            advancedMusicPlayer = new Mp4Player();
+        &#125;
+    &#125;
+
+    @Override
+    public void play(String audioType, String fileName) &#123;
+        if(audioType.equalsIgnoreCase(&quot;vlc&quot;))&#123;
+            advancedMusicPlayer.playVlc(fileName);
+        &#125;else if(audioType.equalsIgnoreCase(&quot;mp4&quot;))&#123;
+            advancedMusicPlayer.playMp4(fileName);
+        &#125;
+    &#125;
+&#125;
+</code></pre>
+<p>4.创建使用适配器 <em>MediaAdapter</em> 的 <em>Mp3Player</em> 类。</p>
+<pre><code class="java">public class Mp3Player implements MediaPlayer &#123;
+    @Override
+    public void play(String audioType, String fileName) &#123;
+        //播放 mp3 音乐文件的内置支持
+        if(audioType.equals(&quot;mp3&quot;))&#123;
+            System.out.println(&quot;Playing mp3 file: &quot;+ fileName);
+        &#125; else if(audioType.equals(&quot;vlc&quot;) || audioType.equals(&quot;mp4&quot;)) &#123;
+            MediaAdapter mediaAdapter = new MediaAdapter(audioType);
+            mediaAdapter.play(audioType, fileName);
+        &#125; else&#123;
+            System.out.println(&quot;Invalid media. &quot;+
+                    audioType + &quot; format not supported&quot;);
+        &#125;
+    &#125;
+&#125;
+</code></pre>
+<p>5.用测试代码播放不同格式的音乐</p>
+<pre><code class="java">public class Demo &#123;
+    public static void main(String[] args) &#123;
+        Mp3Player mp3Player = new Mp3Player();
+        mp3Player.play(&quot;mp3&quot;, &quot;I wish you love.mp3&quot;);
+        mp3Player.play(&quot;mp4&quot;, &quot;Love.mp4&quot;);
+        mp3Player.play(&quot;vlc&quot;, &quot;Monster.vlc&quot;);
+    &#125;
+&#125;
+</code></pre>
+<p>6.输出结果</p>
+<pre><code class="java">Playing mp3 file: I wish you love.mp3
+Playing mp4 file: Love.mp4
+Playing vlc file: Monster.vlc
+</code></pre>
+<h3 id="模式结构-4"><a href="#模式结构-4" class="headerlink" title="模式结构"></a>模式结构</h3><ul>
+<li><strong>两个不同产品类</strong>：声明不同功能的两个不同接口</li>
+<li><strong>产品1</strong>：实现接口1的功能</li>
+<li><strong>适配器</strong>：实现接口2，封装另一个接口1的实例对象</li>
+<li><strong>产品2（客户端）</strong>：实现接口2的功能之外，通过调用适配器实现接口1中的功能</li>
+</ul>
+<h3 id="优点-5"><a href="#优点-5" class="headerlink" title="优点"></a>优点</h3><ul>
+<li>可以让任何两个没有关联的类一起运行</li>
+<li>开闭原则。 只要客户端代码通过客户端接口与适配器进行交互， 你就能在不修改现有客户端代码的情况下在程序中添加新类型的适配器。</li>
+<li>单一职责原则。你可以将接口或数据转换代码从程序主要业务逻辑中分离。</li>
+</ul>
+<h3 id="缺点："><a href="#缺点：" class="headerlink" title="缺点："></a>缺点：</h3><ul>
+<li>代码整体复杂度增加， 因为你需要新增一系列接口和类。 有时直接更改服务类使其与其他代码兼容会更简单。</li>
+</ul>
 
       
 
@@ -1045,7 +1364,7 @@ true
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%AE%80%E4%BB%8B"><span class="toc-number">1.</span> <span class="toc-text">设计模式简介</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">1.1.</span> <span class="toc-text">设计模式是什么？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#GOF%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">1.2.</span> <span class="toc-text">GOF是什么？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%9A%84%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.3.</span> <span class="toc-text">设计模式的类型</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F"><span class="toc-number">2.</span> <span class="toc-text">创建型模式</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F%EF%BC%88Factory-Pattern%EF%BC%89"><span class="toc-number">2.1.</span> <span class="toc-text">工厂方法模式（Factory Pattern）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE"><span class="toc-number">2.1.1.</span> <span class="toc-text">意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-number">2.1.2.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E9%97%AE%E9%A2%98"><span class="toc-number">2.1.3.</span> <span class="toc-text">示例问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84"><span class="toc-number">2.1.4.</span> <span class="toc-text">模式结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9"><span class="toc-number">2.1.5.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9"><span class="toc-number">2.1.6.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F%EF%BC%88Abstract-Factory%EF%BC%89"><span class="toc-number">2.2.</span> <span class="toc-text">抽象工厂模式（Abstract Factory）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE-1"><span class="toc-number">2.2.1.</span> <span class="toc-text">意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF-1"><span class="toc-number">2.2.2.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E9%97%AE%E9%A2%98-1"><span class="toc-number">2.2.3.</span> <span class="toc-text">示例问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84-1"><span class="toc-number">2.2.4.</span> <span class="toc-text">模式结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9-1"><span class="toc-number">2.2.5.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9-1"><span class="toc-number">2.2.6.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F%EF%BC%88Builder%EF%BC%89"><span class="toc-number">2.3.</span> <span class="toc-text">建造者模式（Builder）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE-2"><span class="toc-number">2.3.1.</span> <span class="toc-text">意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF-2"><span class="toc-number">2.3.2.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E9%97%AE%E9%A2%98-2"><span class="toc-number">2.3.3.</span> <span class="toc-text">示例问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84-2"><span class="toc-number">2.3.4.</span> <span class="toc-text">模式结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9-2"><span class="toc-number">2.3.5.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9-2"><span class="toc-number">2.3.6.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F%EF%BC%88Prototype%EF%BC%89"><span class="toc-number">2.4.</span> <span class="toc-text">原型模式（Prototype）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE-3"><span class="toc-number">2.4.1.</span> <span class="toc-text">意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF-3"><span class="toc-number">2.4.2.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E9%97%AE%E9%A2%98-3"><span class="toc-number">2.4.3.</span> <span class="toc-text">示例问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84-3"><span class="toc-number">2.4.4.</span> <span class="toc-text">模式结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9-3"><span class="toc-number">2.4.5.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9-3"><span class="toc-number">2.4.6.</span> <span class="toc-text">缺点</span></a></li></ol></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%AE%80%E4%BB%8B"><span class="toc-number">1.</span> <span class="toc-text">设计模式简介</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">1.1.</span> <span class="toc-text">设计模式是什么？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#GOF%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">1.2.</span> <span class="toc-text">GOF是什么？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%9A%84%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.3.</span> <span class="toc-text">设计模式的类型</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F"><span class="toc-number">2.</span> <span class="toc-text">创建型模式</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F%EF%BC%88Factory-Pattern%EF%BC%89"><span class="toc-number">2.1.</span> <span class="toc-text">工厂方法模式（Factory Pattern）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE"><span class="toc-number">2.1.1.</span> <span class="toc-text">意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-number">2.1.2.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E9%97%AE%E9%A2%98"><span class="toc-number">2.1.3.</span> <span class="toc-text">示例问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84"><span class="toc-number">2.1.4.</span> <span class="toc-text">模式结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9"><span class="toc-number">2.1.5.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9"><span class="toc-number">2.1.6.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F%EF%BC%88Abstract-Factory%EF%BC%89"><span class="toc-number">2.2.</span> <span class="toc-text">抽象工厂模式（Abstract Factory）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE-1"><span class="toc-number">2.2.1.</span> <span class="toc-text">意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF-1"><span class="toc-number">2.2.2.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E9%97%AE%E9%A2%98-1"><span class="toc-number">2.2.3.</span> <span class="toc-text">示例问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84-1"><span class="toc-number">2.2.4.</span> <span class="toc-text">模式结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9-1"><span class="toc-number">2.2.5.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9-1"><span class="toc-number">2.2.6.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F%EF%BC%88Builder%EF%BC%89"><span class="toc-number">2.3.</span> <span class="toc-text">建造者模式（Builder）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE-2"><span class="toc-number">2.3.1.</span> <span class="toc-text">意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF-2"><span class="toc-number">2.3.2.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E9%97%AE%E9%A2%98-2"><span class="toc-number">2.3.3.</span> <span class="toc-text">示例问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84-2"><span class="toc-number">2.3.4.</span> <span class="toc-text">模式结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9-2"><span class="toc-number">2.3.5.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9-2"><span class="toc-number">2.3.6.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F%EF%BC%88Prototype%EF%BC%89"><span class="toc-number">2.4.</span> <span class="toc-text">原型模式（Prototype）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE-3"><span class="toc-number">2.4.1.</span> <span class="toc-text">意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF-3"><span class="toc-number">2.4.2.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E9%97%AE%E9%A2%98-3"><span class="toc-number">2.4.3.</span> <span class="toc-text">示例问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84-3"><span class="toc-number">2.4.4.</span> <span class="toc-text">模式结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9-3"><span class="toc-number">2.4.5.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9-3"><span class="toc-number">2.4.6.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F%EF%BC%88Singleton%EF%BC%89"><span class="toc-number">2.5.</span> <span class="toc-text">单例模式（Singleton）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE-4"><span class="toc-number">2.5.1.</span> <span class="toc-text">意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF-4"><span class="toc-number">2.5.2.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E9%97%AE%E9%A2%98-4"><span class="toc-number">2.5.3.</span> <span class="toc-text">示例问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F%E7%9A%84%E5%87%A0%E7%A7%8D%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F"><span class="toc-number">2.5.4.</span> <span class="toc-text">单例模式的几种实现方式</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E6%87%92%E6%B1%89%E5%BC%8F%EF%BC%8C%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8"><span class="toc-number">2.5.4.1.</span> <span class="toc-text">1. 懒汉式，线程不安全</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E6%87%92%E6%B1%89%E5%BC%8F%EF%BC%8C%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8"><span class="toc-number">2.5.4.2.</span> <span class="toc-text">2. 懒汉式，线程安全</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E9%A5%BF%E6%B1%89%E5%BC%8F"><span class="toc-number">2.5.4.3.</span> <span class="toc-text">3. 饿汉式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-%E5%8F%8C%E6%A3%80%E9%94%81-%E5%8F%8C%E9%87%8D%E6%A0%A1%E9%AA%8C%E9%94%81%EF%BC%88DCL%EF%BC%8C%E5%8D%B3-double-checked-locking%EF%BC%89"><span class="toc-number">2.5.4.4.</span> <span class="toc-text">4. 双检锁&#x2F;双重校验锁（DCL，即 double-checked locking）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-%E6%9E%9A%E4%B8%BE"><span class="toc-number">2.5.4.5.</span> <span class="toc-text">5. 枚举</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9-4"><span class="toc-number">2.5.5.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9-4"><span class="toc-number">2.5.6.</span> <span class="toc-text">缺点</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F"><span class="toc-number">3.</span> <span class="toc-text">结构型模式</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F%EF%BC%88Wrapper-Adapter%EF%BC%89"><span class="toc-number">3.1.</span> <span class="toc-text">适配器模式（Wrapper&#x2F;Adapter）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE-5"><span class="toc-number">3.1.1.</span> <span class="toc-text">意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF-5"><span class="toc-number">3.1.2.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E9%97%AE%E9%A2%98-5"><span class="toc-number">3.1.3.</span> <span class="toc-text">示例问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84-4"><span class="toc-number">3.1.4.</span> <span class="toc-text">模式结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9-5"><span class="toc-number">3.1.5.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9%EF%BC%9A"><span class="toc-number">3.1.6.</span> <span class="toc-text">缺点：</span></a></li></ol></li></ol></li></ol>
                     </div>
                 </span>
             </div>
