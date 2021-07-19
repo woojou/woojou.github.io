@@ -18,8 +18,9 @@
 <meta property="og:image" content="https://refactoringguru.cn/images/patterns/diagrams/builder/example-zh.png">
 <meta property="og:image" content="https://www.runoob.com/wp-content/uploads/2014/08/20210223-adapter.png">
 <meta property="og:image" content="https://refactoringguru.cn/images/patterns/diagrams/bridge/solution-zh.png?id=1e12aa93e72a643f325f">
+<meta property="og:image" content="https://refactoringguru.cn/images/patterns/examples/java/composite/OutputDemo.png">
 <meta property="article:published_time" content="2021-07-16T07:53:32.000Z">
-<meta property="article:modified_time" content="2021-07-19T04:39:21.408Z">
+<meta property="article:modified_time" content="2021-07-19T10:14:12.638Z">
 <meta property="article:author" content="Woojou">
 <meta property="article:tag" content="编程基础">
 <meta name="twitter:card" content="summary">
@@ -1547,6 +1548,459 @@ Remote: mute
 <h3 id="缺点-6"><a href="#缺点-6" class="headerlink" title="缺点"></a>缺点</h3><ul>
 <li>对高内聚的类使用该模式可能会让代码更加复杂。</li>
 </ul>
+<h2 id="组合模式（Composite）"><a href="#组合模式（Composite）" class="headerlink" title="组合模式（Composite）"></a>组合模式（Composite）</h2><h3 id="意图-7"><a href="#意图-7" class="headerlink" title="意图"></a>意图</h3><p>这种模式创建了一个包含自己对象组的类，把一组相似的对象当作一个单一的对象，组合模式依据树形结构来组合对象，用来表示部分以及整体层次。使得用户对单个对象和组合对象的使用具有一致性。</p>
+<h3 id="使用场景-7"><a href="#使用场景-7" class="headerlink" title="使用场景"></a>使用场景</h3><ul>
+<li>希望用户忽略组合对象与单个对象的不同，用户将统一地使用组合结构中的所有对象。</li>
+</ul>
+<h3 id="示例问题-7"><a href="#示例问题-7" class="headerlink" title="示例问题"></a>示例问题</h3><p>比如在 JAVA AWT 和 SWING 中，对于 Button 和 Checkbox 是树叶，Container 是树枝。在现实生活中，职场职位关系也是如此，有一个大boss，下面是各类主管，再细分到普通员工。</p>
+<p>这里要求设计可以画出有圆形、矩形还有点的组合图像或者单独画圆形、矩形形状。声明一个 <code>Shape</code> 抽象类，用一个 <code>BasicShape</code> 类实现一些基本功能， 创建其子类 <code>Circle</code> <code>Dot</code> <code>Rectangle</code>和 <code>CompoundShape</code>，客户端 <code>ImageEditor</code> 利用 <code>CompoundShape</code>对象完成作图。</p>
+<p>相当于一个部门叫 <code>Shape</code>，基层员工有 <code>Circle</code> <code>Dor</code> <code>Rectangel</code>，<code>CompundShape</code> 是他们的上司，对内分派他们的工作。</p>
+<p>1.创建形状抽象类，声明一些基本操作</p>
+<pre><code class="java">import java.awt.*;
+
+public interface Shape &#123;
+    int getX();
+    int getY();
+    int getWidth();
+    int getHeight();
+    void move(int x, int y);
+    boolean isInsideBounds(int x, int y);
+    void select();
+    void unSelect();
+    boolean isSelected();
+    void paint(Graphics graphics);
+&#125;
+</code></pre>
+<p>2.创建基本形状类，实现一些基本的功能，作为其他形状或组合形状的父类。</p>
+<pre><code class="java">import java.awt.*;
+
+public class BaseShape implements Shape&#123;
+    public int x;
+    public int y;
+    public Color color;
+    private boolean selected = false;
+
+    BaseShape(int x, int y, Color color) &#123;
+        this.x = x;
+        this.y = y;
+        this.color = color;
+    &#125;
+
+    @Override
+    public int getX() &#123;
+        return x;
+    &#125;
+
+    @Override
+    public int getY() &#123;
+        return y;
+    &#125;
+
+    @Override
+    public int getWidth() &#123;
+        return 0;
+    &#125;
+
+    @Override
+    public int getHeight() &#123;
+        return 0;
+    &#125;
+
+    @Override
+    public void move(int x, int y) &#123;
+        this.x += x;
+        this.y += y;
+    &#125;
+
+    @Override
+    public boolean isInsideBounds(int x, int y) &#123;
+        return x &gt; getX() &amp;&amp; x &lt; (getX() + getWidth()) &amp;&amp;
+                y &gt; getY() &amp;&amp; y &lt; (getY() + getHeight());
+    &#125;
+
+    @Override
+    public void select() &#123;
+        selected = true;
+    &#125;
+
+    @Override
+    public void unSelect() &#123;
+        selected = false;
+    &#125;
+
+    @Override
+    public boolean isSelected() &#123;
+        return selected;
+    &#125;
+
+    void enableSelectionStyle(Graphics graphics) &#123;
+        graphics.setColor(Color.LIGHT_GRAY);
+
+        Graphics2D g2 = (Graphics2D) graphics;
+        float dash1[] = &#123;2.0f&#125;;
+        g2.setStroke(new BasicStroke(1.0f,
+                BasicStroke.CAP_BUTT,
+                BasicStroke.JOIN_MITER,
+                2.0f, dash1, 0.0f));
+    &#125;
+
+    void disableSelectionStyle(Graphics graphics) &#123;
+        graphics.setColor(color);
+        Graphics2D g2 = (Graphics2D) graphics;
+        g2.setStroke(new BasicStroke());
+    &#125;
+
+
+    @Override
+    public void paint(Graphics graphics) &#123;
+        if (isSelected()) &#123;
+            enableSelectionStyle(graphics);
+        &#125; else &#123;
+            disableSelectionStyle(graphics);
+        &#125;
+    &#125;
+&#125;
+</code></pre>
+<p>3.创建单个的形状</p>
+<pre><code class="java">import java.awt.*;
+
+public class Dot extends BaseShape &#123;
+    private final int DOT_SIZE = 3;
+
+    public Dot(int x, int y, Color color) &#123;
+        super(x, y, color);
+    &#125;
+
+    @Override
+    public int getWidth() &#123;
+        return DOT_SIZE;
+    &#125;
+
+    @Override
+    public int getHeight() &#123;
+        return DOT_SIZE;
+    &#125;
+
+    @Override
+    public void paint(Graphics graphics) &#123;
+        super.paint(graphics);
+        graphics.fillRect(x - 1, y - 1, getWidth(), getHeight());
+    &#125;
+&#125;
+</code></pre>
+<pre><code class="java">import java.awt.*;
+
+public class Circle extends BaseShape &#123;
+    public int radius;
+
+    public Circle(int x, int y, int radius, Color color) &#123;
+        super(x, y, color);
+        this.radius = radius;
+    &#125;
+
+    @Override
+    public int getWidth() &#123;
+        return radius * 2;
+    &#125;
+
+    @Override
+    public int getHeight() &#123;
+        return radius * 2;
+    &#125;
+
+    public void paint(Graphics graphics) &#123;
+        super.paint(graphics);
+        graphics.drawOval(x, y, getWidth() - 1, getHeight() - 1);
+    &#125;
+&#125;
+</code></pre>
+<pre><code class="java">import java.awt.*;
+
+public class Rectangle extends BaseShape &#123;
+    public int width;
+    public int height;
+
+    public Rectangle(int x, int y, int width, int height, Color color) &#123;
+        super(x, y, color);
+        this.width = width;
+        this.height = height;
+    &#125;
+
+    @Override
+    public int getWidth() &#123;
+        return width;
+    &#125;
+
+    @Override
+    public int getHeight() &#123;
+        return height;
+    &#125;
+
+    @Override
+    public void paint(Graphics graphics) &#123;
+        super.paint(graphics);
+        graphics.drawRect(x, y, getWidth() - 1, getHeight() - 1);
+    &#125;
+&#125;
+</code></pre>
+<p>4.创建组合形状类，内部属性 List，里面放其他单个形状引用。</p>
+<pre><code class="java">import java.awt.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+public class CompoundShape extends BaseShape &#123;
+    protected List&lt;Shape&gt; children = new ArrayList&lt;&gt;();
+
+    public CompoundShape(Shape... components) &#123;
+        super(0, 0, Color.BLACK);
+        add(components);
+    &#125;
+
+    public void add(Shape component) &#123;
+        children.add(component);
+    &#125;
+
+    public void add(Shape... components) &#123;
+        children.addAll(Arrays.asList(components));
+    &#125;
+
+    public void remove(Shape child) &#123;
+        children.remove(child);
+    &#125;
+
+    public void remove(Shape... components) &#123;
+        children.removeAll(Arrays.asList(components));
+    &#125;
+
+    public void clear() &#123;
+        children.clear();
+    &#125;
+
+    @Override
+    public int getX() &#123;
+        if (children.size() == 0) &#123;
+            return 0;
+        &#125;
+        int x = children.get(0).getX();
+        for (Shape child : children) &#123;
+            if (child.getX() &lt; x) &#123;
+                x = child.getX();
+            &#125;
+        &#125;
+        return x;
+    &#125;
+
+    @Override
+    public int getY() &#123;
+        if (children.size() == 0) &#123;
+            return 0;
+        &#125;
+        int y = children.get(0).getY();
+        for (Shape child : children) &#123;
+            if (child.getY() &lt; y) &#123;
+                y = child.getY();
+            &#125;
+        &#125;
+        return y;
+    &#125;
+
+    @Override
+    public int getWidth() &#123;
+        int maxWidth = 0;
+        int x = getX();
+        for (Shape child : children) &#123;
+            int childsRelativeX = child.getX() - x;
+            int childWidth = childsRelativeX + child.getWidth();
+            if (childWidth &gt; maxWidth) &#123;
+                maxWidth = childWidth;
+            &#125;
+        &#125;
+        return maxWidth;
+    &#125;
+
+    @Override
+    public int getHeight() &#123;
+        int maxHeight = 0;
+        int y = getY();
+        for (Shape child : children) &#123;
+            int childsRelativeY = child.getY() - y;
+            int childHeight = childsRelativeY + child.getHeight();
+            if (childHeight &gt; maxHeight) &#123;
+                maxHeight = childHeight;
+            &#125;
+        &#125;
+        return maxHeight;
+    &#125;
+
+    @Override
+    public void move(int x, int y) &#123;
+        for (Shape child : children) &#123;
+            //移动组合图像要求每个部分都要移动
+            child.move(x, y);
+        &#125;
+    &#125;
+
+    @Override
+    public boolean isInsideBounds(int x, int y) &#123;
+        //只要组合图像有一部分在图纸里就返回真
+        for (Shape child : children) &#123;
+            if (child.isInsideBounds(x, y)) &#123;
+                return true;
+            &#125;
+        &#125;
+        return false;
+    &#125;
+
+    @Override
+    public void unSelect() &#123;
+        super.unSelect();
+        for (Shape child : children) &#123;
+            child.unSelect();
+        &#125;
+    &#125;
+
+    public boolean selectChildAt(int x, int y) &#123;
+        for (Shape child : children) &#123;
+            if (child.isInsideBounds(x, y)) &#123;
+                child.select();
+                return true;
+            &#125;
+        &#125;
+        return false;
+    &#125;
+
+
+    @Override
+    public void paint(Graphics graphics) &#123;
+        if (isSelected()) &#123;
+            enableSelectionStyle(graphics);
+            graphics.drawRect(getX() - 1, getY() - 1, getWidth() + 1, getHeight() + 1);
+            disableSelectionStyle(graphics);
+        &#125;
+
+        for (Shape child : children) &#123;
+            child.paint(graphics);
+        &#125;
+    &#125;
+&#125;
+</code></pre>
+<p>5.创建客户端应用类 <code>ImageEdior</code>，引用了组合形状对象，在画布上画出所有形状。</p>
+<pre><code class="java">import javax.swing.*;
+import javax.swing.border.Border;
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
+public class ImageEditor &#123;
+    private EditorCanvas canvas;
+    private CompoundShape allShapes = new CompoundShape();
+
+    public ImageEditor() &#123;
+        canvas = new EditorCanvas();
+    &#125;
+
+    public void loadShapes(Shape... shapes) &#123;
+        allShapes.clear();
+        allShapes.add(shapes);
+        canvas.refresh();
+    &#125;
+
+    /**
+     * 设置画布
+     */
+    private class EditorCanvas extends Canvas &#123;
+        JFrame frame;
+
+        private static final int PADDING = 10; //留白
+
+        EditorCanvas() &#123;
+            createFrame();
+            refresh();
+            addMouseListener(new MouseAdapter() &#123;
+                @Override
+                public void mousePressed(MouseEvent e) &#123;
+                    allShapes.unSelect();
+                    allShapes.selectChildAt(e.getX(), e.getY());
+                    e.getComponent().repaint();
+                &#125;
+            &#125;);
+        &#125;
+
+        void createFrame() &#123;
+            frame = new JFrame();
+            frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+            frame.setLocationRelativeTo(null);
+
+            JPanel contentPanel = new JPanel();
+            Border padding = BorderFactory.createEmptyBorder(PADDING, PADDING, PADDING, PADDING);
+            contentPanel.setBorder(padding);
+            frame.setContentPane(contentPanel);
+
+            frame.add(this);
+            frame.setVisible(true);
+            frame.getContentPane().setBackground(Color.LIGHT_GRAY);
+        &#125;
+
+        public int getWidth() &#123;
+            return allShapes.getX() + allShapes.getWidth() + PADDING;
+        &#125;
+
+        public int getHeight() &#123;
+            return allShapes.getY() + allShapes.getHeight() + PADDING;
+        &#125;
+
+        void refresh() &#123;
+            this.setSize(getWidth(), getHeight());
+            frame.pack();
+        &#125;
+
+        public void paint(Graphics graphics) &#123;
+            allShapes.paint(graphics);
+        &#125;
+    &#125;
+&#125;
+</code></pre>
+<p>6.测试代码</p>
+<pre><code class="java">import java.awt.*;
+
+public class Demo &#123;
+    public static void main(String[] args) &#123;
+        ImageEditor editor = new ImageEditor();
+
+        editor.loadShapes(
+                new Circle(10, 10, 10, Color.BLUE),
+
+                new CompoundShape(
+                        new Circle(110, 110, 50, Color.RED),
+                        new Dot(160, 160, Color.RED)
+                ),
+
+                new CompoundShape(
+                        new Rectangle(250, 250, 100, 100, Color.GREEN),
+                        new Dot(240, 240, Color.GREEN),
+                        new Dot(240, 360, Color.GREEN),
+                        new Dot(360, 360, Color.GREEN),
+                        new Dot(360, 240, Color.GREEN)
+                )
+        );
+    &#125;
+&#125;
+</code></pre>
+<p>7.图像输出</p>
+<p><img src="https://refactoringguru.cn/images/patterns/examples/java/composite/OutputDemo.png"></p>
+<h3 id="模式结构-6"><a href="#模式结构-6" class="headerlink" title="模式结构"></a>模式结构</h3><ul>
+<li><strong>组件</strong>：抽象类，声明树中的操作。</li>
+<li><strong>叶节点</strong>：是树的基本结构， 它不包含子项目。一般情况下， 叶节点最终会完成大部分的实际工作， 因为它们无法将工作指派给其他部分。</li>
+<li><strong>容器/组合</strong> ：是包含叶节点或其他容器等子项目的单位。 容器不知道其子项目所属的具体类， 它只通过通用的组件接口与其子项目交互。容器接收到请求后会将工作分配给自己的子项目， 处理中间结果， 然后将最终结果返回给客户端。</li>
+</ul>
+<h3 id="优点-7"><a href="#优点-7" class="headerlink" title="优点"></a>优点</h3><ul>
+<li>开闭原则。 无需更改现有代码， 你就可以在应用中添加新元素， 使其成为对象树的一部分。</li>
+</ul>
+<h3 id="缺点-7"><a href="#缺点-7" class="headerlink" title="缺点"></a>缺点</h3><ul>
+<li>对于功能差异较大的类， 提供公共接口会有困难。</li>
+<li>在客户端使用时，依赖于其叶子和枝干，而不是依赖于抽象类，违反了依赖倒置原则。</li>
+</ul>
 
       
 
@@ -1659,7 +2113,7 @@ Remote: mute
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%AE%80%E4%BB%8B"><span class="toc-number">1.</span> <span class="toc-text">设计模式简介</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">1.1.</span> <span class="toc-text">设计模式是什么？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#GOF%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">1.2.</span> <span class="toc-text">GOF是什么？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%9A%84%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.3.</span> <span class="toc-text">设计模式的类型</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F"><span class="toc-number">2.</span> <span class="toc-text">创建型模式</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F%EF%BC%88Factory-Pattern%EF%BC%89"><span class="toc-number">2.1.</span> <span class="toc-text">工厂方法模式（Factory Pattern）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE"><span class="toc-number">2.1.1.</span> <span class="toc-text">意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-number">2.1.2.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E9%97%AE%E9%A2%98"><span class="toc-number">2.1.3.</span> <span class="toc-text">示例问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84"><span class="toc-number">2.1.4.</span> <span class="toc-text">模式结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9"><span class="toc-number">2.1.5.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9"><span class="toc-number">2.1.6.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F%EF%BC%88Abstract-Factory%EF%BC%89"><span class="toc-number">2.2.</span> <span class="toc-text">抽象工厂模式（Abstract Factory）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE-1"><span class="toc-number">2.2.1.</span> <span class="toc-text">意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF-1"><span class="toc-number">2.2.2.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E9%97%AE%E9%A2%98-1"><span class="toc-number">2.2.3.</span> <span class="toc-text">示例问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84-1"><span class="toc-number">2.2.4.</span> <span class="toc-text">模式结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9-1"><span class="toc-number">2.2.5.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9-1"><span class="toc-number">2.2.6.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F%EF%BC%88Builder%EF%BC%89"><span class="toc-number">2.3.</span> <span class="toc-text">建造者模式（Builder）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE-2"><span class="toc-number">2.3.1.</span> <span class="toc-text">意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF-2"><span class="toc-number">2.3.2.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E9%97%AE%E9%A2%98-2"><span class="toc-number">2.3.3.</span> <span class="toc-text">示例问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84-2"><span class="toc-number">2.3.4.</span> <span class="toc-text">模式结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9-2"><span class="toc-number">2.3.5.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9-2"><span class="toc-number">2.3.6.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F%EF%BC%88Prototype%EF%BC%89"><span class="toc-number">2.4.</span> <span class="toc-text">原型模式（Prototype）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE-3"><span class="toc-number">2.4.1.</span> <span class="toc-text">意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF-3"><span class="toc-number">2.4.2.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E9%97%AE%E9%A2%98-3"><span class="toc-number">2.4.3.</span> <span class="toc-text">示例问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84-3"><span class="toc-number">2.4.4.</span> <span class="toc-text">模式结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9-3"><span class="toc-number">2.4.5.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9-3"><span class="toc-number">2.4.6.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F%EF%BC%88Singleton%EF%BC%89"><span class="toc-number">2.5.</span> <span class="toc-text">单例模式（Singleton）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE-4"><span class="toc-number">2.5.1.</span> <span class="toc-text">意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF-4"><span class="toc-number">2.5.2.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E9%97%AE%E9%A2%98-4"><span class="toc-number">2.5.3.</span> <span class="toc-text">示例问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F%E7%9A%84%E5%87%A0%E7%A7%8D%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F"><span class="toc-number">2.5.4.</span> <span class="toc-text">单例模式的几种实现方式</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E6%87%92%E6%B1%89%E5%BC%8F%EF%BC%8C%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8"><span class="toc-number">2.5.4.1.</span> <span class="toc-text">1. 懒汉式，线程不安全</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E6%87%92%E6%B1%89%E5%BC%8F%EF%BC%8C%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8"><span class="toc-number">2.5.4.2.</span> <span class="toc-text">2. 懒汉式，线程安全</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E9%A5%BF%E6%B1%89%E5%BC%8F"><span class="toc-number">2.5.4.3.</span> <span class="toc-text">3. 饿汉式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-%E5%8F%8C%E6%A3%80%E9%94%81-%E5%8F%8C%E9%87%8D%E6%A0%A1%E9%AA%8C%E9%94%81%EF%BC%88DCL%EF%BC%8C%E5%8D%B3-double-checked-locking%EF%BC%89"><span class="toc-number">2.5.4.4.</span> <span class="toc-text">4. 双检锁&#x2F;双重校验锁（DCL，即 double-checked locking）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-%E6%9E%9A%E4%B8%BE"><span class="toc-number">2.5.4.5.</span> <span class="toc-text">5. 枚举</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9-4"><span class="toc-number">2.5.5.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9-4"><span class="toc-number">2.5.6.</span> <span class="toc-text">缺点</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F"><span class="toc-number">3.</span> <span class="toc-text">结构型模式</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F%EF%BC%88Wrapper-Adapter%EF%BC%89"><span class="toc-number">3.1.</span> <span class="toc-text">适配器模式（Wrapper&#x2F;Adapter）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE-5"><span class="toc-number">3.1.1.</span> <span class="toc-text">意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF-5"><span class="toc-number">3.1.2.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E9%97%AE%E9%A2%98-5"><span class="toc-number">3.1.3.</span> <span class="toc-text">示例问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84-4"><span class="toc-number">3.1.4.</span> <span class="toc-text">模式结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9-5"><span class="toc-number">3.1.5.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9-5"><span class="toc-number">3.1.6.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F%EF%BC%88Bridge%EF%BC%89"><span class="toc-number">3.2.</span> <span class="toc-text">桥接模式（Bridge）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE-6"><span class="toc-number">3.2.1.</span> <span class="toc-text">意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF-6"><span class="toc-number">3.2.2.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E9%97%AE%E9%A2%98-6"><span class="toc-number">3.2.3.</span> <span class="toc-text">示例问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84-5"><span class="toc-number">3.2.4.</span> <span class="toc-text">模式结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9-6"><span class="toc-number">3.2.5.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9-6"><span class="toc-number">3.2.6.</span> <span class="toc-text">缺点</span></a></li></ol></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%AE%80%E4%BB%8B"><span class="toc-number">1.</span> <span class="toc-text">设计模式简介</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">1.1.</span> <span class="toc-text">设计模式是什么？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#GOF%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">1.2.</span> <span class="toc-text">GOF是什么？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%9A%84%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.3.</span> <span class="toc-text">设计模式的类型</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F"><span class="toc-number">2.</span> <span class="toc-text">创建型模式</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F%EF%BC%88Factory-Pattern%EF%BC%89"><span class="toc-number">2.1.</span> <span class="toc-text">工厂方法模式（Factory Pattern）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE"><span class="toc-number">2.1.1.</span> <span class="toc-text">意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-number">2.1.2.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E9%97%AE%E9%A2%98"><span class="toc-number">2.1.3.</span> <span class="toc-text">示例问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84"><span class="toc-number">2.1.4.</span> <span class="toc-text">模式结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9"><span class="toc-number">2.1.5.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9"><span class="toc-number">2.1.6.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F%EF%BC%88Abstract-Factory%EF%BC%89"><span class="toc-number">2.2.</span> <span class="toc-text">抽象工厂模式（Abstract Factory）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE-1"><span class="toc-number">2.2.1.</span> <span class="toc-text">意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF-1"><span class="toc-number">2.2.2.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E9%97%AE%E9%A2%98-1"><span class="toc-number">2.2.3.</span> <span class="toc-text">示例问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84-1"><span class="toc-number">2.2.4.</span> <span class="toc-text">模式结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9-1"><span class="toc-number">2.2.5.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9-1"><span class="toc-number">2.2.6.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F%EF%BC%88Builder%EF%BC%89"><span class="toc-number">2.3.</span> <span class="toc-text">建造者模式（Builder）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE-2"><span class="toc-number">2.3.1.</span> <span class="toc-text">意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF-2"><span class="toc-number">2.3.2.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E9%97%AE%E9%A2%98-2"><span class="toc-number">2.3.3.</span> <span class="toc-text">示例问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84-2"><span class="toc-number">2.3.4.</span> <span class="toc-text">模式结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9-2"><span class="toc-number">2.3.5.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9-2"><span class="toc-number">2.3.6.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F%EF%BC%88Prototype%EF%BC%89"><span class="toc-number">2.4.</span> <span class="toc-text">原型模式（Prototype）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE-3"><span class="toc-number">2.4.1.</span> <span class="toc-text">意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF-3"><span class="toc-number">2.4.2.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E9%97%AE%E9%A2%98-3"><span class="toc-number">2.4.3.</span> <span class="toc-text">示例问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84-3"><span class="toc-number">2.4.4.</span> <span class="toc-text">模式结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9-3"><span class="toc-number">2.4.5.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9-3"><span class="toc-number">2.4.6.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F%EF%BC%88Singleton%EF%BC%89"><span class="toc-number">2.5.</span> <span class="toc-text">单例模式（Singleton）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE-4"><span class="toc-number">2.5.1.</span> <span class="toc-text">意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF-4"><span class="toc-number">2.5.2.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E9%97%AE%E9%A2%98-4"><span class="toc-number">2.5.3.</span> <span class="toc-text">示例问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F%E7%9A%84%E5%87%A0%E7%A7%8D%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F"><span class="toc-number">2.5.4.</span> <span class="toc-text">单例模式的几种实现方式</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E6%87%92%E6%B1%89%E5%BC%8F%EF%BC%8C%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8"><span class="toc-number">2.5.4.1.</span> <span class="toc-text">1. 懒汉式，线程不安全</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E6%87%92%E6%B1%89%E5%BC%8F%EF%BC%8C%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8"><span class="toc-number">2.5.4.2.</span> <span class="toc-text">2. 懒汉式，线程安全</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E9%A5%BF%E6%B1%89%E5%BC%8F"><span class="toc-number">2.5.4.3.</span> <span class="toc-text">3. 饿汉式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-%E5%8F%8C%E6%A3%80%E9%94%81-%E5%8F%8C%E9%87%8D%E6%A0%A1%E9%AA%8C%E9%94%81%EF%BC%88DCL%EF%BC%8C%E5%8D%B3-double-checked-locking%EF%BC%89"><span class="toc-number">2.5.4.4.</span> <span class="toc-text">4. 双检锁&#x2F;双重校验锁（DCL，即 double-checked locking）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-%E6%9E%9A%E4%B8%BE"><span class="toc-number">2.5.4.5.</span> <span class="toc-text">5. 枚举</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9-4"><span class="toc-number">2.5.5.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9-4"><span class="toc-number">2.5.6.</span> <span class="toc-text">缺点</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F"><span class="toc-number">3.</span> <span class="toc-text">结构型模式</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F%EF%BC%88Wrapper-Adapter%EF%BC%89"><span class="toc-number">3.1.</span> <span class="toc-text">适配器模式（Wrapper&#x2F;Adapter）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE-5"><span class="toc-number">3.1.1.</span> <span class="toc-text">意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF-5"><span class="toc-number">3.1.2.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E9%97%AE%E9%A2%98-5"><span class="toc-number">3.1.3.</span> <span class="toc-text">示例问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84-4"><span class="toc-number">3.1.4.</span> <span class="toc-text">模式结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9-5"><span class="toc-number">3.1.5.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9-5"><span class="toc-number">3.1.6.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F%EF%BC%88Bridge%EF%BC%89"><span class="toc-number">3.2.</span> <span class="toc-text">桥接模式（Bridge）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE-6"><span class="toc-number">3.2.1.</span> <span class="toc-text">意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF-6"><span class="toc-number">3.2.2.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E9%97%AE%E9%A2%98-6"><span class="toc-number">3.2.3.</span> <span class="toc-text">示例问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84-5"><span class="toc-number">3.2.4.</span> <span class="toc-text">模式结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9-6"><span class="toc-number">3.2.5.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9-6"><span class="toc-number">3.2.6.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F%EF%BC%88Composite%EF%BC%89"><span class="toc-number">3.3.</span> <span class="toc-text">组合模式（Composite）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE-7"><span class="toc-number">3.3.1.</span> <span class="toc-text">意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF-7"><span class="toc-number">3.3.2.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E9%97%AE%E9%A2%98-7"><span class="toc-number">3.3.3.</span> <span class="toc-text">示例问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84-6"><span class="toc-number">3.3.4.</span> <span class="toc-text">模式结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9-7"><span class="toc-number">3.3.5.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9-7"><span class="toc-number">3.3.6.</span> <span class="toc-text">缺点</span></a></li></ol></li></ol></li></ol>
                     </div>
                 </span>
             </div>
