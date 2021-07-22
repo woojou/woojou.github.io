@@ -21,7 +21,7 @@
 <meta property="og:image" content="https://refactoringguru.cn/images/patterns/examples/java/composite/OutputDemo.png">
 <meta property="og:image" content="https://refactoringguru.cn/images/patterns/diagrams/facade/example.png">
 <meta property="article:published_time" content="2021-07-16T07:53:32.000Z">
-<meta property="article:modified_time" content="2021-07-21T11:02:39.791Z">
+<meta property="article:modified_time" content="2021-07-22T12:57:16.077Z">
 <meta property="article:author" content="Woojou">
 <meta property="article:tag" content="编程基础">
 <meta name="twitter:card" content="summary">
@@ -2458,6 +2458,354 @@ public class Forest extends JFrame &#123;
 <li>提高了系统的复杂度，需要分离出外部状态和内部状态，而且外部状态具有固有化的性质，不可以随着内部状态的变化而变化</li>
 <li>需要牺牲执行速度来换取内存， 因为每次调用享元方法时都需要重新计算部分情景数据。</li>
 </ul>
+<h2 id="代理模式（Proxy）"><a href="#代理模式（Proxy）" class="headerlink" title="代理模式（Proxy）"></a>代理模式（Proxy）</h2><h3 id="意图-11"><a href="#意图-11" class="headerlink" title="意图"></a>意图</h3><p>一个类代表另一个类的功能，能够提供对象的替代品或其占位符。</p>
+<h3 id="使用场景-11"><a href="#使用场景-11" class="headerlink" title="使用场景"></a>使用场景</h3><ul>
+<li>在面向对象系统中，有些对象由于某些原因（比如对象创建开销很大，或者某些操作需要安全控制，或者需要进程外的访问），直接访问会给使用者或者系统结构带来很多麻烦，我们可以在访问此对象时加上一个对此对象的访问层。</li>
+<li>延迟初始化。有一个偶尔使用的重量级服务对象，如果一直保持该对象的运行会消耗大量系统资源时可以使用代理模式。</li>
+<li>访问控制。只希望特定客户端使用服务对象。</li>
+<li>本地执行远程服务的代理，适用于服务对象位于远程服务器的情形。</li>
+<li>记录日志请求，适用于需要缓存客户请求结果并对缓存生命周期进行管理时， 特别是当返回结果的体积非常大时。</li>
+</ul>
+<h3 id="示例问题-11"><a href="#示例问题-11" class="headerlink" title="示例问题"></a>示例问题</h3><p>需要在在第三方youtube视频库下载视频，程序库提供了视频下载类。 但是该类的效率非常低。 如果客户端程序多次请求同一视频， 程序库会反复下载该视频， 而不会将首次下载的文件缓存下来复用。</p>
+<p>1.创建远程服务接口</p>
+<pre><code class="java">import java.util.HashMap;
+
+public interface ThirdPartyYouTubeLib &#123;
+    HashMap&lt;String, Video&gt; popularVideos();
+
+    Video getVideo(String videoId);
+&#125;
+</code></pre>
+<p>2.创建远程服务实现类</p>
+<pre><code class="java">import java.util.HashMap;
+
+public class ThirdPartyYouTubeClass implements ThirdPartyYouTubeLib &#123;
+
+    @Override
+    public HashMap&lt;String, Video&gt; popularVideos() &#123;
+        connectToServer(&quot;http://www.youtube.com&quot;);
+        return getRandomVideos();
+    &#125;
+
+    @Override
+    public Video getVideo(String videoId) &#123;
+        connectToServer(&quot;http://www.youtube.com/&quot; + videoId);
+        return getSomeVideo(videoId);
+    &#125;
+
+    // -----------------------------------------------------------------------
+    // Fake methods to simulate network activity. They as slow as a real life.
+
+    private int random(int min, int max) &#123;
+        return min + (int) (Math.random() * ((max - min) + 1));
+    &#125;
+
+    private void experienceNetworkLatency() &#123;
+        int randomLatency = random(5, 10);
+        for (int i = 0; i &lt; randomLatency; i++) &#123;
+            try &#123;
+                Thread.sleep(100);
+            &#125; catch (InterruptedException ex) &#123;
+                ex.printStackTrace();
+            &#125;
+        &#125;
+    &#125;
+
+    private void connectToServer(String server) &#123;
+        System.out.print(&quot;Connecting to &quot; + server + &quot;... &quot;);
+        experienceNetworkLatency();
+        System.out.print(&quot;Connected!&quot; + &quot;\n&quot;);
+    &#125;
+
+    private HashMap&lt;String, Video&gt; getRandomVideos() &#123;
+        System.out.print(&quot;Downloading populars... &quot;);
+
+        experienceNetworkLatency();
+        HashMap&lt;String, Video&gt; hmap = new HashMap&lt;String, Video&gt;();
+        hmap.put(&quot;catzzzzzzzzz&quot;, new Video(&quot;sadgahasgdas&quot;, &quot;Catzzzz.avi&quot;));
+        hmap.put(&quot;mkafksangasj&quot;, new Video(&quot;mkafksangasj&quot;, &quot;Dog play with ball.mp4&quot;));
+        hmap.put(&quot;dancesvideoo&quot;, new Video(&quot;asdfas3ffasd&quot;, &quot;Dancing video.mpq&quot;));
+        hmap.put(&quot;dlsdk5jfslaf&quot;, new Video(&quot;dlsdk5jfslaf&quot;, &quot;Barcelona vs RealM.mov&quot;));
+        hmap.put(&quot;3sdfgsd1j333&quot;, new Video(&quot;3sdfgsd1j333&quot;, &quot;Programing lesson#1.avi&quot;));
+
+        System.out.print(&quot;Done!&quot; + &quot;\n&quot;);
+        return hmap;
+    &#125;
+
+    private Video getSomeVideo(String videoId) &#123;
+        System.out.print(&quot;Downloading video... &quot;);
+
+        experienceNetworkLatency();
+        Video video = new Video(videoId, &quot;Some video title&quot;);
+
+        System.out.print(&quot;Done!&quot; + &quot;\n&quot;);
+        return video;
+    &#125;
+
+&#125;
+</code></pre>
+<p>3.创建视频类</p>
+<pre><code class="java">public class Video &#123;
+    public String id;
+    public String title;
+    public String data;
+
+    Video(String id, String title) &#123;
+        this.id = id;
+        this.title = title;
+        this.data = &quot;Random video.&quot;;
+    &#125;
+&#125;
+</code></pre>
+<p>4.创建油管视频远程服务的缓存代理类，如果当前本地缓存没有请求对象才会向远程服务类发起获取请求。</p>
+<pre><code class="java">import java.util.HashMap;
+
+public class YouTubeCacheProxy implements ThirdPartyYouTubeLib &#123;
+    private ThirdPartyYouTubeLib youtubeService;
+    private HashMap&lt;String, Video&gt; cachePopular = new HashMap&lt;String, Video&gt;();
+    private HashMap&lt;String, Video&gt; cacheAll = new HashMap&lt;String, Video&gt;();
+
+    public YouTubeCacheProxy() &#123;
+        this.youtubeService = new ThirdPartyYouTubeClass();
+    &#125;
+
+    @Override
+    public HashMap&lt;String, Video&gt; popularVideos() &#123;
+        if (cachePopular.isEmpty()) &#123;
+            cachePopular = youtubeService.popularVideos();
+        &#125; else &#123;
+            System.out.println(&quot;Retrieved list from cache.&quot;);
+        &#125;
+        return cachePopular;
+    &#125;
+
+    @Override
+    public Video getVideo(String videoId) &#123;
+        Video video = cacheAll.get(videoId);
+        if (video == null) &#123;
+            video = youtubeService.getVideo(videoId);
+            cacheAll.put(videoId, video);
+        &#125; else &#123;
+            System.out.println(&quot;Retrieved video &#39;&quot; + videoId + &quot;&#39; from cache.&quot;);
+        &#125;
+        return video;
+    &#125;
+
+    public void reset() &#123;
+        cachePopular.clear();
+        cacheAll.clear();
+    &#125;
+&#125;
+</code></pre>
+<p>5.创建油管应用客户端</p>
+<pre><code class="java">import java.util.HashMap;
+
+public class YouTubeDownloader &#123;
+    private ThirdPartyYouTubeLib api; //利用接口
+
+    public YouTubeDownloader(ThirdPartyYouTubeLib api) &#123;
+        this.api = api;
+    &#125;
+
+    public void renderVideoPage(String videoId) &#123;
+        Video video = api.getVideo(videoId);
+        System.out.println(&quot;\n-------------------------------&quot;);
+        System.out.println(&quot;Video page (imagine fancy HTML)&quot;);
+        System.out.println(&quot;ID: &quot; + video.id);
+        System.out.println(&quot;Title: &quot; + video.title);
+        System.out.println(&quot;Video: &quot; + video.data);
+        System.out.println(&quot;-------------------------------\n&quot;);
+    &#125;
+
+    public void renderPopularVideos() &#123;
+        HashMap&lt;String, Video&gt; list = api.popularVideo();
+        System.out.println(&quot;\n-------------------------------&quot;);
+        System.out.println(&quot;Most popular videos on YouTube (imagine fancy HTML)&quot;);
+        for (Video video : list.values()) &#123;
+            System.out.println(&quot;ID: &quot; + video.id + &quot; / Title: &quot; + video.title);
+        &#125;
+        System.out.println(&quot;-------------------------------\n&quot;);
+    &#125;
+&#125;
+</code></pre>
+<p>6.测试代码，比较直接用远程服务和利用代理处理相同请求内容所需的时间</p>
+<pre><code class="java">public class Demo &#123;
+
+    public static void main(String[] args) &#123;
+        YouTubeDownloader naiveDownloader = new YouTubeDownloader(new ThirdPartyYouTubeClass());
+        YouTubeDownloader smartDownloader = new YouTubeDownloader(new YouTubeCacheProxy());
+
+        long naive = test(naiveDownloader);
+        long smart = test(smartDownloader);
+        System.out.print(&quot;\nTime saved by caching proxy: &quot; + (naive - smart) + &quot;ms&quot;);
+
+    &#125;
+
+    private static long test(YouTubeDownloader downloader) &#123;
+        long startTime = System.currentTimeMillis();
+
+        // User behavior in our app:
+        downloader.renderPopularVideos();
+        downloader.renderVideoPage(&quot;catzzzzzzzzz&quot;);
+        downloader.renderPopularVideos();
+        downloader.renderVideoPage(&quot;dancesvideoo&quot;);
+        // Users might visit the same page quite often.
+        downloader.renderVideoPage(&quot;catzzzzzzzzz&quot;);
+        downloader.renderVideoPage(&quot;someothervid&quot;);
+
+        long estimatedTime = System.currentTimeMillis() - startTime;
+        System.out.print(&quot;Time elapsed: &quot; + estimatedTime + &quot;ms\n&quot;);
+        return estimatedTime;
+    &#125;
+&#125;
+</code></pre>
+<p>7.输出结果，可以看到节省了 3479ms</p>
+<pre><code>Connecting to http://www.youtube.com... Connected!
+Downloading populars... Done!
+
+-------------------------------
+Most popular videos on YouTube (imagine fancy HTML)
+ID: sadgahasgdas / Title: Catzzzz.avi
+ID: asdfas3ffasd / Title: Dancing video.mpq
+ID: 3sdfgsd1j333 / Title: Programing lesson#1.avi
+ID: mkafksangasj / Title: Dog play with ball.mp4
+ID: dlsdk5jfslaf / Title: Barcelona vs RealM.mov
+-------------------------------
+
+Connecting to http://www.youtube.com/catzzzzzzzzz... Connected!
+Downloading video... Done!
+
+-------------------------------
+Video page (imagine fancy HTML)
+ID: catzzzzzzzzz
+Title: Some video title
+Video: Random video.
+-------------------------------
+
+Connecting to http://www.youtube.com... Connected!
+Downloading populars... Done!
+
+-------------------------------
+Most popular videos on YouTube (imagine fancy HTML)
+ID: sadgahasgdas / Title: Catzzzz.avi
+ID: asdfas3ffasd / Title: Dancing video.mpq
+ID: 3sdfgsd1j333 / Title: Programing lesson#1.avi
+ID: mkafksangasj / Title: Dog play with ball.mp4
+ID: dlsdk5jfslaf / Title: Barcelona vs RealM.mov
+-------------------------------
+
+Connecting to http://www.youtube.com/dancesvideoo... Connected!
+Downloading video... Done!
+
+-------------------------------
+Video page (imagine fancy HTML)
+ID: dancesvideoo
+Title: Some video title
+Video: Random video.
+-------------------------------
+
+Connecting to http://www.youtube.com/catzzzzzzzzz... Connected!
+Downloading video... Done!
+
+-------------------------------
+Video page (imagine fancy HTML)
+ID: catzzzzzzzzz
+Title: Some video title
+Video: Random video.
+-------------------------------
+
+Connecting to http://www.youtube.com/someothervid... Connected!
+Downloading video... Done!
+
+-------------------------------
+Video page (imagine fancy HTML)
+ID: someothervid
+Title: Some video title
+Video: Random video.
+-------------------------------
+
+Time elapsed: 9354ms
+Connecting to http://www.youtube.com... Connected!
+Downloading populars... Done!
+
+-------------------------------
+Most popular videos on YouTube (imagine fancy HTML)
+ID: sadgahasgdas / Title: Catzzzz.avi
+ID: asdfas3ffasd / Title: Dancing video.mpq
+ID: 3sdfgsd1j333 / Title: Programing lesson#1.avi
+ID: mkafksangasj / Title: Dog play with ball.mp4
+ID: dlsdk5jfslaf / Title: Barcelona vs RealM.mov
+-------------------------------
+
+Connecting to http://www.youtube.com/catzzzzzzzzz... Connected!
+Downloading video... Done!
+
+-------------------------------
+Video page (imagine fancy HTML)
+ID: catzzzzzzzzz
+Title: Some video title
+Video: Random video.
+-------------------------------
+
+Retrieved list from cache.
+
+-------------------------------
+Most popular videos on YouTube (imagine fancy HTML)
+ID: sadgahasgdas / Title: Catzzzz.avi
+ID: asdfas3ffasd / Title: Dancing video.mpq
+ID: 3sdfgsd1j333 / Title: Programing lesson#1.avi
+ID: mkafksangasj / Title: Dog play with ball.mp4
+ID: dlsdk5jfslaf / Title: Barcelona vs RealM.mov
+-------------------------------
+
+Connecting to http://www.youtube.com/dancesvideoo... Connected!
+Downloading video... Done!
+
+-------------------------------
+Video page (imagine fancy HTML)
+ID: dancesvideoo
+Title: Some video title
+Video: Random video.
+-------------------------------
+
+Retrieved video &#39;catzzzzzzzzz&#39; from cache.
+
+-------------------------------
+Video page (imagine fancy HTML)
+ID: catzzzzzzzzz
+Title: Some video title
+Video: Random video.
+-------------------------------
+
+Connecting to http://www.youtube.com/someothervid... Connected!
+Downloading video... Done!
+
+-------------------------------
+Video page (imagine fancy HTML)
+ID: someothervid
+Title: Some video title
+Video: Random video.
+-------------------------------
+
+Time elapsed: 5875ms
+
+Time saved by caching proxy: 3479ms
+</code></pre>
+<h3 id="模式结构-10"><a href="#模式结构-10" class="headerlink" title="模式结构"></a>模式结构</h3><ul>
+<li><strong>服务接口</strong>：声明了服务接口。 代理必须遵循该接口才能伪装成服务对象。</li>
+<li><strong>服务类</strong>：提供了一些实用的业务逻辑。</li>
+<li><strong>代理类</strong>：包含一个指向服务对象的引用成员变量。 代理完成其任务 （例如延迟初始化、 记录日志、 访问控制和缓存等） 后会将请求传递给服务对象。 通常情况下， 代理会对其服务对象的整个生命周期进行管理。</li>
+<li><strong>客户端</strong>：能通过同一接口与服务或代理进行交互， 所以你可在一切需要服务对象的代码中使用代理。</li>
+</ul>
+<h3 id="优点-11"><a href="#优点-11" class="headerlink" title="优点"></a>优点</h3><ul>
+<li>开闭原则。 你可以在不对服务或客户端做出修改的情况下创建新代理。</li>
+<li>即使服务对象还未准备好或不存在， 代理也可以正常工作。</li>
+<li>可以在客户端毫无察觉的情况下控制服务对象。</li>
+</ul>
+<h3 id="缺点-11"><a href="#缺点-11" class="headerlink" title="缺点"></a>缺点</h3><ul>
+<li>由于在客户端和真实主题之间增加了代理对象，因此有些类型的代理模式可能会造成请求的处理速度变慢。</li>
+<li>实现代理模式需要额外的工作，有些代理模式的实现非常复杂。</li>
+</ul>
 
       
 
@@ -2570,7 +2918,7 @@ public class Forest extends JFrame &#123;
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%AE%80%E4%BB%8B"><span class="toc-number">1.</span> <span class="toc-text">设计模式简介</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">1.1.</span> <span class="toc-text">设计模式是什么？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#GOF%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">1.2.</span> <span class="toc-text">GOF是什么？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%9A%84%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.3.</span> <span class="toc-text">设计模式的类型</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F"><span class="toc-number">2.</span> <span class="toc-text">创建型模式</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F%EF%BC%88Factory-Method%EF%BC%89"><span class="toc-number">2.1.</span> <span class="toc-text">工厂方法模式（Factory Method）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE"><span class="toc-number">2.1.1.</span> <span class="toc-text">意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-number">2.1.2.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E9%97%AE%E9%A2%98"><span class="toc-number">2.1.3.</span> <span class="toc-text">示例问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84"><span class="toc-number">2.1.4.</span> <span class="toc-text">模式结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9"><span class="toc-number">2.1.5.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9"><span class="toc-number">2.1.6.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F%EF%BC%88Abstract-Factory%EF%BC%89"><span class="toc-number">2.2.</span> <span class="toc-text">抽象工厂模式（Abstract Factory）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE-1"><span class="toc-number">2.2.1.</span> <span class="toc-text">意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF-1"><span class="toc-number">2.2.2.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E9%97%AE%E9%A2%98-1"><span class="toc-number">2.2.3.</span> <span class="toc-text">示例问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84-1"><span class="toc-number">2.2.4.</span> <span class="toc-text">模式结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9-1"><span class="toc-number">2.2.5.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9-1"><span class="toc-number">2.2.6.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F%EF%BC%88Builder%EF%BC%89"><span class="toc-number">2.3.</span> <span class="toc-text">建造者模式（Builder）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE-2"><span class="toc-number">2.3.1.</span> <span class="toc-text">意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF-2"><span class="toc-number">2.3.2.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E9%97%AE%E9%A2%98-2"><span class="toc-number">2.3.3.</span> <span class="toc-text">示例问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84-2"><span class="toc-number">2.3.4.</span> <span class="toc-text">模式结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9-2"><span class="toc-number">2.3.5.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9-2"><span class="toc-number">2.3.6.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F%EF%BC%88Prototype%EF%BC%89"><span class="toc-number">2.4.</span> <span class="toc-text">原型模式（Prototype）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE-3"><span class="toc-number">2.4.1.</span> <span class="toc-text">意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF-3"><span class="toc-number">2.4.2.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E9%97%AE%E9%A2%98-3"><span class="toc-number">2.4.3.</span> <span class="toc-text">示例问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84-3"><span class="toc-number">2.4.4.</span> <span class="toc-text">模式结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9-3"><span class="toc-number">2.4.5.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9-3"><span class="toc-number">2.4.6.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F%EF%BC%88Singleton%EF%BC%89"><span class="toc-number">2.5.</span> <span class="toc-text">单例模式（Singleton）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE-4"><span class="toc-number">2.5.1.</span> <span class="toc-text">意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF-4"><span class="toc-number">2.5.2.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E9%97%AE%E9%A2%98-4"><span class="toc-number">2.5.3.</span> <span class="toc-text">示例问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F%E7%9A%84%E5%87%A0%E7%A7%8D%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F"><span class="toc-number">2.5.4.</span> <span class="toc-text">单例模式的几种实现方式</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E6%87%92%E6%B1%89%E5%BC%8F%EF%BC%8C%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8"><span class="toc-number">2.5.4.1.</span> <span class="toc-text">1. 懒汉式，线程不安全</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E6%87%92%E6%B1%89%E5%BC%8F%EF%BC%8C%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8"><span class="toc-number">2.5.4.2.</span> <span class="toc-text">2. 懒汉式，线程安全</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E9%A5%BF%E6%B1%89%E5%BC%8F"><span class="toc-number">2.5.4.3.</span> <span class="toc-text">3. 饿汉式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-%E5%8F%8C%E6%A3%80%E9%94%81-%E5%8F%8C%E9%87%8D%E6%A0%A1%E9%AA%8C%E9%94%81%EF%BC%88DCL%EF%BC%8C%E5%8D%B3-double-checked-locking%EF%BC%89"><span class="toc-number">2.5.4.4.</span> <span class="toc-text">4. 双检锁&#x2F;双重校验锁（DCL，即 double-checked locking）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-%E6%9E%9A%E4%B8%BE"><span class="toc-number">2.5.4.5.</span> <span class="toc-text">5. 枚举</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9-4"><span class="toc-number">2.5.5.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9-4"><span class="toc-number">2.5.6.</span> <span class="toc-text">缺点</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F"><span class="toc-number">3.</span> <span class="toc-text">结构型模式</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F%EF%BC%88Wrapper-Adapter%EF%BC%89"><span class="toc-number">3.1.</span> <span class="toc-text">适配器模式（Wrapper&#x2F;Adapter）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE-5"><span class="toc-number">3.1.1.</span> <span class="toc-text">意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF-5"><span class="toc-number">3.1.2.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E9%97%AE%E9%A2%98-5"><span class="toc-number">3.1.3.</span> <span class="toc-text">示例问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84-4"><span class="toc-number">3.1.4.</span> <span class="toc-text">模式结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9-5"><span class="toc-number">3.1.5.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9-5"><span class="toc-number">3.1.6.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F%EF%BC%88Bridge%EF%BC%89"><span class="toc-number">3.2.</span> <span class="toc-text">桥接模式（Bridge）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE-6"><span class="toc-number">3.2.1.</span> <span class="toc-text">意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF-6"><span class="toc-number">3.2.2.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E9%97%AE%E9%A2%98-6"><span class="toc-number">3.2.3.</span> <span class="toc-text">示例问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84-5"><span class="toc-number">3.2.4.</span> <span class="toc-text">模式结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9-6"><span class="toc-number">3.2.5.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9-6"><span class="toc-number">3.2.6.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F%EF%BC%88Composite%EF%BC%89"><span class="toc-number">3.3.</span> <span class="toc-text">组合模式（Composite）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE-7"><span class="toc-number">3.3.1.</span> <span class="toc-text">意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF-7"><span class="toc-number">3.3.2.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E9%97%AE%E9%A2%98-7"><span class="toc-number">3.3.3.</span> <span class="toc-text">示例问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84-6"><span class="toc-number">3.3.4.</span> <span class="toc-text">模式结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9-7"><span class="toc-number">3.3.5.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9-7"><span class="toc-number">3.3.6.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A3%85%E9%A5%B0%E6%A8%A1%E5%BC%8F%EF%BC%88Decorator%EF%BC%89"><span class="toc-number">3.4.</span> <span class="toc-text">装饰模式（Decorator）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE-8"><span class="toc-number">3.4.1.</span> <span class="toc-text">意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF-8"><span class="toc-number">3.4.2.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E9%97%AE%E9%A2%98-8"><span class="toc-number">3.4.3.</span> <span class="toc-text">示例问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84-7"><span class="toc-number">3.4.4.</span> <span class="toc-text">模式结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9-8"><span class="toc-number">3.4.5.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9-8"><span class="toc-number">3.4.6.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%96%E8%A7%82%E6%A8%A1%E5%BC%8F%EF%BC%88Facade%EF%BC%89"><span class="toc-number">3.5.</span> <span class="toc-text">外观模式（Facade）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE-9"><span class="toc-number">3.5.1.</span> <span class="toc-text">意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF-9"><span class="toc-number">3.5.2.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E9%97%AE%E9%A2%98-9"><span class="toc-number">3.5.3.</span> <span class="toc-text">示例问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84-8"><span class="toc-number">3.5.4.</span> <span class="toc-text">模式结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9-9"><span class="toc-number">3.5.5.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9-9"><span class="toc-number">3.5.6.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%AB%E5%85%83%E6%A8%A1%E5%BC%8F%EF%BC%88Flyweight%EF%BC%89"><span class="toc-number">3.6.</span> <span class="toc-text">享元模式（Flyweight）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE-10"><span class="toc-number">3.6.1.</span> <span class="toc-text">意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF-10"><span class="toc-number">3.6.2.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E9%97%AE%E9%A2%98-10"><span class="toc-number">3.6.3.</span> <span class="toc-text">示例问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84-9"><span class="toc-number">3.6.4.</span> <span class="toc-text">模式结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9-10"><span class="toc-number">3.6.5.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9-10"><span class="toc-number">3.6.6.</span> <span class="toc-text">缺点</span></a></li></ol></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%AE%80%E4%BB%8B"><span class="toc-number">1.</span> <span class="toc-text">设计模式简介</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">1.1.</span> <span class="toc-text">设计模式是什么？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#GOF%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">1.2.</span> <span class="toc-text">GOF是什么？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%9A%84%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.3.</span> <span class="toc-text">设计模式的类型</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F"><span class="toc-number">2.</span> <span class="toc-text">创建型模式</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F%EF%BC%88Factory-Method%EF%BC%89"><span class="toc-number">2.1.</span> <span class="toc-text">工厂方法模式（Factory Method）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE"><span class="toc-number">2.1.1.</span> <span class="toc-text">意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-number">2.1.2.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E9%97%AE%E9%A2%98"><span class="toc-number">2.1.3.</span> <span class="toc-text">示例问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84"><span class="toc-number">2.1.4.</span> <span class="toc-text">模式结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9"><span class="toc-number">2.1.5.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9"><span class="toc-number">2.1.6.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F%EF%BC%88Abstract-Factory%EF%BC%89"><span class="toc-number">2.2.</span> <span class="toc-text">抽象工厂模式（Abstract Factory）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE-1"><span class="toc-number">2.2.1.</span> <span class="toc-text">意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF-1"><span class="toc-number">2.2.2.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E9%97%AE%E9%A2%98-1"><span class="toc-number">2.2.3.</span> <span class="toc-text">示例问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84-1"><span class="toc-number">2.2.4.</span> <span class="toc-text">模式结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9-1"><span class="toc-number">2.2.5.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9-1"><span class="toc-number">2.2.6.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F%EF%BC%88Builder%EF%BC%89"><span class="toc-number">2.3.</span> <span class="toc-text">建造者模式（Builder）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE-2"><span class="toc-number">2.3.1.</span> <span class="toc-text">意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF-2"><span class="toc-number">2.3.2.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E9%97%AE%E9%A2%98-2"><span class="toc-number">2.3.3.</span> <span class="toc-text">示例问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84-2"><span class="toc-number">2.3.4.</span> <span class="toc-text">模式结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9-2"><span class="toc-number">2.3.5.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9-2"><span class="toc-number">2.3.6.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F%EF%BC%88Prototype%EF%BC%89"><span class="toc-number">2.4.</span> <span class="toc-text">原型模式（Prototype）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE-3"><span class="toc-number">2.4.1.</span> <span class="toc-text">意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF-3"><span class="toc-number">2.4.2.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E9%97%AE%E9%A2%98-3"><span class="toc-number">2.4.3.</span> <span class="toc-text">示例问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84-3"><span class="toc-number">2.4.4.</span> <span class="toc-text">模式结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9-3"><span class="toc-number">2.4.5.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9-3"><span class="toc-number">2.4.6.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F%EF%BC%88Singleton%EF%BC%89"><span class="toc-number">2.5.</span> <span class="toc-text">单例模式（Singleton）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE-4"><span class="toc-number">2.5.1.</span> <span class="toc-text">意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF-4"><span class="toc-number">2.5.2.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E9%97%AE%E9%A2%98-4"><span class="toc-number">2.5.3.</span> <span class="toc-text">示例问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F%E7%9A%84%E5%87%A0%E7%A7%8D%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F"><span class="toc-number">2.5.4.</span> <span class="toc-text">单例模式的几种实现方式</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E6%87%92%E6%B1%89%E5%BC%8F%EF%BC%8C%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8"><span class="toc-number">2.5.4.1.</span> <span class="toc-text">1. 懒汉式，线程不安全</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E6%87%92%E6%B1%89%E5%BC%8F%EF%BC%8C%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8"><span class="toc-number">2.5.4.2.</span> <span class="toc-text">2. 懒汉式，线程安全</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E9%A5%BF%E6%B1%89%E5%BC%8F"><span class="toc-number">2.5.4.3.</span> <span class="toc-text">3. 饿汉式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-%E5%8F%8C%E6%A3%80%E9%94%81-%E5%8F%8C%E9%87%8D%E6%A0%A1%E9%AA%8C%E9%94%81%EF%BC%88DCL%EF%BC%8C%E5%8D%B3-double-checked-locking%EF%BC%89"><span class="toc-number">2.5.4.4.</span> <span class="toc-text">4. 双检锁&#x2F;双重校验锁（DCL，即 double-checked locking）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-%E6%9E%9A%E4%B8%BE"><span class="toc-number">2.5.4.5.</span> <span class="toc-text">5. 枚举</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9-4"><span class="toc-number">2.5.5.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9-4"><span class="toc-number">2.5.6.</span> <span class="toc-text">缺点</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F"><span class="toc-number">3.</span> <span class="toc-text">结构型模式</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F%EF%BC%88Wrapper-Adapter%EF%BC%89"><span class="toc-number">3.1.</span> <span class="toc-text">适配器模式（Wrapper&#x2F;Adapter）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE-5"><span class="toc-number">3.1.1.</span> <span class="toc-text">意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF-5"><span class="toc-number">3.1.2.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E9%97%AE%E9%A2%98-5"><span class="toc-number">3.1.3.</span> <span class="toc-text">示例问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84-4"><span class="toc-number">3.1.4.</span> <span class="toc-text">模式结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9-5"><span class="toc-number">3.1.5.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9-5"><span class="toc-number">3.1.6.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F%EF%BC%88Bridge%EF%BC%89"><span class="toc-number">3.2.</span> <span class="toc-text">桥接模式（Bridge）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE-6"><span class="toc-number">3.2.1.</span> <span class="toc-text">意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF-6"><span class="toc-number">3.2.2.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E9%97%AE%E9%A2%98-6"><span class="toc-number">3.2.3.</span> <span class="toc-text">示例问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84-5"><span class="toc-number">3.2.4.</span> <span class="toc-text">模式结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9-6"><span class="toc-number">3.2.5.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9-6"><span class="toc-number">3.2.6.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F%EF%BC%88Composite%EF%BC%89"><span class="toc-number">3.3.</span> <span class="toc-text">组合模式（Composite）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE-7"><span class="toc-number">3.3.1.</span> <span class="toc-text">意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF-7"><span class="toc-number">3.3.2.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E9%97%AE%E9%A2%98-7"><span class="toc-number">3.3.3.</span> <span class="toc-text">示例问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84-6"><span class="toc-number">3.3.4.</span> <span class="toc-text">模式结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9-7"><span class="toc-number">3.3.5.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9-7"><span class="toc-number">3.3.6.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A3%85%E9%A5%B0%E6%A8%A1%E5%BC%8F%EF%BC%88Decorator%EF%BC%89"><span class="toc-number">3.4.</span> <span class="toc-text">装饰模式（Decorator）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE-8"><span class="toc-number">3.4.1.</span> <span class="toc-text">意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF-8"><span class="toc-number">3.4.2.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E9%97%AE%E9%A2%98-8"><span class="toc-number">3.4.3.</span> <span class="toc-text">示例问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84-7"><span class="toc-number">3.4.4.</span> <span class="toc-text">模式结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9-8"><span class="toc-number">3.4.5.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9-8"><span class="toc-number">3.4.6.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%96%E8%A7%82%E6%A8%A1%E5%BC%8F%EF%BC%88Facade%EF%BC%89"><span class="toc-number">3.5.</span> <span class="toc-text">外观模式（Facade）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE-9"><span class="toc-number">3.5.1.</span> <span class="toc-text">意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF-9"><span class="toc-number">3.5.2.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E9%97%AE%E9%A2%98-9"><span class="toc-number">3.5.3.</span> <span class="toc-text">示例问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84-8"><span class="toc-number">3.5.4.</span> <span class="toc-text">模式结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9-9"><span class="toc-number">3.5.5.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9-9"><span class="toc-number">3.5.6.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%AB%E5%85%83%E6%A8%A1%E5%BC%8F%EF%BC%88Flyweight%EF%BC%89"><span class="toc-number">3.6.</span> <span class="toc-text">享元模式（Flyweight）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE-10"><span class="toc-number">3.6.1.</span> <span class="toc-text">意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF-10"><span class="toc-number">3.6.2.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E9%97%AE%E9%A2%98-10"><span class="toc-number">3.6.3.</span> <span class="toc-text">示例问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84-9"><span class="toc-number">3.6.4.</span> <span class="toc-text">模式结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9-10"><span class="toc-number">3.6.5.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9-10"><span class="toc-number">3.6.6.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F%EF%BC%88Proxy%EF%BC%89"><span class="toc-number">3.7.</span> <span class="toc-text">代理模式（Proxy）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE-11"><span class="toc-number">3.7.1.</span> <span class="toc-text">意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF-11"><span class="toc-number">3.7.2.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E9%97%AE%E9%A2%98-11"><span class="toc-number">3.7.3.</span> <span class="toc-text">示例问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84-10"><span class="toc-number">3.7.4.</span> <span class="toc-text">模式结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9-11"><span class="toc-number">3.7.5.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9-11"><span class="toc-number">3.7.6.</span> <span class="toc-text">缺点</span></a></li></ol></li></ol></li></ol>
                     </div>
                 </span>
             </div>
