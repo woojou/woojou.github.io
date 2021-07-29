@@ -20,8 +20,9 @@
 <meta property="og:image" content="https://refactoringguru.cn/images/patterns/diagrams/bridge/solution-zh.png?id=1e12aa93e72a643f325f">
 <meta property="og:image" content="https://refactoringguru.cn/images/patterns/examples/java/composite/OutputDemo.png">
 <meta property="og:image" content="https://refactoringguru.cn/images/patterns/diagrams/facade/example.png">
+<meta property="og:image" content="https://refactoringguru.cn/images/patterns/examples/java/command/OutputDemo.png">
 <meta property="article:published_time" content="2021-07-16T07:53:32.000Z">
-<meta property="article:modified_time" content="2021-07-23T13:35:34.998Z">
+<meta property="article:modified_time" content="2021-07-29T09:46:38.071Z">
 <meta property="article:author" content="Woojou">
 <meta property="article:tag" content="编程基础">
 <meta name="twitter:card" content="summary">
@@ -2806,7 +2807,7 @@ Time saved by caching proxy: 3479ms
 <li>由于在客户端和真实主题之间增加了代理对象，因此有些类型的代理模式可能会造成请求的处理速度变慢。</li>
 <li>实现代理模式需要额外的工作，有些代理模式的实现非常复杂。</li>
 </ul>
-<h1 id="行为模式"><a href="#行为模式" class="headerlink" title="行为模式"></a>行为模式</h1><h2 id="责任链模式（Chain-of-Responsibility-Pattern）"><a href="#责任链模式（Chain-of-Responsibility-Pattern）" class="headerlink" title="责任链模式（Chain of Responsibility Pattern）"></a>责任链模式（Chain of Responsibility Pattern）</h2><h3 id="意图-12"><a href="#意图-12" class="headerlink" title="意图"></a>意图</h3><p>允许将请求沿着处理者链进行发送。 收到请求后， 每个处理者均可对请求进行处理， 或将其传递给链上的下个处理者。责任链会将特定行为转换为被称作<em>处理者</em>的独立对象。</p>
+<h1 id="行为模式"><a href="#行为模式" class="headerlink" title="行为模式"></a>行为模式</h1><h2 id="责任链模式（Chain-of-Responsibility）"><a href="#责任链模式（Chain-of-Responsibility）" class="headerlink" title="责任链模式（Chain of Responsibility）"></a>责任链模式（Chain of Responsibility）</h2><h3 id="意图-12"><a href="#意图-12" class="headerlink" title="意图"></a>意图</h3><p>允许将请求沿着处理者链进行发送。 收到请求后， 每个处理者均可对请求进行处理， 或将其传递给链上的下个处理者。责任链会将特定行为转换为被称作<em>处理者</em>的独立对象。</p>
 <h3 id="使用场景-12"><a href="#使用场景-12" class="headerlink" title="使用场景"></a>使用场景</h3><ul>
 <li>必须按顺序执行多个处理者</li>
 <li>程序需要使用不同方式处理不同种类请求，且请求类型和顺序预先未知</li>
@@ -2986,7 +2987,335 @@ Authorization have been successful!
 <li>不能保证请求一定被接收，部分请求可能未被处理</li>
 <li>系统性能将受到一定影响，而且在进行代码调试时不太方便，可能会造成循环调用</li>
 </ul>
-<h2 id="命令模式"><a href="#命令模式" class="headerlink" title="命令模式"></a>命令模式</h2><h3 id="意图-13"><a href="#意图-13" class="headerlink" title="意图"></a>意图</h3>
+<h2 id="命令模式（Command）"><a href="#命令模式（Command）" class="headerlink" title="命令模式（Command）"></a>命令模式（Command）</h2><h3 id="意图-13"><a href="#意图-13" class="headerlink" title="意图"></a>意图</h3><p>请求以命令的形式包裹在对象中，并传给调用对象。调用对象寻找可以处理该命令的合适的对象，并把该命令传给相应的对象，该对象执行命令。</p>
+<h3 id="使用场景-13"><a href="#使用场景-13" class="headerlink" title="使用场景"></a>使用场景</h3><p>认为是命令的地方都可以用命令模式</p>
+<h3 id="示例问题-13"><a href="#示例问题-13" class="headerlink" title="示例问题"></a>示例问题</h3><p>开发一款文字编辑器时，要创建一个包含多个具有不同功能的按钮的窗口。</p>
+<p>已经有一个<code>Button</code>类，最简单的做法是在使用按钮的每个地方都创建大量的子类。 这些子类中包含按钮点击后必须执行的代码。但是这样就创建了大量的子类， 当每次修改基类 <code>Button</code>时， 都有可能需要修改所有子类的代码。另外不同的按钮中又会有一些重合的功能部分，这样每次都需要把相同的代码复制到许多的类当中。</p>
+<p>命令模式建议 GUI 对象不直接提交这些请求。 而是将请求的所有细节 （例如调用的对象、 方法名称和参数列表） 抽取出来组成命令类， 该类中仅包含一个用于触发请求的方法，然后让所有命令实现相同的<code>Command</code>接口/抽象类。这样，命令成为了减少 GUI 和业务逻辑层之间耦合的中间层。 </p>
+<p>1.创建<code>Command</code>抽象命令类</p>
+<pre><code class="java">public abstract class Command &#123;
+    public Editor editor;
+    private String backup;//用于存储当前编辑器框里的文字
+
+    Command(Editor editor) &#123;
+        this.editor = editor;
+    &#125;
+
+    void backup() &#123;
+        backup = editor.textField.getText();
+    &#125;
+
+    public void undo() &#123;
+        editor.textField.setText(backup);
+    &#125;
+
+    public abstract boolean execute();
+
+&#125;
+</code></pre>
+<p>2.创建各种命令类继承<code>Command</code></p>
+<pre><code class="java">//将所选文字复制到剪贴板
+public class CopyCommand extends Command &#123;
+    public CopyCommand(Editor editor) &#123;
+        super(editor);
+    &#125;
+
+    @Override
+    public boolean execute() &#123;
+        editor.clipboard = editor.textField.getSelectedText();
+        //返回值设为false，是为了后序控制复制这一步操作无法撤销
+        return false;
+    &#125;
+&#125;
+</code></pre>
+<pre><code class="java">//从剪贴板粘贴文字
+public class PasteCommand extends Command &#123;
+    public PasteCommand(Editor editor) &#123;
+        super(editor);
+    &#125;
+
+    @Override
+    public boolean execute() &#123;
+        if (editor.clipboard == null || editor.clipboard.isEmpty()) return false;
+
+        backup();
+        editor.textField.insert(editor.clipboard, editor.textField.getCaretPosition());
+        return true;
+    &#125;
+&#125;
+</code></pre>
+<pre><code class="java">//将文字剪切到剪切板
+public class CutCommand extends Command &#123;
+
+    public CutCommand(Editor editor) &#123;
+        super(editor);
+    &#125;
+
+    @Override
+    public boolean execute() &#123;
+        if (editor.textField.getSelectedText().isEmpty()) return false;
+
+        backup();
+        String source = editor.textField.getText();
+        editor.clipboard = editor.textField.getSelectedText();
+        editor.textField.setText(cutString(source));
+        return true;
+    &#125;
+
+    private String cutString(String source) &#123;
+        String start = source.substring(0, editor.textField.getSelectionStart());
+        String end = source.substring(editor.textField.getSelectionEnd());
+        return start + end;
+    &#125;
+&#125;
+</code></pre>
+<p>3.创建命令历史类，用一个栈存放之前的所有命令对象</p>
+<pre><code class="java">public class CommandHistory &#123;
+    private Stack&lt;Command&gt; history = new Stack&lt;&gt;();
+
+    public void push(Command c) &#123;
+        history.push(c);
+    &#125;
+
+    public Command pop() &#123;
+        return history.pop();
+    &#125;
+
+    public boolean isEmpty() &#123; return history.isEmpty(); &#125;
+&#125;
+</code></pre>
+<p>4.创建编辑器类</p>
+<pre><code class="java">import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class Editor &#123;
+    public JTextArea textField;
+    public String clipboard;
+    private CommandHistory history = new CommandHistory();
+
+    public void init() &#123;
+        JFrame frame = new JFrame(&quot;Text editor (type &amp; use buttons, Baby!)&quot;);
+        JPanel content = new JPanel();
+        frame.setContentPane(content);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
+        textField = new JTextArea();
+        textField.setLineWrap(true);
+        content.add(textField);
+        JPanel buttons = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JButton ctrlC = new JButton(&quot;Ctrl+C&quot;);
+        JButton ctrlX = new JButton(&quot;Ctrl+X&quot;);
+        JButton ctrlV = new JButton(&quot;Ctrl+V&quot;);
+        JButton ctrlZ = new JButton(&quot;Ctrl+Z&quot;);
+        Editor editor = this;
+        ctrlC.addActionListener(new ActionListener() &#123;
+            @Override
+            public void actionPerformed(ActionEvent e) &#123;
+                executeCommand(new CopyCommand(editor));
+            &#125;
+        &#125;);
+        ctrlX.addActionListener(new ActionListener() &#123;
+            @Override
+            public void actionPerformed(ActionEvent e) &#123;
+                executeCommand(new CutCommand(editor));
+            &#125;
+        &#125;);
+        ctrlV.addActionListener(new ActionListener() &#123;
+            @Override
+            public void actionPerformed(ActionEvent e) &#123;
+                executeCommand(new PasteCommand(editor));
+            &#125;
+        &#125;);
+        ctrlZ.addActionListener(new ActionListener() &#123;
+            @Override
+            public void actionPerformed(ActionEvent e) &#123;
+                undo();
+            &#125;
+        &#125;);
+        buttons.add(ctrlC);
+        buttons.add(ctrlX);
+        buttons.add(ctrlV);
+        buttons.add(ctrlZ);
+        content.add(buttons);
+        frame.setSize(450, 200);
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+    &#125;
+
+    private void executeCommand(Command command) &#123;
+        if (command.execute()) &#123;
+            history.push(command);
+        &#125;
+    &#125;
+
+    private void undo() &#123;
+        if (history.isEmpty()) return;
+
+        Command command = history.pop();
+        if (command != null) &#123;
+            //重新设置编辑器框内的文字
+            command.undo();
+        &#125;
+    &#125;
+&#125;
+</code></pre>
+<p>5.编写测试代码</p>
+<pre><code class="java">public class Demo &#123;
+    public static void main(String[] args) &#123;
+        Editor editor = new Editor();
+        editor.init();
+    &#125;
+&#125;
+</code></pre>
+<p>6.测试结果</p>
+<p><img src="https://refactoringguru.cn/images/patterns/examples/java/command/OutputDemo.png"></p>
+<h3 id="模式结构-12"><a href="#模式结构-12" class="headerlink" title="模式结构"></a>模式结构</h3><ul>
+<li><strong>触发者</strong>：负责对请求进行初始化， 其中必须包含一个成员变量来存储对于命令对象的引用。不负责创建命令对象： 它通常会通过构造函数从客户端处获得预先生成的命令。</li>
+<li><strong>命令接口</strong>：通常仅声明一个执行命令的方法。</li>
+<li><strong>具体命令类</strong>：实现命令接口，实现各种类型的请求。</li>
+<li><strong>接收者</strong>：包含部分业务逻辑。 几乎任何对象都可以作为接收者。 绝大部分命令只处理如何将请求传递到接收者的细节， 接收者自己会完成实际的工作。</li>
+<li><strong>客户端</strong>：创建并配置接收者、具体的命令对象、发送者并将其与特地命令关联。</li>
+</ul>
+<h3 id="优点-13"><a href="#优点-13" class="headerlink" title="优点"></a>优点</h3><ul>
+<li>单一职责原则。 可以解耦触发和执行操作的类。</li>
+<li>开闭原则。可以在不修改已有客户端代码的情况下在程序中创建新的命令。</li>
+<li>可以实现撤销和恢复功能，以及操作的延迟执行。</li>
+<li>可以将一组简单命令组合成一个复杂命令。</li>
+</ul>
+<h3 id="缺点-13"><a href="#缺点-13" class="headerlink" title="缺点"></a>缺点</h3><ul>
+<li>代码可能会变得更加复杂， 因为在发送者和接收者之间增加了一个全新的层次。</li>
+</ul>
+<h2 id="迭代器模式（Iterator）"><a href="#迭代器模式（Iterator）" class="headerlink" title="迭代器模式（Iterator）"></a>迭代器模式（Iterator）</h2><h3 id="意图-14"><a href="#意图-14" class="headerlink" title="意图"></a>意图</h3><p>在不暴露集合底层表现形式 （列表、 栈和树等） 的情况下遍历集合中所有的元素。</p>
+<h3 id="使用场景-14"><a href="#使用场景-14" class="headerlink" title="使用场景"></a>使用场景</h3><ul>
+<li>访问一个聚合对象的内容而无须暴露它的内部表示。</li>
+<li>需要为聚合对象提供多种遍历方式。</li>
+<li>为遍历不同的聚合结构提供一个统一的接口。</li>
+</ul>
+<h3 id="示例问题-14"><a href="#示例问题-14" class="headerlink" title="示例问题"></a>示例问题</h3><p>不同的集合会使用不同的数据结构进行存储数据，每种集合都需要提供遍历所有元素的方式。</p>
+<p>1.创建迭代器接口，提供基本的<code>hasNext</code>方法和<code>next</code>方法。</p>
+<pre><code class="java">public interface Iterator &#123;
+    public boolean hasNext();
+    public Object next();
+&#125;
+</code></pre>
+<p>2.创建集合接口，提供获取迭代器的方法</p>
+<pre><code class="java">public interface Container &#123;
+    public Iterator getIterator();
+&#125;
+</code></pre>
+<p>3.创建具体的集合类，采用了不同的存储结构</p>
+<pre><code class="java">public class NameRepository implements Container &#123;
+    public String[] names = &#123;&quot;Bob&quot;, &quot;Mary&quot;, &quot;Daniel&quot;&#125;;
+
+    @Override
+    public Iterator getIterator() &#123;
+        return new NameIterator(names);
+    &#125;
+&#125;
+</code></pre>
+<pre><code class="java">import java.util.ArrayList;
+import java.util.List;
+
+public class EmailRepository implements Container &#123;
+    private List&lt;String&gt; emails;
+
+    public EmailRepository() &#123;
+        emails = new ArrayList&lt;&gt;();
+    &#125;
+
+    public void add(String email) &#123;
+        emails.add(email);
+    &#125;
+
+    @Override
+    public Iterator getIterator() &#123;
+        return new EmailIterator(emails);
+    &#125;
+&#125;
+</code></pre>
+<p>4.创建具体的迭代器</p>
+<pre><code class="java">public class NameIterator implements Iterator &#123;
+    private int index = 0;
+    private String[] names;
+
+    public NameIterator(String[] names) &#123;
+        this.names = names;
+    &#125;
+
+    @Override
+    public boolean hasNext() &#123;
+        return index &lt; names.length;
+    &#125;
+
+    @Override
+    public Object next() &#123;
+        if(hasNext()) &#123;
+            return names[index++];
+        &#125;
+        return null;
+    &#125;
+&#125;
+</code></pre>
+<pre><code class="java">import java.util.List;
+
+public class EmailIterator implements Iterator &#123;
+    int index = 0;
+    List&lt;String&gt; emails;
+
+    public EmailIterator(List&lt;String&gt; emails) &#123;
+        this.emails = emails;
+    &#125;
+
+    @Override
+    public boolean hasNext() &#123;
+        return index &lt; emails.size();
+    &#125;
+
+    @Override
+    public Object next() &#123;
+        if(hasNext()) &#123;
+            return emails.get(index++);
+        &#125;
+        return null;
+    &#125;
+&#125;
+</code></pre>
+<p>5.编写测试代码</p>
+<pre><code class="java">public class Demo &#123;
+    public static void main(String[] args) &#123;
+        NameRepository nameRepository = new NameRepository();
+        for(Iterator iter = nameRepository.getIterator(); iter.hasNext();) &#123;
+            String name = (String)iter.next();
+            System.out.println(&quot;Name : &quot; + name);
+        &#125;
+
+        EmailRepository emailRepository = new EmailRepository();
+        emailRepository.add(&quot;111@163.com&quot;);
+        emailRepository.add(&quot;222@163.com&quot;);
+        for(Iterator iter = emailRepository.getIterator(); iter.hasNext();) &#123;
+            System.out.println(&quot;Email : &quot; + iter.next());
+        &#125;
+    &#125;
+&#125;
+</code></pre>
+<h3 id="模式结构-13"><a href="#模式结构-13" class="headerlink" title="模式结构"></a>模式结构</h3><ul>
+<li><strong>迭代器</strong> ：接口声明了遍历集合所需的操作： 获取下一个元素、 获取当前位置和重新开始迭代等。</li>
+<li><strong>具体迭代器</strong> ：实现遍历集合的一种特定算法。 迭代器对象必须跟踪自身遍历的进度。 这使得多个迭代器可以相互独立地遍历同一集合。</li>
+<li><strong>集合</strong> ：接口声明一个或多个方法来获取与集合兼容的迭代器。  返回方法的类型必须被声明为迭代器接口， 因此具体集合可以返回各种不同种类的迭代器。</li>
+<li><strong>具体集合</strong> ：会在客户端请求迭代器时返回一个特定的具体迭代器类实体。</li>
+</ul>
+<h3 id="优点-14"><a href="#优点-14" class="headerlink" title="优点"></a>优点</h3><ul>
+<li>单一职责原则。</li>
+<li>开闭原则。</li>
+<li>可以并行遍历同一集合， 因为每个迭代器对象都包含其自身的遍历状态。</li>
+</ul>
+<h3 id="缺点-14"><a href="#缺点-14" class="headerlink" title="缺点"></a>缺点</h3><ul>
+<li>对于某些特殊集合， 使用迭代器可能比直接遍历的效率低。</li>
+<li>如果程序只与简单的集合进行交互， 应用该模式可能会矫枉过正。</li>
+</ul>
+
       
 
       
@@ -3098,7 +3427,7 @@ Authorization have been successful!
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%AE%80%E4%BB%8B"><span class="toc-number">1.</span> <span class="toc-text">设计模式简介</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">1.1.</span> <span class="toc-text">设计模式是什么？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#GOF%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">1.2.</span> <span class="toc-text">GOF是什么？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%9A%84%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.3.</span> <span class="toc-text">设计模式的类型</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F"><span class="toc-number">2.</span> <span class="toc-text">创建型模式</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F%EF%BC%88Factory-Method%EF%BC%89"><span class="toc-number">2.1.</span> <span class="toc-text">工厂方法模式（Factory Method）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE"><span class="toc-number">2.1.1.</span> <span class="toc-text">意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-number">2.1.2.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E9%97%AE%E9%A2%98"><span class="toc-number">2.1.3.</span> <span class="toc-text">示例问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84"><span class="toc-number">2.1.4.</span> <span class="toc-text">模式结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9"><span class="toc-number">2.1.5.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9"><span class="toc-number">2.1.6.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F%EF%BC%88Abstract-Factory%EF%BC%89"><span class="toc-number">2.2.</span> <span class="toc-text">抽象工厂模式（Abstract Factory）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE-1"><span class="toc-number">2.2.1.</span> <span class="toc-text">意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF-1"><span class="toc-number">2.2.2.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E9%97%AE%E9%A2%98-1"><span class="toc-number">2.2.3.</span> <span class="toc-text">示例问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84-1"><span class="toc-number">2.2.4.</span> <span class="toc-text">模式结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9-1"><span class="toc-number">2.2.5.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9-1"><span class="toc-number">2.2.6.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F%EF%BC%88Builder%EF%BC%89"><span class="toc-number">2.3.</span> <span class="toc-text">建造者模式（Builder）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE-2"><span class="toc-number">2.3.1.</span> <span class="toc-text">意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF-2"><span class="toc-number">2.3.2.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E9%97%AE%E9%A2%98-2"><span class="toc-number">2.3.3.</span> <span class="toc-text">示例问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84-2"><span class="toc-number">2.3.4.</span> <span class="toc-text">模式结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9-2"><span class="toc-number">2.3.5.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9-2"><span class="toc-number">2.3.6.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F%EF%BC%88Prototype%EF%BC%89"><span class="toc-number">2.4.</span> <span class="toc-text">原型模式（Prototype）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE-3"><span class="toc-number">2.4.1.</span> <span class="toc-text">意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF-3"><span class="toc-number">2.4.2.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E9%97%AE%E9%A2%98-3"><span class="toc-number">2.4.3.</span> <span class="toc-text">示例问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84-3"><span class="toc-number">2.4.4.</span> <span class="toc-text">模式结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9-3"><span class="toc-number">2.4.5.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9-3"><span class="toc-number">2.4.6.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F%EF%BC%88Singleton%EF%BC%89"><span class="toc-number">2.5.</span> <span class="toc-text">单例模式（Singleton）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE-4"><span class="toc-number">2.5.1.</span> <span class="toc-text">意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF-4"><span class="toc-number">2.5.2.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E9%97%AE%E9%A2%98-4"><span class="toc-number">2.5.3.</span> <span class="toc-text">示例问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F%E7%9A%84%E5%87%A0%E7%A7%8D%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F"><span class="toc-number">2.5.4.</span> <span class="toc-text">单例模式的几种实现方式</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E6%87%92%E6%B1%89%E5%BC%8F%EF%BC%8C%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8"><span class="toc-number">2.5.4.1.</span> <span class="toc-text">1. 懒汉式，线程不安全</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E6%87%92%E6%B1%89%E5%BC%8F%EF%BC%8C%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8"><span class="toc-number">2.5.4.2.</span> <span class="toc-text">2. 懒汉式，线程安全</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E9%A5%BF%E6%B1%89%E5%BC%8F"><span class="toc-number">2.5.4.3.</span> <span class="toc-text">3. 饿汉式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-%E5%8F%8C%E6%A3%80%E9%94%81-%E5%8F%8C%E9%87%8D%E6%A0%A1%E9%AA%8C%E9%94%81%EF%BC%88DCL%EF%BC%8C%E5%8D%B3-double-checked-locking%EF%BC%89"><span class="toc-number">2.5.4.4.</span> <span class="toc-text">4. 双检锁&#x2F;双重校验锁（DCL，即 double-checked locking）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-%E6%9E%9A%E4%B8%BE"><span class="toc-number">2.5.4.5.</span> <span class="toc-text">5. 枚举</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9-4"><span class="toc-number">2.5.5.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9-4"><span class="toc-number">2.5.6.</span> <span class="toc-text">缺点</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F"><span class="toc-number">3.</span> <span class="toc-text">结构型模式</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F%EF%BC%88Wrapper-Adapter%EF%BC%89"><span class="toc-number">3.1.</span> <span class="toc-text">适配器模式（Wrapper&#x2F;Adapter）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE-5"><span class="toc-number">3.1.1.</span> <span class="toc-text">意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF-5"><span class="toc-number">3.1.2.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E9%97%AE%E9%A2%98-5"><span class="toc-number">3.1.3.</span> <span class="toc-text">示例问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84-4"><span class="toc-number">3.1.4.</span> <span class="toc-text">模式结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9-5"><span class="toc-number">3.1.5.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9-5"><span class="toc-number">3.1.6.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F%EF%BC%88Bridge%EF%BC%89"><span class="toc-number">3.2.</span> <span class="toc-text">桥接模式（Bridge）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE-6"><span class="toc-number">3.2.1.</span> <span class="toc-text">意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF-6"><span class="toc-number">3.2.2.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E9%97%AE%E9%A2%98-6"><span class="toc-number">3.2.3.</span> <span class="toc-text">示例问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84-5"><span class="toc-number">3.2.4.</span> <span class="toc-text">模式结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9-6"><span class="toc-number">3.2.5.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9-6"><span class="toc-number">3.2.6.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F%EF%BC%88Composite%EF%BC%89"><span class="toc-number">3.3.</span> <span class="toc-text">组合模式（Composite）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE-7"><span class="toc-number">3.3.1.</span> <span class="toc-text">意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF-7"><span class="toc-number">3.3.2.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E9%97%AE%E9%A2%98-7"><span class="toc-number">3.3.3.</span> <span class="toc-text">示例问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84-6"><span class="toc-number">3.3.4.</span> <span class="toc-text">模式结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9-7"><span class="toc-number">3.3.5.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9-7"><span class="toc-number">3.3.6.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A3%85%E9%A5%B0%E6%A8%A1%E5%BC%8F%EF%BC%88Decorator%EF%BC%89"><span class="toc-number">3.4.</span> <span class="toc-text">装饰模式（Decorator）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE-8"><span class="toc-number">3.4.1.</span> <span class="toc-text">意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF-8"><span class="toc-number">3.4.2.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E9%97%AE%E9%A2%98-8"><span class="toc-number">3.4.3.</span> <span class="toc-text">示例问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84-7"><span class="toc-number">3.4.4.</span> <span class="toc-text">模式结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9-8"><span class="toc-number">3.4.5.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9-8"><span class="toc-number">3.4.6.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%96%E8%A7%82%E6%A8%A1%E5%BC%8F%EF%BC%88Facade%EF%BC%89"><span class="toc-number">3.5.</span> <span class="toc-text">外观模式（Facade）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE-9"><span class="toc-number">3.5.1.</span> <span class="toc-text">意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF-9"><span class="toc-number">3.5.2.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E9%97%AE%E9%A2%98-9"><span class="toc-number">3.5.3.</span> <span class="toc-text">示例问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84-8"><span class="toc-number">3.5.4.</span> <span class="toc-text">模式结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9-9"><span class="toc-number">3.5.5.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9-9"><span class="toc-number">3.5.6.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%AB%E5%85%83%E6%A8%A1%E5%BC%8F%EF%BC%88Flyweight%EF%BC%89"><span class="toc-number">3.6.</span> <span class="toc-text">享元模式（Flyweight）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE-10"><span class="toc-number">3.6.1.</span> <span class="toc-text">意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF-10"><span class="toc-number">3.6.2.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E9%97%AE%E9%A2%98-10"><span class="toc-number">3.6.3.</span> <span class="toc-text">示例问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84-9"><span class="toc-number">3.6.4.</span> <span class="toc-text">模式结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9-10"><span class="toc-number">3.6.5.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9-10"><span class="toc-number">3.6.6.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F%EF%BC%88Proxy%EF%BC%89"><span class="toc-number">3.7.</span> <span class="toc-text">代理模式（Proxy）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE-11"><span class="toc-number">3.7.1.</span> <span class="toc-text">意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF-11"><span class="toc-number">3.7.2.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E9%97%AE%E9%A2%98-11"><span class="toc-number">3.7.3.</span> <span class="toc-text">示例问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84-10"><span class="toc-number">3.7.4.</span> <span class="toc-text">模式结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9-11"><span class="toc-number">3.7.5.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9-11"><span class="toc-number">3.7.6.</span> <span class="toc-text">缺点</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%A1%8C%E4%B8%BA%E6%A8%A1%E5%BC%8F"><span class="toc-number">4.</span> <span class="toc-text">行为模式</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B4%A3%E4%BB%BB%E9%93%BE%E6%A8%A1%E5%BC%8F%EF%BC%88Chain-of-Responsibility-Pattern%EF%BC%89"><span class="toc-number">4.1.</span> <span class="toc-text">责任链模式（Chain of Responsibility Pattern）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE-12"><span class="toc-number">4.1.1.</span> <span class="toc-text">意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF-12"><span class="toc-number">4.1.2.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E9%97%AE%E9%A2%98-12"><span class="toc-number">4.1.3.</span> <span class="toc-text">示例问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84-11"><span class="toc-number">4.1.4.</span> <span class="toc-text">模式结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9-12"><span class="toc-number">4.1.5.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9-12"><span class="toc-number">4.1.6.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%91%BD%E4%BB%A4%E6%A8%A1%E5%BC%8F"><span class="toc-number">4.2.</span> <span class="toc-text">命令模式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE-13"><span class="toc-number">4.2.1.</span> <span class="toc-text">意图</span></a></li></ol></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%AE%80%E4%BB%8B"><span class="toc-number">1.</span> <span class="toc-text">设计模式简介</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">1.1.</span> <span class="toc-text">设计模式是什么？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#GOF%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">1.2.</span> <span class="toc-text">GOF是什么？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%9A%84%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.3.</span> <span class="toc-text">设计模式的类型</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F"><span class="toc-number">2.</span> <span class="toc-text">创建型模式</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F%EF%BC%88Factory-Method%EF%BC%89"><span class="toc-number">2.1.</span> <span class="toc-text">工厂方法模式（Factory Method）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE"><span class="toc-number">2.1.1.</span> <span class="toc-text">意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-number">2.1.2.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E9%97%AE%E9%A2%98"><span class="toc-number">2.1.3.</span> <span class="toc-text">示例问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84"><span class="toc-number">2.1.4.</span> <span class="toc-text">模式结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9"><span class="toc-number">2.1.5.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9"><span class="toc-number">2.1.6.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F%EF%BC%88Abstract-Factory%EF%BC%89"><span class="toc-number">2.2.</span> <span class="toc-text">抽象工厂模式（Abstract Factory）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE-1"><span class="toc-number">2.2.1.</span> <span class="toc-text">意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF-1"><span class="toc-number">2.2.2.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E9%97%AE%E9%A2%98-1"><span class="toc-number">2.2.3.</span> <span class="toc-text">示例问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84-1"><span class="toc-number">2.2.4.</span> <span class="toc-text">模式结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9-1"><span class="toc-number">2.2.5.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9-1"><span class="toc-number">2.2.6.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F%EF%BC%88Builder%EF%BC%89"><span class="toc-number">2.3.</span> <span class="toc-text">建造者模式（Builder）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE-2"><span class="toc-number">2.3.1.</span> <span class="toc-text">意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF-2"><span class="toc-number">2.3.2.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E9%97%AE%E9%A2%98-2"><span class="toc-number">2.3.3.</span> <span class="toc-text">示例问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84-2"><span class="toc-number">2.3.4.</span> <span class="toc-text">模式结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9-2"><span class="toc-number">2.3.5.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9-2"><span class="toc-number">2.3.6.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F%EF%BC%88Prototype%EF%BC%89"><span class="toc-number">2.4.</span> <span class="toc-text">原型模式（Prototype）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE-3"><span class="toc-number">2.4.1.</span> <span class="toc-text">意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF-3"><span class="toc-number">2.4.2.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E9%97%AE%E9%A2%98-3"><span class="toc-number">2.4.3.</span> <span class="toc-text">示例问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84-3"><span class="toc-number">2.4.4.</span> <span class="toc-text">模式结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9-3"><span class="toc-number">2.4.5.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9-3"><span class="toc-number">2.4.6.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F%EF%BC%88Singleton%EF%BC%89"><span class="toc-number">2.5.</span> <span class="toc-text">单例模式（Singleton）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE-4"><span class="toc-number">2.5.1.</span> <span class="toc-text">意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF-4"><span class="toc-number">2.5.2.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E9%97%AE%E9%A2%98-4"><span class="toc-number">2.5.3.</span> <span class="toc-text">示例问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F%E7%9A%84%E5%87%A0%E7%A7%8D%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F"><span class="toc-number">2.5.4.</span> <span class="toc-text">单例模式的几种实现方式</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E6%87%92%E6%B1%89%E5%BC%8F%EF%BC%8C%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8"><span class="toc-number">2.5.4.1.</span> <span class="toc-text">1. 懒汉式，线程不安全</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E6%87%92%E6%B1%89%E5%BC%8F%EF%BC%8C%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8"><span class="toc-number">2.5.4.2.</span> <span class="toc-text">2. 懒汉式，线程安全</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E9%A5%BF%E6%B1%89%E5%BC%8F"><span class="toc-number">2.5.4.3.</span> <span class="toc-text">3. 饿汉式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-%E5%8F%8C%E6%A3%80%E9%94%81-%E5%8F%8C%E9%87%8D%E6%A0%A1%E9%AA%8C%E9%94%81%EF%BC%88DCL%EF%BC%8C%E5%8D%B3-double-checked-locking%EF%BC%89"><span class="toc-number">2.5.4.4.</span> <span class="toc-text">4. 双检锁&#x2F;双重校验锁（DCL，即 double-checked locking）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-%E6%9E%9A%E4%B8%BE"><span class="toc-number">2.5.4.5.</span> <span class="toc-text">5. 枚举</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9-4"><span class="toc-number">2.5.5.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9-4"><span class="toc-number">2.5.6.</span> <span class="toc-text">缺点</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F"><span class="toc-number">3.</span> <span class="toc-text">结构型模式</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F%EF%BC%88Wrapper-Adapter%EF%BC%89"><span class="toc-number">3.1.</span> <span class="toc-text">适配器模式（Wrapper&#x2F;Adapter）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE-5"><span class="toc-number">3.1.1.</span> <span class="toc-text">意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF-5"><span class="toc-number">3.1.2.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E9%97%AE%E9%A2%98-5"><span class="toc-number">3.1.3.</span> <span class="toc-text">示例问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84-4"><span class="toc-number">3.1.4.</span> <span class="toc-text">模式结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9-5"><span class="toc-number">3.1.5.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9-5"><span class="toc-number">3.1.6.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F%EF%BC%88Bridge%EF%BC%89"><span class="toc-number">3.2.</span> <span class="toc-text">桥接模式（Bridge）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE-6"><span class="toc-number">3.2.1.</span> <span class="toc-text">意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF-6"><span class="toc-number">3.2.2.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E9%97%AE%E9%A2%98-6"><span class="toc-number">3.2.3.</span> <span class="toc-text">示例问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84-5"><span class="toc-number">3.2.4.</span> <span class="toc-text">模式结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9-6"><span class="toc-number">3.2.5.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9-6"><span class="toc-number">3.2.6.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F%EF%BC%88Composite%EF%BC%89"><span class="toc-number">3.3.</span> <span class="toc-text">组合模式（Composite）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE-7"><span class="toc-number">3.3.1.</span> <span class="toc-text">意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF-7"><span class="toc-number">3.3.2.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E9%97%AE%E9%A2%98-7"><span class="toc-number">3.3.3.</span> <span class="toc-text">示例问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84-6"><span class="toc-number">3.3.4.</span> <span class="toc-text">模式结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9-7"><span class="toc-number">3.3.5.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9-7"><span class="toc-number">3.3.6.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A3%85%E9%A5%B0%E6%A8%A1%E5%BC%8F%EF%BC%88Decorator%EF%BC%89"><span class="toc-number">3.4.</span> <span class="toc-text">装饰模式（Decorator）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE-8"><span class="toc-number">3.4.1.</span> <span class="toc-text">意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF-8"><span class="toc-number">3.4.2.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E9%97%AE%E9%A2%98-8"><span class="toc-number">3.4.3.</span> <span class="toc-text">示例问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84-7"><span class="toc-number">3.4.4.</span> <span class="toc-text">模式结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9-8"><span class="toc-number">3.4.5.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9-8"><span class="toc-number">3.4.6.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%96%E8%A7%82%E6%A8%A1%E5%BC%8F%EF%BC%88Facade%EF%BC%89"><span class="toc-number">3.5.</span> <span class="toc-text">外观模式（Facade）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE-9"><span class="toc-number">3.5.1.</span> <span class="toc-text">意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF-9"><span class="toc-number">3.5.2.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E9%97%AE%E9%A2%98-9"><span class="toc-number">3.5.3.</span> <span class="toc-text">示例问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84-8"><span class="toc-number">3.5.4.</span> <span class="toc-text">模式结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9-9"><span class="toc-number">3.5.5.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9-9"><span class="toc-number">3.5.6.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%AB%E5%85%83%E6%A8%A1%E5%BC%8F%EF%BC%88Flyweight%EF%BC%89"><span class="toc-number">3.6.</span> <span class="toc-text">享元模式（Flyweight）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE-10"><span class="toc-number">3.6.1.</span> <span class="toc-text">意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF-10"><span class="toc-number">3.6.2.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E9%97%AE%E9%A2%98-10"><span class="toc-number">3.6.3.</span> <span class="toc-text">示例问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84-9"><span class="toc-number">3.6.4.</span> <span class="toc-text">模式结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9-10"><span class="toc-number">3.6.5.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9-10"><span class="toc-number">3.6.6.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F%EF%BC%88Proxy%EF%BC%89"><span class="toc-number">3.7.</span> <span class="toc-text">代理模式（Proxy）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE-11"><span class="toc-number">3.7.1.</span> <span class="toc-text">意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF-11"><span class="toc-number">3.7.2.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E9%97%AE%E9%A2%98-11"><span class="toc-number">3.7.3.</span> <span class="toc-text">示例问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84-10"><span class="toc-number">3.7.4.</span> <span class="toc-text">模式结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9-11"><span class="toc-number">3.7.5.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9-11"><span class="toc-number">3.7.6.</span> <span class="toc-text">缺点</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%A1%8C%E4%B8%BA%E6%A8%A1%E5%BC%8F"><span class="toc-number">4.</span> <span class="toc-text">行为模式</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B4%A3%E4%BB%BB%E9%93%BE%E6%A8%A1%E5%BC%8F%EF%BC%88Chain-of-Responsibility%EF%BC%89"><span class="toc-number">4.1.</span> <span class="toc-text">责任链模式（Chain of Responsibility）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE-12"><span class="toc-number">4.1.1.</span> <span class="toc-text">意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF-12"><span class="toc-number">4.1.2.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E9%97%AE%E9%A2%98-12"><span class="toc-number">4.1.3.</span> <span class="toc-text">示例问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84-11"><span class="toc-number">4.1.4.</span> <span class="toc-text">模式结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9-12"><span class="toc-number">4.1.5.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9-12"><span class="toc-number">4.1.6.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%91%BD%E4%BB%A4%E6%A8%A1%E5%BC%8F%EF%BC%88Command%EF%BC%89"><span class="toc-number">4.2.</span> <span class="toc-text">命令模式（Command）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE-13"><span class="toc-number">4.2.1.</span> <span class="toc-text">意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF-13"><span class="toc-number">4.2.2.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E9%97%AE%E9%A2%98-13"><span class="toc-number">4.2.3.</span> <span class="toc-text">示例问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84-12"><span class="toc-number">4.2.4.</span> <span class="toc-text">模式结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9-13"><span class="toc-number">4.2.5.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9-13"><span class="toc-number">4.2.6.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%A8%A1%E5%BC%8F%EF%BC%88Iterator%EF%BC%89"><span class="toc-number">4.3.</span> <span class="toc-text">迭代器模式（Iterator）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%84%8F%E5%9B%BE-14"><span class="toc-number">4.3.1.</span> <span class="toc-text">意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF-14"><span class="toc-number">4.3.2.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E9%97%AE%E9%A2%98-14"><span class="toc-number">4.3.3.</span> <span class="toc-text">示例问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84-13"><span class="toc-number">4.3.4.</span> <span class="toc-text">模式结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9-14"><span class="toc-number">4.3.5.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9-14"><span class="toc-number">4.3.6.</span> <span class="toc-text">缺点</span></a></li></ol></li></ol></li></ol>
                     </div>
                 </span>
             </div>
