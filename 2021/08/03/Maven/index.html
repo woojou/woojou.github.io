@@ -6,17 +6,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://woojou.github.io">
-  <title>Archives: 2021 | woojou&#39;s blog</title>
+  <title>Maven | woojou&#39;s blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="专注于JAVA后端知识，很菜">
-<meta property="og:type" content="website">
-<meta property="og:title" content="woojou&#39;s blog">
-<meta property="og:url" content="http://woojou.github.io/archives/2021/index.html">
+  <meta name="description" content="本文章是跟着动力节点的课程及其资源学习做的笔记。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Maven">
+<meta property="og:url" content="http://woojou.github.io/2021/08/03/Maven/index.html">
 <meta property="og:site_name" content="woojou&#39;s blog">
-<meta property="og:description" content="专注于JAVA后端知识，很菜">
+<meta property="og:description" content="本文章是跟着动力节点的课程及其资源学习做的笔记。">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-08-03T08:56:04.000Z">
+<meta property="article:modified_time" content="2021-08-07T03:08:27.318Z">
 <meta property="article:author" content="Woojou">
-<meta property="article:tag" content="程序媛">
+<meta property="article:tag" content="工具">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternative" href="/atom.xml" title="woojou&#39;s blog" type="application/atom+xml">
@@ -157,36 +159,244 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-Maven" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2021" class="archive-year">2021</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/08/03/Maven/" class="archive-article-date">
-  	<time datetime="2021-08-03T08:56:04.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-08-03</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/08/03/Maven/">Maven</a>
+    <h1 class="article-title" itemprop="name">
+      Maven
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+        
+        <a href="/2021/08/03/Maven/" class="archive-article-date">
+  	<time datetime="2021-08-03T08:56:04.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-08-03</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>本文章是跟着<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1x5411P7Hh">动力节点的课程</a>及其资源学习做的笔记。</p>
+<span id="more"></span>
+
+<h1 id="第一章-Maven简介"><a href="#第一章-Maven简介" class="headerlink" title="第一章 Maven简介"></a>第一章 Maven简介</h1><h2 id="1-1-软件开发中的问题"><a href="#1-1-软件开发中的问题" class="headerlink" title="1.1 软件开发中的问题"></a>1.1 软件开发中的问题</h2><p>软件开发需要编译代码—&gt;开发人员自己测试代码—&gt;把代码打包—&gt;部署项目到测试服务器—&gt;测试人员测试功能—&gt;测试测试出 bug。</p>
+<p>开发人员需要修改 bug—&gt;开发人员自己测试代码—&gt;把代码打包—&gt;部署项目到测试服务器—&gt;测试人员测试功能—&gt;直到符合功能要求。</p>
+<p>而上述过程需要重复多次，大型项目中构建项目比较复杂，有很多的配置文件，jar 文件，多个子项目等等。</p>
+<p>项目中需要的数量众多的 jar 包，需要手动下载并引入，并且多个项目需要的 jar 包存在重复的问题；项目中需要的 jar 包有版本兼容的问题；项目中需要的 jar 包又依赖其它的 jar 包。这些问题如果都手动解决会十分麻烦。</p>
+<h2 id="1-2-Maven的作用"><a href="#1-2-Maven的作用" class="headerlink" title="1.2 Maven的作用"></a>1.2 Maven的作用</h2><p>Maven是专门服务于 Java 平台的项目构建和依赖管理的工具。</p>
+<ul>
+<li>项目构建：构建包括 清理、编译、测试、报告、打包、安装和部署。</li>
+<li>依赖管理：项目需要使用的资源，常见的是jar包。例如：项目需要用到mysql驱动，则称项目依赖mysql驱动。</li>
+</ul>
+<h2 id="1-3-Maven中的概念"><a href="#1-3-Maven中的概念" class="headerlink" title="1.3 Maven中的概念"></a>1.3 Maven中的概念</h2><p>有九个核心概念：</p>
+<ol>
+<li>POM</li>
+<li>约定的目录结构</li>
+<li>坐标</li>
+<li>依赖管理</li>
+<li>仓库管理</li>
+<li>生命周期</li>
+<li>插件和目标</li>
+<li>继承</li>
+<li>聚合</li>
+</ol>
+<p>其中 8 和 9 属于Maven高级部分的概念。</p>
+<h2 id="1-4-Maven-工具的获取和安装"><a href="#1-4-Maven-工具的获取和安装" class="headerlink" title="1.4 Maven 工具的获取和安装"></a>1.4 Maven 工具的获取和安装</h2><p>地址： <a target="_blank" rel="noopener" href="http://maven.apache.org/">http://maven.apache.org/</a>  从中下载  <code>.zip</code>文件。 推荐使用 <code>apache-maven-3.3.9-bin.zip</code>，版本比较稳定。</p>
+<ol>
+<li>确定环境变量 <code>%JAVA_HOME%</code> 指定的是 <code>jdk</code> 的安装目录，如果没有 <code>%JAVA_HOME%</code> 要自己新创建。且 <code>path</code> 中包含 <code>%JAVE_HOME%</code></li>
+<li>解压缩 <code>.zip</code> 文件到一个自己指定的全英文（且不含空格）目录下。</li>
+<li>解压缩后的包中有一个 <code>bin</code> 文件夹，把该文件夹的路径添加到环境变量 <code>path</code> 中。</li>
+<li>用 <code>mvn -v</code> 测试 Maven 是否安装成功。出现下面信息就是成功了：</li>
+</ol>
+<pre><code class="java">C:\Users\Administrator&gt;mvn -v
+Apache Maven 3.3.9 (bb52d8502b132ec0a5a3f4c09453c07478323dc5; 2015-11-11T00:41:47+08:00)
+Maven home: E:\java\apache-maven-3.3.9\bin\..
+Java version: 14.0.1, vendor: Oracle Corporation
+Java home: C:\Program Files\Java\jdk
+Default locale: zh_CN, platform encoding: GBK
+OS name: &quot;windows 7&quot;, version: &quot;6.1&quot;, arch: &quot;amd64&quot;, family: &quot;dos&quot;
+</code></pre>
+<h1 id="第二章-Maven的核心概念"><a href="#第二章-Maven的核心概念" class="headerlink" title="第二章 Maven的核心概念"></a>第二章 Maven的核心概念</h1><h2 id="2-1-约定的目录结构"><a href="#2-1-约定的目录结构" class="headerlink" title="2.1 约定的目录结构"></a>2.1 约定的目录结构</h2><pre><code>项目文件夹
+|---src
+|---|---main                主程序目录（放置完成项目功能的代码和配置文件）
+|---|---|---java            源代码（包和相关的类定义）
+|---|---|---resources        配置文件
+|---|---test                   测试程序目录（放置开发人员自己编写的测试代码）
+|---|---|---java            测试代码（junit）
+|---|---|---resources        配置文件
+|---pom.xml                    maven的配置文件， 核心文件
+</code></pre>
+<p>Maven有两种使用方式：</p>
+<ul>
+<li>独立使用：创建项目，编译代码，测试程序，打包，部署等等。</li>
+<li>和 IDEA 一起使用：通过 IDEA 借助 Maven，来实现所有的步骤。</li>
+</ul>
+<h2 id="2-2-POM"><a href="#2-2-POM" class="headerlink" title="2.2 POM"></a>2.2 POM</h2><p>POM：Project Object Model 项目对象模型。Maven把一个项目的结构和内容抽象成一个模型，在 <code>xml</code> 文件中进行声明，便于进行构建和描述。</p>
+<p>Maven 就是通过 <code>pom.xml</code> 文件来实现项目构建和依赖管理的。</p>
+<pre><code class="xml">
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+
+&lt;!-- project是根标签， 后面的是约束文件 --&gt;
+&lt;project xmlns=&quot;http://maven.apache.org/POM/4.0.0&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+  xsi:schemaLocation=&quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd&quot;&gt;
+    
+    
+  &lt;!-- Maven POM 模型的版本，这里是4.0.0 --&gt;  
+  &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
+
+  &lt;!-- 坐标 --&gt;  
+  &lt;groupId&gt;com.bjpowernode&lt;/groupId&gt;
+  &lt;artifactId&gt;ch01-maven&lt;/artifactId&gt;
+  &lt;version&gt;1.0-SNAPSHOT&lt;/version&gt;
+  &lt;!-- packaging 项目打包的类型，有jar、war、ear、pom等等 默认是jar--&gt;
+  &lt;packaging&gt;jar&lt;/packaging&gt;
+  &lt;properties&gt;
+     &lt;java.version&gt;1.8&lt;/java.version&gt;
+     &lt;maven.compiler.source&gt;1.8&lt;/maven.compiler.source&gt;
+     &lt;maven.compiler.target&gt;1.8&lt;/maven.compiler.target&gt;
+  &lt;/properties&gt;
+  
+&lt;/project&gt;
+</code></pre>
+<h2 id="2-3-坐标"><a href="#2-3-坐标" class="headerlink" title="2.3 坐标"></a>2.3 坐标</h2><p>包含三个部分分别为 <code>groupId</code>、<code>artifactId</code> 和 <code>version</code>，所以坐标又称为 <code>gav</code>：</p>
+<ul>
+<li><code>groupId</code>：组织名称，一般是公司域名的倒写（例如 com.baidu） 或 公司域名倒写 + 项目名（例如 com.baidu.appollo），后一种方法适用于构建的项目非常庞大复杂的情况。</li>
+<li><code>artifactId</code>：项目名称，如果 <code>groupId</code> 中有项目名，则当前值是子项目名。</li>
+<li><code>version</code>：项目的版本号，一般由三位数字组成，例如：主版本号 . 次版本号 . 小版本号。</li>
+</ul>
+<pre><code class="xml">&lt;groupId&gt;com.bjpowernode&lt;/groupId&gt;
+&lt;artifactId&gt;ch01-maven&lt;/artifactId&gt;
+&lt;version&gt;1.0-SNAPSHOT&lt;/version&gt;
+</code></pre>
+<h2 id="2-4-依赖"><a href="#2-4-依赖" class="headerlink" title="2.4 依赖"></a>2.4 依赖</h2><p>依赖的配置正是通过坐标来定位的。Maven 通过这些坐标从互联网上下载依赖的包到本机上，由Maven管理项目并使用这些包。</p>
+<p>需要的依赖坐标可以在这里找到：<a target="_blank" rel="noopener" href="https://mvnrepository.com/">https://mvnrepository.com/</a></p>
+<pre><code class="xml">&lt;dependencies&gt;
+  
+    &lt;!-- 日志 --&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;log4j&lt;/groupId&gt;
+        &lt;artifactId&gt;log4j&lt;/artifactId&gt;
+        &lt;version&gt;1.2.17&lt;/version&gt;
+    &lt;/dependency&gt;
+    
+    &lt;!-- mysql驱动 --&gt;
+     &lt;dependency&gt;
+        &lt;groupId&gt;mysql&lt;/groupId&gt;
+        &lt;artifactId&gt;mysql-connector-java&lt;/artifactId&gt;
+        &lt;version&gt;5.1.16&lt;/version&gt;
+    &lt;/dependency&gt;
+
+&lt;/dependencies&gt; 
+</code></pre>
+<h2 id="2-5-仓库"><a href="#2-5-仓库" class="headerlink" title="2.5 仓库"></a>2.5 仓库</h2><p>Maven的仓库存放的是：</p>
+<ul>
+<li>Maven 工具自己需要的 <code>jar</code> 包</li>
+<li>第三方的其他 <code>jar</code>，比如项目依赖的</li>
+<li>自己写的程序打包后的包</li>
+</ul>
+<p>仓库分为 本地仓库 和 远程仓库：</p>
+<ul>
+<li><p>本地仓库：在本机上，默认位置是：<code>~\.m2\repository</code>。</p>
+<p>可以进行修改本地仓库的位置：</p>
+<p>​     1）创建一个目录，作为仓库使用。  目录不要有中文和空格。 目录不要太深。我放在 <code>E:\java\openrepository</code></p>
+<p>​     2）修改 <code>setting.xml</code> 文件，指定 <code>E:\java\openrepository</code> 这个目录：<code>&lt;localRepository&gt;D:/openrepository&lt;/localRepository&gt;</code></p>
+<p>​     3）把原默认本地仓库的所有资源拷贝到 <code>E:\java\openrepository</code></p>
+</li>
+<li><p>远程仓库：需要通过联网访问</p>
+<p>1）中央仓库： 一个ftp服务器， 存放了所有的资源。 </p>
+<p>2）中央仓库的镜像： 就是中央仓库的拷贝。 在各大主要城市都有镜像。</p>
+<p>3）私服：在局域网中使用的。 私服就是自己的仓库服务器。 在公司内部使用的。</p>
+</li>
+</ul>
+<p>Maven会自动使用仓库，当执行了Maven命令后，Maven首先访问本地仓库，若无所需资源会访问私服，若无再去访问中央仓库或镜像。</p>
+<h2 id="2-6-Maven的生命周期，插件和命令"><a href="#2-6-Maven的生命周期，插件和命令" class="headerlink" title="2.6 Maven的生命周期，插件和命令"></a>2.6 Maven的生命周期，插件和命令</h2><ul>
+<li>生命周期：项目构建的各个阶段，包括：清理、编译、测试、报告、打包、安装和部署。</li>
+<li>插件：通过插件来完成构建项目的各个阶段，插件就是 <code>jar</code> 包，一些类。</li>
+<li>命令：通过命令来使用插件。例如：<code>mvn compile</code>。</li>
+</ul>
+<h2 id="2-7-完整的项目构建过程示例"><a href="#2-7-完整的项目构建过程示例" class="headerlink" title="2.7 完整的项目构建过程示例"></a>2.7 完整的项目构建过程示例</h2><p>1）在src/main/java 目录中创建类文件，在src/test/java 目录中创建测试类文件，编写测试代码。</p>
+<p>   单元测试使用的建议：</p>
+<p>​    1.测试类的定义， 名称一般是Test+要测试的类名称。</p>
+<p>​    2.测试类的包名和要测试的类包名一样。</p>
+<p>​    3.在类中定义方法，要测试代码。</p>
+<p>​       方法的定义：public方法， </p>
+<p>​                              没有返回值</p>
+<p>​                              方法名称自定义（建议 Test+测试的方法名称）</p>
+<p>​                              方法没有参数</p>
+<p>   4.在测试类中的方法，可以单独执行。 测试类也可以单独执行。</p>
+<p>   5.在方法的上面加入 @Test。</p>
+<p>2）添加 junit 依赖：</p>
+<p>junit 是一个单元测试的工具，单元指的是 java 中的方法，是测试的最小单位。</p>
+<pre><code class="xml">&lt;dependency&gt;
+    &lt;groupId&gt;junit&lt;/groupId&gt;
+    &lt;artifactId&gt;junit&lt;/artifactId&gt;
+    &lt;version&gt;4.12&lt;/version&gt;
+    &lt;scope&gt;test&lt;/scope&gt;
+&lt;/dependency&gt;
+</code></pre>
+<p>3）使用各种 Maven 命令，注意所有命令必须要在 <code>pom.xml</code> 所在的同级目录下使用：</p>
+<ul>
+<li><p><code>mvn clean</code> ：清理，删除以前构建项目生成的数据，删除 <code>target</code> 目录。</p>
+<p>插件： <code>maven-clean-plugin:2.5</code></p>
+</li>
+<li><p><code>mvn compile</code>：编译，把 <code>src/main/java</code> 目录中的 java 代码编译为 class 文件，并把 class 文件拷贝到 <code>target/classes</code> 目录。</p>
+<p>插件：<code>maven-resources-plugin:2.6</code> 资源插件， 作用是把 <code>src/main/resources</code> 目录中的文件拷贝 <code>target/classes</code> 目录中；<code>maven-compiler-plugin:3.1</code> 编译代码插件。</p>
+</li>
+<li><p><code>mvn test-compile</code>：编译测试代码，编译 <code>src/test/java</code> 目录中的源文件， 把生成的 class 拷贝到 <code>target/test-classes</code> 目录。同时把 <code>src/test/resources</code> 目录中的文件拷贝到 <code>test/classes</code> 目录。</p>
+<p>插件：<code>maven-compiler-plugin:3.1</code> 编译代码的插件；<code>maven-resources-plugin:2.6</code>  资源插件。</p>
+</li>
+<li><p><code>mvn test</code>：测试，执行 <code>test/classes</code> 目录的程序。</p>
+<p>插件：<code>maven-surefire-plugin:2.12.4</code></p>
+</li>
+<li><p><code>mvn package</code>：打包，把项目中的资源 class 文件和配置文件都放到一个压缩文件中， 默认压缩文件是 <code>jar</code> 类型的。 web应用是 <code>war</code> 类型， 扩展是<code>jar</code>，<code>war</code>的。</p>
+<p>插件：<code>maven-jar-plugin:2.4</code> 生成一个<code>jar</code>包， 放在target目录下。</p>
+<p>​           打包的文件包含的是  <code>src/main</code> 目录中的所有的生成的class和配置文件，和test无关。生成的打包文件名是 <code>artifactId-version.packaging</code>。</p>
+</li>
+<li><p><code>mvn install</code>：把生成的打包文件安装到 Maven 本地仓库中。</p>
+</li>
+</ul>
+<p>一些补充：</p>
+<ul>
+<li>执行命令时会自动执行所有之前必须完成的命令。</li>
+<li>命令可以组合使用，例如 <code>mvn  clean  compile</code>。</li>
+</ul>
+<h2 id="2-8-自定义配置插件"><a href="#2-8-自定义配置插件" class="headerlink" title="2.8 自定义配置插件"></a>2.8 自定义配置插件</h2><p>在 <code>pom.xml</code> 文件中， <code>build</code> 标签中。设置插件。</p>
+<pre><code class="xml">&lt;!-- 设置构建项目相关的内容 --&gt;
+&lt;build&gt;
+  &lt;plugins&gt;
+    &lt;!-- 设置插件 --&gt;
+    &lt;plugin&gt;
+        &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+        &lt;artifactId&gt;maven-compiler-plugin&lt;/artifactId&gt;
+        &lt;version&gt;3.8.1&lt;/version&gt;
+        &lt;configuration&gt;
+            &lt;source&gt;1.8&lt;/source&gt; &lt;!-- 指定编译代码的jdk版本 --&gt;
+            &lt;target&gt;1.8&lt;/target&gt; &lt;!-- 运行java程序使用的jdk版本--&gt;
+        &lt;/configuration&gt;
+    &lt;/plugin&gt;
+  &lt;/plugins&gt;
+&lt;/build&gt; 
+</code></pre>
+<h1 id="第三章-Maven在IDEA中的应用"><a href="#第三章-Maven在IDEA中的应用" class="headerlink" title="第三章 Maven在IDEA中的应用"></a>第三章 Maven在IDEA中的应用</h1><h2 id="3-1-IDEA中集成Maven"><a href="#3-1-IDEA中集成Maven" class="headerlink" title="3.1 IDEA中集成Maven"></a>3.1 IDEA中集成Maven</h2><p>1）File -&gt; Settings -&gt; Build, Execution, Deployment -&gt; Build Tools -&gt; Maven</p>
+<p>​       Maven home directory: 改成自己的Maven安装目录</p>
+<p>​       User settings file: 改成 Maven安装目录\conf\settings.xml，勾选 override</p>
+<p>​       Local repository: 会自动读取本地仓库的地址</p>
+<p>2）File -&gt; Settings -&gt; Build, Execution, Deployment -&gt; Build Tools -&gt; Maven -&gt; Runner</p>
+<p>​       VM Options: -DarchetypeCatalog=internal （Maven在创建项目的时候会从网络中下载一个 archetype-catalog.xml作为项目模板文件，耗时，所以用这个参数关闭这项功能，来加快创建Maven项目的速度）</p>
+<p>​       JRE: 选择自己用的 jdk 版本即可</p>
+<p>3）File -&gt; Other Settings -&gt; Settings for New Projects</p>
+<p>​      对新建的或者是导入的项目也使用同样的Maven设置</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
@@ -198,251 +408,119 @@
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://woojou.github.io/2021/08/03/Maven/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/08/03/Spring%E6%A1%86%E6%9E%B6/" class="archive-article-date">
-  	<time datetime="2021-08-03T07:26:05.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-08-03</time>
-</a>
+<nav id="article-nav">
+  
+  
+    <a href="/2021/08/03/Spring%E6%A1%86%E6%9E%B6/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Spring框架</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/08/03/Spring%E6%A1%86%E6%9E%B6/">Spring框架</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">框架</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
+        
+        
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E4%B8%80%E7%AB%A0-Maven%E7%AE%80%E4%BB%8B"><span class="toc-number">1.</span> <span class="toc-text">第一章 Maven简介</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91%E4%B8%AD%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-number">1.1.</span> <span class="toc-text">1.1 软件开发中的问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-Maven%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="toc-number">1.2.</span> <span class="toc-text">1.2 Maven的作用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-3-Maven%E4%B8%AD%E7%9A%84%E6%A6%82%E5%BF%B5"><span class="toc-number">1.3.</span> <span class="toc-text">1.3 Maven中的概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-4-Maven-%E5%B7%A5%E5%85%B7%E7%9A%84%E8%8E%B7%E5%8F%96%E5%92%8C%E5%AE%89%E8%A3%85"><span class="toc-number">1.4.</span> <span class="toc-text">1.4 Maven 工具的获取和安装</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E7%AB%A0-Maven%E7%9A%84%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5"><span class="toc-number">2.</span> <span class="toc-text">第二章 Maven的核心概念</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1-%E7%BA%A6%E5%AE%9A%E7%9A%84%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84"><span class="toc-number">2.1.</span> <span class="toc-text">2.1 约定的目录结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2-POM"><span class="toc-number">2.2.</span> <span class="toc-text">2.2 POM</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-3-%E5%9D%90%E6%A0%87"><span class="toc-number">2.3.</span> <span class="toc-text">2.3 坐标</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-4-%E4%BE%9D%E8%B5%96"><span class="toc-number">2.4.</span> <span class="toc-text">2.4 依赖</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-5-%E4%BB%93%E5%BA%93"><span class="toc-number">2.5.</span> <span class="toc-text">2.5 仓库</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-6-Maven%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%EF%BC%8C%E6%8F%92%E4%BB%B6%E5%92%8C%E5%91%BD%E4%BB%A4"><span class="toc-number">2.6.</span> <span class="toc-text">2.6 Maven的生命周期，插件和命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-7-%E5%AE%8C%E6%95%B4%E7%9A%84%E9%A1%B9%E7%9B%AE%E6%9E%84%E5%BB%BA%E8%BF%87%E7%A8%8B%E7%A4%BA%E4%BE%8B"><span class="toc-number">2.7.</span> <span class="toc-text">2.7 完整的项目构建过程示例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-8-%E8%87%AA%E5%AE%9A%E4%B9%89%E9%85%8D%E7%BD%AE%E6%8F%92%E4%BB%B6"><span class="toc-number">2.8.</span> <span class="toc-text">2.8 自定义配置插件</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E7%AB%A0-Maven%E5%9C%A8IDEA%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8"><span class="toc-number">3.</span> <span class="toc-text">第三章 Maven在IDEA中的应用</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#3-1-IDEA%E4%B8%AD%E9%9B%86%E6%88%90Maven"><span class="toc-number">3.1.</span> <span class="toc-text">3.1 IDEA中集成Maven</span></a></li></ol></li></ol>
+                    </div>
+                </span>
+            </div>
         </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
+        
+    </div>
+</aside>
+
+
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/07/16/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" class="archive-article-date">
-  	<time datetime="2021-07-16T07:53:32.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-07-16</time>
-</a>
-        </div>
-    	 
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/07/16/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">编程基础</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/07/13/JVM/" class="archive-article-date">
-  	<time datetime="2021-07-13T11:14:50.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-07-13</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/07/13/JVM/">JVM</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">编程基础</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Java</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/07/13/leetcode%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B0/" class="archive-article-date">
-  	<time datetime="2021-07-13T00:30:29.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-07-13</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/07/13/leetcode%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B0/">leetcode刷题笔记</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">JAVA</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/07/12/MySQL/" class="archive-article-date">
-  	<time datetime="2021-07-12T12:11:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-07-12</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/07/12/MySQL/">MySQL</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">数据库</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/07/12/2020-07-12-%E5%8D%9A%E5%AE%A2%E7%BD%91%E7%AB%99%E5%88%9B%E5%BB%BA/" class="archive-article-date">
-  	<time datetime="2021-07-12T03:23:47.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-07-12</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/07/12/2020-07-12-%E5%8D%9A%E5%AE%A2%E7%BD%91%E7%AB%99%E5%88%9B%E5%BB%BA/">2020/07/12 博客网站创建</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">随笔</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
-
-    
 
 
           </div>
@@ -465,8 +543,8 @@
 	var yiliaConfig = {
 		mathjax: true,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
