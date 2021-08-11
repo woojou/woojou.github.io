@@ -30,8 +30,15 @@
 <meta property="og:image" content="https://img-blog.csdnimg.cn/8d4887dc1f724b6294dc106ca6bb21f9.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/8953a4edd65246a29b4d9b3d59794371.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/5bc1de6276784c73b0211279cb15c383.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/e260c18476344989b075f21762e8153f.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/9521310caba3486383caa94721bf8d64.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/ccbaf4bf4e6e489d901ca6bcaa510072.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/9cb972540e5444058021cd1c9527c2fd.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/ed30975917d84157a60db3153539d6b0.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/4b36d1be09c74db59f055c043db59c5b.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/e2d37c217e9c4876adc54bf0e331d950.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center">
 <meta property="article:published_time" content="2021-08-07T07:13:19.000Z">
-<meta property="article:modified_time" content="2021-08-10T09:46:27.375Z">
+<meta property="article:modified_time" content="2021-08-11T09:52:08.950Z">
 <meta property="article:author" content="Woojou">
 <meta property="article:tag" content="JAVA">
 <meta name="twitter:card" content="summary">
@@ -427,6 +434,79 @@ Set-Cookie: BD_HOME=1; path=/
 <ul>
 <li>点击右上角的启动，即可得到页面显示Hello World！这就是默认的index.jsp写的内容</li>
 </ul>
+<h2 id="5-4-pom文件"><a href="#5-4-pom文件" class="headerlink" title="5.4 pom文件"></a>5.4 pom文件</h2><p>pom.xml是Maven的核心文件。</p>
+<p><img src="https://img-blog.csdnimg.cn/e260c18476344989b075f21762e8153f.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center"></p>
+<p>Maven约定大于配置，之后可能会遇到自己写的文件无法被导出依赖，在build中配置resources。</p>
+<pre><code class="xml">  &lt;build&gt;
+    .......
+      &lt;resources&gt;
+        &lt;resource&gt;
+            &lt;directory&gt;src/main/resources&lt;/directory&gt;
+            &lt;excludes&gt;
+                &lt;exclude&gt;**/*.properties&lt;/exclude&gt;
+                &lt;exclude&gt;**/*.xml&lt;/exclude&gt;
+             &lt;/excludes&gt;
+            &lt;filtering&gt;false&lt;/filtering&gt;
+        &lt;/resource&gt;
+        &lt;resource&gt;
+            &lt;directory&gt;src/main/java&lt;/directory&gt;
+            &lt;includes&gt;
+                &lt;include&gt;**/*.properties&lt;/include&gt;
+                &lt;include&gt;**/*.xml&lt;/include&gt;
+            &lt;/includes&gt;
+            &lt;filtering&gt;false&lt;/filtering&gt;
+        &lt;/resource&gt;
+    &lt;/resources&gt;
+    ......
+&lt;/build&gt;
+</code></pre>
+<h1 id="第六章-Servlet"><a href="#第六章-Servlet" class="headerlink" title="第六章 Servlet"></a>第六章 Servlet</h1><h2 id="6-1-Servlet简介"><a href="#6-1-Servlet简介" class="headerlink" title="6.1 Servlet简介"></a>6.1 Servlet简介</h2><ul>
+<li>Sun公司开发动态web的一门技术</li>
+<li>Sun公司在这些API中提供了一个接口叫做 Servlet，如果要开发一个Servlet程序，只需要完成两个步骤<ul>
+<li>编写一个类，实现Servlet接口</li>
+<li>把开发好的Java类部署到web服务器中</li>
+</ul>
+</li>
+<li><strong>所谓Servlet就是：实现了Servlet接口的Java程序</strong></li>
+</ul>
+<h2 id="6-2-Hello-Servlet"><a href="#6-2-Hello-Servlet" class="headerlink" title="6.2 Hello Servlet"></a>6.2 Hello Servlet</h2><ul>
+<li>创建一个新的Maven项目，并删掉里面的src目录，以后的学习就在这个项目里建立module，这个空档工程就是Maven的主工程</li>
+</ul>
+<p><img src="https://img-blog.csdnimg.cn/9521310caba3486383caa94721bf8d64.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center"></p>
+<p><img src="https://img-blog.csdnimg.cn/ccbaf4bf4e6e489d901ca6bcaa510072.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center"></p>
+<p><img src="https://img-blog.csdnimg.cn/9cb972540e5444058021cd1c9527c2fd.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center"></p>
+<ul>
+<li>导入依赖</li>
+</ul>
+<pre><code class="xml">    &lt;dependencies&gt;
+
+    &lt;!-- https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api --&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;javax.servlet&lt;/groupId&gt;
+            &lt;artifactId&gt;javax.servlet-api&lt;/artifactId&gt;
+            &lt;version&gt;4.0.1&lt;/version&gt;
+            &lt;scope&gt;provided&lt;/scope&gt;
+        &lt;/dependency&gt;
+
+        &lt;!-- https://mvnrepository.com/artifact/javax.servlet.jsp/javax.servlet.jsp-api --&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;javax.servlet.jsp&lt;/groupId&gt;
+            &lt;artifactId&gt;javax.servlet.jsp-api&lt;/artifactId&gt;
+            &lt;version&gt;2.3.3&lt;/version&gt;
+            &lt;scope&gt;provided&lt;/scope&gt;
+        &lt;/dependency&gt;
+
+    &lt;/dependencies&gt;
+</code></pre>
+<ul>
+<li>新建Module，创建webapp项目</li>
+</ul>
+<p><img src="https://img-blog.csdnimg.cn/ed30975917d84157a60db3153539d6b0.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center"></p>
+<p><img src="https://img-blog.csdnimg.cn/4b36d1be09c74db59f055c043db59c5b.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center"></p>
+<p><img src="https://img-blog.csdnimg.cn/e2d37c217e9c4876adc54bf0e331d950.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center"></p>
+<ul>
+<li>关于Maven父子工程的理解</li>
+</ul>
 
       
 
@@ -539,7 +619,7 @@ Set-Cookie: BD_HOME=1; path=/
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E4%B8%80%E7%AB%A0-%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-number">1.</span> <span class="toc-text">第一章 基本概念</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-%E5%89%8D%E8%A8%80"><span class="toc-number">1.1.</span> <span class="toc-text">1.1 前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-web%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F"><span class="toc-number">1.2.</span> <span class="toc-text">1.2 web应用程序</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-3-%E9%9D%99%E6%80%81web"><span class="toc-number">1.3.</span> <span class="toc-text">1.3 静态web</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-4-%E5%8A%A8%E6%80%81web"><span class="toc-number">1.4.</span> <span class="toc-text">1.4 动态web</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E7%AB%A0-web%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-number">2.</span> <span class="toc-text">第二章 web服务器</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1-%E4%B8%80%E4%BA%9B%E6%8A%80%E6%9C%AF%E8%AE%B2%E8%A7%A3"><span class="toc-number">2.1.</span> <span class="toc-text">2.1 一些技术讲解</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-1-ASP"><span class="toc-number">2.1.1.</span> <span class="toc-text">2.1.1 ASP</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-2-PHP"><span class="toc-number">2.1.2.</span> <span class="toc-text">2.1.2 PHP</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-3-JSP-Servlet"><span class="toc-number">2.1.3.</span> <span class="toc-text">2.1.3 JSP&#x2F;Servlet</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2-web%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-number">2.2.</span> <span class="toc-text">2.2 web服务器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-1-IIS"><span class="toc-number">2.2.1.</span> <span class="toc-text">2.2.1 IIS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-2-Tomcat"><span class="toc-number">2.2.2.</span> <span class="toc-text">2.2.2 Tomcat</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E7%AB%A0-Tomcat%E8%AF%A6%E8%A7%A3"><span class="toc-number">3.</span> <span class="toc-text">第三章 Tomcat详解</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#3-1-%E4%B8%8B%E8%BD%BD%E4%B8%8E%E5%AE%89%E8%A3%85"><span class="toc-number">3.1.</span> <span class="toc-text">3.1 下载与安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-2-%E5%90%AF%E5%8A%A8"><span class="toc-number">3.2.</span> <span class="toc-text">3.2 启动</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-3-%E9%85%8D%E7%BD%AE"><span class="toc-number">3.3.</span> <span class="toc-text">3.3 配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-4-%E6%A8%A1%E4%BB%BF%E5%8F%91%E5%B8%83web%E7%BD%91%E7%AB%99"><span class="toc-number">3.4.</span> <span class="toc-text">3.4 模仿发布web网站</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E5%9B%9B%E7%AB%A0-HTTP%E8%AF%A6%E8%A7%A3"><span class="toc-number">4.</span> <span class="toc-text">第四章 HTTP详解</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#4-1-%E4%BB%80%E4%B9%88%E6%98%AFHTTP"><span class="toc-number">4.1.</span> <span class="toc-text">4.1 什么是HTTP</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-2-%E4%B8%A4%E4%B8%AA%E7%89%88%E6%9C%AC"><span class="toc-number">4.2.</span> <span class="toc-text">4.2 两个版本</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-3-HTTP%E8%AF%B7%E6%B1%82"><span class="toc-number">4.3.</span> <span class="toc-text">4.3 HTTP请求</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-4-HTTP%E5%93%8D%E5%BA%94"><span class="toc-number">4.4.</span> <span class="toc-text">4.4 HTTP响应</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E4%BA%94%E7%AB%A0-Maven%E9%A1%B9%E7%9B%AE%E6%9E%84%E5%BB%BA"><span class="toc-number">5.</span> <span class="toc-text">第五章 Maven项目构建</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#5-1-Maven%E5%8F%8A%E7%9B%B8%E5%85%B3%E8%AE%BE%E7%BD%AE"><span class="toc-number">5.1.</span> <span class="toc-text">5.1 Maven及相关设置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-2-IDEA-Maven%E9%A1%B9%E7%9B%AE%E5%88%9B%E5%BB%BA"><span class="toc-number">5.2.</span> <span class="toc-text">5.2 IDEA Maven项目创建</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-3-%E5%9C%A8IDEA%E4%B8%AD%E9%85%8D%E7%BD%AETomcat"><span class="toc-number">5.3.</span> <span class="toc-text">5.3 在IDEA中配置Tomcat</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E4%B8%80%E7%AB%A0-%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-number">1.</span> <span class="toc-text">第一章 基本概念</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-%E5%89%8D%E8%A8%80"><span class="toc-number">1.1.</span> <span class="toc-text">1.1 前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-web%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F"><span class="toc-number">1.2.</span> <span class="toc-text">1.2 web应用程序</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-3-%E9%9D%99%E6%80%81web"><span class="toc-number">1.3.</span> <span class="toc-text">1.3 静态web</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-4-%E5%8A%A8%E6%80%81web"><span class="toc-number">1.4.</span> <span class="toc-text">1.4 动态web</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E7%AB%A0-web%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-number">2.</span> <span class="toc-text">第二章 web服务器</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1-%E4%B8%80%E4%BA%9B%E6%8A%80%E6%9C%AF%E8%AE%B2%E8%A7%A3"><span class="toc-number">2.1.</span> <span class="toc-text">2.1 一些技术讲解</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-1-ASP"><span class="toc-number">2.1.1.</span> <span class="toc-text">2.1.1 ASP</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-2-PHP"><span class="toc-number">2.1.2.</span> <span class="toc-text">2.1.2 PHP</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-3-JSP-Servlet"><span class="toc-number">2.1.3.</span> <span class="toc-text">2.1.3 JSP&#x2F;Servlet</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2-web%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-number">2.2.</span> <span class="toc-text">2.2 web服务器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-1-IIS"><span class="toc-number">2.2.1.</span> <span class="toc-text">2.2.1 IIS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-2-Tomcat"><span class="toc-number">2.2.2.</span> <span class="toc-text">2.2.2 Tomcat</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E7%AB%A0-Tomcat%E8%AF%A6%E8%A7%A3"><span class="toc-number">3.</span> <span class="toc-text">第三章 Tomcat详解</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#3-1-%E4%B8%8B%E8%BD%BD%E4%B8%8E%E5%AE%89%E8%A3%85"><span class="toc-number">3.1.</span> <span class="toc-text">3.1 下载与安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-2-%E5%90%AF%E5%8A%A8"><span class="toc-number">3.2.</span> <span class="toc-text">3.2 启动</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-3-%E9%85%8D%E7%BD%AE"><span class="toc-number">3.3.</span> <span class="toc-text">3.3 配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-4-%E6%A8%A1%E4%BB%BF%E5%8F%91%E5%B8%83web%E7%BD%91%E7%AB%99"><span class="toc-number">3.4.</span> <span class="toc-text">3.4 模仿发布web网站</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E5%9B%9B%E7%AB%A0-HTTP%E8%AF%A6%E8%A7%A3"><span class="toc-number">4.</span> <span class="toc-text">第四章 HTTP详解</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#4-1-%E4%BB%80%E4%B9%88%E6%98%AFHTTP"><span class="toc-number">4.1.</span> <span class="toc-text">4.1 什么是HTTP</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-2-%E4%B8%A4%E4%B8%AA%E7%89%88%E6%9C%AC"><span class="toc-number">4.2.</span> <span class="toc-text">4.2 两个版本</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-3-HTTP%E8%AF%B7%E6%B1%82"><span class="toc-number">4.3.</span> <span class="toc-text">4.3 HTTP请求</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-4-HTTP%E5%93%8D%E5%BA%94"><span class="toc-number">4.4.</span> <span class="toc-text">4.4 HTTP响应</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E4%BA%94%E7%AB%A0-Maven%E9%A1%B9%E7%9B%AE%E6%9E%84%E5%BB%BA"><span class="toc-number">5.</span> <span class="toc-text">第五章 Maven项目构建</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#5-1-Maven%E5%8F%8A%E7%9B%B8%E5%85%B3%E8%AE%BE%E7%BD%AE"><span class="toc-number">5.1.</span> <span class="toc-text">5.1 Maven及相关设置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-2-IDEA-Maven%E9%A1%B9%E7%9B%AE%E5%88%9B%E5%BB%BA"><span class="toc-number">5.2.</span> <span class="toc-text">5.2 IDEA Maven项目创建</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-3-%E5%9C%A8IDEA%E4%B8%AD%E9%85%8D%E7%BD%AETomcat"><span class="toc-number">5.3.</span> <span class="toc-text">5.3 在IDEA中配置Tomcat</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-4-pom%E6%96%87%E4%BB%B6"><span class="toc-number">5.4.</span> <span class="toc-text">5.4 pom文件</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E5%85%AD%E7%AB%A0-Servlet"><span class="toc-number">6.</span> <span class="toc-text">第六章 Servlet</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#6-1-Servlet%E7%AE%80%E4%BB%8B"><span class="toc-number">6.1.</span> <span class="toc-text">6.1 Servlet简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-2-Hello-Servlet"><span class="toc-number">6.2.</span> <span class="toc-text">6.2 Hello Servlet</span></a></li></ol></li></ol>
                     </div>
                 </span>
             </div>
