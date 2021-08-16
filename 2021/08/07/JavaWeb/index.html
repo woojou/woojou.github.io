@@ -40,8 +40,13 @@
 <meta property="og:image" content="https://img-blog.csdnimg.cn/128dd3b9ba2342839fd9b72774146959.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/c6116ed08d7a4f339ace508b67679cfc.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/213e65c089c842968591601ab68b940f.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/baa5a40cdc7f47e1a537630dc2ef87ce.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/f343e572ee184890b29ab3de78c24ce6.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/4437555a85314d1880160e13542b08c2.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/b22f2d9c4ade46efa0575a003637d029.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/913fbd523532491abc6027c4af85c09f.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center">
 <meta property="article:published_time" content="2021-08-07T07:13:19.000Z">
-<meta property="article:modified_time" content="2021-08-15T09:35:19.983Z">
+<meta property="article:modified_time" content="2021-08-16T09:52:52.203Z">
 <meta property="article:author" content="Woojou">
 <meta property="article:tag" content="JAVA">
 <meta name="twitter:card" content="summary">
@@ -960,6 +965,261 @@ public class LoginServlet extends HttpServlet &#123;
 <li>重定向状态码为302，请求转发的为307</li>
 <li>重定向本质是响应动作，而请求转发是又一次新的请求动作</li>
 </ul>
+<h1 id="第七章-Cookie-amp-Session"><a href="#第七章-Cookie-amp-Session" class="headerlink" title="第七章 Cookie &amp; Session"></a>第七章 Cookie &amp; Session</h1><h2 id="7-1-会话"><a href="#7-1-会话" class="headerlink" title="7.1 会话"></a>7.1 会话</h2><p>会话，指用户登录网站后的一系列操作，包括添加购物车、收藏夹、支付等其他动作。</p>
+<h2 id="7-2-两种保存会话的技术"><a href="#7-2-两种保存会话的技术" class="headerlink" title="7.2 两种保存会话的技术"></a>7.2 两种保存会话的技术</h2><p>为了保持用户登录的状态，有两个技术：Cookie与Session。<strong>Cookie是给客户端一个专属于个人的信息验证码</strong>，<strong>Session在服务器端记录用户的信息</strong></p>
+<ol>
+<li>存储位置不同: Cookie是保存在客户端, Session是保存服务器端。</li>
+<li>存储数据量大小不同: Cookie存储是有限的, 不超过4KB。而Seesion是无限制的（因为Session需要存储会话内容，这对容量要求比较高）</li>
+</ol>
+<h3 id="7-2-1-Cookie"><a href="#7-2-1-Cookie" class="headerlink" title="7.2.1 Cookie"></a>7.2.1 Cookie</h3><p><strong>cookie一般会保存在本地的用户目录下 appdata</strong>。</p>
+<h4 id="7-2-1-1-添加获取和设置有效期"><a href="#7-2-1-1-添加获取和设置有效期" class="headerlink" title="7.2.1.1 添加获取和设置有效期"></a>7.2.1.1 添加获取和设置有效期</h4><ul>
+<li>创建了一个新项目，编写CookieDemo01代码，记得要在pom里面添加Servlet和jsp依赖。</li>
+</ul>
+<pre><code class="java">package com.kuang.servlet;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Date;
+
+public class CookieDemo01 extends HttpServlet &#123;
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException &#123;
+        //保存用户上一次访问的时间，可以通过服务器给客户端打包一个时间到对象里
+        resp.setHeader(&quot;Content-type&quot;, &quot;text/html;charset=utf-8&quot;);
+        resp.setCharacterEncoding(&quot;utf-8&quot;);
+        req.setCharacterEncoding(&quot;utf-8&quot;);
+        PrintWriter writer = resp.getWriter();
+        //Cookie是客户携带的验证码，服务器要从客户端获取的
+        //可能有多个Cookie
+        Cookie[] cookies = req.getCookies();
+        //判断Cookie是否存在
+        if(cookies != null) &#123;
+            //如果存在就要遍历数组
+            writer.write(&quot;您上一次访问的时间是：&quot;);
+
+            for(Cookie co : cookies) &#123;
+                if(&quot;lastLoginTime&quot;.equals(co.getName())) &#123;
+                    long lastLoginTime = Long.parseLong(co.getValue());
+                    Date date = new Date(lastLoginTime);
+                    writer.write(date.toLocaleString());
+                &#125;
+            &#125;
+
+        &#125; else &#123;
+            writer.write(&quot;这是您第一次访问本网站&quot;);
+
+        &#125;
+        //服务器要给客户端分配Cookie
+        Cookie cookie = new Cookie(&quot;lastLoginTime&quot;, System.currentTimeMillis() + &quot;&quot;);
+        resp.addCookie(cookie);
+    &#125;
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException &#123;
+        doGet(req, resp);
+    &#125;
+&#125;
+</code></pre>
+<ul>
+<li>配置web.xml</li>
+</ul>
+<pre><code class="xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;web-app xmlns=&quot;http://xmlns.jcp.org/xml/ns/javaee&quot;
+         xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+         xsi:schemaLocation=&quot;http://xmlns.jcp.org/xml/ns/javaee
+                         http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd&quot;
+         version=&quot;4.0&quot;
+         metadata-complete=&quot;true&quot;&gt;
+  &lt;!-- 这里改成false可以支持servlet注解--&gt;
+
+  &lt;servlet&gt;
+    &lt;servlet-name&gt;CookieDemo01&lt;/servlet-name&gt;
+    &lt;servlet-class&gt;com.kuang.servlet.CookieDemo01&lt;/servlet-class&gt;
+  &lt;/servlet&gt;
+  &lt;servlet-mapping&gt;
+    &lt;servlet-name&gt;CookieDemo01&lt;/servlet-name&gt;
+    &lt;url-pattern&gt;/c1&lt;/url-pattern&gt;
+  &lt;/servlet-mapping&gt;
+
+&lt;/web-app&gt;
+</code></pre>
+<ul>
+<li><p>配置Tomcat，这里遇到了一个小坑，在添加Artifact的时候如果选war包，会出现错误，无法访问页面。如果选war:exploded就没问题了。查了两个的区别，但是感觉并不能对应上？</p>
+<ul>
+<li><p>war模式：将WEB工程以包的形式上传到服务器 ；</p>
+</li>
+<li><p>war exploded模式：将WEB工程以当前文件夹的位置关系上传到服务器；</p>
+<p>（1）war模式这种可以称之为是发布模式，看名字也知道，这是先打成war包，再发布；</p>
+<p>（2）war exploded模式是直接把文件夹、jsp页面 、classes等等移到Tomcat 部署文件夹里面，进行加载部署。因此这种方式支持热部署，一般在开发的时候也是用这种方式。</p>
+</li>
+</ul>
+</li>
+<li><p>最后测试访问页面</p>
+</li>
+</ul>
+<p><img src="https://img-blog.csdnimg.cn/baa5a40cdc7f47e1a537630dc2ef87ce.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center"></p>
+<p>可以看到响应和请求里都有Cookie</p>
+<p><img src="https://img-blog.csdnimg.cn/f343e572ee184890b29ab3de78c24ce6.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center"></p>
+<ul>
+<li><p>用<code>setMaxAge(24*60*60)</code>给Cookie设置一天的有效期，并测试。可以看到就有了过期时间，注意要设置浏览器，不要让他清除cookie。</p>
+<p>如果设置为负值的话，则为浏览器进程Cookie(内存中保存)，关闭浏览器就失效；如果设置为0，则会立即删除该Cookie。</p>
+</li>
+</ul>
+<p><img src="https://img-blog.csdnimg.cn/4437555a85314d1880160e13542b08c2.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center"></p>
+<h4 id="7-2-1-2-Cookie的一些特性"><a href="#7-2-1-2-Cookie的一些特性" class="headerlink" title="7.2.1.2 Cookie的一些特性"></a>7.2.1.2 Cookie的一些特性</h4><ul>
+<li>一个 Cookie只能保存一个信息</li>
+<li>一个web站点可以给浏览器发送多个Cookie，最多20个</li>
+<li>Cookie大小上限为4kb</li>
+<li>浏览器上限为300个cookie</li>
+</ul>
+<h3 id="7-2-2-Session"><a href="#7-2-2-Session" class="headerlink" title="7.2.2 Session"></a>7.2.2 Session</h3><p>服务器会给每个用户（浏览器）创建一个Session对象，只要浏览器没关闭，这个Session就会一直存在。</p>
+<p><strong>session的创建</strong></p>
+<p>当程序需要为某个客户端的请求创建一个session时，服务器首先检查这个客户端的请求里是否已包含了sessionId，如果已包含则说明以前已经为此客户端创建过session，服务器就按照sessionId把这个session从后台数据库中检索出来使用（检索不到，会新建一个）。</p>
+<p>如果客户端请求不包含sessionId，则为此客户端创建一个session并且生成一个与此session相关联的sessionId，并发送给浏览器，浏览器下次来访问的时候，会在request的cookie中带上sessionid，然后通过sessionid在服务器的缓存中获取实际数据。</p>
+<h4 id="7-2-2-1-创建sessionId"><a href="#7-2-2-1-创建sessionId" class="headerlink" title="7.2.2.1 创建sessionId"></a>7.2.2.1 创建sessionId</h4><ul>
+<li>编写 SessionDemo01 代码</li>
+</ul>
+<pre><code class="java">package com.kuang.servlet;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
+
+public class SessionDemo01 extends HttpServlet &#123;
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException &#123;
+        resp.setHeader(&quot;Content-type&quot;, &quot;text/html;charset=utf-8&quot;);
+        req.setCharacterEncoding(&quot;utf-8&quot;);
+        resp.setCharacterEncoding(&quot;utf-8&quot;);
+
+        HttpSession session = req.getSession();
+        
+        String id = session.getId();
+        if(session.isNew()) &#123;
+            resp.getWriter().write(&quot;Session创建成功，ID为：&quot; + id);
+        &#125; else &#123;
+            resp.getWriter().write(&quot;Session已经创建过了，ID为：&quot; + id);
+        &#125;
+    &#125;
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException &#123;
+        doGet(req, resp);
+    &#125;
+&#125;
+</code></pre>
+<ul>
+<li>测试，发现这个 SessionId实际上是带在Cookie里的JESSIONID属性，再次访问网站，可以看到在请求中的Cookie里带有该值</li>
+</ul>
+<p><img src="https://img-blog.csdnimg.cn/b22f2d9c4ade46efa0575a003637d029.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center"></p>
+<p><img src="https://img-blog.csdnimg.cn/913fbd523532491abc6027c4af85c09f.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center"></p>
+<h4 id="7-2-2-2-Session存储信息"><a href="#7-2-2-2-Session存储信息" class="headerlink" title="7.2.2.2 Session存储信息"></a>7.2.2.2 Session存储信息</h4><p>可以用 <code>setAttibute</code> 来给Session存储用户信息</p>
+<pre><code class="java">//新建一个Person类
+package com.kuang.servlet;
+
+public class Person &#123;
+    String name;
+    int age;
+    String sex;
+
+    public Person(String name, int age, String sex) &#123;
+        this.name = name;
+        this.age = age;
+        this.sex = sex;
+    &#125;
+
+    @Override
+    public String toString() &#123;
+        return name + &quot; &quot; + sex + &quot; &quot; + age + &quot;岁&quot;;
+    &#125;
+&#125;
+</code></pre>
+<pre><code class="java">/**
+*存储用户信息
+*/
+package com.kuang.servlet;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
+
+public class SessionDemo01 extends HttpServlet &#123;
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException &#123;
+        resp.setHeader(&quot;Content-type&quot;, &quot;text/html;charset=utf-8&quot;);
+        req.setCharacterEncoding(&quot;utf-8&quot;);
+        resp.setCharacterEncoding(&quot;utf-8&quot;);
+
+        HttpSession session = req.getSession();
+        //存储信息
+        session.setAttribute(&quot;person&quot;, new Person(&quot;朱宇彤&quot;, 18, &quot;女&quot;));
+        String id = session.getId();
+        if(session.isNew()) &#123;
+            resp.getWriter().write(&quot;Session创建成功，ID为：&quot; + id);
+        &#125; else &#123;
+            resp.getWriter().write(&quot;Session已经创建过了，ID为：&quot; + id);
+        &#125;
+    &#125;
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException &#123;
+        doGet(req, resp);
+    &#125;
+&#125;
+</code></pre>
+<pre><code class="java">/**
+*取出用户信息
+*/
+package com.kuang.servlet;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
+
+public class SessionDemo02 extends HttpServlet &#123;
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException &#123;
+        resp.setHeader(&quot;Content-type&quot;, &quot;text/html;charset=utf-8&quot;);
+        req.setCharacterEncoding(&quot;utf-8&quot;);
+        resp.setCharacterEncoding(&quot;utf-8&quot;);
+        HttpSession session = req.getSession();
+        Person person = (Person) session.getAttribute(&quot;person&quot;);
+        resp.getWriter().write(person.toString());
+    &#125;
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException &#123;
+        doGet(req, resp);
+    &#125;
+&#125;
+</code></pre>
+<h4 id="7-2-2-3-手动注销Session"><a href="#7-2-2-3-手动注销Session" class="headerlink" title="7.2.2.3 手动注销Session"></a>7.2.2.3 手动注销Session</h4><pre><code class="java">HttpSession session = req.getSession();
+//移除属性
+session.removeAttribute(&quot;person&quot;);
+//注销该Session，但并不代表一旦注销后就没有SessionId了。因为注销之后还是会立刻创建一个新的SessionId。
+session.invalidate();
+//在这之后仍然可以输出ID，但是不能输出Person
+</code></pre>
+<h4 id="7-2-2-4-设置Session默认失效时间"><a href="#7-2-2-4-设置Session默认失效时间" class="headerlink" title="7.2.2.4 设置Session默认失效时间"></a>7.2.2.4 设置Session默认失效时间</h4><p>在web.xml中</p>
+<pre><code class="xml">  &lt;session-config&gt;
+    &lt;!-- 15min --&gt;
+    &lt;session-timeout&gt;15&lt;/session-timeout&gt;
+  &lt;/session-config&gt;
+</code></pre>
 
       
 
@@ -1072,7 +1332,7 @@ public class LoginServlet extends HttpServlet &#123;
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E4%B8%80%E7%AB%A0-%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-number">1.</span> <span class="toc-text">第一章 基本概念</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-%E5%89%8D%E8%A8%80"><span class="toc-number">1.1.</span> <span class="toc-text">1.1 前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-web%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F"><span class="toc-number">1.2.</span> <span class="toc-text">1.2 web应用程序</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-3-%E9%9D%99%E6%80%81web"><span class="toc-number">1.3.</span> <span class="toc-text">1.3 静态web</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-4-%E5%8A%A8%E6%80%81web"><span class="toc-number">1.4.</span> <span class="toc-text">1.4 动态web</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E7%AB%A0-web%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-number">2.</span> <span class="toc-text">第二章 web服务器</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1-%E4%B8%80%E4%BA%9B%E6%8A%80%E6%9C%AF%E8%AE%B2%E8%A7%A3"><span class="toc-number">2.1.</span> <span class="toc-text">2.1 一些技术讲解</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-1-ASP"><span class="toc-number">2.1.1.</span> <span class="toc-text">2.1.1 ASP</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-2-PHP"><span class="toc-number">2.1.2.</span> <span class="toc-text">2.1.2 PHP</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-3-JSP-Servlet"><span class="toc-number">2.1.3.</span> <span class="toc-text">2.1.3 JSP&#x2F;Servlet</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2-web%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-number">2.2.</span> <span class="toc-text">2.2 web服务器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-1-IIS"><span class="toc-number">2.2.1.</span> <span class="toc-text">2.2.1 IIS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-2-Tomcat"><span class="toc-number">2.2.2.</span> <span class="toc-text">2.2.2 Tomcat</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E7%AB%A0-Tomcat%E8%AF%A6%E8%A7%A3"><span class="toc-number">3.</span> <span class="toc-text">第三章 Tomcat详解</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#3-1-%E4%B8%8B%E8%BD%BD%E4%B8%8E%E5%AE%89%E8%A3%85"><span class="toc-number">3.1.</span> <span class="toc-text">3.1 下载与安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-2-%E5%90%AF%E5%8A%A8"><span class="toc-number">3.2.</span> <span class="toc-text">3.2 启动</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-3-%E9%85%8D%E7%BD%AE"><span class="toc-number">3.3.</span> <span class="toc-text">3.3 配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-4-%E6%A8%A1%E4%BB%BF%E5%8F%91%E5%B8%83web%E7%BD%91%E7%AB%99"><span class="toc-number">3.4.</span> <span class="toc-text">3.4 模仿发布web网站</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E5%9B%9B%E7%AB%A0-HTTP%E8%AF%A6%E8%A7%A3"><span class="toc-number">4.</span> <span class="toc-text">第四章 HTTP详解</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#4-1-%E4%BB%80%E4%B9%88%E6%98%AFHTTP"><span class="toc-number">4.1.</span> <span class="toc-text">4.1 什么是HTTP</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-2-%E4%B8%A4%E4%B8%AA%E7%89%88%E6%9C%AC"><span class="toc-number">4.2.</span> <span class="toc-text">4.2 两个版本</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-3-HTTP%E8%AF%B7%E6%B1%82"><span class="toc-number">4.3.</span> <span class="toc-text">4.3 HTTP请求</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-4-HTTP%E5%93%8D%E5%BA%94"><span class="toc-number">4.4.</span> <span class="toc-text">4.4 HTTP响应</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E4%BA%94%E7%AB%A0-Maven%E9%A1%B9%E7%9B%AE%E6%9E%84%E5%BB%BA"><span class="toc-number">5.</span> <span class="toc-text">第五章 Maven项目构建</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#5-1-Maven%E5%8F%8A%E7%9B%B8%E5%85%B3%E8%AE%BE%E7%BD%AE"><span class="toc-number">5.1.</span> <span class="toc-text">5.1 Maven及相关设置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-2-IDEA-Maven%E9%A1%B9%E7%9B%AE%E5%88%9B%E5%BB%BA"><span class="toc-number">5.2.</span> <span class="toc-text">5.2 IDEA Maven项目创建</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-3-%E5%9C%A8IDEA%E4%B8%AD%E9%85%8D%E7%BD%AETomcat"><span class="toc-number">5.3.</span> <span class="toc-text">5.3 在IDEA中配置Tomcat</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-4-pom%E6%96%87%E4%BB%B6"><span class="toc-number">5.4.</span> <span class="toc-text">5.4 pom文件</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E5%85%AD%E7%AB%A0-Servlet"><span class="toc-number">6.</span> <span class="toc-text">第六章 Servlet</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#6-1-Servlet%E7%AE%80%E4%BB%8B"><span class="toc-number">6.1.</span> <span class="toc-text">6.1 Servlet简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-2-Hello-Servlet"><span class="toc-number">6.2.</span> <span class="toc-text">6.2 Hello Servlet</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-3-Servlet%E5%8E%9F%E7%90%86"><span class="toc-number">6.3.</span> <span class="toc-text">6.3 Servlet原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-4-Mapping%E9%97%AE%E9%A2%98"><span class="toc-number">6.4.</span> <span class="toc-text">6.4 Mapping问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-5-ServletContext"><span class="toc-number">6.5.</span> <span class="toc-text">6.5 ServletContext</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-6-HttpServletResponse"><span class="toc-number">6.6.</span> <span class="toc-text">6.6 HttpServletResponse</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#6-6-1-%E5%88%86%E7%B1%BB"><span class="toc-number">6.6.1.</span> <span class="toc-text">6.6.1 分类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-6-2-%E4%B8%8B%E8%BD%BD%E6%96%87%E4%BB%B6"><span class="toc-number">6.6.2.</span> <span class="toc-text">6.6.2 下载文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-6-3-%E6%B5%8F%E8%A7%88%E5%99%A8%E6%98%BE%E7%A4%BA%E5%9B%BE%E7%89%87"><span class="toc-number">6.6.3.</span> <span class="toc-text">6.6.3 浏览器显示图片</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-6-4-%E9%87%8D%E5%AE%9A%E5%90%91"><span class="toc-number">6.6.4.</span> <span class="toc-text">6.6.4 重定向</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-7-HttpServletRequest"><span class="toc-number">6.7.</span> <span class="toc-text">6.7 HttpServletRequest</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#6-7-1-%E8%8E%B7%E5%8F%96%E5%89%8D%E7%AB%AF%E4%BC%A0%E9%80%92%E5%8F%82%E6%95%B0%E5%92%8C%E8%AF%B7%E6%B1%82%E8%BD%AC%E5%8F%91"><span class="toc-number">6.7.1.</span> <span class="toc-text">6.7.1 获取前端传递参数和请求转发</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-7-2-%E9%87%8D%E5%AE%9A%E5%90%91%E4%B8%8E%E8%AF%B7%E6%B1%82%E8%BD%AC%E5%8F%91%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">6.7.2.</span> <span class="toc-text">6.7.2 重定向与请求转发的区别</span></a></li></ol></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E4%B8%80%E7%AB%A0-%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-number">1.</span> <span class="toc-text">第一章 基本概念</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-%E5%89%8D%E8%A8%80"><span class="toc-number">1.1.</span> <span class="toc-text">1.1 前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-web%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F"><span class="toc-number">1.2.</span> <span class="toc-text">1.2 web应用程序</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-3-%E9%9D%99%E6%80%81web"><span class="toc-number">1.3.</span> <span class="toc-text">1.3 静态web</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-4-%E5%8A%A8%E6%80%81web"><span class="toc-number">1.4.</span> <span class="toc-text">1.4 动态web</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E7%AB%A0-web%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-number">2.</span> <span class="toc-text">第二章 web服务器</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1-%E4%B8%80%E4%BA%9B%E6%8A%80%E6%9C%AF%E8%AE%B2%E8%A7%A3"><span class="toc-number">2.1.</span> <span class="toc-text">2.1 一些技术讲解</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-1-ASP"><span class="toc-number">2.1.1.</span> <span class="toc-text">2.1.1 ASP</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-2-PHP"><span class="toc-number">2.1.2.</span> <span class="toc-text">2.1.2 PHP</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-3-JSP-Servlet"><span class="toc-number">2.1.3.</span> <span class="toc-text">2.1.3 JSP&#x2F;Servlet</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2-web%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-number">2.2.</span> <span class="toc-text">2.2 web服务器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-1-IIS"><span class="toc-number">2.2.1.</span> <span class="toc-text">2.2.1 IIS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-2-Tomcat"><span class="toc-number">2.2.2.</span> <span class="toc-text">2.2.2 Tomcat</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E7%AB%A0-Tomcat%E8%AF%A6%E8%A7%A3"><span class="toc-number">3.</span> <span class="toc-text">第三章 Tomcat详解</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#3-1-%E4%B8%8B%E8%BD%BD%E4%B8%8E%E5%AE%89%E8%A3%85"><span class="toc-number">3.1.</span> <span class="toc-text">3.1 下载与安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-2-%E5%90%AF%E5%8A%A8"><span class="toc-number">3.2.</span> <span class="toc-text">3.2 启动</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-3-%E9%85%8D%E7%BD%AE"><span class="toc-number">3.3.</span> <span class="toc-text">3.3 配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-4-%E6%A8%A1%E4%BB%BF%E5%8F%91%E5%B8%83web%E7%BD%91%E7%AB%99"><span class="toc-number">3.4.</span> <span class="toc-text">3.4 模仿发布web网站</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E5%9B%9B%E7%AB%A0-HTTP%E8%AF%A6%E8%A7%A3"><span class="toc-number">4.</span> <span class="toc-text">第四章 HTTP详解</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#4-1-%E4%BB%80%E4%B9%88%E6%98%AFHTTP"><span class="toc-number">4.1.</span> <span class="toc-text">4.1 什么是HTTP</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-2-%E4%B8%A4%E4%B8%AA%E7%89%88%E6%9C%AC"><span class="toc-number">4.2.</span> <span class="toc-text">4.2 两个版本</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-3-HTTP%E8%AF%B7%E6%B1%82"><span class="toc-number">4.3.</span> <span class="toc-text">4.3 HTTP请求</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-4-HTTP%E5%93%8D%E5%BA%94"><span class="toc-number">4.4.</span> <span class="toc-text">4.4 HTTP响应</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E4%BA%94%E7%AB%A0-Maven%E9%A1%B9%E7%9B%AE%E6%9E%84%E5%BB%BA"><span class="toc-number">5.</span> <span class="toc-text">第五章 Maven项目构建</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#5-1-Maven%E5%8F%8A%E7%9B%B8%E5%85%B3%E8%AE%BE%E7%BD%AE"><span class="toc-number">5.1.</span> <span class="toc-text">5.1 Maven及相关设置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-2-IDEA-Maven%E9%A1%B9%E7%9B%AE%E5%88%9B%E5%BB%BA"><span class="toc-number">5.2.</span> <span class="toc-text">5.2 IDEA Maven项目创建</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-3-%E5%9C%A8IDEA%E4%B8%AD%E9%85%8D%E7%BD%AETomcat"><span class="toc-number">5.3.</span> <span class="toc-text">5.3 在IDEA中配置Tomcat</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-4-pom%E6%96%87%E4%BB%B6"><span class="toc-number">5.4.</span> <span class="toc-text">5.4 pom文件</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E5%85%AD%E7%AB%A0-Servlet"><span class="toc-number">6.</span> <span class="toc-text">第六章 Servlet</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#6-1-Servlet%E7%AE%80%E4%BB%8B"><span class="toc-number">6.1.</span> <span class="toc-text">6.1 Servlet简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-2-Hello-Servlet"><span class="toc-number">6.2.</span> <span class="toc-text">6.2 Hello Servlet</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-3-Servlet%E5%8E%9F%E7%90%86"><span class="toc-number">6.3.</span> <span class="toc-text">6.3 Servlet原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-4-Mapping%E9%97%AE%E9%A2%98"><span class="toc-number">6.4.</span> <span class="toc-text">6.4 Mapping问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-5-ServletContext"><span class="toc-number">6.5.</span> <span class="toc-text">6.5 ServletContext</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-6-HttpServletResponse"><span class="toc-number">6.6.</span> <span class="toc-text">6.6 HttpServletResponse</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#6-6-1-%E5%88%86%E7%B1%BB"><span class="toc-number">6.6.1.</span> <span class="toc-text">6.6.1 分类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-6-2-%E4%B8%8B%E8%BD%BD%E6%96%87%E4%BB%B6"><span class="toc-number">6.6.2.</span> <span class="toc-text">6.6.2 下载文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-6-3-%E6%B5%8F%E8%A7%88%E5%99%A8%E6%98%BE%E7%A4%BA%E5%9B%BE%E7%89%87"><span class="toc-number">6.6.3.</span> <span class="toc-text">6.6.3 浏览器显示图片</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-6-4-%E9%87%8D%E5%AE%9A%E5%90%91"><span class="toc-number">6.6.4.</span> <span class="toc-text">6.6.4 重定向</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-7-HttpServletRequest"><span class="toc-number">6.7.</span> <span class="toc-text">6.7 HttpServletRequest</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#6-7-1-%E8%8E%B7%E5%8F%96%E5%89%8D%E7%AB%AF%E4%BC%A0%E9%80%92%E5%8F%82%E6%95%B0%E5%92%8C%E8%AF%B7%E6%B1%82%E8%BD%AC%E5%8F%91"><span class="toc-number">6.7.1.</span> <span class="toc-text">6.7.1 获取前端传递参数和请求转发</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-7-2-%E9%87%8D%E5%AE%9A%E5%90%91%E4%B8%8E%E8%AF%B7%E6%B1%82%E8%BD%AC%E5%8F%91%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">6.7.2.</span> <span class="toc-text">6.7.2 重定向与请求转发的区别</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E4%B8%83%E7%AB%A0-Cookie-amp-Session"><span class="toc-number">7.</span> <span class="toc-text">第七章 Cookie &amp; Session</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#7-1-%E4%BC%9A%E8%AF%9D"><span class="toc-number">7.1.</span> <span class="toc-text">7.1 会话</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-2-%E4%B8%A4%E7%A7%8D%E4%BF%9D%E5%AD%98%E4%BC%9A%E8%AF%9D%E7%9A%84%E6%8A%80%E6%9C%AF"><span class="toc-number">7.2.</span> <span class="toc-text">7.2 两种保存会话的技术</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#7-2-1-Cookie"><span class="toc-number">7.2.1.</span> <span class="toc-text">7.2.1 Cookie</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#7-2-1-1-%E6%B7%BB%E5%8A%A0%E8%8E%B7%E5%8F%96%E5%92%8C%E8%AE%BE%E7%BD%AE%E6%9C%89%E6%95%88%E6%9C%9F"><span class="toc-number">7.2.1.1.</span> <span class="toc-text">7.2.1.1 添加获取和设置有效期</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#7-2-1-2-Cookie%E7%9A%84%E4%B8%80%E4%BA%9B%E7%89%B9%E6%80%A7"><span class="toc-number">7.2.1.2.</span> <span class="toc-text">7.2.1.2 Cookie的一些特性</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-2-2-Session"><span class="toc-number">7.2.2.</span> <span class="toc-text">7.2.2 Session</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#7-2-2-1-%E5%88%9B%E5%BB%BAsessionId"><span class="toc-number">7.2.2.1.</span> <span class="toc-text">7.2.2.1 创建sessionId</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#7-2-2-2-Session%E5%AD%98%E5%82%A8%E4%BF%A1%E6%81%AF"><span class="toc-number">7.2.2.2.</span> <span class="toc-text">7.2.2.2 Session存储信息</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#7-2-2-3-%E6%89%8B%E5%8A%A8%E6%B3%A8%E9%94%80Session"><span class="toc-number">7.2.2.3.</span> <span class="toc-text">7.2.2.3 手动注销Session</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#7-2-2-4-%E8%AE%BE%E7%BD%AESession%E9%BB%98%E8%AE%A4%E5%A4%B1%E6%95%88%E6%97%B6%E9%97%B4"><span class="toc-number">7.2.2.4.</span> <span class="toc-text">7.2.2.4 设置Session默认失效时间</span></a></li></ol></li></ol></li></ol></li></ol>
                     </div>
                 </span>
             </div>
