@@ -45,8 +45,9 @@
 <meta property="og:image" content="https://img-blog.csdnimg.cn/4437555a85314d1880160e13542b08c2.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/b22f2d9c4ade46efa0575a003637d029.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/913fbd523532491abc6027c4af85c09f.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2MzQ1ODg3,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/5ee4d28c01404e3fa1e77a39bd3a7b59.png#pic_center">
 <meta property="article:published_time" content="2021-08-07T07:13:19.000Z">
-<meta property="article:modified_time" content="2021-08-16T09:52:52.203Z">
+<meta property="article:modified_time" content="2021-08-17T10:02:08.961Z">
 <meta property="article:author" content="Woojou">
 <meta property="article:tag" content="JAVA">
 <meta name="twitter:card" content="summary">
@@ -693,6 +694,7 @@ public class HelloServlet extends HttpServlet &#123;
     &lt;/servlet-mapping&gt;
 </code></pre>
 <h2 id="6-5-ServletContext"><a href="#6-5-ServletContext" class="headerlink" title="6.5 ServletContext"></a>6.5 ServletContext</h2><p>web容器在启动的时候，会为每个web程序创建一个对应的 ServletContext 对象（有且只有一个，对应单例模式），代表当前的 web应用。</p>
+<p>也就是全局的，所有用户都可以共享的一些内容（PS：用户私有的内容存储在服务器的Session中）</p>
 <ul>
 <li><p><strong>共享数据</strong></p>
 <p>在这个Servlet类中用到的数据可以被同一个web程序下其他的Servlet读取到</p>
@@ -968,7 +970,7 @@ public class LoginServlet extends HttpServlet &#123;
 <h1 id="第七章-Cookie-amp-Session"><a href="#第七章-Cookie-amp-Session" class="headerlink" title="第七章 Cookie &amp; Session"></a>第七章 Cookie &amp; Session</h1><h2 id="7-1-会话"><a href="#7-1-会话" class="headerlink" title="7.1 会话"></a>7.1 会话</h2><p>会话，指用户登录网站后的一系列操作，包括添加购物车、收藏夹、支付等其他动作。</p>
 <h2 id="7-2-两种保存会话的技术"><a href="#7-2-两种保存会话的技术" class="headerlink" title="7.2 两种保存会话的技术"></a>7.2 两种保存会话的技术</h2><p>为了保持用户登录的状态，有两个技术：Cookie与Session。<strong>Cookie是给客户端一个专属于个人的信息验证码</strong>，<strong>Session在服务器端记录用户的信息</strong></p>
 <ol>
-<li>存储位置不同: Cookie是保存在客户端, Session是保存服务器端。</li>
+<li>存储位置不同: Cookie是保存在客户端（浏览器）， Session是保存到服务器端。</li>
 <li>存储数据量大小不同: Cookie存储是有限的, 不超过4KB。而Seesion是无限制的（因为Session需要存储会话内容，这对容量要求比较高）</li>
 </ol>
 <h3 id="7-2-1-Cookie"><a href="#7-2-1-Cookie" class="headerlink" title="7.2.1 Cookie"></a>7.2.1 Cookie</h3><p><strong>cookie一般会保存在本地的用户目录下 appdata</strong>。</p>
@@ -1077,7 +1079,14 @@ public class CookieDemo01 extends HttpServlet &#123;
 <li>Cookie大小上限为4kb</li>
 <li>浏览器上限为300个cookie</li>
 </ul>
-<h3 id="7-2-2-Session"><a href="#7-2-2-Session" class="headerlink" title="7.2.2 Session"></a>7.2.2 Session</h3><p>服务器会给每个用户（浏览器）创建一个Session对象，只要浏览器没关闭，这个Session就会一直存在。</p>
+<h3 id="7-2-2-Session"><a href="#7-2-2-Session" class="headerlink" title="7.2.2 Session"></a>7.2.2 Session</h3><p>服务器会给每个用户（浏览器）创建一个Session对象，只要浏览器没关闭且Session没过期，这个Session就会一直存在。</p>
+<p>session其实分为客户端Session和服务器端Session。</p>
+<ul>
+<li><p>当用户首次与Web服务器建立连接的时候，服务器会给用户分发一个 SessionID作为标识。SessionID是一个由24个字符组成的随机字符串。用户每次提交页面，浏览器都会把这个SessionID包含在 HTTP头中提交给Web服务器，这样Web服务器就能区分当前请求页面的是哪一个客户端。这个SessionID就是保存在客户端的，属于客户端Session。</p>
+</li>
+<li><p>其实客户端Session默认是以cookie的形式来存储的，所以当用户禁用了cookie的话，服务器端就得不到SessionID。这时我们可以使用url的方式来存储客户端Session。也就是将SessionID直接写在了url中，当然这种方法不常用。</p>
+</li>
+</ul>
 <p><strong>session的创建</strong></p>
 <p>当程序需要为某个客户端的请求创建一个session时，服务器首先检查这个客户端的请求里是否已包含了sessionId，如果已包含则说明以前已经为此客户端创建过session，服务器就按照sessionId把这个session从后台数据库中检索出来使用（检索不到，会新建一个）。</p>
 <p>如果客户端请求不包含sessionId，则为此客户端创建一个session并且生成一个与此session相关联的sessionId，并发送给浏览器，浏览器下次来访问的时候，会在request的cookie中带上sessionid，然后通过sessionid在服务器的缓存中获取实际数据。</p>
@@ -1214,12 +1223,106 @@ session.removeAttribute(&quot;person&quot;);
 session.invalidate();
 //在这之后仍然可以输出ID，但是不能输出Person
 </code></pre>
-<h4 id="7-2-2-4-设置Session默认失效时间"><a href="#7-2-2-4-设置Session默认失效时间" class="headerlink" title="7.2.2.4 设置Session默认失效时间"></a>7.2.2.4 设置Session默认失效时间</h4><p>在web.xml中</p>
+<h4 id="7-2-2-4-设置Session自动失效时间"><a href="#7-2-2-4-设置Session自动失效时间" class="headerlink" title="7.2.2.4 设置Session自动失效时间"></a>7.2.2.4 设置Session自动失效时间</h4><p>在web.xml中配置</p>
 <pre><code class="xml">  &lt;session-config&gt;
     &lt;!-- 15min --&gt;
     &lt;session-timeout&gt;15&lt;/session-timeout&gt;
   &lt;/session-config&gt;
 </code></pre>
+<h1 id="第八章-JSP"><a href="#第八章-JSP" class="headerlink" title="第八章 JSP"></a>第八章 JSP</h1><h2 id="8-1-什么是JSP"><a href="#8-1-什么是JSP" class="headerlink" title="8.1 什么是JSP"></a>8.1 什么是JSP</h2><p>Java Server Pages：Java服务器端页面，和Servlet一样，都是用于动态页面。</p>
+<p>JSP 和 HTML 语法十分相像，他们的区别有：</p>
+<ul>
+<li>HTML 只给用户提供静态的数据</li>
+<li>JSP页面中可以嵌入Java代码，为用户提供动态数据</li>
+</ul>
+<h2 id="8-2-JSP原理"><a href="#8-2-JSP原理" class="headerlink" title="8.2 JSP原理"></a>8.2 JSP原理</h2><p>去Tomcat工作空间下的work文件夹里可以看到jsp文件转变成了java程序。实际上就是把语法比较简单的 JSP 转换成了Java语言的程序。</p>
+<p><strong>注意：</strong>用户必须要去访问这个jsp页面，才会被转换，最终用户拿到的实际上是处理完的class。</p>
+<p><img src="https://img-blog.csdnimg.cn/5ee4d28c01404e3fa1e77a39bd3a7b59.png#pic_center"></p>
+<ul>
+<li>查看这里的java代码，发现index_jsp 继承了 HTTPJSPBase，而这个接口又实现了 Servlet，所以 JSP 本质上就是实现了 Servlet 接口。</li>
+<li>里面还内置了一些对象</li>
+</ul>
+<pre><code class="java">//页面上下文
+final javax.servlet.jsp.PageContext pageContext;
+//session
+javax.servlet.http.HttpSession session = null;
+//applicationContext
+final javax.servlet.ServletContext application;
+//配置
+final javax.servlet.ServletConfig config;
+//JspWriter 输出
+javax.servlet.jsp.JspWriter out = null;
+//当前页面
+final java.lang.Object page = this;
+javax.servlet.jsp.JspWriter _jspx_out = null;
+javax.servlet.jsp.PageContext _jspx_page_context = null;
+
+//请求和响应
+javax.servlet.http.HttpServletRequest request
+    javax.servlet.http.HttpServletResponse response
+</code></pre>
+<ul>
+<li>输出页面前的一些设置</li>
+</ul>
+<pre><code class="java">//设置页面响应类型 及 编码格式
+response.setContentType(&quot;text/html;charset=UTF-8&quot;);
+pageContext = _jspxFactory.getPageContext(this, request, response, null, true, 8192, true);
+_jspx_page_context = pageContext;
+application = pageContext.getServletContext();
+config = pageContext.getServletConfig();
+session = pageContext.getSession();
+out = pageContext.getOut();
+_jspx_out = out;
+</code></pre>
+<ul>
+<li>上面的这些对象其实在写JSP的时候可以直接使用，注意java语法的特殊格式：&lt;%  java代码  %&gt;。在JSP里的java代码，在转换成java程序的时候会被原封不动的输出。如果是HTML的代码会被转换为：</li>
+</ul>
+<pre><code class="java">out.write(&quot;&lt;html&gt;\r\n&quot;);
+</code></pre>
+<h2 id="8-3-JSP基础语法"><a href="#8-3-JSP基础语法" class="headerlink" title="8.3 JSP基础语法"></a>8.3 JSP基础语法</h2><p>下面测试的时候用到的方式是热部署，注意热部署要选 war-exploded，且 <code>On &#39;Update action&#39;</code> 和 <code>On frame deactivation</code> 两个都选择 Update classes and resources。</p>
+<h3 id="8-3-1-JSP表达式"><a href="#8-3-1-JSP表达式" class="headerlink" title="8.3.1 JSP表达式"></a>8.3.1 JSP表达式</h3><pre><code class="jsp">&lt;%-- JSP表达
+    用于将程序输出，输出到客户端
+    &lt;%= 变量或表达式%&gt;
+--%&gt;
+&lt;%= new java.util.Date()%&gt;
+</code></pre>
+<h3 id="8-3-2-JSP脚本片段"><a href="#8-3-2-JSP脚本片段" class="headerlink" title="8.3.2 JSP脚本片段"></a>8.3.2 JSP脚本片段</h3><pre><code class="jsp">&lt;%-- JSP脚本片段 --%&gt;
+&lt;%
+int sum = 0;
+for(int i = 1; i &lt;= 100; i++) &#123;
+    sum += i;
+&#125;
+out.println(&quot;&lt;h1&gt;Sum=&quot; + sum + &quot;&lt;h1&gt;&quot;);
+%&gt;
+</code></pre>
+<h3 id="8-3-3-在代码中嵌入HTML元素"><a href="#8-3-3-在代码中嵌入HTML元素" class="headerlink" title="8.3.3 在代码中嵌入HTML元素"></a>8.3.3 在代码中嵌入HTML元素</h3><pre><code class="jsp">&lt;%-- 在代码中嵌入HTML元素 --%&gt;
+&lt;%
+    for(int i = 0; i &lt; 3; i++) &#123;
+%&gt;
+
+&lt;h1&gt;hello!&lt;/h1&gt;
+
+&lt;%
+    &#125; //上面for循环的右括号在这里
+%&gt;
+</code></pre>
+<h3 id="8-3-4-JSP声明"><a href="#8-3-4-JSP声明" class="headerlink" title="8.3.4 JSP声明"></a>8.3.4 JSP声明</h3><p>JSP声明会被编译到JSP生成的java代码的类中（在所有其他方法以外），而其他的代码会被放到 _jspService 方法中。</p>
+<pre><code class="jsp">&lt;%-- jsp 声明,注意这里有个感叹号 --%&gt;
+&lt;%!
+    static &#123;
+    System.out.println(&quot;这里是静态代码块&quot;);
+&#125;
+public void test01() &#123;
+    System.out.println(&quot;这里是个方法&quot;);
+&#125;
+%&gt;
+</code></pre>
+<h3 id="8-3-5-EL表达式"><a href="#8-3-5-EL表达式" class="headerlink" title="8.3.5 EL表达式"></a>8.3.5 EL表达式</h3><p><code>$&#123;&#125;</code> 也可以内含java代码的输出，例如<code>$&#123;i&#125;</code>，i是一个变量。</p>
+<h3 id="8-3-6-关于注释"><a href="#8-3-6-关于注释" class="headerlink" title="8.3.6 关于注释"></a>8.3.6 关于注释</h3><p>可以用两种格式的注释</p>
+<pre><code class="jsp">&lt;%-- 这是jsp格式的注释 --%&gt;
+&lt;!-- 这是HTML格式的注释 --!&gt;
+</code></pre>
+<p>jsp的注释不会在客户端反编译后显示出来，而HTML会。</p>
 
       
 
@@ -1332,7 +1435,7 @@ session.invalidate();
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E4%B8%80%E7%AB%A0-%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-number">1.</span> <span class="toc-text">第一章 基本概念</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-%E5%89%8D%E8%A8%80"><span class="toc-number">1.1.</span> <span class="toc-text">1.1 前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-web%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F"><span class="toc-number">1.2.</span> <span class="toc-text">1.2 web应用程序</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-3-%E9%9D%99%E6%80%81web"><span class="toc-number">1.3.</span> <span class="toc-text">1.3 静态web</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-4-%E5%8A%A8%E6%80%81web"><span class="toc-number">1.4.</span> <span class="toc-text">1.4 动态web</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E7%AB%A0-web%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-number">2.</span> <span class="toc-text">第二章 web服务器</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1-%E4%B8%80%E4%BA%9B%E6%8A%80%E6%9C%AF%E8%AE%B2%E8%A7%A3"><span class="toc-number">2.1.</span> <span class="toc-text">2.1 一些技术讲解</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-1-ASP"><span class="toc-number">2.1.1.</span> <span class="toc-text">2.1.1 ASP</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-2-PHP"><span class="toc-number">2.1.2.</span> <span class="toc-text">2.1.2 PHP</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-3-JSP-Servlet"><span class="toc-number">2.1.3.</span> <span class="toc-text">2.1.3 JSP&#x2F;Servlet</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2-web%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-number">2.2.</span> <span class="toc-text">2.2 web服务器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-1-IIS"><span class="toc-number">2.2.1.</span> <span class="toc-text">2.2.1 IIS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-2-Tomcat"><span class="toc-number">2.2.2.</span> <span class="toc-text">2.2.2 Tomcat</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E7%AB%A0-Tomcat%E8%AF%A6%E8%A7%A3"><span class="toc-number">3.</span> <span class="toc-text">第三章 Tomcat详解</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#3-1-%E4%B8%8B%E8%BD%BD%E4%B8%8E%E5%AE%89%E8%A3%85"><span class="toc-number">3.1.</span> <span class="toc-text">3.1 下载与安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-2-%E5%90%AF%E5%8A%A8"><span class="toc-number">3.2.</span> <span class="toc-text">3.2 启动</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-3-%E9%85%8D%E7%BD%AE"><span class="toc-number">3.3.</span> <span class="toc-text">3.3 配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-4-%E6%A8%A1%E4%BB%BF%E5%8F%91%E5%B8%83web%E7%BD%91%E7%AB%99"><span class="toc-number">3.4.</span> <span class="toc-text">3.4 模仿发布web网站</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E5%9B%9B%E7%AB%A0-HTTP%E8%AF%A6%E8%A7%A3"><span class="toc-number">4.</span> <span class="toc-text">第四章 HTTP详解</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#4-1-%E4%BB%80%E4%B9%88%E6%98%AFHTTP"><span class="toc-number">4.1.</span> <span class="toc-text">4.1 什么是HTTP</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-2-%E4%B8%A4%E4%B8%AA%E7%89%88%E6%9C%AC"><span class="toc-number">4.2.</span> <span class="toc-text">4.2 两个版本</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-3-HTTP%E8%AF%B7%E6%B1%82"><span class="toc-number">4.3.</span> <span class="toc-text">4.3 HTTP请求</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-4-HTTP%E5%93%8D%E5%BA%94"><span class="toc-number">4.4.</span> <span class="toc-text">4.4 HTTP响应</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E4%BA%94%E7%AB%A0-Maven%E9%A1%B9%E7%9B%AE%E6%9E%84%E5%BB%BA"><span class="toc-number">5.</span> <span class="toc-text">第五章 Maven项目构建</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#5-1-Maven%E5%8F%8A%E7%9B%B8%E5%85%B3%E8%AE%BE%E7%BD%AE"><span class="toc-number">5.1.</span> <span class="toc-text">5.1 Maven及相关设置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-2-IDEA-Maven%E9%A1%B9%E7%9B%AE%E5%88%9B%E5%BB%BA"><span class="toc-number">5.2.</span> <span class="toc-text">5.2 IDEA Maven项目创建</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-3-%E5%9C%A8IDEA%E4%B8%AD%E9%85%8D%E7%BD%AETomcat"><span class="toc-number">5.3.</span> <span class="toc-text">5.3 在IDEA中配置Tomcat</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-4-pom%E6%96%87%E4%BB%B6"><span class="toc-number">5.4.</span> <span class="toc-text">5.4 pom文件</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E5%85%AD%E7%AB%A0-Servlet"><span class="toc-number">6.</span> <span class="toc-text">第六章 Servlet</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#6-1-Servlet%E7%AE%80%E4%BB%8B"><span class="toc-number">6.1.</span> <span class="toc-text">6.1 Servlet简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-2-Hello-Servlet"><span class="toc-number">6.2.</span> <span class="toc-text">6.2 Hello Servlet</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-3-Servlet%E5%8E%9F%E7%90%86"><span class="toc-number">6.3.</span> <span class="toc-text">6.3 Servlet原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-4-Mapping%E9%97%AE%E9%A2%98"><span class="toc-number">6.4.</span> <span class="toc-text">6.4 Mapping问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-5-ServletContext"><span class="toc-number">6.5.</span> <span class="toc-text">6.5 ServletContext</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-6-HttpServletResponse"><span class="toc-number">6.6.</span> <span class="toc-text">6.6 HttpServletResponse</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#6-6-1-%E5%88%86%E7%B1%BB"><span class="toc-number">6.6.1.</span> <span class="toc-text">6.6.1 分类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-6-2-%E4%B8%8B%E8%BD%BD%E6%96%87%E4%BB%B6"><span class="toc-number">6.6.2.</span> <span class="toc-text">6.6.2 下载文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-6-3-%E6%B5%8F%E8%A7%88%E5%99%A8%E6%98%BE%E7%A4%BA%E5%9B%BE%E7%89%87"><span class="toc-number">6.6.3.</span> <span class="toc-text">6.6.3 浏览器显示图片</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-6-4-%E9%87%8D%E5%AE%9A%E5%90%91"><span class="toc-number">6.6.4.</span> <span class="toc-text">6.6.4 重定向</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-7-HttpServletRequest"><span class="toc-number">6.7.</span> <span class="toc-text">6.7 HttpServletRequest</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#6-7-1-%E8%8E%B7%E5%8F%96%E5%89%8D%E7%AB%AF%E4%BC%A0%E9%80%92%E5%8F%82%E6%95%B0%E5%92%8C%E8%AF%B7%E6%B1%82%E8%BD%AC%E5%8F%91"><span class="toc-number">6.7.1.</span> <span class="toc-text">6.7.1 获取前端传递参数和请求转发</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-7-2-%E9%87%8D%E5%AE%9A%E5%90%91%E4%B8%8E%E8%AF%B7%E6%B1%82%E8%BD%AC%E5%8F%91%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">6.7.2.</span> <span class="toc-text">6.7.2 重定向与请求转发的区别</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E4%B8%83%E7%AB%A0-Cookie-amp-Session"><span class="toc-number">7.</span> <span class="toc-text">第七章 Cookie &amp; Session</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#7-1-%E4%BC%9A%E8%AF%9D"><span class="toc-number">7.1.</span> <span class="toc-text">7.1 会话</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-2-%E4%B8%A4%E7%A7%8D%E4%BF%9D%E5%AD%98%E4%BC%9A%E8%AF%9D%E7%9A%84%E6%8A%80%E6%9C%AF"><span class="toc-number">7.2.</span> <span class="toc-text">7.2 两种保存会话的技术</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#7-2-1-Cookie"><span class="toc-number">7.2.1.</span> <span class="toc-text">7.2.1 Cookie</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#7-2-1-1-%E6%B7%BB%E5%8A%A0%E8%8E%B7%E5%8F%96%E5%92%8C%E8%AE%BE%E7%BD%AE%E6%9C%89%E6%95%88%E6%9C%9F"><span class="toc-number">7.2.1.1.</span> <span class="toc-text">7.2.1.1 添加获取和设置有效期</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#7-2-1-2-Cookie%E7%9A%84%E4%B8%80%E4%BA%9B%E7%89%B9%E6%80%A7"><span class="toc-number">7.2.1.2.</span> <span class="toc-text">7.2.1.2 Cookie的一些特性</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-2-2-Session"><span class="toc-number">7.2.2.</span> <span class="toc-text">7.2.2 Session</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#7-2-2-1-%E5%88%9B%E5%BB%BAsessionId"><span class="toc-number">7.2.2.1.</span> <span class="toc-text">7.2.2.1 创建sessionId</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#7-2-2-2-Session%E5%AD%98%E5%82%A8%E4%BF%A1%E6%81%AF"><span class="toc-number">7.2.2.2.</span> <span class="toc-text">7.2.2.2 Session存储信息</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#7-2-2-3-%E6%89%8B%E5%8A%A8%E6%B3%A8%E9%94%80Session"><span class="toc-number">7.2.2.3.</span> <span class="toc-text">7.2.2.3 手动注销Session</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#7-2-2-4-%E8%AE%BE%E7%BD%AESession%E9%BB%98%E8%AE%A4%E5%A4%B1%E6%95%88%E6%97%B6%E9%97%B4"><span class="toc-number">7.2.2.4.</span> <span class="toc-text">7.2.2.4 设置Session默认失效时间</span></a></li></ol></li></ol></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E4%B8%80%E7%AB%A0-%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-number">1.</span> <span class="toc-text">第一章 基本概念</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-%E5%89%8D%E8%A8%80"><span class="toc-number">1.1.</span> <span class="toc-text">1.1 前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-web%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F"><span class="toc-number">1.2.</span> <span class="toc-text">1.2 web应用程序</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-3-%E9%9D%99%E6%80%81web"><span class="toc-number">1.3.</span> <span class="toc-text">1.3 静态web</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-4-%E5%8A%A8%E6%80%81web"><span class="toc-number">1.4.</span> <span class="toc-text">1.4 动态web</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E7%AB%A0-web%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-number">2.</span> <span class="toc-text">第二章 web服务器</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1-%E4%B8%80%E4%BA%9B%E6%8A%80%E6%9C%AF%E8%AE%B2%E8%A7%A3"><span class="toc-number">2.1.</span> <span class="toc-text">2.1 一些技术讲解</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-1-ASP"><span class="toc-number">2.1.1.</span> <span class="toc-text">2.1.1 ASP</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-2-PHP"><span class="toc-number">2.1.2.</span> <span class="toc-text">2.1.2 PHP</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-3-JSP-Servlet"><span class="toc-number">2.1.3.</span> <span class="toc-text">2.1.3 JSP&#x2F;Servlet</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2-web%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-number">2.2.</span> <span class="toc-text">2.2 web服务器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-1-IIS"><span class="toc-number">2.2.1.</span> <span class="toc-text">2.2.1 IIS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-2-Tomcat"><span class="toc-number">2.2.2.</span> <span class="toc-text">2.2.2 Tomcat</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E7%AB%A0-Tomcat%E8%AF%A6%E8%A7%A3"><span class="toc-number">3.</span> <span class="toc-text">第三章 Tomcat详解</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#3-1-%E4%B8%8B%E8%BD%BD%E4%B8%8E%E5%AE%89%E8%A3%85"><span class="toc-number">3.1.</span> <span class="toc-text">3.1 下载与安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-2-%E5%90%AF%E5%8A%A8"><span class="toc-number">3.2.</span> <span class="toc-text">3.2 启动</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-3-%E9%85%8D%E7%BD%AE"><span class="toc-number">3.3.</span> <span class="toc-text">3.3 配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-4-%E6%A8%A1%E4%BB%BF%E5%8F%91%E5%B8%83web%E7%BD%91%E7%AB%99"><span class="toc-number">3.4.</span> <span class="toc-text">3.4 模仿发布web网站</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E5%9B%9B%E7%AB%A0-HTTP%E8%AF%A6%E8%A7%A3"><span class="toc-number">4.</span> <span class="toc-text">第四章 HTTP详解</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#4-1-%E4%BB%80%E4%B9%88%E6%98%AFHTTP"><span class="toc-number">4.1.</span> <span class="toc-text">4.1 什么是HTTP</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-2-%E4%B8%A4%E4%B8%AA%E7%89%88%E6%9C%AC"><span class="toc-number">4.2.</span> <span class="toc-text">4.2 两个版本</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-3-HTTP%E8%AF%B7%E6%B1%82"><span class="toc-number">4.3.</span> <span class="toc-text">4.3 HTTP请求</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-4-HTTP%E5%93%8D%E5%BA%94"><span class="toc-number">4.4.</span> <span class="toc-text">4.4 HTTP响应</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E4%BA%94%E7%AB%A0-Maven%E9%A1%B9%E7%9B%AE%E6%9E%84%E5%BB%BA"><span class="toc-number">5.</span> <span class="toc-text">第五章 Maven项目构建</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#5-1-Maven%E5%8F%8A%E7%9B%B8%E5%85%B3%E8%AE%BE%E7%BD%AE"><span class="toc-number">5.1.</span> <span class="toc-text">5.1 Maven及相关设置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-2-IDEA-Maven%E9%A1%B9%E7%9B%AE%E5%88%9B%E5%BB%BA"><span class="toc-number">5.2.</span> <span class="toc-text">5.2 IDEA Maven项目创建</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-3-%E5%9C%A8IDEA%E4%B8%AD%E9%85%8D%E7%BD%AETomcat"><span class="toc-number">5.3.</span> <span class="toc-text">5.3 在IDEA中配置Tomcat</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-4-pom%E6%96%87%E4%BB%B6"><span class="toc-number">5.4.</span> <span class="toc-text">5.4 pom文件</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E5%85%AD%E7%AB%A0-Servlet"><span class="toc-number">6.</span> <span class="toc-text">第六章 Servlet</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#6-1-Servlet%E7%AE%80%E4%BB%8B"><span class="toc-number">6.1.</span> <span class="toc-text">6.1 Servlet简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-2-Hello-Servlet"><span class="toc-number">6.2.</span> <span class="toc-text">6.2 Hello Servlet</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-3-Servlet%E5%8E%9F%E7%90%86"><span class="toc-number">6.3.</span> <span class="toc-text">6.3 Servlet原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-4-Mapping%E9%97%AE%E9%A2%98"><span class="toc-number">6.4.</span> <span class="toc-text">6.4 Mapping问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-5-ServletContext"><span class="toc-number">6.5.</span> <span class="toc-text">6.5 ServletContext</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-6-HttpServletResponse"><span class="toc-number">6.6.</span> <span class="toc-text">6.6 HttpServletResponse</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#6-6-1-%E5%88%86%E7%B1%BB"><span class="toc-number">6.6.1.</span> <span class="toc-text">6.6.1 分类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-6-2-%E4%B8%8B%E8%BD%BD%E6%96%87%E4%BB%B6"><span class="toc-number">6.6.2.</span> <span class="toc-text">6.6.2 下载文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-6-3-%E6%B5%8F%E8%A7%88%E5%99%A8%E6%98%BE%E7%A4%BA%E5%9B%BE%E7%89%87"><span class="toc-number">6.6.3.</span> <span class="toc-text">6.6.3 浏览器显示图片</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-6-4-%E9%87%8D%E5%AE%9A%E5%90%91"><span class="toc-number">6.6.4.</span> <span class="toc-text">6.6.4 重定向</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-7-HttpServletRequest"><span class="toc-number">6.7.</span> <span class="toc-text">6.7 HttpServletRequest</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#6-7-1-%E8%8E%B7%E5%8F%96%E5%89%8D%E7%AB%AF%E4%BC%A0%E9%80%92%E5%8F%82%E6%95%B0%E5%92%8C%E8%AF%B7%E6%B1%82%E8%BD%AC%E5%8F%91"><span class="toc-number">6.7.1.</span> <span class="toc-text">6.7.1 获取前端传递参数和请求转发</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-7-2-%E9%87%8D%E5%AE%9A%E5%90%91%E4%B8%8E%E8%AF%B7%E6%B1%82%E8%BD%AC%E5%8F%91%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">6.7.2.</span> <span class="toc-text">6.7.2 重定向与请求转发的区别</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E4%B8%83%E7%AB%A0-Cookie-amp-Session"><span class="toc-number">7.</span> <span class="toc-text">第七章 Cookie &amp; Session</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#7-1-%E4%BC%9A%E8%AF%9D"><span class="toc-number">7.1.</span> <span class="toc-text">7.1 会话</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-2-%E4%B8%A4%E7%A7%8D%E4%BF%9D%E5%AD%98%E4%BC%9A%E8%AF%9D%E7%9A%84%E6%8A%80%E6%9C%AF"><span class="toc-number">7.2.</span> <span class="toc-text">7.2 两种保存会话的技术</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#7-2-1-Cookie"><span class="toc-number">7.2.1.</span> <span class="toc-text">7.2.1 Cookie</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#7-2-1-1-%E6%B7%BB%E5%8A%A0%E8%8E%B7%E5%8F%96%E5%92%8C%E8%AE%BE%E7%BD%AE%E6%9C%89%E6%95%88%E6%9C%9F"><span class="toc-number">7.2.1.1.</span> <span class="toc-text">7.2.1.1 添加获取和设置有效期</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#7-2-1-2-Cookie%E7%9A%84%E4%B8%80%E4%BA%9B%E7%89%B9%E6%80%A7"><span class="toc-number">7.2.1.2.</span> <span class="toc-text">7.2.1.2 Cookie的一些特性</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-2-2-Session"><span class="toc-number">7.2.2.</span> <span class="toc-text">7.2.2 Session</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#7-2-2-1-%E5%88%9B%E5%BB%BAsessionId"><span class="toc-number">7.2.2.1.</span> <span class="toc-text">7.2.2.1 创建sessionId</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#7-2-2-2-Session%E5%AD%98%E5%82%A8%E4%BF%A1%E6%81%AF"><span class="toc-number">7.2.2.2.</span> <span class="toc-text">7.2.2.2 Session存储信息</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#7-2-2-3-%E6%89%8B%E5%8A%A8%E6%B3%A8%E9%94%80Session"><span class="toc-number">7.2.2.3.</span> <span class="toc-text">7.2.2.3 手动注销Session</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#7-2-2-4-%E8%AE%BE%E7%BD%AESession%E8%87%AA%E5%8A%A8%E5%A4%B1%E6%95%88%E6%97%B6%E9%97%B4"><span class="toc-number">7.2.2.4.</span> <span class="toc-text">7.2.2.4 设置Session自动失效时间</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E5%85%AB%E7%AB%A0-JSP"><span class="toc-number">8.</span> <span class="toc-text">第八章 JSP</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#8-1-%E4%BB%80%E4%B9%88%E6%98%AFJSP"><span class="toc-number">8.1.</span> <span class="toc-text">8.1 什么是JSP</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-2-JSP%E5%8E%9F%E7%90%86"><span class="toc-number">8.2.</span> <span class="toc-text">8.2 JSP原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-3-JSP%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95"><span class="toc-number">8.3.</span> <span class="toc-text">8.3 JSP基础语法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#8-3-1-JSP%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="toc-number">8.3.1.</span> <span class="toc-text">8.3.1 JSP表达式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-3-2-JSP%E8%84%9A%E6%9C%AC%E7%89%87%E6%AE%B5"><span class="toc-number">8.3.2.</span> <span class="toc-text">8.3.2 JSP脚本片段</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-3-3-%E5%9C%A8%E4%BB%A3%E7%A0%81%E4%B8%AD%E5%B5%8C%E5%85%A5HTML%E5%85%83%E7%B4%A0"><span class="toc-number">8.3.3.</span> <span class="toc-text">8.3.3 在代码中嵌入HTML元素</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-3-4-JSP%E5%A3%B0%E6%98%8E"><span class="toc-number">8.3.4.</span> <span class="toc-text">8.3.4 JSP声明</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-3-5-EL%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="toc-number">8.3.5.</span> <span class="toc-text">8.3.5 EL表达式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-3-6-%E5%85%B3%E4%BA%8E%E6%B3%A8%E9%87%8A"><span class="toc-number">8.3.6.</span> <span class="toc-text">8.3.6 关于注释</span></a></li></ol></li></ol></li></ol>
                     </div>
                 </span>
             </div>
