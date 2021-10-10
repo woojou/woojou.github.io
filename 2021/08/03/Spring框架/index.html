@@ -21,7 +21,7 @@
 <meta property="og:image" content="https://img-blog.csdnimg.cn/7c193ebe3ede4a4482b7d6cecd4ed510.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbTBfNDYzNDU4ODc=,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/ec8743fa51f7461c9fb9a97134a08b15.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbTBfNDYzNDU4ODc=,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center">
 <meta property="article:published_time" content="2021-08-03T07:26:05.000Z">
-<meta property="article:modified_time" content="2021-09-14T03:58:58.967Z">
+<meta property="article:modified_time" content="2021-10-05T09:51:23.274Z">
 <meta property="article:author" content="Woojou">
 <meta property="article:tag" content="框架">
 <meta name="twitter:card" content="summary">
@@ -271,7 +271,7 @@ public class UserDaoDemo &#123;
 <li>运行即可看到控制台输出 save running</li>
 </ul>
 <h2 id="1-3-Spring配置文件"><a href="#1-3-Spring配置文件" class="headerlink" title="1.3 Spring配置文件"></a>1.3 Spring配置文件</h2><h3 id="1-3-1-Bean标签基本配置"><a href="#1-3-1-Bean标签基本配置" class="headerlink" title="1.3.1 Bean标签基本配置"></a>1.3.1 Bean标签基本配置</h3><p>用于配置对象交由Spring 来创建。</p>
-<p>默认情况下它调用的是类中的无参构造函数，如果没有无参构造函数则不能创建成功。</p>
+<p><strong>默认情况下它调用的是类中的无参构造函数</strong>，如果没有无参构造函数则不能创建成功。</p>
 <p>基本属性：</p>
 <ul>
 <li><strong>id</strong>：Bean实例在Spring容器中的<strong>唯一标识</strong></li>
@@ -360,7 +360,7 @@ public class DynamicFactoryBean &#123;
 <p><img src="https://img-blog.csdnimg.cn/7c193ebe3ede4a4482b7d6cecd4ed510.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbTBfNDYzNDU4ODc=,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center"></p>
 <p>简单的说，就是坐等框架把持久层对象传入业务层，而不用我们自己去获取。</p>
 <ul>
-<li>set方法注入</li>
+<li>set方法注入（推荐使用）</li>
 </ul>
 <pre><code class="java">public class UserServiceImpl implements UserService &#123;
     private UserDao userDao;
@@ -447,6 +447,7 @@ xmlns:p=&quot;http://www.springframework.org/schema/p&quot;
 &#125;
 </code></pre>
 <pre><code class="xml">&lt;bean id=&quot;userService&quot; class=&quot;com.kalimera.service.UserServiceImpl&quot;&gt;
+    &lt;!-- 引用数据类型用的是ref --&gt;
     &lt;property name=&quot;userDao&quot; ref=&quot;userDao&quot;&gt;&lt;/property&gt;
     &lt;property name=&quot;age&quot; value=&quot;15&quot;&gt;&lt;/property&gt;
     &lt;property name=&quot;userName&quot; value=&quot;zhangsan&quot;&gt;&lt;/property&gt;
@@ -604,8 +605,8 @@ public void test02() throws PropertyVetoException, SQLException &#123;
     connection.close();
 &#125;
 </code></pre>
-<p>还可以通过把这些基本连接数据配置到一个文件中，方便解耦</p>
-<pre><code class="pro">jdbc.driver = com.mysql.jdbc.Driver
+<p>还可以通过把这些基本连接数据配置到一个properties文件中，方便解耦</p>
+<pre><code class="properties">jdbc.driver = com.mysql.jdbc.Driver
 jdbc.url = jdbc:mysql://localhost:3306/bjpowernode
 jdbc.user = root
 jdbc.password = 123
@@ -638,7 +639,7 @@ public void test03() throws PropertyVetoException, SQLException &#123;
     &lt;property name=&quot;driverClass&quot; value=&quot;com.mysql.jdbc.Driver&quot;&gt;&lt;/property&gt;
     &lt;property name=&quot;jdbcUrl&quot; value=&quot;jdbc:mysql://localhost:3306/bjpowernode&quot;&gt;&lt;/property&gt;
     &lt;property name=&quot;user&quot; value=&quot;root&quot;&gt;&lt;/property&gt;
-    &lt;property name=&quot;password&quot; value=&quot;199911zytaime.&quot;&gt;&lt;/property&gt;
+    &lt;property name=&quot;password&quot; value=&quot;123&quot;&gt;&lt;/property&gt;
 &lt;/bean&gt;
 </code></pre>
 <ul>
@@ -667,12 +668,12 @@ public void test04() throws SQLException &#123;
                        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd&quot;&gt;
 </code></pre>
 <ul>
-<li>配置properties文件</li>
+<li>配置 properties 文件</li>
 </ul>
 <pre><code class="xml">&lt;context:property-placeholder location=&quot;jdbc.properties&quot;&gt;&lt;/context:property-placeholder&gt;
 </code></pre>
 <ul>
-<li>用EL表达式配置数据</li>
+<li>用 EL 表达式配置数据</li>
 </ul>
 <pre><code class="xml">&lt;bean id=&quot;dataSource&quot; class=&quot;com.mchange.v2.c3p0.ComboPooledDataSource&quot;&gt;
     &lt;property name=&quot;driverClass&quot; value=&quot;$&#123;jdbc.driver&#125;&quot;&gt;&lt;/property&gt;
