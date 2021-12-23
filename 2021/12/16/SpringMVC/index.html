@@ -6,26 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://woojou.github.io">
-  <title>Spring框架 | woojou&#39;s blog</title>
+  <title>SpringMVC | woojou&#39;s blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="本文章是根据黑马程序员SSM框架课程做的笔记。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Spring框架">
-<meta property="og:url" content="http://woojou.github.io/2021/08/03/Spring%E6%A1%86%E6%9E%B6/index.html">
+<meta property="og:title" content="SpringMVC">
+<meta property="og:url" content="http://woojou.github.io/2021/12/16/SpringMVC/index.html">
 <meta property="og:site_name" content="woojou&#39;s blog">
 <meta property="og:description" content="本文章是根据黑马程序员SSM框架课程做的笔记。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/2020031110534271.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2hlbGxvX3dvcmQy,size_16,color_FFFFFF,t_70">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/cfc87f8e61264686a4b2423c1a775a1e.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbTBfNDYzNDU4ODc=,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/3c67410203d24b52b5c7c9fa7c116385.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbTBfNDYzNDU4ODc=,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/7c193ebe3ede4a4482b7d6cecd4ed510.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbTBfNDYzNDU4ODc=,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/ec8743fa51f7461c9fb9a97134a08b15.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbTBfNDYzNDU4ODc=,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center">
-<meta property="article:published_time" content="2021-08-03T07:26:05.000Z">
-<meta property="article:modified_time" content="2021-12-18T01:04:53.846Z">
+<meta property="article:published_time" content="2021-12-16T13:34:54.000Z">
+<meta property="article:modified_time" content="2021-12-23T13:49:18.027Z">
 <meta property="article:author" content="Woojou">
 <meta property="article:tag" content="框架">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://img-blog.csdnimg.cn/2020031110534271.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2hlbGxvX3dvcmQy,size_16,color_FFFFFF,t_70">
   
     <link rel="alternative" href="/atom.xml" title="woojou&#39;s blog" type="application/atom+xml">
   
@@ -165,20 +159,20 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-Spring框架" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-SpringMVC" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      Spring框架
+      SpringMVC
     </h1>
   
 
         
-        <a href="/2021/08/03/Spring%E6%A1%86%E6%9E%B6/" class="archive-article-date">
-  	<time datetime="2021-08-03T07:26:05.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-08-03</time>
+        <a href="/2021/12/16/SpringMVC/" class="archive-article-date">
+  	<time datetime="2021-12-16T13:34:54.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-12-16</time>
 </a>
         
       </header>
@@ -188,987 +182,287 @@
         <p>本文章是根据<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1WZ4y1P7Bp">黑马程序员SSM框架课程</a>做的笔记。</p>
 <span id="more"></span>
 
-<h2 id="1-Spring简介"><a href="#1-Spring简介" class="headerlink" title="1 Spring简介"></a>1 Spring简介</h2><h3 id="1-1-Spring是什么"><a href="#1-1-Spring是什么" class="headerlink" title="1.1 Spring是什么"></a>1.1 Spring是什么</h3><ul>
-<li>分层的</li>
-<li>Java SE/EE 应用 full-stack：这里的全栈并不是指前端和后端，而是指各层都有解决方案。</li>
-<li>轻量级开源框架：轻量级框架比较小巧，API比较少。</li>
-<li>以 <strong>IoC（Inverse of Control：反转控制，实质就是反转 bean 的控制权）</strong> 和 <strong>AOP（Aspect Oriented Programming：面向切面编程）</strong> 为内核</li>
-</ul>
-<p>提供了展现层 SpringMVC 和 持久层 Spring JDBCTemplate 以及 业务层事务管理等众多的企业级应用技术，还能整合开源世界上众多著名的第三方框架和类库。是使用最多的 Java EE 企业应用开源框架。</p>
-<h3 id="1-2-Spring发展历程"><a href="#1-2-Spring发展历程" class="headerlink" title="1.2 Spring发展历程"></a>1.2 Spring发展历程</h3><p>-&gt; 1997年，IBM 提出 EJB 的思想 </p>
-<p>-&gt; 1998年，SUN 制定开发标准规范 EJB1.0 </p>
-<p>-&gt; 1999年，EJB1.1发布 … 随后 2001年、2003年、2006年分别发布了EJB2.0 EJB2.1 EJB3.0</p>
-<p>-&gt; 2004年，Rod Johnson 提出了 Spring 雏形</p>
-<p><strong>2017年9月发布了Spring的最新版本 Spring 5.0 通用版本</strong></p>
-<h3 id="1-3-Spring优势"><a href="#1-3-Spring优势" class="headerlink" title="1.3 Spring优势"></a>1.3 Spring优势</h3><ul>
-<li><p>方便解耦，简化开发</p>
-<p>把对象的创建权交由 Spring 提供的 IoC 容器，使得对象间的依赖关系由 Spring 进行控制，避免硬编码造成的过度耦合。</p>
-</li>
-<li><p>AOP 编程的支持</p>
-</li>
-<li><p>声明式事务的支持</p>
-</li>
-<li><p>方便程序测试</p>
-</li>
-<li><p>方便集成各种优秀框架</p>
-</li>
-<li><p>降低 JavaEE API 的使用难度</p>
-<p>Spring 对 JavaEE API（如 JDBC、JavaMail、远程调用等）进行了薄薄的封装层（封完不是util，而是模板），使这些 API 的使用难度大大降低。</p>
-</li>
-</ul>
-<h3 id="1-4-Spring的体系结构"><a href="#1-4-Spring的体系结构" class="headerlink" title="1.4 Spring的体系结构"></a>1.4 Spring的体系结构</h3><p><img src="https://img-blog.csdnimg.cn/2020031110534271.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2hlbGxvX3dvcmQy,size_16,color_FFFFFF,t_70"></p>
-<p>Test：在底层是表明整个框架都可以进行测试</p>
-<h2 id="2-Spring快速入门"><a href="#2-Spring快速入门" class="headerlink" title="2 Spring快速入门"></a>2 Spring快速入门</h2><h3 id="2-1-Spring程序开发步骤"><a href="#2-1-Spring程序开发步骤" class="headerlink" title="2.1 Spring程序开发步骤"></a>2.1 Spring程序开发步骤</h3><p><img src="https://img-blog.csdnimg.cn/cfc87f8e61264686a4b2423c1a775a1e.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbTBfNDYzNDU4ODc=,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center"></p>
-<ol>
-<li>在 pom.xml 中导入 Spring 开发所需基本包的依赖</li>
-<li>编写 Dao 接口和实现类</li>
-<li>创建 Spring 核心配置文件</li>
-<li>在 Spring 配置文件中配置 Dao 实现类的 id标识</li>
-<li>使用 Spring 的API 获得 Bean 实例</li>
-</ol>
-<h3 id="2-2-一个简单的上手程序"><a href="#2-2-一个简单的上手程序" class="headerlink" title="2.2 一个简单的上手程序"></a>2.2 一个简单的上手程序</h3><ul>
-<li>先创建一个 project，删除src，然后新建module</li>
-<li>添加依赖</li>
-</ul>
-<pre><code class="xml">&lt;dependency&gt;
-    &lt;groupId&gt;org.springframework&lt;/groupId&gt;
-    &lt;artifactId&gt;spring-context&lt;/artifactId&gt;
-    &lt;version&gt;5.0.5.RELEASE&lt;/version&gt;
-&lt;/dependency&gt;
-</code></pre>
+<h1 id="1-Spring-MVC-简介"><a href="#1-Spring-MVC-简介" class="headerlink" title="1 Spring MVC 简介"></a>1 Spring MVC 简介</h1><h2 id="1-1-Spring-MVC-概述"><a href="#1-1-Spring-MVC-概述" class="headerlink" title="1.1 Spring MVC 概述"></a>1.1 Spring MVC 概述</h2><p>SpringMVC 是一种基于 Java 的实现 MVC 设计模型的请求驱动类型的轻量级 Web 框架，属于SpringFrameWork 的后续产品，已经融合在 Spring Web Flow 中。</p>
+<p>SpringMVC 已经成为目前最主流的MVC框架之一，并且随着Spring3.0 的发布，全面超越 Struts2，成为最优秀的 MVC 框架。它通过一套注解，让一个简单的 Java 类成为处理请求的控制器，而无须实现任何接口。同时它还支持 RESTful 编程风格的请求。</p>
+<h2 id="1-2-Spring-MVC-快速入门"><a href="#1-2-Spring-MVC-快速入门" class="headerlink" title="1.2 Spring MVC 快速入门"></a>1.2 Spring MVC 快速入门</h2><p><strong>需求</strong>：客户端发起请求，服务器端接收请求，执行逻辑并进行视图跳转。</p>
+<p><strong>开发步骤</strong>：</p>
 <ul>
-<li><p>编写简单的UserDao和UserDaoImpl类</p>
-</li>
-<li><p>右键 module 到 add framework support ，选中 SpringMVC</p>
-</li>
-<li><p>然后右键 resource -&gt; new -&gt; XML Configuration File -&gt; Spring Config，创建一个 applicationContext.xml 文件 并配置</p>
-</li>
+<li>导入SpringMVC相关坐标</li>
 </ul>
-<pre><code class="xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
-       xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-       xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd&quot;&gt;
-
-    &lt;bean id=&quot;userDao&quot; class=&quot;com.kalimera.dao.impl.UserDaoImpl&quot;&gt;&lt;/bean&gt;
-&lt;/beans&gt;
-</code></pre>
-<ul>
-<li>编写一个Demo</li>
-</ul>
-<pre><code class="java">import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-
-public class UserDaoDemo &#123;
-    public static void main(String[] args) &#123;
-        ApplicationContext app = new ClassPathXmlApplicationContext(&quot;applicationContext.xml&quot;);
-        //通过xml文件获取对象并执行方法
-        UserDao userDao = (UserDao) app.getBean(&quot;userDao&quot;);
-        userDao.save();
-    &#125;
-&#125;
-</code></pre>
-<ul>
-<li>运行即可看到控制台输出 save running</li>
-</ul>
-<h2 id="3-Spring配置文件"><a href="#3-Spring配置文件" class="headerlink" title="3 Spring配置文件"></a>3 Spring配置文件</h2><h3 id="3-1-Bean标签基本配置"><a href="#3-1-Bean标签基本配置" class="headerlink" title="3.1 Bean标签基本配置"></a>3.1 Bean标签基本配置</h3><p>用于配置对象交由Spring 来创建。</p>
-<p><strong>默认情况下它调用的是类中的无参构造函数</strong>，如果没有无参构造函数则不能创建成功。</p>
-<p>基本属性：</p>
-<ul>
-<li><strong>id</strong>：Bean实例在Spring容器中的<strong>唯一标识</strong></li>
-<li><strong>class</strong>：Bean的<strong>全限定名称</strong></li>
-</ul>
-<h3 id="3-2-Bean标签范围配置"><a href="#3-2-Bean标签范围配置" class="headerlink" title="3.2 Bean标签范围配置"></a>3.2 Bean标签范围配置</h3><p>scope：对象的作用范围，取值如下</p>
-<table>
-<thead>
-<tr>
-<th>取值范围</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>singleton</strong></td>
-<td><strong>默认值，单例</strong></td>
-</tr>
-<tr>
-<td><strong>prototype</strong></td>
-<td><strong>多例的（从容器当中取对应值时，每次都创建一个新的对象）</strong></td>
-</tr>
-<tr>
-<td>request</td>
-<td>WEB 项目中，Spring 创建一个 Bean 的对象，将对象存入到 request 域中</td>
-</tr>
-<tr>
-<td>session</td>
-<td>WEB 项目中，Spring 创建一个 Bean 的对象，将对象存入到 session 域中</td>
-</tr>
-<tr>
-<td>global session</td>
-<td>WEB 项目中，应用在 Portlet 环境，如果没有 Portlet 环境那么globalSession 相当于 session</td>
-</tr>
-</tbody></table>
-<ul>
-<li><p>当scope的取值为<strong>singleton</strong>时</p>
-<p>Bean的实例化个数：<strong>1个</strong></p>
-<p>Bean的实例化时机：当<strong>Spring核心文件被加载时</strong>，实例化配置的Bean实例</p>
-<p>Bean的生命周期：<br>对象创建：当应用加载，创建容器时，对象就被创建了<br>对象运行：只要<strong>容器在，对象一直活着</strong><br>对象销毁：当应用卸载，<strong>销毁容器时，对象就被销毁</strong>了</p>
-</li>
-<li><p>当scope的取值为<strong>prototype</strong>时</p>
-<p>  Bean的实例化个数：多个</p>
-<p>Bean的实例化时机：当<strong>调用getBean()方法时</strong>实例化Bean<br>对象创建：当使用对象时，创建新的对象实例<br>对象运行：只要<strong>对象在使用中，就一直活着</strong><br>对象销毁：当对象<strong>长时间不用时，被 Java 的垃圾回收器回收</strong>了</p>
-</li>
-</ul>
-<h3 id="3-3-Bean生命周期配置"><a href="#3-3-Bean生命周期配置" class="headerlink" title="3.3 Bean生命周期配置"></a>3.3 Bean生命周期配置</h3><p><strong>init-method</strong>：指定类中的初始化方法名称<br><strong>destroy-method</strong>：指定类中销毁方法名称</p>
-<p>在<code>UserDaoImpl</code>中写好<code>init</code>和<code>destroy</code>方法，然后再xml中bean里配置：</p>
-<pre><code class="xml">&lt;bean id=&quot;userDao&quot; class=&quot;com.kalimera.dao.impl.UserDaoImpl&quot; init-method=&quot;init&quot; destroy-method=&quot;destroy&quot;&gt;&lt;/bean&gt;
-</code></pre>
-<h3 id="3-4-Bean实例化三种方式"><a href="#3-4-Bean实例化三种方式" class="headerlink" title="3.4 Bean实例化三种方式"></a>3.4 Bean实例化三种方式</h3><ul>
-<li>使用无参构造方法实例化</li>
-</ul>
-<pre><code class="xml">&lt;bean id=&quot;userDao&quot; class=&quot;com.kalimera.dao.impl.UserDaoImpl&quot;/&gt;
-</code></pre>
-<ul>
-<li>工厂静态方法实例化</li>
-</ul>
-<pre><code class="java">//StaticFactoryBean
-public class StaticFactoryBean &#123;
-    public static UserDao createUserDao()&#123;
-        return new UserDaoImpl();
-    &#125;
-&#125;
-</code></pre>
-<pre><code class="xml">&lt;bean id=&quot;userDao&quot; class=&quot;com.itheima.factory.StaticFactoryBean&quot; 
-      factory-method=&quot;createUserDao&quot; /&gt;
-</code></pre>
-<ul>
-<li>工厂实例方法实例化</li>
-</ul>
-<pre><code class="java">//DynamicFactoryBean
-public class DynamicFactoryBean &#123;
-    //不再使用静态方法
-    public UserDao createUserDao()&#123;
-        return new UserDaoImpl();
-    &#125;
-&#125;
-</code></pre>
-<pre><code class="xml">&lt;bean id=&quot;factoryBean&quot; class=&quot;com.itheima.factory.DynamicFactoryBean&quot;/&gt;
-&lt;bean id=&quot;userDao&quot; factory-bean=&quot;factoryBean&quot; factory-method=&quot;createUserDao&quot;/&gt;
-</code></pre>
-<h3 id="3-5-Bean的依赖注入"><a href="#3-5-Bean的依赖注入" class="headerlink" title="3.5 Bean的依赖注入"></a>3.5 Bean的依赖注入</h3><p><strong>依赖注入（Dependency Injection）：它是 Spring 框架核心 IOC 的具体实现。</strong></p>
-<p>举个例子，我们需要用 UserService 调用 UserDao 的方法，所以在UserService的类中，通过容器获取UserDao的实例，而我们要调用UserService方法的时候，又需要通过容器获取 UserService 实例。具体的结构如下：</p>
-<p><img src="https://img-blog.csdnimg.cn/3c67410203d24b52b5c7c9fa7c116385.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbTBfNDYzNDU4ODc=,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center"></p>
-<p>但是这样的操作是有存在问题的，我们可以通过注入，直接把UserDao设置到UserService里面（set方法或有参构造）。</p>
-<p><img src="https://img-blog.csdnimg.cn/7c193ebe3ede4a4482b7d6cecd4ed510.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbTBfNDYzNDU4ODc=,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center"></p>
-<p>简单的说，就是坐等框架把持久层对象传入业务层，而不用我们自己去获取。</p>
-<ul>
-<li>set方法注入（推荐使用）</li>
-</ul>
-<pre><code class="java">public class UserServiceImpl implements UserService &#123;
-    private UserDao userDao;
-    
-    public void setUserDao(UserDao userDao) &#123;
-        this.userDao = userDao;
-    &#125;
-    @Override
-    public void save() &#123;
-        userDao.save();
-    &#125;
-&#125;
-</code></pre>
-<pre><code class="xml">&lt;bean id=&quot;userDao&quot; class=&quot;com.itheima.dao.impl.UserDaoImpl&quot;/&gt;
-&lt;!-- 配置属性userDao --&gt;
-&lt;bean id=&quot;userService&quot; class=&quot;com.itheima.service.impl.UserServiceImpl&quot;&gt;
-    &lt;!-- ref代表引用bean的id --&gt;
-    &lt;!-- name是属性名 --&gt;
-    &lt;property name=&quot;userDao&quot; ref=&quot;userDao&quot;/&gt;
-&lt;/bean&gt;
-</code></pre>
-<p>也可以采用P命名空间注入的方法。</p>
-<pre><code class="xml">&lt;!-- 首先要在头里加上这一句 
-xmlns:p=&quot;http://www.springframework.org/schema/p&quot;
---&gt;
-
-&lt;bean id=&quot;userService&quot; class=&quot;com.itheima.service.impl.UserServiceImpl&quot; p:userDao-
- ref=&quot;userDao&quot;/&gt;
-&lt;!-- -ref是注入对象实例 ，不加ref的是注入普通实例--&gt;
-</code></pre>
-<ul>
-<li>有参构造</li>
-</ul>
-<pre><code class="java">public class UserServiceImpl implements UserService &#123;
-    private UserDao userDao;
-    
-    public UserServiceImpl() &#123;
-    &#125;
-    
-    public UserServiceImpl(UserDao userDao) &#123;
-        this.userDao = userDao;
-    &#125;
-    
-    @Override
-    public void save() &#123;
-        ApplicationContext applicationContext = new 
-                 ClassPathXmlApplicationContext(&quot;applicationContext.xml&quot;);
-        UserDao userDao = (UserDao) applicationContext.getBean(&quot;userDao&quot;);
-        userDao.save();
-    &#125;
-&#125;
-</code></pre>
-<pre><code class="xml">&lt;bean id=&quot;userDao&quot; class=&quot;com.itheima.dao.impl.UserDaoImpl&quot;/&gt;
-&lt;bean id=&quot;userService&quot; class=&quot;com.itheima.service.impl.UserServiceImpl&quot;&gt;
-    &lt;!-- name是构造的参数名 --&gt;
-    &lt;constructor-arg name=&quot;userDao&quot; ref=&quot;userDao&quot;&gt;&lt;/constructor-arg&gt;
-&lt;/bean&gt;
-</code></pre>
-<h3 id="3-6-Bean的依赖注入的数据类型"><a href="#3-6-Bean的依赖注入的数据类型" class="headerlink" title="3.6 Bean的依赖注入的数据类型"></a>3.6 Bean的依赖注入的数据类型</h3><p>上面的操作，都是注入的引用Bean，除了对象的引用可以注入，普通数据类型，集合等都可以在容器中进行注入。</p>
-<p>注入数据的三种数据类型 </p>
-<ul>
-<li>普通数据类型</li>
-<li>引用数据类型</li>
-<li>集合数据类型</li>
-</ul>
-<h4 id="3-6-1-普通数据类型注入"><a href="#3-6-1-普通数据类型注入" class="headerlink" title="3.6.1 普通数据类型注入"></a>3.6.1 普通数据类型注入</h4><p>这里用set方法演示</p>
-<pre><code class="java">public class UserServiceImpl implements UserService &#123;
-    private String userName;
-    private int age;
-
-    public void setUserName(String userName) &#123;
-        this.userName = userName;
-    &#125;
-
-    public void setAge(int age) &#123;
-        this.age = age;
-    &#125;
-
-    @Override
-    public void save() &#123;
-        System.out.println(&quot;UserServiceImpl running&quot;);
-        System.out.println(userName + &quot;----&quot; + age);
-    &#125;
-&#125;
-</code></pre>
-<pre><code class="xml">&lt;bean id=&quot;userService&quot; class=&quot;com.kalimera.service.UserServiceImpl&quot;&gt;
-    &lt;!-- 引用数据类型用的是ref --&gt;
-    &lt;property name=&quot;userDao&quot; ref=&quot;userDao&quot;&gt;&lt;/property&gt;
-    &lt;property name=&quot;age&quot; value=&quot;15&quot;&gt;&lt;/property&gt;
-    &lt;property name=&quot;userName&quot; value=&quot;zhangsan&quot;&gt;&lt;/property&gt;
-&lt;/bean&gt;
-</code></pre>
-<h4 id="3-6-2-集合数据类型注入"><a href="#3-6-2-集合数据类型注入" class="headerlink" title="3.6.2 集合数据类型注入"></a>3.6.2 集合数据类型注入</h4><pre><code class="java">package com.kalimera.service;
-
-import com.kalimera.dao.UserDao;
-import com.kalimera.domain.User;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Properties;
-
-public class UserServiceImpl implements UserService &#123;
-    private List&lt;String&gt; strList;
-    private HashMap&lt;String, User&gt; map;
-    private Properties properties;
-
-    public void setStrList(List&lt;String&gt; strList) &#123;
-        this.strList = strList;
-    &#125;
-
-    public void setMap(HashMap&lt;String, User&gt; map) &#123;
-        this.map = map;
-    &#125;
-
-    public void setProperties(Properties properties) &#123;
-        this.properties = properties;
-    &#125;
-
-    @Override
-    public void save() &#123;
-        System.out.println(strList);
-        System.out.println(map);
-        System.out.println(properties);
-    &#125;
-&#125;
-</code></pre>
-<pre><code class="xml">&lt;bean id=&quot;user1&quot; class=&quot;com.kalimera.domain.User&quot;&gt;
-    &lt;property name=&quot;userName&quot; value=&quot;lucy&quot;&gt;&lt;/property&gt;
-    &lt;property name=&quot;age&quot; value=&quot;11&quot;&gt;&lt;/property&gt;
-&lt;/bean&gt;
-&lt;bean id=&quot;user2&quot; class=&quot;com.kalimera.domain.User&quot;&gt;
-    &lt;property name=&quot;userName&quot; value=&quot;Cindy&quot;&gt;&lt;/property&gt;
-    &lt;property name=&quot;age&quot; value=&quot;12&quot;&gt;&lt;/property&gt;
-&lt;/bean&gt;
-
-&lt;bean id=&quot;userService&quot; class=&quot;com.kalimera.service.UserServiceImpl&quot;&gt;
-    &lt;property name=&quot;strList&quot;&gt;
-        &lt;list&gt;
-            &lt;value&gt;aaa&lt;/value&gt;
-            &lt;value&gt;bbb&lt;/value&gt;
-        &lt;/list&gt;
-    &lt;/property&gt;
-    &lt;property name=&quot;map&quot;&gt;
-        &lt;map&gt;
-            &lt;entry key=&quot;u1&quot; value-ref=&quot;user1&quot;&gt;&lt;/entry&gt;
-            &lt;entry key=&quot;u2&quot; value-ref=&quot;user2&quot;&gt;&lt;/entry&gt;
-        &lt;/map&gt;
-    &lt;/property&gt;
-    &lt;property name=&quot;properties&quot;&gt;
-        &lt;props&gt;
-            &lt;prop key=&quot;a&quot;&gt;aaa&lt;/prop&gt;
-            &lt;prop key=&quot;b&quot;&gt;bbb&lt;/prop&gt;
-            &lt;prop key=&quot;c&quot;&gt;ccc&lt;/prop&gt;
-        &lt;/props&gt;
-    &lt;/property&gt;
-&lt;/bean&gt;
-</code></pre>
-<h3 id="3-7-分模块开发"><a href="#3-7-分模块开发" class="headerlink" title="3.7 分模块开发"></a>3.7 分模块开发</h3><p>可以创建好几个不同的spring xml文件然后对应不同的类或者不同的层，最后把他们引入到主xml文件中即可。</p>
-<pre><code class="xml">&lt;import resource=&quot;applicationContext-xxx.xml&quot;/&gt;
-</code></pre>
-<h2 id="4-Spring相关API"><a href="#4-Spring相关API" class="headerlink" title="4 Spring相关API"></a>4 Spring相关API</h2><h3 id="4-1-ApplicationContext的继承体系"><a href="#4-1-ApplicationContext的继承体系" class="headerlink" title="4.1 ApplicationContext的继承体系"></a>4.1 ApplicationContext的继承体系</h3><p>applicationContext：接口类型，代表应用上下文，可以通过其实例获得 Spring 容器中的 Bean 对象。</p>
-<p><img src="https://img-blog.csdnimg.cn/ec8743fa51f7461c9fb9a97134a08b15.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAbTBfNDYzNDU4ODc=,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center"></p>
-<h3 id="4-2-ApplicationContext的实现类"><a href="#4-2-ApplicationContext的实现类" class="headerlink" title="4.2 ApplicationContext的实现类"></a>4.2 ApplicationContext的实现类</h3><p>1）<strong>ClassPathXmlApplicationContext</strong><br>      它是从类的根路径下加载配置文件 推荐使用这种<br>2）FileSystemXmlApplicationContext<br>      它是从磁盘路径上加载配置文件，配置文件可以在磁盘的任意位置。路径要写在磁盘上的绝对路径<br>3）AnnotationConfigApplicationContext<br>      当使用注解配置容器对象时，需要使用此类来创建 spring 容器。它用来读取注解。</p>
-<h3 id="4-3-getBean-方法使用"><a href="#4-3-getBean-方法使用" class="headerlink" title="4.3 getBean()方法使用"></a>4.3 getBean()方法使用</h3><ul>
-<li>通过id名获取</li>
-</ul>
-<pre><code class="java">public Object getBean(String name) throws BeansException;
-</code></pre>
-<ul>
-<li>通过类获取</li>
-</ul>
-<pre><code class="java">public &lt;T&gt; T getBean(Class&lt;T&gt; requiredType) throws BeansException;
-</code></pre>
-<ul>
-<li>id+类名获取</li>
-</ul>
-<pre><code class="java">public &lt;T&gt; T getBean(String name, Class&lt;T&gt; requiredType)
-</code></pre>
-<p><strong>注意：</strong></p>
-<p>当参数的数据类型是字符串时，表示根据Bean的id从容器中获得Bean实例，返回是Object，需要强转。</p>
-<p>当参数的数据类型是Class类型时，表示根据类型从容器中匹配Bean实例，当容器中相同类型的Bean有多个时，则此方法会报错。</p>
-<h2 id="5-Spring配置数据源"><a href="#5-Spring配置数据源" class="headerlink" title="5 Spring配置数据源"></a>5 Spring配置数据源</h2><h3 id="5-1-数据源（连接池）的作用"><a href="#5-1-数据源（连接池）的作用" class="headerlink" title="5.1 数据源（连接池）的作用"></a>5.1 数据源（连接池）的作用</h3><ol>
-<li>为了提高程序性能而出现的</li>
-<li>事先实例化数据源，初始化部分连接资源</li>
-<li>使用连接资源时从数据源中获取</li>
-<li>使用完毕后将连接资源归还给数据源</li>
-</ol>
-<p>常见的数据源(连接池)：DBCP、C3P0、BoneCP、Druid等</p>
-<h3 id="5-2-数据源开发步骤"><a href="#5-2-数据源开发步骤" class="headerlink" title="5.2 数据源开发步骤"></a>5.2 数据源开发步骤</h3><ol>
-<li>导入数据源坐标和数据库驱动坐标</li>
-<li>创建数据源对象</li>
-<li>设置数据源的基本连接数据</li>
-<li>使用数据原获取资源并关闭资源</li>
-</ol>
-<p><strong>导入坐标</strong></p>
-<pre><code class="xml">&lt;dependencies&gt;
-    &lt;dependency&gt;
-        &lt;groupId&gt;mysql&lt;/groupId&gt;
-        &lt;artifactId&gt;mysql-connector-java&lt;/artifactId&gt;
-        &lt;version&gt;5.1.38&lt;/version&gt;
-    &lt;/dependency&gt;
-    &lt;dependency&gt;
-        &lt;groupId&gt;junit&lt;/groupId&gt;
-        &lt;artifactId&gt;junit&lt;/artifactId&gt;
-        &lt;version&gt;4.12&lt;/version&gt;
-    &lt;/dependency&gt;
-    &lt;dependency&gt;
-        &lt;groupId&gt;c3p0&lt;/groupId&gt;
-        &lt;artifactId&gt;c3p0&lt;/artifactId&gt;
-        &lt;version&gt;0.9.1.2&lt;/version&gt;
-    &lt;/dependency&gt;
-    &lt;dependency&gt;
-        &lt;groupId&gt;com.alibaba&lt;/groupId&gt;
-        &lt;artifactId&gt;druid&lt;/artifactId&gt;
-        &lt;version&gt;1.1.10&lt;/version&gt;
-    &lt;/dependency&gt;
-&lt;/dependencies&gt;
-</code></pre>
-<p><strong>使用c3p0获得连接</strong></p>
-<pre><code class="java">@Test
-public void test01() throws PropertyVetoException, SQLException &#123;
-    ComboPooledDataSource dataSource = new ComboPooledDataSource();
-    dataSource.setDriverClass(&quot;com.mysql.jdbc.Driver&quot;);
-    dataSource.setJdbcUrl(&quot;jdbc:mysql://localhost:3306/bjpowernode&quot;);
-    dataSource.setUser(&quot;root&quot;);
-    dataSource.setPassword(&quot;123&quot;);
-    Connection connection = dataSource.getConnection();
-    System.out.println(connection);
-    connection.close();
-&#125;
-</code></pre>
-<p><strong>使用druid获得连接</strong></p>
-<pre><code class="java">@Test
-public void test02() throws PropertyVetoException, SQLException &#123;
-    DruidDataSource dataSource = new DruidDataSource();
-    dataSource.setDriverClassName(&quot;com.mysql.jdbc.Driver&quot;);
-    dataSource.setUrl(&quot;jdbc:mysql://localhost:3306/bjpowernode&quot;);
-    dataSource.setUsername(&quot;root&quot;);
-    dataSource.setPassword(&quot;123&quot;);
-    Connection connection = dataSource.getConnection();
-    System.out.println(connection);
-    connection.close();
-&#125;
-</code></pre>
-<p>还可以通过把这些基本连接数据配置到一个properties文件中，方便解耦</p>
-<pre><code class="properties">jdbc.driver = com.mysql.jdbc.Driver
-jdbc.url = jdbc:mysql://localhost:3306/bjpowernode
-jdbc.user = root
-jdbc.password = 123
-</code></pre>
-<pre><code class="java">@Test
-public void test03() throws PropertyVetoException, SQLException &#123;
-    //获取数据
-    ResourceBundle resourceBundle = ResourceBundle.getBundle(&quot;jdbc&quot;);
-    String driver = resourceBundle.getString(&quot;jdbc.driver&quot;);
-    String url = resourceBundle.getString(&quot;jdbc.url&quot;);
-    String user = resourceBundle.getString(&quot;jdbc.user&quot;);
-    String pwd = resourceBundle.getString(&quot;jdbc.password&quot;);
-
-    ComboPooledDataSource dataSource = new ComboPooledDataSource();
-
-    dataSource.setDriverClass(driver);
-    dataSource.setJdbcUrl(url);
-    dataSource.setUser(user);
-    dataSource.setPassword(pwd);
-
-    Connection connection = dataSource.getConnection();
-    System.out.println(connection);
-    connection.close();
-&#125;
-</code></pre>
-<h3 id="5-3-Spring配置数据源"><a href="#5-3-Spring配置数据源" class="headerlink" title="5.3 Spring配置数据源"></a>5.3 Spring配置数据源</h3><ul>
-<li>在 applicationContext.xml 中配置</li>
-</ul>
-<pre><code class="xml">&lt;bean id=&quot;dataSource&quot; class=&quot;com.mchange.v2.c3p0.ComboPooledDataSource&quot;&gt;
-    &lt;property name=&quot;driverClass&quot; value=&quot;com.mysql.jdbc.Driver&quot;&gt;&lt;/property&gt;
-    &lt;property name=&quot;jdbcUrl&quot; value=&quot;jdbc:mysql://localhost:3306/bjpowernode&quot;&gt;&lt;/property&gt;
-    &lt;property name=&quot;user&quot; value=&quot;root&quot;&gt;&lt;/property&gt;
-    &lt;property name=&quot;password&quot; value=&quot;123&quot;&gt;&lt;/property&gt;
-&lt;/bean&gt;
-</code></pre>
-<ul>
-<li>通过容器获取数据源对象并连接</li>
-</ul>
-<pre><code class="java">@Test
-public void test04() throws SQLException &#123;
-    ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext(&quot;applicationContext.xml&quot;);
-    ComboPooledDataSource dataSource = applicationContext.getBean(ComboPooledDataSource.class);
-    Connection connection = dataSource.getConnection();
-    System.out.println(connection);
-    connection.close();
-&#125;
-</code></pre>
-<h3 id="5-4-抽取jdbc配置文件"><a href="#5-4-抽取jdbc配置文件" class="headerlink" title="5.4 抽取jdbc配置文件"></a>5.4 抽取jdbc配置文件</h3><p>虽然上面的 applicationContext.xml 已经完成了解耦，但是一般的习惯是把配置单独提出来写成properties文件再用Spring抽取。这样每个文件是专注于自己的功能的。</p>
-<ul>
-<li><p>首先要引入context命名空间和约束路径</p>
-<p>命名空间：xmlns:context=”<a target="_blank" rel="noopener" href="http://www.springframework.org/schema/context&quot;">http://www.springframework.org/schema/context&quot;</a><br>约束路径：<a target="_blank" rel="noopener" href="http://www.springframework.org/schema/context">http://www.springframework.org/schema/context</a>                       <a target="_blank" rel="noopener" href="http://www.springframework.org/schema/context/spring-context.xsd">http://www.springframework.org/schema/context/spring-context.xsd</a></p>
-</li>
-</ul>
-<pre><code class="xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
-       xmlns:context=&quot;http://www.springframework.org/schema/context&quot;
-       xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-       xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-                       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd&quot;&gt;
-</code></pre>
-<ul>
-<li>配置 properties 文件</li>
-</ul>
-<pre><code class="xml">&lt;context:property-placeholder location=&quot;jdbc.properties&quot;&gt;&lt;/context:property-placeholder&gt;
-</code></pre>
-<ul>
-<li>用 EL 表达式配置数据</li>
-</ul>
-<pre><code class="xml">&lt;bean id=&quot;dataSource&quot; class=&quot;com.mchange.v2.c3p0.ComboPooledDataSource&quot;&gt;
-    &lt;property name=&quot;driverClass&quot; value=&quot;$&#123;jdbc.driver&#125;&quot;&gt;&lt;/property&gt;
-    &lt;property name=&quot;jdbcUrl&quot; value=&quot;$&#123;jdbc.url&#125;&quot;&gt;&lt;/property&gt;
-    &lt;property name=&quot;user&quot; value=&quot;$&#123;jdbc.user&#125;&quot;&gt;&lt;/property&gt;
-    &lt;property name=&quot;password&quot; value=&quot;$&#123;jdbc.password&#125;&quot;&gt;&lt;/property&gt;
-&lt;/bean&gt;
-</code></pre>
-<h2 id="6-Spring注解开发"><a href="#6-Spring注解开发" class="headerlink" title="6 Spring注解开发"></a>6 Spring注解开发</h2><h3 id="6-1-Spring原始注解"><a href="#6-1-Spring原始注解" class="headerlink" title="6.1 Spring原始注解"></a>6.1 Spring原始注解</h3><p>Spring是轻代码而重配置的框架，配置比较繁重，影响开发效率，所以注解开发是一种趋势，注解代替xml配置文件可以简化配置，提高开发效率。</p>
-<p>Spring原始注解主要是替代<Bean>的配置</Bean></p>
-<table>
-<thead>
-<tr>
-<th><strong>注解</strong></th>
-<th><strong>说明</strong></th>
-</tr>
-</thead>
-<tbody><tr>
-<td>@Component</td>
-<td>使用在类上用于实例化Bean</td>
-</tr>
-<tr>
-<td>@Controller</td>
-<td>使用在web层类上用于实例化Bean</td>
-</tr>
-<tr>
-<td>@Service</td>
-<td>使用在service层类上用于实例化Bean</td>
-</tr>
-<tr>
-<td>@Repository</td>
-<td>使用在dao层类上用于实例化Bean</td>
-</tr>
-<tr>
-<td>@Autowired</td>
-<td>使用在字段上用于根据类型依赖注入</td>
-</tr>
-<tr>
-<td>@Qualifier</td>
-<td>结合@Autowired一起使用用于根据名称进行依赖注入</td>
-</tr>
-<tr>
-<td>@Resource</td>
-<td>相当于@Autowired+@Qualifier，按照名称进行注入</td>
-</tr>
-<tr>
-<td>@Value</td>
-<td>注入普通属性</td>
-</tr>
-<tr>
-<td>@Scope</td>
-<td>标注Bean的作用范围</td>
-</tr>
-<tr>
-<td>@PostConstruct</td>
-<td>使用在方法上标注该方法是Bean的初始化方法</td>
-</tr>
-<tr>
-<td>@PreDestroy</td>
-<td>使用在方法上标注该方法是Bean的销毁方法</td>
-</tr>
-</tbody></table>
-<p><strong>具体步骤</strong></p>
-<ul>
-<li>在applicationContext.xml中配置组件扫描，作用是指定哪个包及其子包下的Bean需要进行扫描以便识别使用注解配置的类、字段和方法。</li>
-</ul>
-<pre><code class="xml">&lt;!--注解的组件扫描--&gt;
-&lt;context:component-scan base-package=&quot;com.kalimera&quot;&gt;&lt;/context:component-scan&gt;
-</code></pre>
-<ul>
-<li>使用@Compont或@Repository标识UserDaoImpl需要Spring进行实例化。</li>
-</ul>
-<pre><code class="java">//@Component(&quot;userDao&quot;)
-
-@Repository(&quot;userDao&quot;)
-//@Scope(&quot;singleton&quot;) 可以配置scope
-public class UserDaoImpl implements UserDao &#123;
-    @Override
-    public void save() &#123;
-        System.out.println(&quot;save running&quot;);
-    &#125;
-&#125;
-</code></pre>
-<ul>
-<li>使用@Compont或@Service标识UserServiceImpl需要Spring进行实例化，使用@Autowired或者@Autowired+@Qulifier或者@Resource进行userDao的<strong>注入</strong></li>
-</ul>
-<pre><code class="java">//@Component(&quot;userService&quot;)
-@Service(&quot;userService&quot;)
-public class UserServiceImpl implements UserService &#123;
-    
-    @Autowired //按照数据类型从Spring容器中匹配，可以单独用，但是当容器中有多个UserDaoImpl类型的实例时，会出错
-    @Qualifier (&quot;userDao&quot;) //是按照id的名称从容器中进行匹配的，但是需要与@Autowired一起使用
-    //@Resource(name=&quot;userDao&quot;)相当于@Autowired+@Qulifier
-    private UserDao userDao;
-    
-    //可以不写setUserDao
-    
-    @Override
-    public void save() &#123;
-        userDao.save();
-    &#125;
-&#125;
-</code></pre>
-<ul>
-<li>如果想要注入普通属性，可以把数据值放入properties文件中，在xml中配置好properties文件后，在需要注入的普通数据类型上面加上 @Value(“${XXXX}”)，其中XXXX是properties文件中的key。</li>
-</ul>
-<h3 id="6-2-Spring新注解"><a href="#6-2-Spring新注解" class="headerlink" title="6.2 Spring新注解"></a>6.2 Spring新注解</h3><p>使用上面的注解还不能全部替代xml配置文件，还需要使用注解替代的配置如下：</p>
-<ul>
-<li>非自定义的Bean的配置：<bean></bean></li>
-<li>加载properties文件的配置：<a href="context:property-placeholder">context:property-placeholder</a></li>
-<li>组件扫描的配置：<a href="context:component-scan">context:component-scan</a></li>
-<li>引入其他文件：<import></import></li>
-</ul>
-<table>
-<thead>
-<tr>
-<th align="left"><strong>注解</strong></th>
-<th align="left"><strong>说明</strong></th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">@Configuration</td>
-<td align="left">用于指定当前类是一个 Spring 配置类，当创建容器时会从该类上加载注解</td>
-</tr>
-<tr>
-<td align="left">@ComponentScan</td>
-<td align="left">用于指定 Spring 在初始化容器时要扫描的包。作用和在 Spring 的 xml 配置文件中的&lt;context:component-scan base-package=”com.itheima”/&gt;一样</td>
-</tr>
-<tr>
-<td align="left">@Bean</td>
-<td align="left">使用在方法上，标注将该方法的返回值存储到 Spring 容器中</td>
-</tr>
-<tr>
-<td align="left">@PropertySource</td>
-<td align="left">用于加载.properties 文件中的配置</td>
-</tr>
-<tr>
-<td align="left">@Import</td>
-<td align="left">用于导入其他配置类</td>
-</tr>
-</tbody></table>
-<p><strong>具体步骤</strong></p>
-<ul>
-<li>创建SpringConfiguration，标注Configuration表示它是配置文件，标注ComponentScan配置组件扫描，Import导入其他的配置文件，里面的花括号表示是一组文件</li>
-</ul>
-<pre><code class="java">@Configuration
-@ComponentScan(&quot;com.kalimerai&quot;)
-//&lt;context:property-placeholder location=&quot;jdbc.properties&quot;/&gt;
-@Import(&#123;DataSourceConfiguration.class&#125;)
-
-public class SpringConfiguration &#123;
-
-&#125;
-</code></pre>
-<ul>
-<li>创建DataSourceConfiguration，标注PropertySource是配置属性文件，用Value标注，里面的EL表达式是用于获取属性文件里的键对应的值。标注Bean获得DataSource，这里之所以不能用Component是因为这个类并不是我们自己写的，不能够在其对应的类上面加注解。所以我们需要通过Bean注解，从外部创建实例对象然后交由Spring容器。</li>
-</ul>
-<pre><code class="java">@PropertySource(&quot;jdbc.properties&quot;)
-public class DataSourceConfiguration &#123;
-    @Value(&quot;$&#123;jdbc.driver&#125;&quot;)
-    public String driver;
-    @Value(&quot;$&#123;jdbc.user&#125;&quot;)
-    public String user;
-    @Value(&quot;$&#123;jdbc.url&#125;&quot;)
-    public String url;
-    @Value(&quot;$&#123;jdbc.password&#125;&quot;)
-    public String password;
-
-    @Bean(name=&quot;dataSource&quot;)
-    public DataSource getDataSource() throws PropertyVetoException &#123;
-        ComboPooledDataSource dataSource = new ComboPooledDataSource();
-        dataSource.setDriverClass(driver);
-        dataSource.setJdbcUrl(url);
-        dataSource.setUser(user);
-        dataSource.setPassword(password);
-        return dataSource;
-    &#125;
-&#125;
-</code></pre>
-<ul>
-<li>测试加载核心配置类创建Spring容器</li>
-</ul>
-<pre><code class="java">@Test
-public void test04() throws SQLException &#123;
-    //ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext(&quot;applicationContext.xml&quot;);
-    //通过注解加载类
-    ApplicationContext applicationContext = new AnnotationConfigApplicationContext(SpringConfiguration.class);
-    ComboPooledDataSource dataSource = applicationContext.getBean(ComboPooledDataSource.class);
-    Connection connection = dataSource.getConnection();
-    System.out.println(connection);
-    connection.close();
-&#125;
-</code></pre>
-<h2 id="7-Spring集成Junit"><a href="#7-Spring集成Junit" class="headerlink" title="7 Spring集成Junit"></a>7 Spring集成Junit</h2><p>原方法在获取上下文容器的时候，比较繁琐。</p>
-<p>现在，让SpringJunit负责创建Spring容器，但是需要将配置文件的名称告诉它。并将需要进行测试Bean直接在测试类中进行注入。</p>
-<ul>
-<li>导入spring集成Junit的坐标</li>
-</ul>
-<pre><code class="xml">&lt;!--此处需要注意的是，spring5 及以上版本要求 junit 的版本必须是 4.12 及以上--&gt;
-&lt;dependency&gt;
-    &lt;groupId&gt;org.springframework&lt;/groupId&gt;
-    &lt;artifactId&gt;spring-test&lt;/artifactId&gt;
-    &lt;version&gt;5.0.2.RELEASE&lt;/version&gt;
-&lt;/dependency&gt;
-&lt;dependency&gt;
-    &lt;groupId&gt;junit&lt;/groupId&gt;
-    &lt;artifactId&gt;junit&lt;/artifactId&gt;
-    &lt;version&gt;4.12&lt;/version&gt;
-    &lt;scope&gt;test&lt;/scope&gt;
-&lt;/dependency&gt;
-</code></pre>
-<ul>
-<li>使用@Runwith注解替换原来的运行器</li>
-</ul>
-<pre><code class="java">@RunWith(SpringJUnit4ClassRunner.class)
-public class SpringJunitTest &#123;
-&#125;
-</code></pre>
-<ul>
-<li>使用@ContextConfiguration指定配置文件或配置类</li>
-</ul>
-<pre><code class="java">@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = &#123;SpringConfiguration.class&#125;)
-//加载spring核心配置文件
-//@ContextConfiguration(value = &#123;&quot;classpath:applicationContext.xml&quot;&#125;)
-public class SpringJunitTest &#123;
-&#125;
-</code></pre>
-<ul>
-<li>使用@Autowired注入需要测试的对象</li>
-</ul>
-<pre><code class="java">public class SpringJunitTest &#123;
-    @Autowired
-    private DataSource dataSource;
-&#125;
-</code></pre>
-<ul>
-<li>创建测试方法进行测试</li>
-</ul>
-<pre><code class="java">public class SpringJunitTest &#123;
-    @Autowired
-    private DataSource dataSource;
-
-    @Test
-    public void test01() throws SQLException &#123;
-        System.out.println(dataSource.getConnection());
-    &#125;
-&#125;
-</code></pre>
-<h2 id="8-Spring与Web环境的集成"><a href="#8-Spring与Web环境的集成" class="headerlink" title="8 Spring与Web环境的集成"></a>8 Spring与Web环境的集成</h2><h3 id="8-1-基本三层架构环境搭建"><a href="#8-1-基本三层架构环境搭建" class="headerlink" title="8.1 基本三层架构环境搭建"></a>8.1 基本三层架构环境搭建</h3><ul>
-<li><p>dao 层</p>
-<p>编写 <code>UserDao</code> 和 <code>UserDaoImpl</code></p>
-</li>
-</ul>
-<pre><code class="java">package com.kalimera.dao;
-
-public interface UserDao &#123;
-    void save();
-&#125;
-</code></pre>
-<pre><code class="java">package com.kalimera.dao.impl;
-
-import com.kalimera.dao.UserDao;
-
-public class UserDaoImpl implements UserDao &#123;
-
-    @Override
-    public void save() &#123;
-        System.out.println(&quot;UserDao save running&quot;);
-    &#125;
-&#125;
-</code></pre>
-<ul>
-<li><p>service 层</p>
-<p>编写 <code>UserService</code> 和 <code>UserServiceImpl</code></p>
-</li>
-</ul>
-<pre><code class="java">package com.kalimera.service;
-
-public interface UserService &#123;
-    void save();
-&#125;
-</code></pre>
-<pre><code class="java">package com.kalimera.service.impl;
-
-import com.kalimera.dao.UserDao;
-import com.kalimera.service.UserService;
-
-public class UserServiceImpl implements UserService &#123;
-    private UserDao userDao;
-
-    public void setUserDao(UserDao userDao) &#123;
-        this.userDao = userDao;
-    &#125;
-
-    public void save() &#123;
-        System.out.println(&quot;UserService save running&quot;);
-    &#125;
-&#125;
-</code></pre>
-<ul>
-<li><p>web 层</p>
-<p>编写 <code>UserServlet</code></p>
-</li>
-</ul>
-<pre><code class="java">package com.kalimera.web;
-
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-
-import com.kalimera.service.UserService;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-
-public class UserServlet extends HttpServlet &#123;
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException &#123;
-        ApplicationContext applicationContext = new ClassPathXmlApplicationContext(&quot;applicationContext.xml&quot;);
-        UserService userService = applicationContext.getBean(UserService.class);
-        userService.save();
-    &#125;
-&#125;
-</code></pre>
-<p>配置 web.xml 文件 (servlet)</p>
-<pre><code class="xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;web-app xmlns=&quot;http://xmlns.jcp.org/xml/ns/javaee&quot;
-         xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-         xsi:schemaLocation=&quot;http://xmlns.jcp.org/xml/ns/javaee
-                         http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd&quot;
-         version=&quot;4.0&quot;
-         metadata-complete=&quot;true&quot;&gt;
-
-  &lt;servlet&gt;
-    &lt;servlet-name&gt;UserServlet&lt;/servlet-name&gt;
-    &lt;servlet-class&gt;com.kalimera.web.UserServlet&lt;/servlet-class&gt;
-  &lt;/servlet&gt;
-  &lt;servlet-mapping&gt;
-    &lt;servlet-name&gt;UserServlet&lt;/servlet-name&gt;
-    &lt;url-pattern&gt;/userServlet&lt;/url-pattern&gt;
-  &lt;/servlet-mapping&gt;
-
-&lt;/web-app&gt;
-</code></pre>
-<h3 id="8-2-ContextLoaderListener"><a href="#8-2-ContextLoaderListener" class="headerlink" title="8.2 ContextLoaderListener"></a>8.2 ContextLoaderListener</h3><p>应用上下文对象是通过 <code>new ClasspathXmlApplicationContext</code> (spring配置文件) 方式获取的，但是每次从容器中获得Bean时都要编写 <code>new ClasspathXmlApplicationContext</code> (spring配置文件) ，这样的弊端是配置文件加载多次，应用上下文对象创建多次。</p>
-<p>在Web项目中，可以使用 <code>ServletContextListener</code> 监听Web应用的启动，我们可以在Web应用启动时，就加载Spring的配置文件，创建应用上下文对象 <code>ApplicationContext</code> ，在将其存储到最大的域 <code>servletContext</code> 域中，这样就可以在任意位置从域中获得应用上下文 <code>ApplicationContext</code> 对象了。</p>
-<ul>
-<li>创建 listener package，编写 <code>ContextLoaderListener</code> </li>
-</ul>
-<pre><code class="java">package com.kalimera.listener;
-
-import com.kalimera.service.UserService;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-
-import javax.servlet.ServletContext;
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
-
-public class ContextLoaderListener implements ServletContextListener &#123;
-    @Override
-    public void contextInitialized(ServletContextEvent sce) &#123;
-        //将Spring应用上下文对象存储到ServletContext域中
-        ServletContext servletContext = sce.getServletContext();
-        //读取web.xml里的全局参数，方便与xml文件解耦
-        //当然这里也可以直接写 “applicationContext.xml”
-        String contextConfiglocation = servletContext.getInitParameter(&quot;contextConfiglocation&quot;);
-        ApplicationContext applicationContext = new ClassPathXmlApplicationContext(contextConfigLocation);
-
-        servletContext.setAttribute(&quot;app&quot;, applicationContext);
-        System.out.println(&quot;spring容器创建完毕&quot;);
-    &#125;
-
-    @Override
-    public void contextDestroyed(ServletContextEvent sce) &#123;
-
-    &#125;
-&#125;
-</code></pre>
-<ul>
-<li>在 web.xml 中配置 <code>ContextLoaderListener</code> 监听器，并全局初始化参数（与applicationContext.xml解耦）</li>
-</ul>
-<pre><code class="xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;web-app xmlns=&quot;http://xmlns.jcp.org/xml/ns/javaee&quot;
-         xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-         xsi:schemaLocation=&quot;http://xmlns.jcp.org/xml/ns/javaee
-                         http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd&quot;
-         version=&quot;4.0&quot;
-         metadata-complete=&quot;true&quot;&gt;
-
-  &lt;!--- 全局初始化参数 --&gt;
-  &lt;context-param&gt;
-    &lt;param-name&gt;contextConfigLocation&lt;/param-name&gt;
-    &lt;param-value&gt;applicationContext.xml&lt;/param-value&gt;
-  &lt;/context-param&gt;
-    
-  &lt;listener&gt;
-    &lt;listener-class&gt;com.kalimera.listener.ContextLoaderListener&lt;/listener-class&gt;
-  &lt;/listener&gt;    
-  &lt;servlet&gt;
-    &lt;servlet-name&gt;UserServlet&lt;/servlet-name&gt;
-    &lt;servlet-class&gt;com.kalimera.web.UserServlet&lt;/servlet-class&gt;
-  &lt;/servlet&gt;
-  &lt;servlet-mapping&gt;
-    &lt;servlet-name&gt;UserServlet&lt;/servlet-name&gt;
-    &lt;url-pattern&gt;/userServlet&lt;/url-pattern&gt;
-  &lt;/servlet-mapping&gt;
-  
-
-&lt;/web-app&gt;
-</code></pre>
-<ul>
-<li>使用 <code>WebApplicationContextUtils</code> 获得应用上下文对象 <code>ApplicationContext</code> ，这样就不用我们去记住上下文对象的属性名并手动去获取</li>
-</ul>
-<pre><code class="java">package com.kalimera.web;
-
-import org.springframework.context.ApplicationContext;
-
-import javax.servlet.ServletContext;
-
-public class WebApplicationContextUtils &#123;
-    public static ApplicationContext getApplicationContext(ServletContext servletContext) &#123;
-        return (ApplicationContext) servletContext.getAttribute(&quot;app&quot;);
-    &#125;
-&#125;
-</code></pre>
-<p>在 UserServlet 中：</p>
-<pre><code class="java">package com.kalimera.web;
-
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-
-import com.kalimera.service.UserService;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-
-public class UserServlet extends HttpServlet &#123;
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException &#123;
-        //ApplicationContext applicationContext = new ClassPathXmlApplicationContext(&quot;applicationContext.xml&quot;);
-        ServletContext servletContext = req.getServletContext();
-        //通过工具类来获取
-        ApplicationContext applicationContext = WebApplicationContextUtils.getApplicationContext(servletContext);
-        UserService userService = applicationContext.getBean(UserService.class);
-        userService.save();
-
-    &#125;
-&#125;
-</code></pre>
-<h3 id="8-3-Spring提供获取应用上下文的工具"><a href="#8-3-Spring提供获取应用上下文的工具" class="headerlink" title="8.3 Spring提供获取应用上下文的工具"></a>8.3 Spring提供获取应用上下文的工具</h3><p>上面的分析不用手动实现，Spring提供了一个监听器 <code>ContextLoaderListener</code> 就是对上述功能的封装，该监听器内部加载 <code>Spring</code> 配置文件，创建应用上下文对象，并存储到 <code>ServletContext</code> 域中，提供了一个客户端工具 <code>WebApplicationContextUtils</code> 供使用者调用来获得应用上下文对象。</p>
-<p>只需要：</p>
-<ul>
-<li>导入spring-web坐标</li>
-</ul>
+<p>在pom.xml中导入spring mvc的坐标，注意这边的版本号一定要对应上，要保持一致为同一版本</p>
 <pre><code class="xml">&lt;dependency&gt;
     &lt;groupId&gt;org.springframework&lt;/groupId&gt;
     &lt;artifactId&gt;spring-web&lt;/artifactId&gt;
     &lt;version&gt;5.0.5.RELEASE&lt;/version&gt;
 &lt;/dependency&gt;
+
+&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-webmvc&lt;/artifactId&gt;
+    &lt;version&gt;5.0.5.RELEASE&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
+<p>导入jsp和servlet坐标</p>
+<pre><code class="xml">&lt;dependency&gt;
+    &lt;groupId&gt;javax.servlet&lt;/groupId&gt;
+    &lt;artifactId&gt;javax.servlet-api&lt;/artifactId&gt;
+    &lt;version&gt;4.0.1&lt;/version&gt;
+&lt;/dependency&gt;
+
+&lt;dependency&gt;
+    &lt;groupId&gt;javax.servlet.jsp&lt;/groupId&gt;
+    &lt;artifactId&gt;javax.servlet.jsp-api&lt;/artifactId&gt;
+    &lt;version&gt;2.2.1&lt;/version&gt;
+&lt;/dependency&gt;
 </code></pre>
 <ul>
-<li>在web.xml中配置 <code>ContextLoaderListener</code> 监听器</li>
+<li>在web.xml中配置SpringMVC核心控制器DispathcerServlet</li>
 </ul>
-<pre><code class="xml">&lt;!--- 全局初始化参数 --&gt;
-&lt;context-param&gt;
-    &lt;!-- 这里的contextConfigLocation名称一定不能改 --&gt;
-    &lt;param-name&gt;contextConfigLocation&lt;/param-name&gt;
-    &lt;!-- 需要标注是在类路径下的 --&gt;
-    &lt;param-value&gt;classpath:applicationContext.xml&lt;/param-value&gt;
-&lt;/context-param&gt;
-&lt;!-- 配置监听器 --&gt;
-&lt;listener&gt;
-    &lt;listener-class&gt;org.springframework.web.context.ContextLoaderListener&lt;/listener-class&gt;
-&lt;/listener&gt;
+<pre><code class="xml">  &lt;!-- 配置spring mvc 前端控制器 --&gt;
+  &lt;servlet&gt;
+    &lt;servlet-name&gt;DispatcherServlet&lt;/servlet-name&gt;
+    &lt;servlet-class&gt;org.springframework.web.servlet.DispatcherServlet&lt;/servlet-class&gt;
+    &lt;init-param&gt;
+      &lt;param-name&gt;contextConfigLocation&lt;/param-name&gt;
+      &lt;param-value&gt;classpath:spring-mvc.xml&lt;/param-value&gt;
+    &lt;/init-param&gt;
+    &lt;!-- 服务器启动时就去加载创建这个对象 --&gt;
+    &lt;load-on-startup&gt;1&lt;/load-on-startup&gt;
+  &lt;/servlet&gt;
+
+  &lt;!-- 路径里的/是表示缺省，表示访问任何请求时都要走这边 --&gt;
+  &lt;servlet-mapping&gt;
+    &lt;servlet-name&gt;DispatcherServlet&lt;/servlet-name&gt;
+    &lt;url-pattern&gt;/&lt;/url-pattern&gt;
+  &lt;/servlet-mapping&gt;
 </code></pre>
 <ul>
-<li>使用 <code>WebApplicationContextUtils</code> 获得应用上下文对象 <code>ApplicationContext</code> </li>
+<li>创建Controller类和视图页面，使用注解配置Controller类中业务方法的映射地址</li>
 </ul>
-<pre><code class="java">public class UserServlet extends HttpServlet &#123;
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException &#123;
-        //ApplicationContext applicationContext = new ClassPathXmlApplicationContext(&quot;applicationContext.xml&quot;);
-        ServletContext servletContext = req.getServletContext();
-        //ApplicationContext applicationContext = WebApplicationContextUtils.getApplicationContext(servletContext);
-        WebApplicationContext applicationContext = WebApplicationContextUtils.getWebApplicationContext(servletContext);
-        UserService userService = applicationContext.getBean(UserService.class);
-        userService.save();
+<p>创建controller包，在其下创建 UserController 类</p>
+<pre><code class="java">package com.kalimera.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+//把这个类放到Spring容器当中
+@Controller
+public class UserController &#123;
+    //把请求地址映射到对应的界面
+    @RequestMapping(&quot;/quick&quot;)
+    public String save() &#123;
+        System.out.println(&quot;Controller svae running...&quot;);
+        return &quot;success.jsp&quot;;
     &#125;
+&#125;
+</code></pre>
+<p>编写一个视图界面</p>
+<pre><code class="jsp">&lt;%@ page contentType=&quot;text/html;charset=UTF-8&quot; language=&quot;java&quot; %&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;Success&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;Success&lt;/h1&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<ul>
+<li>配置SpringMVC核心文件 spring-mvc.xml</li>
+</ul>
+<p>注意这里用到component-scan属于context命名空间，所以要在头部补上context 的命名空间</p>
+<pre><code class="xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
+       xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+       xmlns:context=&quot;http://www.springframework.org/schema/context&quot;
+       xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                      http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd&quot;&gt;
+
+    &lt;!-- Controller组件扫描 --&gt;
+    &lt;context:component-scan base-package=&quot;com.kalimera.controller&quot;/&gt;
+&lt;/beans&gt;
+</code></pre>
+<ul>
+<li>客户端发起请求测试</li>
+</ul>
+<p><strong>实现原理</strong></p>
+<p>![](SpringMVC/屏幕截图 2021-12-23 091125.png)</p>
+<h2 id="1-3-Spring-MVC-组件解析"><a href="#1-3-Spring-MVC-组件解析" class="headerlink" title="1.3 Spring MVC 组件解析"></a>1.3 Spring MVC 组件解析</h2><h3 id="1-3-1-Spring-MVC-的执行流程"><a href="#1-3-1-Spring-MVC-的执行流程" class="headerlink" title="1.3.1 Spring MVC 的执行流程"></a>1.3.1 Spring MVC 的执行流程</h3><p>![](SpringMVC/屏幕截图 2021-12-23 105547.png)</p>
+<ol>
+<li>用户发送请求至前端控制器DispatcherServlet。</li>
+<li>DispatcherServlet收到请求调用HandlerMapping处理器映射器。</li>
+<li>处理器映射器找到具体的处理器(可以根据xml配置、注解进行查找)，生成处理器对象及处理器拦截器(如果有则生成)一并返回给DispatcherServlet。</li>
+<li>DispatcherServlet调用HandlerAdapter处理器适配器。</li>
+<li>HandlerAdapter经过适配调用具体的处理器 Handler (Controller，也叫后端控制器)。</li>
+<li>Handler/Controller执行完成返回ModelAndView。</li>
+<li>HandlerAdapter将 Handler/Controller 执行结果ModelAndView返回给DispatcherServlet。</li>
+<li>DispatcherServlet将ModelAndView传给ViewReslover视图解析器。</li>
+<li>ViewReslover解析后返回具体View。</li>
+<li>DispatcherServlet根据View进行渲染视图（即将模型数据填充至视图中）。DispatcherServlet响应用户。</li>
+</ol>
+<h3 id="1-3-2-Spring-MVC-组件解析"><a href="#1-3-2-Spring-MVC-组件解析" class="headerlink" title="1.3.2 Spring MVC 组件解析"></a>1.3.2 Spring MVC 组件解析</h3><ul>
+<li><p><strong>前端控制器：DispatcherServlet</strong></p>
+<p>用户请求到达前端控制器，它就相当于 MVC 模式中的 C，DispatcherServlet 是整个流程控制的中心，由它调用其它组件处理用户的请求，DispatcherServlet 的存在降低了组件之间的耦合性。</p>
+</li>
+<li><p><strong>处理器映射器：HandlerMapping</strong></p>
+<p>HandlerMapping 负责根据用户请求找到 Handler 即处理器，SpringMVC 提供了不同的映射器实现不同的映射方式，例如：配置文件方式，实现接口方式，注解方式等。</p>
+</li>
+<li><p><strong>处理器适配器：HandlerAdapter</strong></p>
+<p>通过 HandlerAdapter 对处理器进行执行，这是适配器模式的应用，通过扩展适配器可以对更多类型的处理器进行执行。</p>
+</li>
+<li><p><strong>处理器：Handler/Controller</strong></p>
+<p>它就是我们开发中要编写的具体业务控制器。由 DispatcherServlet 把用户请求转发到 Handler。由Handler 对具体的用户请求进行处理。</p>
+</li>
+<li><p><strong>视图解析器：View Resolver</strong> </p>
+<p>View Resolver 负责将处理结果生成 View 视图，View Resolver 首先根据逻辑视图名解析成物理视图名，即具体的页面地址，再生成 View 视图对象，最后对 View 进行渲染将处理结果通过页面展示给用户。</p>
+</li>
+<li><p><strong>视图：View</strong></p>
+<p>SpringMVC 框架提供了很多的 View 视图类型的支持，包括：jstlView、freemarkerView、pdfView等。最常用的视图就是 jsp。一般情况下需要通过页面标签或页面模版技术将模型数据通过页面展示给用户，需要由程序员根据业务需求开发具体的页面。</p>
+</li>
+</ul>
+<h3 id="1-3-3-Spring-MVC-注解解析"><a href="#1-3-3-Spring-MVC-注解解析" class="headerlink" title="1.3.3 Spring MVC 注解解析"></a>1.3.3 Spring MVC 注解解析</h3><h4 id="1-3-3-1-RequestMapping"><a href="#1-3-3-1-RequestMapping" class="headerlink" title="1.3.3.1 @RequestMapping"></a>1.3.3.1 @RequestMapping</h4><p><strong>作用：</strong>用于建立 <strong>请求 URL</strong> 和处理 <strong>请求方法</strong> 之间的对应关系</p>
+<p><strong>位置：</strong></p>
+<ul>
+<li>类上，请求URL 的第一级访问目录。此处不写的话，就相当于应用的根目录</li>
+<li>方法上，请求 URL 的第二级访问目录，与类上的使用@ReqquestMapping标注的一级目录一起组成访问虚拟路径</li>
+</ul>
+<p>注意：如果在这里有写第一级访问目录，如下面例子所示，如果success.jsp文件必须要在webapp/view这个文件夹下，请求地址为：<a target="_blank" rel="noopener" href="http://localhost:8080/view/quick">http://localhost:8080/view/quick</a></p>
+<pre><code class="java">@Controller
+@RequestMapping(&quot;/view&quot;)
+public class UserController &#123;
+    @RequestMapping(&quot;/quick&quot;)
+    public String save() &#123;
+        System.out.println(&quot;Controller svae running...&quot;);
+        //这里也可以写/view/success.jsp
+        return &quot;success.jsp&quot;;
+    &#125;
+&#125;
+</code></pre>
+<p><strong>属性：</strong></p>
+<ul>
+<li><p>value：用于指定请求的URL。它和path属性的作用是一样的</p>
+</li>
+<li><p>method：用于指定请求的方式</p>
+</li>
+<li><p>params：用于指定限制请求参数的条件。它支持简单的表达式。要求请求参数的key和value必须和配置的一模一样</p>
+<ul>
+<li>例如：params = {“accountName”}，表示请求参数必须有accountName（<a target="_blank" rel="noopener" href="http://localhost:8080/spring/view/quick?username=xxx%EF%BC%89%EF%BC%8C%E5%A6%82%E6%9E%9C%E6%B2%A1%E6%9C%89%E4%BC%9A%E6%8A%A5%E9%94%99400">http://localhost:8080/spring/view/quick?username=xxx），如果没有会报错400</a></li>
+<li>例如：params = {“moeny!=100”}，表示请求参数中money不能是100</li>
+</ul>
+</li>
+</ul>
+<h4 id="1-3-3-2-xml命名空间注入"><a href="#1-3-3-2-xml命名空间注入" class="headerlink" title="1.3.3.2 xml命名空间注入"></a>1.3.3.2 xml命名空间注入</h4><p>命名空间：xmlns:context=”<a target="_blank" rel="noopener" href="http://www.springframework.org/schema/context&quot;">http://www.springframework.org/schema/context&quot;</a><br>                   xmlns:mvc=”<a target="_blank" rel="noopener" href="http://www.springframework.org/schema/mvc&quot;">http://www.springframework.org/schema/mvc&quot;</a><br>约束地址：<a target="_blank" rel="noopener" href="http://www.springframework.org/schema/context">http://www.springframework.org/schema/context</a><br>                   <a target="_blank" rel="noopener" href="http://www.springframework.org/schema/context/spring-context.xsd">http://www.springframework.org/schema/context/spring-context.xsd</a><br>                   <a target="_blank" rel="noopener" href="http://www.springframework.org/schema/mvc">http://www.springframework.org/schema/mvc</a><br>                   <a target="_blank" rel="noopener" href="http://www.springframework.org/schema/mvc/spring-mvc.xsd">http://www.springframework.org/schema/mvc/spring-mvc.xsd</a></p>
+<h4 id="1-3-3-3-组件扫描"><a href="#1-3-3-3-组件扫描" class="headerlink" title="1.3.3.3 组件扫描"></a>1.3.3.3 组件扫描</h4><p>SpringMVC基于Spring容器，所以在进行SpringMVC操作时，需要将Controller存储到Spring容器中，如果使用@Controller注解标注的话，就需要使用 <code>&lt;context:component-scan base-package=“com.kalimera.controller&quot;/&gt;</code> 进行组件扫描。</p>
+<p>或者可以另一种方式，不标注到具体的controller包，而是对整个项目进行扫描，但是需要添加一些参数：</p>
+<pre><code class="xml">&lt;context:component-scan base-package=&quot;com.kalimera&quot;&gt;
+    &lt;!-- 表示只对@Controller这个注解进行扫描 --&gt;
+    &lt;context:include-filter type=&quot;annotation&quot; expression=&quot;org.springframework.stereotype.Controller&quot;/&gt;
+&lt;/context:component-scan&gt;
+</code></pre>
+<h3 id="1-3-4-视图解析器"><a href="#1-3-4-视图解析器" class="headerlink" title="1.3.4 视图解析器"></a>1.3.4 视图解析器</h3><p>内部资源视图解析器 org.springframework.web.servlet.view.InternalResourceViewResolver</p>
+<ul>
+<li><p>redirect</p>
+<pre><code class="java">@Controller
+@RequestMapping(value = &quot;/view&quot;)
+public class UserController &#123;
+    @RequestMapping(value = &quot;/quick&quot;, params = &#123;&quot;username&quot;&#125;)
+    public String save() &#123;
+        System.out.println(&quot;Controller svae running...&quot;);
+        return &quot;redirect:success.jsp&quot;;
+    &#125;
+&#125;
+</code></pre>
+</li>
+<li><p>forward 默认</p>
+<pre><code class="java">@Controller
+@RequestMapping(value = &quot;/view&quot;)
+public class UserController &#123;
+    @RequestMapping(value = &quot;/quick&quot;, params = &#123;&quot;username&quot;&#125;)
+    public String save() &#123;
+        System.out.println(&quot;Controller svae running...&quot;);
+        return &quot;success.jsp&quot;;
+    &#125;
+&#125;
+</code></pre>
+</li>
+<li><p>通过在spring-mvc.xml中用属性注入的方式修改视图的的前后缀（prefix suffix），不适用于重定向</p>
+<pre><code class="xml">&lt;bean class=&quot;org.springframework.web.servlet.view.InternalResourceViewResolver&quot;&gt;
+    &lt;property name=&quot;prefix&quot; value=&quot;/view/&quot;/&gt;
+    &lt;property name=&quot;suffix&quot; value=&quot;.jsp&quot;/&gt;
+&lt;/bean&gt;
+</code></pre>
+<pre><code class="java">@Controller
+public class UserController &#123;
+    @RequestMapping(value = &quot;/quick&quot;, params = &#123;&quot;username&quot;&#125;)
+    public String save() &#123;
+        System.out.println(&quot;Controller svae running...&quot;);
+        // &quot;/view/success1.jsp&quot;
+        return &quot;success1&quot;; 
+    &#125;
+&#125;
+</code></pre>
+</li>
+</ul>
+<h1 id="2-Spring-MVC-数据响应"><a href="#2-Spring-MVC-数据响应" class="headerlink" title="2 Spring MVC 数据响应"></a>2 Spring MVC 数据响应</h1><h2 id="2-1-页面跳转"><a href="#2-1-页面跳转" class="headerlink" title="2.1 页面跳转"></a>2.1 页面跳转</h2><h3 id="2-1-1-直接返回字符串"><a href="#2-1-1-直接返回字符串" class="headerlink" title="2.1.1 直接返回字符串"></a>2.1.1 直接返回字符串</h3><p>也就是直接 <code>return</code> 一个页面路径，此种方式会将返回的字符串与视图解析器的前后缀拼接后跳转。</p>
+<h3 id="2-1-2-返回ModelAndView对象"><a href="#2-1-2-返回ModelAndView对象" class="headerlink" title="2.1.2 返回ModelAndView对象"></a>2.1.2 返回ModelAndView对象</h3><p>这种方式也依然会自动进行前后缀拼接</p>
+<ul>
+<li>无参</li>
+</ul>
+<pre><code class="java">@RequestMapping(&quot;/mv1&quot;)
+public ModelAndView modelAndView1() &#123;
+    ModelAndView modelAndView = new ModelAndView();
+    //这样写的前提是已经用属性注入的方式进行了前后缀配置
+    modelAndView.setViewName(&quot;success1&quot;);
+    return modelAndView;
+&#125;
+</code></pre>
+<ul>
+<li>有参，这里的ModelAndeView对象是由Spring容器提供的</li>
+</ul>
+<pre><code class="java">@RequestMapping(&quot;/mv2&quot;)
+public ModelAndView modelAndView2(ModelAndView modelAndView) &#123;
+    modelAndView.setViewName(&quot;success1&quot;);
+    return modelAndView;
+&#125;
+</code></pre>
+<h3 id="2-1-3-向Request域存储数据"><a href="#2-1-3-向Request域存储数据" class="headerlink" title="2.1.3 向Request域存储数据"></a>2.1.3 向Request域存储数据</h3><ul>
+<li>通过SpringMVC框架注入的request对象setAttribute()方法设置</li>
+</ul>
+<pre><code class="java">@RequestMapping(value = &quot;/quick&quot;)
+public String save(HttpServletRequest httpServletRequest) &#123;
+    System.out.println(&quot;Controller svae running...&quot;);
+    httpServletRequest.setAttribute(&quot;username&quot;, &quot;kalimera&quot;);
+    return &quot;success1&quot;;
+&#125;
+</code></pre>
+<pre><code class="jsp">&lt;%@ page contentType=&quot;text/html;charset=UTF-8&quot; language=&quot;java&quot; %&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;Title&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+success1 $&#123;username&#125;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<ul>
+<li>通过Model的addAttribute()方法设置</li>
+</ul>
+<pre><code class="java">@RequestMapping(value = &quot;/quick&quot;)
+public String save(Model model) &#123;
+    System.out.println(&quot;Controller svae running...&quot;);
+    model.addAttribute(&quot;username&quot;, &quot;kalimera&quot;);
+    return &quot;success1&quot;;
+&#125;
+</code></pre>
+<ul>
+<li>也可以通过ModelAndView的addObject()方法设置，注意这里就不能再用上面返回字符串的形式了</li>
+</ul>
+<pre><code class="java">@RequestMapping(&quot;/mv2&quot;)
+public ModelAndView modelAndView2(ModelAndView modelAndView) &#123;
+    modelAndView.addObject(&quot;username&quot;, &quot;kalimera&quot;);
+    modelAndView.setViewName(&quot;success1&quot;);
+    return modelAndView;
 &#125;
 </code></pre>
 
@@ -1240,7 +534,7 @@ public class UserServlet extends HttpServlet &#123;
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://woojou.github.io/2021/08/03/Spring%E6%A1%86%E6%9E%B6/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://woojou.github.io/2021/12/16/SpringMVC/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -1254,18 +548,9 @@ public class UserServlet extends HttpServlet &#123;
   
 <nav id="article-nav">
   
-    <a href="/2021/08/03/Maven/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          Maven
-        
-      </div>
-    </a>
   
-  
-    <a href="/2021/07/16/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">设计模式</div>
+    <a href="/2021/08/07/JavaWeb/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">JavaWeb</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -1292,7 +577,7 @@ public class UserServlet extends HttpServlet &#123;
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-Spring%E7%AE%80%E4%BB%8B"><span class="toc-number">1.</span> <span class="toc-text">1 Spring简介</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-Spring%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-number">1.1.</span> <span class="toc-text">1.1 Spring是什么</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-Spring%E5%8F%91%E5%B1%95%E5%8E%86%E7%A8%8B"><span class="toc-number">1.2.</span> <span class="toc-text">1.2 Spring发展历程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-Spring%E4%BC%98%E5%8A%BF"><span class="toc-number">1.3.</span> <span class="toc-text">1.3 Spring优势</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-4-Spring%E7%9A%84%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84"><span class="toc-number">1.4.</span> <span class="toc-text">1.4 Spring的体系结构</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-Spring%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8"><span class="toc-number">2.</span> <span class="toc-text">2 Spring快速入门</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-Spring%E7%A8%8B%E5%BA%8F%E5%BC%80%E5%8F%91%E6%AD%A5%E9%AA%A4"><span class="toc-number">2.1.</span> <span class="toc-text">2.1 Spring程序开发步骤</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E4%B8%8A%E6%89%8B%E7%A8%8B%E5%BA%8F"><span class="toc-number">2.2.</span> <span class="toc-text">2.2 一个简单的上手程序</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-Spring%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-number">3.</span> <span class="toc-text">3 Spring配置文件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-Bean%E6%A0%87%E7%AD%BE%E5%9F%BA%E6%9C%AC%E9%85%8D%E7%BD%AE"><span class="toc-number">3.1.</span> <span class="toc-text">3.1 Bean标签基本配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-Bean%E6%A0%87%E7%AD%BE%E8%8C%83%E5%9B%B4%E9%85%8D%E7%BD%AE"><span class="toc-number">3.2.</span> <span class="toc-text">3.2 Bean标签范围配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-Bean%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E9%85%8D%E7%BD%AE"><span class="toc-number">3.3.</span> <span class="toc-text">3.3 Bean生命周期配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-Bean%E5%AE%9E%E4%BE%8B%E5%8C%96%E4%B8%89%E7%A7%8D%E6%96%B9%E5%BC%8F"><span class="toc-number">3.4.</span> <span class="toc-text">3.4 Bean实例化三种方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-5-Bean%E7%9A%84%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5"><span class="toc-number">3.5.</span> <span class="toc-text">3.5 Bean的依赖注入</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-6-Bean%E7%9A%84%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5%E7%9A%84%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="toc-number">3.6.</span> <span class="toc-text">3.6 Bean的依赖注入的数据类型</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-6-1-%E6%99%AE%E9%80%9A%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E6%B3%A8%E5%85%A5"><span class="toc-number">3.6.1.</span> <span class="toc-text">3.6.1 普通数据类型注入</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-6-2-%E9%9B%86%E5%90%88%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E6%B3%A8%E5%85%A5"><span class="toc-number">3.6.2.</span> <span class="toc-text">3.6.2 集合数据类型注入</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-7-%E5%88%86%E6%A8%A1%E5%9D%97%E5%BC%80%E5%8F%91"><span class="toc-number">3.7.</span> <span class="toc-text">3.7 分模块开发</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-Spring%E7%9B%B8%E5%85%B3API"><span class="toc-number">4.</span> <span class="toc-text">4 Spring相关API</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-ApplicationContext%E7%9A%84%E7%BB%A7%E6%89%BF%E4%BD%93%E7%B3%BB"><span class="toc-number">4.1.</span> <span class="toc-text">4.1 ApplicationContext的继承体系</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-ApplicationContext%E7%9A%84%E5%AE%9E%E7%8E%B0%E7%B1%BB"><span class="toc-number">4.2.</span> <span class="toc-text">4.2 ApplicationContext的实现类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-getBean-%E6%96%B9%E6%B3%95%E4%BD%BF%E7%94%A8"><span class="toc-number">4.3.</span> <span class="toc-text">4.3 getBean()方法使用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-Spring%E9%85%8D%E7%BD%AE%E6%95%B0%E6%8D%AE%E6%BA%90"><span class="toc-number">5.</span> <span class="toc-text">5 Spring配置数据源</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1-%E6%95%B0%E6%8D%AE%E6%BA%90%EF%BC%88%E8%BF%9E%E6%8E%A5%E6%B1%A0%EF%BC%89%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="toc-number">5.1.</span> <span class="toc-text">5.1 数据源（连接池）的作用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-2-%E6%95%B0%E6%8D%AE%E6%BA%90%E5%BC%80%E5%8F%91%E6%AD%A5%E9%AA%A4"><span class="toc-number">5.2.</span> <span class="toc-text">5.2 数据源开发步骤</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-3-Spring%E9%85%8D%E7%BD%AE%E6%95%B0%E6%8D%AE%E6%BA%90"><span class="toc-number">5.3.</span> <span class="toc-text">5.3 Spring配置数据源</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-4-%E6%8A%BD%E5%8F%96jdbc%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-number">5.4.</span> <span class="toc-text">5.4 抽取jdbc配置文件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-Spring%E6%B3%A8%E8%A7%A3%E5%BC%80%E5%8F%91"><span class="toc-number">6.</span> <span class="toc-text">6 Spring注解开发</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#6-1-Spring%E5%8E%9F%E5%A7%8B%E6%B3%A8%E8%A7%A3"><span class="toc-number">6.1.</span> <span class="toc-text">6.1 Spring原始注解</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-2-Spring%E6%96%B0%E6%B3%A8%E8%A7%A3"><span class="toc-number">6.2.</span> <span class="toc-text">6.2 Spring新注解</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-Spring%E9%9B%86%E6%88%90Junit"><span class="toc-number">7.</span> <span class="toc-text">7 Spring集成Junit</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-Spring%E4%B8%8EWeb%E7%8E%AF%E5%A2%83%E7%9A%84%E9%9B%86%E6%88%90"><span class="toc-number">8.</span> <span class="toc-text">8 Spring与Web环境的集成</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#8-1-%E5%9F%BA%E6%9C%AC%E4%B8%89%E5%B1%82%E6%9E%B6%E6%9E%84%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA"><span class="toc-number">8.1.</span> <span class="toc-text">8.1 基本三层架构环境搭建</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-2-ContextLoaderListener"><span class="toc-number">8.2.</span> <span class="toc-text">8.2 ContextLoaderListener</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-3-Spring%E6%8F%90%E4%BE%9B%E8%8E%B7%E5%8F%96%E5%BA%94%E7%94%A8%E4%B8%8A%E4%B8%8B%E6%96%87%E7%9A%84%E5%B7%A5%E5%85%B7"><span class="toc-number">8.3.</span> <span class="toc-text">8.3 Spring提供获取应用上下文的工具</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-Spring-MVC-%E7%AE%80%E4%BB%8B"><span class="toc-number">1.</span> <span class="toc-text">1 Spring MVC 简介</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-Spring-MVC-%E6%A6%82%E8%BF%B0"><span class="toc-number">1.1.</span> <span class="toc-text">1.1 Spring MVC 概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-Spring-MVC-%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8"><span class="toc-number">1.2.</span> <span class="toc-text">1.2 Spring MVC 快速入门</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-3-Spring-MVC-%E7%BB%84%E4%BB%B6%E8%A7%A3%E6%9E%90"><span class="toc-number">1.3.</span> <span class="toc-text">1.3 Spring MVC 组件解析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-1-Spring-MVC-%E7%9A%84%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B"><span class="toc-number">1.3.1.</span> <span class="toc-text">1.3.1 Spring MVC 的执行流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-2-Spring-MVC-%E7%BB%84%E4%BB%B6%E8%A7%A3%E6%9E%90"><span class="toc-number">1.3.2.</span> <span class="toc-text">1.3.2 Spring MVC 组件解析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-3-Spring-MVC-%E6%B3%A8%E8%A7%A3%E8%A7%A3%E6%9E%90"><span class="toc-number">1.3.3.</span> <span class="toc-text">1.3.3 Spring MVC 注解解析</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-3-1-RequestMapping"><span class="toc-number">1.3.3.1.</span> <span class="toc-text">1.3.3.1 @RequestMapping</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-3-2-xml%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4%E6%B3%A8%E5%85%A5"><span class="toc-number">1.3.3.2.</span> <span class="toc-text">1.3.3.2 xml命名空间注入</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-3-3-%E7%BB%84%E4%BB%B6%E6%89%AB%E6%8F%8F"><span class="toc-number">1.3.3.3.</span> <span class="toc-text">1.3.3.3 组件扫描</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-4-%E8%A7%86%E5%9B%BE%E8%A7%A3%E6%9E%90%E5%99%A8"><span class="toc-number">1.3.4.</span> <span class="toc-text">1.3.4 视图解析器</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-Spring-MVC-%E6%95%B0%E6%8D%AE%E5%93%8D%E5%BA%94"><span class="toc-number">2.</span> <span class="toc-text">2 Spring MVC 数据响应</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1-%E9%A1%B5%E9%9D%A2%E8%B7%B3%E8%BD%AC"><span class="toc-number">2.1.</span> <span class="toc-text">2.1 页面跳转</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-1-%E7%9B%B4%E6%8E%A5%E8%BF%94%E5%9B%9E%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="toc-number">2.1.1.</span> <span class="toc-text">2.1.1 直接返回字符串</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-2-%E8%BF%94%E5%9B%9EModelAndView%E5%AF%B9%E8%B1%A1"><span class="toc-number">2.1.2.</span> <span class="toc-text">2.1.2 返回ModelAndView对象</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-3-%E5%90%91Request%E5%9F%9F%E5%AD%98%E5%82%A8%E6%95%B0%E6%8D%AE"><span class="toc-number">2.1.3.</span> <span class="toc-text">2.1.3 向Request域存储数据</span></a></li></ol></li></ol></li></ol>
                     </div>
                 </span>
             </div>
