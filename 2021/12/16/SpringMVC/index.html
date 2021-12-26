@@ -16,7 +16,7 @@
 <meta property="og:description" content="本文章是根据黑马程序员SSM框架课程做的笔记。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-12-16T13:34:54.000Z">
-<meta property="article:modified_time" content="2021-12-23T13:49:18.027Z">
+<meta property="article:modified_time" content="2021-12-26T10:29:58.069Z">
 <meta property="article:author" content="Woojou">
 <meta property="article:tag" content="框架">
 <meta name="twitter:card" content="summary">
@@ -465,6 +465,445 @@ public ModelAndView modelAndView2(ModelAndView modelAndView) &#123;
     return modelAndView;
 &#125;
 </code></pre>
+<h2 id="2-2-回写数据"><a href="#2-2-回写数据" class="headerlink" title="2.2 回写数据"></a>2.2 回写数据</h2><h3 id="2-2-1-Response"><a href="#2-2-1-Response" class="headerlink" title="2.2.1 Response"></a>2.2.1 Response</h3><p>通过 <code>HttpServletResponse</code> 的 <code>getWriter().write( &quot;&quot; )</code> 方法来实现。</p>
+<pre><code class="java">@RequestMapping(value = &quot;/quick1&quot;)
+public void save1(HttpServletResponse httpServletResponse) throws IOException &#123;
+    httpServletResponse.getWriter().write(&quot;hello kalimera&quot;);
+&#125;
+</code></pre>
+<p>但是既然现在用框架了，最好还是不要用这种耦合的方式。下面介绍解耦合方法。</p>
+<h3 id="2-2-2-返回字符串"><a href="#2-2-2-返回字符串" class="headerlink" title="2.2.2 返回字符串"></a>2.2.2 返回字符串</h3><p>但此时需要通过 <code>@ResponseBody</code> 注解告知 SpringMVC 框架，方法不进行页面/视图跳转。</p>
+<pre><code class="java">@RequestMapping(value = &quot;/quick2&quot;)
+@ResponseBody
+public String save2() &#123;
+    return &quot;Hello kalimera&quot;;
+&#125;
+</code></pre>
+<h3 id="2-2-3-返回json格式字符串"><a href="#2-2-3-返回json格式字符串" class="headerlink" title="2.2.3 返回json格式字符串"></a>2.2.3 返回json格式字符串</h3><p>可以通过用jackson工具来将对象转换成json格式字符串。</p>
+<ul>
+<li>导入jackson工具坐标</li>
+</ul>
+<p>注意这里的版本号需要一致</p>
+<pre><code class="xml">&lt;dependency&gt;
+    &lt;groupId&gt;com.fasterxml.jackson.core&lt;/groupId&gt;
+    &lt;artifactId&gt;jackson-core&lt;/artifactId&gt;
+    &lt;version&gt;2.9.0&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;com.fasterxml.jackson.core&lt;/groupId&gt;
+    &lt;artifactId&gt;jackson-databind&lt;/artifactId&gt;
+    &lt;version&gt;2.9.0&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;com.fasterxml.jackson.core&lt;/groupId&gt;
+    &lt;artifactId&gt;jackson-annotations&lt;/artifactId&gt;
+    &lt;version&gt;2.9.0&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
+<ul>
+<li>编写一个User类，注意一定要写toString方法，否则后面会报错500</li>
+</ul>
+<pre><code class="java">package com.kalimera.pojo;
+
+public class User &#123;
+    String username;
+    int age;
+
+    public User(String username, int age) &#123;
+        this.username = username;
+        this.age = age;
+    &#125;
+
+    public String getUsername() &#123;
+        return username;
+    &#125;
+
+    public void setUsername(String username) &#123;
+        this.username = username;
+    &#125;
+
+    public int getAge() &#123;
+        return age;
+    &#125;
+
+    public void setAge(int age) &#123;
+        this.age = age;
+    &#125;
+
+    @Override
+    public String toString() &#123;
+        return &quot;User&#123;&quot; +
+                &quot;username=&#39;&quot; + username + &#39;\&#39;&#39; +
+                &quot;, age=&quot; + age +
+                &#39;&#125;&#39;;
+    &#125;
+&#125;
+</code></pre>
+<ul>
+<li>用工具类 <code>objectMapper.writeValueAsString()</code> 方法进行转换，依然需要 @ResponseBody</li>
+</ul>
+<pre><code class="java">@RequestMapping(value = &quot;/quick2&quot;)
+@ResponseBody
+public String save2() &#123;
+    User user = new User();
+    user.setUsername(&quot;zhangsan&quot;);
+    user.setAge(18);
+    ObjectMapper objectMapper = new ObjectMapper;
+    String json = objectMapper.writeValueAsString(user);
+    return json;
+&#125;
+</code></pre>
+<h3 id="2-2-4-返回对象-集合"><a href="#2-2-4-返回对象-集合" class="headerlink" title="2.2.4 返回对象/集合"></a>2.2.4 返回对象/集合</h3><p>然而这里的转换工作其实不用我们自己做，Spring MVC 有提供，我们最终只需要返回对象/集合即可。</p>
+<ul>
+<li>配置spring-mvc.xml</li>
+</ul>
+<pre><code class="xml">&lt;bean class=&quot;org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter&quot;&gt;
+    &lt;property name=&quot;messageConverters&quot;&gt;
+        &lt;list&gt;
+            &lt;bean class=&quot;org.springframework.http.converter.json.MappingJackson2HttpMessageConverter&quot;&gt;
+            &lt;/bean&gt;
+        &lt;/list&gt;
+    &lt;/property&gt;
+&lt;/bean&gt;
+</code></pre>
+<ul>
+<li>直接返回对象</li>
+</ul>
+<pre><code class="java">@RequestMapping(value = &quot;/quick3&quot;)
+@ResponseBody
+public User save3() throws JsonProcessingException &#123;
+    User user = new User();
+    user.setUsername(&quot;lisi&quot;);
+    user.setAge(18);
+    return user;
+&#125;
+</code></pre>
+<p>但是上面的方法要配置的代码比较多，还有更好的方法。</p>
+<ul>
+<li>导入mvc命名空间</li>
+</ul>
+<pre><code class="xml">&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
+       xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+       xmlns:context=&quot;http://www.springframework.org/schema/context&quot;
+       xmlns:mvc=&quot;http://www.springframework.org/schema/mvc&quot;
+       xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                      http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd 
+                      http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd&quot;&gt;
+</code></pre>
+<ul>
+<li>直接在spring-mvc.xml中配置注解驱动</li>
+</ul>
+<pre><code class="xml">&lt;mvc:annotation-driven/&gt;
+</code></pre>
+<ul>
+<li>直接返回对象</li>
+</ul>
+<h2 id="2-3-获得请求数据"><a href="#2-3-获得请求数据" class="headerlink" title="2.3 获得请求数据"></a>2.3 获得请求数据</h2><p>客户端请求参数的格式是：<code>name=value&amp;name=value… …</code></p>
+<p>服务器端要获得请求的参数，有时还需要进行数据的封装，SpringMVC可以接收如下类型的参数：基本类型参数；POJO类型参数；数组类型参数；集合类型参数</p>
+<h3 id="2-3-1-获得基本类型参数"><a href="#2-3-1-获得基本类型参数" class="headerlink" title="2.3.1 获得基本类型参数"></a>2.3.1 获得基本类型参数</h3><p>Controller中的业务方法的参数名称要与请求参数的name一致，参数值会自动映射匹配。</p>
+<p>url: localhost:8080/spring/quick4?username=haha&amp;age=22</p>
+<pre><code class="java">@RequestMapping(&quot;quick4&quot;)
+@ResponseBody
+public void save4(String username, int age) &#123;
+    System.out.println(username);
+    System.out.println(age);
+&#125;
+</code></pre>
+<p>当然也可以用驼峰命名法，只不过这样必须要在请求时也用 <code>userName</code>。</p>
+<h3 id="2-3-2-获得pojo类型参数"><a href="#2-3-2-获得pojo类型参数" class="headerlink" title="2.3.2 获得pojo类型参数"></a>2.3.2 获得pojo类型参数</h3><p>Controller中的业务方法的POJO参数的属性名与请求参数的name一致，参数值会自动映射匹配。</p>
+<p>url: localhost:8080/spring/quick5?username=zhangsan&amp;age=23</p>
+<pre><code class="java">@RequestMapping(&quot;quick5&quot;)
+@ResponseBody
+public void save5(User user) &#123;
+    user.toString();
+&#125;
+</code></pre>
+<h3 id="2-3-3-获得数组类型参数"><a href="#2-3-3-获得数组类型参数" class="headerlink" title="2.3.3 获得数组类型参数"></a>2.3.3 获得数组类型参数</h3><p>Controller中的业务方法数组名称与请求参数的名字一致，参数值会自动映射匹配。</p>
+<p>url: localhost:8080/spring/quick6?strs=kaka&amp;strs=jaja</p>
+<pre><code class="java">@RequestMapping(&quot;quick6&quot;)
+@ResponseBody
+public void save6(String[] strs) &#123;
+    System.out.println(Arrays.asList(strs));
+&#125;
+</code></pre>
+<h3 id="2-3-4-获得集合类型参数"><a href="#2-3-4-获得集合类型参数" class="headerlink" title="2.3.4 获得集合类型参数"></a>2.3.4 获得集合类型参数</h3><h4 id="2-3-4-1-将集合包装到一个pojo对象中"><a href="#2-3-4-1-将集合包装到一个pojo对象中" class="headerlink" title="2.3.4.1 将集合包装到一个pojo对象中"></a>2.3.4.1 将集合包装到一个pojo对象中</h4><ul>
+<li>编写一个VO类包装User集合</li>
+</ul>
+<pre><code class="java">package com.kalimera.pojo;
+
+import java.util.List;
+
+public class VO &#123;
+    private List&lt;User&gt; userList;
+
+    public List&lt;User&gt; getUserList() &#123;
+        return userList;
+    &#125;
+
+    public void setUserList(List&lt;User&gt; userList) &#123;
+        this.userList = userList;
+    &#125;
+
+    @Override
+    public String toString() &#123;
+        return &quot;VO&#123;&quot; +
+                &quot;userList=&quot; + userList +
+                &#39;&#125;&#39;;
+    &#125;
+&#125;
+</code></pre>
+<ul>
+<li>编写Controller中对应方法，这里传入参数是VO</li>
+</ul>
+<pre><code class="java">@RequestMapping(&quot;quick7&quot;)
+@ResponseBody
+public void save7(VO vo) &#123;
+    System.out.println(vo);
+&#125;
+</code></pre>
+<ul>
+<li>此时不再像上面那样用get方法来输入数据，而是用post方法，所以需要写一个页面，注意这里的名字一定要对应上。（访问页面时直接输入jsp的地址）</li>
+</ul>
+<pre><code class="jsp">&lt;form action=&quot;$&#123;pageContext.request.contextPath&#125;/quick7&quot; method=&quot;post&quot;&gt;
+    &lt;input type=&quot;text&quot; name=&quot;userList[0].username&quot;&gt;&lt;br&gt;
+    &lt;input type=&quot;text&quot; name=&quot;userList[0].age&quot;&gt;&lt;br&gt;
+    &lt;input type=&quot;text&quot; name=&quot;userList[1].username&quot;&gt;&lt;br&gt;
+    &lt;input type=&quot;text&quot; name=&quot;userList[1].age&quot;&gt;&lt;br&gt;
+    &lt;input type=&quot;submit&quot; value=&quot;提交&quot;&gt;&lt;br&gt;
+&lt;/form&gt;
+</code></pre>
+<h4 id="2-3-4-2-使用ajax提交"><a href="#2-3-4-2-使用ajax提交" class="headerlink" title="2.3.4.2 使用ajax提交"></a>2.3.4.2 使用ajax提交</h4><p>指定contentType为json形式，在方法参数位置使用@RequestBody可以直接接收集合数据而无需使用POJO进行包装。</p>
+<ul>
+<li><p>导入jquery-3.3.1.js</p>
+</li>
+<li><p>编写提交表单</p>
+</li>
+</ul>
+<pre><code class="jsp">&lt;script src=&quot;$&#123;pageContext.request.contextPath&#125;/js/jquery-3.3.1.js&quot;&gt;&lt;/script&gt;
+    &lt;script&gt;
+    var userList = new Array();
+userList.push(&#123;username: &quot;zhangsan&quot;,age: &quot;20&quot;&#125;);
+userList.push(&#123;username: &quot;lisi&quot;,age: &quot;21&quot;&#125;);
+$.ajax(&#123;
+    type: &quot;POST&quot;,
+    url: &quot;$&#123;pageContext.request.contextPath&#125;/quick8&quot;,
+    data: JSON.stringify(userList),
+    contentType: &quot;application/json;charset=utf-8&quot;
+&#125;);
+&lt;/script&gt;
+</code></pre>
+<ul>
+<li>编写Controller中的方法</li>
+</ul>
+<pre><code class="java">@RequestMapping(&quot;quick8&quot;)
+@ResponseBody
+public void save8(@RequestBody List&lt;User&gt; userList) &#123;
+    System.out.println(userList);
+&#125;
+</code></pre>
+<ul>
+<li>如果直接这样跑，用开发者工具抓包发现，没有加载到jquery文件。这是因为SpringMVC的前端控制器 DispatcherServlet 的url-pattern配置的是/，也就是缺省方式。jsp文件能请求到是因为前端控制器映射方法中有配置该jsp的映射 。jquery静态资源找不到，是因为映射方法没有配置，对所有的resources资源都进行了过滤操作。所以要进行指定放行静态资源的操作。<ul>
+<li>在spring-mvc.xml配置文件中指定开放资源访问  <code>&lt;mvc:resources mapping=&quot;/js/**&quot; location=&quot;/js/&quot;/&gt;</code></li>
+<li>使用 <code>&lt;mvc:default-servlet-handler/&gt;</code> 标签，表示当前端控制器找不到资源时，就交给原始的容器（我们这里是Tomcat）去寻找</li>
+</ul>
+</li>
+</ul>
+<p>访问 (<a target="_blank" rel="noopener" href="http://localhost:8080/spring/ajax.jsp">http://localhost:8080/spring/ajax.jsp</a>) 即可看到控制台输出了数据。</p>
+<h2 id="2-4-请求数据乱码问题"><a href="#2-4-请求数据乱码问题" class="headerlink" title="2.4 请求数据乱码问题"></a>2.4 请求数据乱码问题</h2><p>当请求数据为中文时，会出现乱码，所以需要在web.xml中设置一个过滤器来进行编码的过滤。</p>
+<pre><code class="xml">&lt;filter&gt;
+    &lt;filter-name&gt;CharacterEncodingFilter&lt;/filter-name&gt;
+    &lt;filter-class&gt;org.springframework.web.filter.CharacterEncodingFilter&lt;/filter-class&gt;
+    &lt;init-param&gt;
+        &lt;param-name&gt;encoding&lt;/param-name&gt;
+        &lt;param-value&gt;UTF-8&lt;/param-value&gt;
+    &lt;/init-param&gt;
+&lt;/filter&gt;
+&lt;filter-mapping&gt;
+    &lt;!-- /*表示所有的路径都要被过滤 --&gt;
+    &lt;filter-name&gt;CharacterEncodingFilter&lt;/filter-name&gt;
+    &lt;url-pattern&gt;/*&lt;/url-pattern&gt;
+&lt;/filter-mapping&gt;
+</code></pre>
+<h2 id="2-5-参数绑定注解"><a href="#2-5-参数绑定注解" class="headerlink" title="2.5 参数绑定注解"></a>2.5 参数绑定注解</h2><p>上面当请求的参数和Controller的请求参数一致时，就会被自动匹配赋值，但是如果不一致，就需要通过 <code>@RequestParam</code> 注解显示绑定。</p>
+<p>请求URL：localhost:8080/spring/quick9?name=张三</p>
+<pre><code class="java">@RequestMapping(&quot;quick9&quot;)
+@ResponseBody
+public void save9(@RequestParam(&quot;name&quot;) String username) &#123;
+    System.out.println(username);
+&#125;
+</code></pre>
+<p> <code>@RequestParam</code> 有如下参数可以设定：</p>
+<ul>
+<li><strong>value</strong>：与请求参数名称</li>
+<li><strong>required</strong>：此在指定的请求参数是否必须包括，默认是true，提交时如果没有此参数则报错</li>
+<li><strong>defaultValue</strong>：当没有指定请求参数时，则使用指定的默认值赋值</li>
+</ul>
+<h2 id="2-6-Restful风格"><a href="#2-6-Restful风格" class="headerlink" title="2.6 Restful风格"></a>2.6 Restful风格</h2><p>Restful是一种软件架构风格、设计风格，而不是标准，只是提供了一组设计原则和约束条件。主要用于客户端和服务器交互类的软件，基于这个风格设计的软件可以更简洁，更有层次，更易于实现缓存机制等。</p>
+<p>Restful风格的请求是使用“url+请求方式”表示一次请求目的的，HTTP 协议里面四个表示操作方式的动词如下：</p>
+<p><strong>GET</strong>：用于获取资源</p>
+<p><strong>POST</strong>：用于新建资源</p>
+<p><strong>PUT</strong>：用于更新资源</p>
+<p><strong>DELETE</strong>：用于删除资源 </p>
+<p>例如：<br><strong>/user/1    GET</strong> ：       得到 id = 1 的 user</p>
+<p><strong>/user/1    DELETE</strong>：  删除 id = 1 的 user</p>
+<p><strong>/user/1    PUT</strong>：       更新 id = 1 的 user</p>
+<p><strong>/user       POST</strong>：      新增 user</p>
+<p>上述url地址/user/1中的1就是要获得的请求参数，在SpringMVC中可以使用占位符进行参数绑定。地址/user/1可以写成/user/{id}，占位符{id}对应的就是1的值。在业务方法中我们可以使用 <code>@PathVariable</code> 注解进行占位符的匹配获取工作。</p>
+<pre><code class="java">@RequestMapping(&quot;quick10/&#123;name&#125;&quot;)
+@ResponseBody
+//用name作为占位符，把实际请求的URL中的name赋值给这里的username
+public void save10(@PathVariable(&quot;name&quot;) String username) &#123;
+    System.out.println(username);
+&#125;
+</code></pre>
+<p>请求URL：localhost:8080/spring/quick10/张三</p>
+<h2 id="2-7-自定义类型转换器"><a href="#2-7-自定义类型转换器" class="headerlink" title="2.7 自定义类型转换器"></a>2.7 自定义类型转换器</h2><p>SpringMVC 默认已经提供了一些常用的类型转换器，例如客户端提交的字符串转换成int型进行参数设置。但是不是所有的数据类型都提供了转换器，没有提供的就需要自定义转换器，例如：日期类型的数据就需要自定义转换器。</p>
+<ul>
+<li>定义转换器类实现Converter接口</li>
+</ul>
+<pre><code class="java">import org.springframework.core.convert.converter.Converter;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+public class DateConverter implements Converter&lt;String, Date&gt; &#123;
+    @Override
+    public Date convert(String source) &#123;
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(&quot;yyyy-MM-dd&quot;);
+        Date date = null;
+        try &#123;
+            date = simpleDateFormat.parse(source);
+        &#125; catch (ParseException e) &#123;
+            e.printStackTrace();
+        &#125;
+        return date;
+    &#125;
+&#125;
+</code></pre>
+<ul>
+<li>在配置文件中声明转换器</li>
+</ul>
+<pre><code class="xml">&lt;bean id=&quot;converterService&quot; class=&quot;org.springframework.context.support.ConversionServiceFactoryBean&quot;&gt;
+    &lt;property name=&quot;converters&quot;&gt;
+        &lt;list&gt;
+            &lt;bean class=&quot;com.kalimera.converter.DateConverter&quot;/&gt;
+        &lt;/list&gt;
+    &lt;/property&gt;
+&lt;/bean&gt;
+</code></pre>
+<ul>
+<li>在<annotation-driven>中引用转换器</annotation-driven></li>
+</ul>
+<pre><code class="xml">&lt;mvc:annotation-driven conversion-service=&quot;converterService&quot;/&gt;
+</code></pre>
+<ul>
+<li>编写对应 Controller 业务方法</li>
+</ul>
+<pre><code class="java">@RequestMapping(&quot;quick11/&#123;date&#125;&quot;)
+@ResponseBody
+public void save11(@PathVariable(&quot;date&quot;) Date date) &#123;
+    System.out.println(date);
+&#125;
+</code></pre>
+<p>请求URL：localhost:8080/spring/quick11/2021-12-26，看到控制台正确输出日期。</p>
+<h2 id="2-8-获得Servlet相关API"><a href="#2-8-获得Servlet相关API" class="headerlink" title="2.8 获得Servlet相关API"></a>2.8 获得Servlet相关API</h2><p>SpringMVC支持使用原始ServletAPI对象作为控制器方法的参数进行注入，常用的对象有：HttpServletRequest、HttpServletResponse、HttpSession。</p>
+<pre><code class="java">@RequestMapping(&quot;/quick12&quot;)
+@ResponseBody
+public void save12(HttpServletRequest request, HttpServletResponse response, HttpSession session)&#123;
+    System.out.println(request);
+    System.out.println(response);
+    System.out.println(session);
+&#125;
+</code></pre>
+<h2 id="2-9-获得请求头"><a href="#2-9-获得请求头" class="headerlink" title="2.9 获得请求头"></a>2.9 获得请求头</h2><h3 id="2-9-1-RequestHeader"><a href="#2-9-1-RequestHeader" class="headerlink" title="2.9.1 @RequestHeader"></a>2.9.1 @RequestHeader</h3><p>使用<code>@RequestHeader</code>可以获得请求头信息，属性有：</p>
+<ul>
+<li><strong>value</strong>：请求头的名称</li>
+<li><strong>required</strong>：是否必须携带此请求头</li>
+</ul>
+<p>可以用它获取请求头中的User-Agent信息</p>
+<pre><code class="java">@RequestMapping(&quot;quick13&quot;)
+@ResponseBody
+public void save13(@RequestHeader(value = &quot;User-Agent&quot;, required = false) String userAgent) &#123;
+    System.out.println(userAgent);
+&#125;
+</code></pre>
+<h3 id="2-9-2-CookieValue"><a href="#2-9-2-CookieValue" class="headerlink" title="2.9.2 @CookieValue"></a>2.9.2 @CookieValue</h3><p><code>@CookieValue</code>可以获得指定Cookie的值，属性有：</p>
+<ul>
+<li><strong>value</strong>：指定cookie的名称</li>
+<li><strong>required</strong>：是否必须携带此cookie</li>
+</ul>
+<h2 id="2-10-文件上传"><a href="#2-10-文件上传" class="headerlink" title="2.10 文件上传"></a>2.10 文件上传</h2><h3 id="2-10-1-文件上传客户端三要素"><a href="#2-10-1-文件上传客户端三要素" class="headerlink" title="2.10.1 文件上传客户端三要素"></a>2.10.1 文件上传客户端三要素</h3><ul>
+<li>表单项 <code>type=“file”</code></li>
+<li>表单的提交方式是 <code>post</code></li>
+<li>表单的enctype属性是多部分表单形式，及 <code>enctype=“multipart/form-data”</code></li>
+</ul>
+<h3 id="2-10-2-文件上传原理"><a href="#2-10-2-文件上传原理" class="headerlink" title="2.10.2 文件上传原理"></a>2.10.2 文件上传原理</h3><p>当form表单修改为多部分表单时，request.getParameter()将失效。<code>enctype=“application/x-www-form-urlencoded</code>时，form表单的正文内容格式是：key=value&amp;key=value&amp;key=value；当form表单的enctype取值为<code>Mutilpart/form-data</code>时，请求正文内容就变成多部分形式：</p>
+<p>![](SpringMVC/屏幕截图 2021-12-26 173843.png)</p>
+<h3 id="2-10-3-单文件上传"><a href="#2-10-3-单文件上传" class="headerlink" title="2.10.3 单文件上传"></a>2.10.3 单文件上传</h3><ul>
+<li>编写页面</li>
+</ul>
+<pre><code class="jsp">&lt;form action=&quot;$&#123;pageContext.request.contextPath&#125;/quick15&quot; method=&quot;post&quot; enctype=&quot;multipart/form-data&quot;&gt;
+    名字：&lt;input type=&quot;text&quot; name=&quot;username&quot;&gt;&lt;br&gt;
+    文件：&lt;input type=&quot;file&quot; name=&quot;file&quot;&gt;&lt;br&gt;
+    &lt;input type=&quot;submit&quot; value=&quot;upload&quot;&gt;
+&lt;/form&gt;
+</code></pre>
+<ul>
+<li>导入fileupload和io坐标</li>
+</ul>
+<pre><code class="xml">&lt;dependency&gt;
+    &lt;groupId&gt;commons-fileupload&lt;/groupId&gt;
+    &lt;artifactId&gt;commons-fileupload&lt;/artifactId&gt;
+    &lt;version&gt;1.4&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;commons-io&lt;/groupId&gt;
+    &lt;artifactId&gt;commons-io&lt;/artifactId&gt;
+    &lt;version&gt;2.4&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
+<ul>
+<li>配置文件上传解析器，注意这里的id不能瞎写</li>
+</ul>
+<pre><code class="xml">&lt;bean id=&quot;multipartResolver&quot; class=&quot;org.springframework.web.multipart.commons.CommonsMultipartResolver&quot;&gt;
+    &lt;!-- 配置编码方式 上传文件限制的大小 --&gt;
+    &lt;property name=&quot;defaultEncoding&quot; value=&quot;UTF-8&quot;/&gt;
+    &lt;property name=&quot;maxUploadSize&quot; value=&quot;5242800&quot;/&gt;
+    &lt;property name=&quot;maxUploadSizePerFile&quot; value=&quot;5242800&quot;/&gt;
+&lt;/bean&gt;
+</code></pre>
+<ul>
+<li>编写文件上传代码</li>
+</ul>
+<pre><code class="java">@RequestMapping(&quot;/quick15&quot;)
+@ResponseBody
+public void save15(String username, MultipartFile file) throws IOException &#123;
+    System.out.println(username);
+    String originalFilename = file.getOriginalFilename();
+    System.out.println(originalFilename);
+    file.transferTo(new File(&quot;F:/saltfish/SSM/&quot;+originalFilename));
+&#125;
+</code></pre>
+<h3 id="2-10-4-多文件上传"><a href="#2-10-4-多文件上传" class="headerlink" title="2.10.4 多文件上传"></a>2.10.4 多文件上传</h3><p>用数组的方式：</p>
+<pre><code class="java">@RequestMapping(&quot;/quick15&quot;)
+@ResponseBody
+public void save15(String username, MultipartFile[] files) throws IOException &#123;
+    System.out.println(username);
+    for(MultipartFile file : files) &#123;
+        String originalFilename = file.getOriginalFilename();
+        System.out.println(originalFilename);
+        file.transferTo(new File(&quot;F:/saltfish/SSM/&quot;+originalFilename));
+    &#125;
+&#125;
+</code></pre>
+<pre><code class="jsp">&lt;form action=&quot;$&#123;pageContext.request.contextPath&#125;/quick15&quot; method=&quot;post&quot; enctype=&quot;multipart/form-data&quot;&gt;
+    名字：&lt;input type=&quot;text&quot; name=&quot;username&quot;&gt;&lt;br&gt;
+    文件1：&lt;input type=&quot;file&quot; name=&quot;files&quot;&gt;&lt;br&gt;
+    文件2：&lt;input type=&quot;file&quot; name=&quot;files&quot;&gt;&lt;br&gt;
+    &lt;input type=&quot;submit&quot; value=&quot;upload&quot;&gt;
+&lt;/form&gt;
+</code></pre>
 
       
 
@@ -577,7 +1016,7 @@ public ModelAndView modelAndView2(ModelAndView modelAndView) &#123;
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-Spring-MVC-%E7%AE%80%E4%BB%8B"><span class="toc-number">1.</span> <span class="toc-text">1 Spring MVC 简介</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-Spring-MVC-%E6%A6%82%E8%BF%B0"><span class="toc-number">1.1.</span> <span class="toc-text">1.1 Spring MVC 概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-Spring-MVC-%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8"><span class="toc-number">1.2.</span> <span class="toc-text">1.2 Spring MVC 快速入门</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-3-Spring-MVC-%E7%BB%84%E4%BB%B6%E8%A7%A3%E6%9E%90"><span class="toc-number">1.3.</span> <span class="toc-text">1.3 Spring MVC 组件解析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-1-Spring-MVC-%E7%9A%84%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B"><span class="toc-number">1.3.1.</span> <span class="toc-text">1.3.1 Spring MVC 的执行流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-2-Spring-MVC-%E7%BB%84%E4%BB%B6%E8%A7%A3%E6%9E%90"><span class="toc-number">1.3.2.</span> <span class="toc-text">1.3.2 Spring MVC 组件解析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-3-Spring-MVC-%E6%B3%A8%E8%A7%A3%E8%A7%A3%E6%9E%90"><span class="toc-number">1.3.3.</span> <span class="toc-text">1.3.3 Spring MVC 注解解析</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-3-1-RequestMapping"><span class="toc-number">1.3.3.1.</span> <span class="toc-text">1.3.3.1 @RequestMapping</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-3-2-xml%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4%E6%B3%A8%E5%85%A5"><span class="toc-number">1.3.3.2.</span> <span class="toc-text">1.3.3.2 xml命名空间注入</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-3-3-%E7%BB%84%E4%BB%B6%E6%89%AB%E6%8F%8F"><span class="toc-number">1.3.3.3.</span> <span class="toc-text">1.3.3.3 组件扫描</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-4-%E8%A7%86%E5%9B%BE%E8%A7%A3%E6%9E%90%E5%99%A8"><span class="toc-number">1.3.4.</span> <span class="toc-text">1.3.4 视图解析器</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-Spring-MVC-%E6%95%B0%E6%8D%AE%E5%93%8D%E5%BA%94"><span class="toc-number">2.</span> <span class="toc-text">2 Spring MVC 数据响应</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1-%E9%A1%B5%E9%9D%A2%E8%B7%B3%E8%BD%AC"><span class="toc-number">2.1.</span> <span class="toc-text">2.1 页面跳转</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-1-%E7%9B%B4%E6%8E%A5%E8%BF%94%E5%9B%9E%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="toc-number">2.1.1.</span> <span class="toc-text">2.1.1 直接返回字符串</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-2-%E8%BF%94%E5%9B%9EModelAndView%E5%AF%B9%E8%B1%A1"><span class="toc-number">2.1.2.</span> <span class="toc-text">2.1.2 返回ModelAndView对象</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-3-%E5%90%91Request%E5%9F%9F%E5%AD%98%E5%82%A8%E6%95%B0%E6%8D%AE"><span class="toc-number">2.1.3.</span> <span class="toc-text">2.1.3 向Request域存储数据</span></a></li></ol></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-Spring-MVC-%E7%AE%80%E4%BB%8B"><span class="toc-number">1.</span> <span class="toc-text">1 Spring MVC 简介</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-Spring-MVC-%E6%A6%82%E8%BF%B0"><span class="toc-number">1.1.</span> <span class="toc-text">1.1 Spring MVC 概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-Spring-MVC-%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8"><span class="toc-number">1.2.</span> <span class="toc-text">1.2 Spring MVC 快速入门</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-3-Spring-MVC-%E7%BB%84%E4%BB%B6%E8%A7%A3%E6%9E%90"><span class="toc-number">1.3.</span> <span class="toc-text">1.3 Spring MVC 组件解析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-1-Spring-MVC-%E7%9A%84%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B"><span class="toc-number">1.3.1.</span> <span class="toc-text">1.3.1 Spring MVC 的执行流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-2-Spring-MVC-%E7%BB%84%E4%BB%B6%E8%A7%A3%E6%9E%90"><span class="toc-number">1.3.2.</span> <span class="toc-text">1.3.2 Spring MVC 组件解析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-3-Spring-MVC-%E6%B3%A8%E8%A7%A3%E8%A7%A3%E6%9E%90"><span class="toc-number">1.3.3.</span> <span class="toc-text">1.3.3 Spring MVC 注解解析</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-3-1-RequestMapping"><span class="toc-number">1.3.3.1.</span> <span class="toc-text">1.3.3.1 @RequestMapping</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-3-2-xml%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4%E6%B3%A8%E5%85%A5"><span class="toc-number">1.3.3.2.</span> <span class="toc-text">1.3.3.2 xml命名空间注入</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-3-3-%E7%BB%84%E4%BB%B6%E6%89%AB%E6%8F%8F"><span class="toc-number">1.3.3.3.</span> <span class="toc-text">1.3.3.3 组件扫描</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-4-%E8%A7%86%E5%9B%BE%E8%A7%A3%E6%9E%90%E5%99%A8"><span class="toc-number">1.3.4.</span> <span class="toc-text">1.3.4 视图解析器</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-Spring-MVC-%E6%95%B0%E6%8D%AE%E5%93%8D%E5%BA%94"><span class="toc-number">2.</span> <span class="toc-text">2 Spring MVC 数据响应</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1-%E9%A1%B5%E9%9D%A2%E8%B7%B3%E8%BD%AC"><span class="toc-number">2.1.</span> <span class="toc-text">2.1 页面跳转</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-1-%E7%9B%B4%E6%8E%A5%E8%BF%94%E5%9B%9E%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="toc-number">2.1.1.</span> <span class="toc-text">2.1.1 直接返回字符串</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-2-%E8%BF%94%E5%9B%9EModelAndView%E5%AF%B9%E8%B1%A1"><span class="toc-number">2.1.2.</span> <span class="toc-text">2.1.2 返回ModelAndView对象</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-3-%E5%90%91Request%E5%9F%9F%E5%AD%98%E5%82%A8%E6%95%B0%E6%8D%AE"><span class="toc-number">2.1.3.</span> <span class="toc-text">2.1.3 向Request域存储数据</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2-%E5%9B%9E%E5%86%99%E6%95%B0%E6%8D%AE"><span class="toc-number">2.2.</span> <span class="toc-text">2.2 回写数据</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-1-Response"><span class="toc-number">2.2.1.</span> <span class="toc-text">2.2.1 Response</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-2-%E8%BF%94%E5%9B%9E%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="toc-number">2.2.2.</span> <span class="toc-text">2.2.2 返回字符串</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-3-%E8%BF%94%E5%9B%9Ejson%E6%A0%BC%E5%BC%8F%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="toc-number">2.2.3.</span> <span class="toc-text">2.2.3 返回json格式字符串</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-4-%E8%BF%94%E5%9B%9E%E5%AF%B9%E8%B1%A1-%E9%9B%86%E5%90%88"><span class="toc-number">2.2.4.</span> <span class="toc-text">2.2.4 返回对象&#x2F;集合</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-3-%E8%8E%B7%E5%BE%97%E8%AF%B7%E6%B1%82%E6%95%B0%E6%8D%AE"><span class="toc-number">2.3.</span> <span class="toc-text">2.3 获得请求数据</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-1-%E8%8E%B7%E5%BE%97%E5%9F%BA%E6%9C%AC%E7%B1%BB%E5%9E%8B%E5%8F%82%E6%95%B0"><span class="toc-number">2.3.1.</span> <span class="toc-text">2.3.1 获得基本类型参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-2-%E8%8E%B7%E5%BE%97pojo%E7%B1%BB%E5%9E%8B%E5%8F%82%E6%95%B0"><span class="toc-number">2.3.2.</span> <span class="toc-text">2.3.2 获得pojo类型参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-3-%E8%8E%B7%E5%BE%97%E6%95%B0%E7%BB%84%E7%B1%BB%E5%9E%8B%E5%8F%82%E6%95%B0"><span class="toc-number">2.3.3.</span> <span class="toc-text">2.3.3 获得数组类型参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-4-%E8%8E%B7%E5%BE%97%E9%9B%86%E5%90%88%E7%B1%BB%E5%9E%8B%E5%8F%82%E6%95%B0"><span class="toc-number">2.3.4.</span> <span class="toc-text">2.3.4 获得集合类型参数</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-4-1-%E5%B0%86%E9%9B%86%E5%90%88%E5%8C%85%E8%A3%85%E5%88%B0%E4%B8%80%E4%B8%AApojo%E5%AF%B9%E8%B1%A1%E4%B8%AD"><span class="toc-number">2.3.4.1.</span> <span class="toc-text">2.3.4.1 将集合包装到一个pojo对象中</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-4-2-%E4%BD%BF%E7%94%A8ajax%E6%8F%90%E4%BA%A4"><span class="toc-number">2.3.4.2.</span> <span class="toc-text">2.3.4.2 使用ajax提交</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-4-%E8%AF%B7%E6%B1%82%E6%95%B0%E6%8D%AE%E4%B9%B1%E7%A0%81%E9%97%AE%E9%A2%98"><span class="toc-number">2.4.</span> <span class="toc-text">2.4 请求数据乱码问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-5-%E5%8F%82%E6%95%B0%E7%BB%91%E5%AE%9A%E6%B3%A8%E8%A7%A3"><span class="toc-number">2.5.</span> <span class="toc-text">2.5 参数绑定注解</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-6-Restful%E9%A3%8E%E6%A0%BC"><span class="toc-number">2.6.</span> <span class="toc-text">2.6 Restful风格</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-7-%E8%87%AA%E5%AE%9A%E4%B9%89%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2%E5%99%A8"><span class="toc-number">2.7.</span> <span class="toc-text">2.7 自定义类型转换器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-8-%E8%8E%B7%E5%BE%97Servlet%E7%9B%B8%E5%85%B3API"><span class="toc-number">2.8.</span> <span class="toc-text">2.8 获得Servlet相关API</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-9-%E8%8E%B7%E5%BE%97%E8%AF%B7%E6%B1%82%E5%A4%B4"><span class="toc-number">2.9.</span> <span class="toc-text">2.9 获得请求头</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-9-1-RequestHeader"><span class="toc-number">2.9.1.</span> <span class="toc-text">2.9.1 @RequestHeader</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-9-2-CookieValue"><span class="toc-number">2.9.2.</span> <span class="toc-text">2.9.2 @CookieValue</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-10-%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0"><span class="toc-number">2.10.</span> <span class="toc-text">2.10 文件上传</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-10-1-%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E5%AE%A2%E6%88%B7%E7%AB%AF%E4%B8%89%E8%A6%81%E7%B4%A0"><span class="toc-number">2.10.1.</span> <span class="toc-text">2.10.1 文件上传客户端三要素</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-10-2-%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E5%8E%9F%E7%90%86"><span class="toc-number">2.10.2.</span> <span class="toc-text">2.10.2 文件上传原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-10-3-%E5%8D%95%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0"><span class="toc-number">2.10.3.</span> <span class="toc-text">2.10.3 单文件上传</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-10-4-%E5%A4%9A%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0"><span class="toc-number">2.10.4.</span> <span class="toc-text">2.10.4 多文件上传</span></a></li></ol></li></ol></li></ol>
                     </div>
                 </span>
             </div>
