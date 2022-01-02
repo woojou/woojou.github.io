@@ -16,7 +16,7 @@
 <meta property="og:description" content="本文章是根据黑马程序员SSM框架课程做的笔记。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-12-29T02:10:37.000Z">
-<meta property="article:modified_time" content="2021-12-30T08:49:46.378Z">
+<meta property="article:modified_time" content="2022-01-02T01:44:30.220Z">
 <meta property="article:author" content="Woojou">
 <meta property="article:tag" content="框架">
 <meta name="twitter:card" content="summary">
@@ -787,6 +787,89 @@ public void delUser(Long userId) &#123;
     jdbcTemplate.update(&quot;delete from sys_user where id=?&quot;,userId);
 &#125;
 </code></pre>
+<h1 id="8-用户登陆权限"><a href="#8-用户登陆权限" class="headerlink" title="8 用户登陆权限"></a>8 用户登陆权限</h1><h2 id="8-1-拦截器部分"><a href="#8-1-拦截器部分" class="headerlink" title="8.1 拦截器部分"></a>8.1 拦截器部分</h2><ul>
+<li>编写拦截器类，判断请求中的session中是否带有user属性（即用户是否已经登陆）如果没有，则需要跳转到登录界面</li>
+</ul>
+<pre><code class="java">package com.kalimera.Interceptor;
+
+import com.kalimera.domain.User;
+import org.springframework.web.servlet.HandlerInterceptor;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+public class LogInInterceptor implements HandlerInterceptor &#123;
+    @Override
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception &#123;
+        //逻辑：判断用户是否登录  本质：判断session中有没有user
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute(&quot;user&quot;);
+        if(user==null)&#123;
+            //没有登录
+            response.sendRedirect(request.getContextPath()+&quot;/login.jsp&quot;);
+            return false;
+        &#125;
+
+        //放行  访问目标资源
+        return true;
+    &#125;
+&#125;
+</code></pre>
+<ul>
+<li>注册拦截器</li>
+</ul>
+<pre><code class="xml">&lt;mvc:interceptors&gt;
+    &lt;mvc:interceptor&gt;
+        &lt;mvc:mapping path=&quot;/**&quot;/&gt;
+        &lt;!-- 对于登录功能需要放行 --&gt;
+        &lt;mvc:exclude-mapping path=&quot;/user/login&quot;/&gt;
+        &lt;bean class=&quot;com.kalimera.Interceptor.LogInInterceptor&quot;/&gt;
+    &lt;/mvc:interceptor&gt;
+&lt;/mvc:interceptors&gt;
+</code></pre>
+<h2 id="8-2-登录功能"><a href="#8-2-登录功能" class="headerlink" title="8.2 登录功能"></a>8.2 登录功能</h2><ul>
+<li>登陆界面URL</li>
+</ul>
+<p>![](spring练习小项目/屏幕截图 2022-01-02 093259.png)</p>
+<ul>
+<li>编写UserController的login()方法</li>
+</ul>
+<pre><code class="java">@RequestMapping(&quot;/login&quot;)
+public String login(String username, String password, HttpSession httpSession) &#123;
+    User user = userService.login(username, password);
+    if(user != null) &#123;
+        httpSession.setAttribute(&quot;user&quot;, user);
+        return &quot;redirect:/index.jsp&quot;;
+    &#125;
+    return &quot;redirect:/login.jsp&quot;;
+&#125;
+</code></pre>
+<ul>
+<li>编写UserService的login()方法</li>
+</ul>
+<pre><code class="java">@Override
+public User login(String username, String password) &#123;
+    try &#123;
+        User user = userDao.login(username, password);
+        return user;
+    &#125;catch (EmptyResultDataAccessException e)&#123;
+        //这里的异常处理是因为dao层的查询操作
+        //可能会报异常，但是异常我们不会在dao处理
+        //通常异常都会在service处理
+        return null;
+    &#125;
+&#125;
+</code></pre>
+<ul>
+<li>编写UserDao的login()方法</li>
+</ul>
+<pre><code class="java">@Override
+public User login(String username, String password) &#123;
+    User user = jdbcTemplate.queryForObject(&quot;select * from sys_user where username=? and password=?&quot;, new BeanPropertyRowMapper&lt;User&gt;(User.class), username, password);
+    return user;
+&#125;
+</code></pre>
 <p>实现完毕！！！！</p>
 
       
@@ -900,7 +983,7 @@ public void delUser(Long userId) &#123;
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-Spring%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA"><span class="toc-number">1.</span> <span class="toc-text">1 Spring环境搭建</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%A7%92%E8%89%B2%E4%B8%9A%E5%8A%A1%E5%85%B3%E7%B3%BB"><span class="toc-number">2.</span> <span class="toc-text">2 数据库角色业务关系</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-%E8%A7%92%E8%89%B2%E5%88%97%E8%A1%A8%E7%9A%84%E5%B1%95%E7%A4%BA%E5%8A%9F%E8%83%BD"><span class="toc-number">3.</span> <span class="toc-text">3 角色列表的展示功能</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-%E8%A7%92%E8%89%B2%E6%B7%BB%E5%8A%A0%E5%8A%9F%E8%83%BD"><span class="toc-number">4.</span> <span class="toc-text">4 角色添加功能</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#5-%E7%94%A8%E6%88%B7%E5%88%97%E8%A1%A8%E7%9A%84%E5%B1%95%E7%A4%BA"><span class="toc-number">5.</span> <span class="toc-text">5 用户列表的展示</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#6-%E7%94%A8%E6%88%B7%E6%B7%BB%E5%8A%A0%E6%93%8D%E4%BD%9C"><span class="toc-number">6.</span> <span class="toc-text">6 用户添加操作</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#7-%E7%94%A8%E6%88%B7%E5%88%A0%E9%99%A4%E6%93%8D%E4%BD%9C"><span class="toc-number">7.</span> <span class="toc-text">7 用户删除操作</span></a></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-Spring%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA"><span class="toc-number">1.</span> <span class="toc-text">1 Spring环境搭建</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%A7%92%E8%89%B2%E4%B8%9A%E5%8A%A1%E5%85%B3%E7%B3%BB"><span class="toc-number">2.</span> <span class="toc-text">2 数据库角色业务关系</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-%E8%A7%92%E8%89%B2%E5%88%97%E8%A1%A8%E7%9A%84%E5%B1%95%E7%A4%BA%E5%8A%9F%E8%83%BD"><span class="toc-number">3.</span> <span class="toc-text">3 角色列表的展示功能</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-%E8%A7%92%E8%89%B2%E6%B7%BB%E5%8A%A0%E5%8A%9F%E8%83%BD"><span class="toc-number">4.</span> <span class="toc-text">4 角色添加功能</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#5-%E7%94%A8%E6%88%B7%E5%88%97%E8%A1%A8%E7%9A%84%E5%B1%95%E7%A4%BA"><span class="toc-number">5.</span> <span class="toc-text">5 用户列表的展示</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#6-%E7%94%A8%E6%88%B7%E6%B7%BB%E5%8A%A0%E6%93%8D%E4%BD%9C"><span class="toc-number">6.</span> <span class="toc-text">6 用户添加操作</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#7-%E7%94%A8%E6%88%B7%E5%88%A0%E9%99%A4%E6%93%8D%E4%BD%9C"><span class="toc-number">7.</span> <span class="toc-text">7 用户删除操作</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#8-%E7%94%A8%E6%88%B7%E7%99%BB%E9%99%86%E6%9D%83%E9%99%90"><span class="toc-number">8.</span> <span class="toc-text">8 用户登陆权限</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#8-1-%E6%8B%A6%E6%88%AA%E5%99%A8%E9%83%A8%E5%88%86"><span class="toc-number">8.1.</span> <span class="toc-text">8.1 拦截器部分</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-2-%E7%99%BB%E5%BD%95%E5%8A%9F%E8%83%BD"><span class="toc-number">8.2.</span> <span class="toc-text">8.2 登录功能</span></a></li></ol></li></ol>
                     </div>
                 </span>
             </div>
@@ -929,7 +1012,7 @@ public void delUser(Long userId) &#123;
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2021 Woojou
+    		&copy; 2022 Woojou
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
