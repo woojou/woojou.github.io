@@ -17,7 +17,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://woojou.github.io/.io//1.4.1.png">
 <meta property="article:published_time" content="2021-12-16T13:34:54.000Z">
-<meta property="article:modified_time" content="2022-01-02T12:12:49.400Z">
+<meta property="article:modified_time" content="2022-01-03T13:45:53.091Z">
 <meta property="article:author" content="Woojou">
 <meta property="article:tag" content="框架">
 <meta name="twitter:card" content="summary">
@@ -1347,6 +1347,263 @@ $&#123;info&#125;
 <p>Spring 框架监控切入点方法的执行。一旦监控到切入点方法被运行，使用代理机制，动态创建目标对象的代理对象，根据通知类别，在代理对象的对应位置，将通知对应的功能织入，完成完整的代码逻辑运行。</p>
 <p><strong>代理方式</strong></p>
 <p>Spring 框架会根据<strong>目标类是否实现了接口</strong>来决定采用哪种动态代理的方式。</p>
+<h2 id="6-2-基于XML的AOP开发"><a href="#6-2-基于XML的AOP开发" class="headerlink" title="6.2 基于XML的AOP开发"></a>6.2 基于XML的AOP开发</h2><h3 id="6-2-1-开发步骤"><a href="#6-2-1-开发步骤" class="headerlink" title="6.2.1 开发步骤"></a>6.2.1 开发步骤</h3><ul>
+<li>导入AOP坐标</li>
+</ul>
+<pre><code class="xml">&lt;!--context中就含有aop包--&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-context&lt;/artifactId&gt;
+    &lt;version&gt;5.0.5.RELEASE&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;!--spring集成第三方的织入框架--&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.aspectj&lt;/groupId&gt;
+    &lt;artifactId&gt;aspectjweaver&lt;/artifactId&gt;
+    &lt;version&gt;1.8.4&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
+<ul>
+<li>创建目标接口和目标类（内部有切点）</li>
+</ul>
+<pre><code class="java">public interface TargetInterface &#123;
+    void save();
+&#125;
+</code></pre>
+<pre><code class="java">public class Target implements TargetInterface &#123;
+    @Override
+    public void save() &#123;
+        System.out.println(&quot;====Target save running====&quot;);
+    &#125;
+&#125;
+</code></pre>
+<ul>
+<li>创建切面类（内部有增强方法）</li>
+</ul>
+<pre><code class="java">public class MyAspect &#123;
+    public void before() &#123;
+        System.out.println(&quot;====before running enhancement====&quot;);
+    &#125;
+
+    public void after() &#123;
+        System.out.println(&quot;====after running enhancement====&quot;);
+    &#125;
+&#125;
+</code></pre>
+<ul>
+<li>将目标类和切面类的对象创建权交给 spring</li>
+</ul>
+<pre><code class="xml">&lt;bean id=&quot;target&quot; class=&quot;com.kalimera.aop.Target&quot;/&gt;
+&lt;bean id=&quot;myAspect&quot; class=&quot;com.kalimera.aop.MyAspect&quot;/&gt;
+</code></pre>
+<ul>
+<li>在 applicationContext.xml 中注入context和aop命名空间，并配置织入关系</li>
+</ul>
+<pre><code class="xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
+       xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+       xmlns:context=&quot;http://www.springframework.org/schema/context&quot;
+       xmlns:aop=&quot;http://www.springframework.org/schema/aop&quot;
+
+       xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+&quot;&gt;
+
+    &lt;bean id=&quot;target&quot; class=&quot;com.kalimera.aop.Target&quot;/&gt;
+    &lt;bean id=&quot;myAspect&quot; class=&quot;com.kalimera.aop.MyAspect&quot;/&gt;
+
+    &lt;!--织入告诉框架哪些方法需要被增强，以及用哪些来实现增强--&gt;
+    &lt;aop:config&gt;
+        &lt;aop:aspect ref=&quot;myAspect&quot;&gt;
+            &lt;aop:before method=&quot;before&quot; pointcut=&quot;execution(public void com.kalimera.aop.Target.save())&quot;&gt;&lt;/aop:before&gt;
+            &lt;aop:after-returning method=&quot;after&quot; pointcut=&quot;execution(public void com.kalimera.aop.Target.save())&quot;&gt;&lt;/aop:after-returning&gt;
+        &lt;/aop:aspect&gt;
+    &lt;/aop:config&gt;
+
+&lt;/beans&gt;
+</code></pre>
+<ul>
+<li>测试代码</li>
+</ul>
+<pre><code class="java">@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(&quot;classpath:applicationContext.xml&quot;)
+public class Test &#123;
+
+    @Autowired
+    private TargetInterface target;
+
+    @org.junit.Test
+    public void test1() &#123;
+        target.save();
+    &#125;
+&#125;
+</code></pre>
+<p>控制台输出</p>
+<pre><code>====before running enhancement====
+====Target save running====
+====after running enhancement====
+</code></pre>
+<h3 id="6-2-2-XML配置AOP详解"><a href="#6-2-2-XML配置AOP详解" class="headerlink" title="6.2.2 XML配置AOP详解"></a>6.2.2 XML配置AOP详解</h3><p><strong>切点表达式写法</strong></p>
+<pre><code>execution([修饰符] 返回值类型 包名.类名.方法名(参数))
+</code></pre>
+<ol>
+<li>访问修饰符可以省略</li>
+<li> 返回值类型、包名、类名、方法名可以使用星号*  代表任意</li>
+<li> 包名与类名之间一个点 . 代表当前包下的类，两个点 .. 表示当前包及其子包下的类</li>
+<li> 参数列表可以使用两个点 .. 表示任意个数，任意类型的参数列表</li>
+</ol>
+<p>举例：</p>
+<pre><code>execution(public void com.itheima.aop.Target.method())    
+execution(void com.itheima.aop.Target.*(..))
+execution(* com.itheima.aop.*.*(..)) //最常用的！
+execution(* com.itheima.aop..*.*(..))
+execution(* *..*.*(..))
+</code></pre>
+<p><strong>通知的类型</strong></p>
+<pre><code>&lt;aop:通知类型 method=“切面类中方法名” pointcut=“切点表达式&quot;&gt;&lt;/aop:通知类型&gt;
+</code></pre>
+<table>
+<thead>
+<tr>
+<th><strong>名称</strong></th>
+<th><strong>标签</strong></th>
+<th><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>前置通知</td>
+<td>&lt; aop:before &gt;</td>
+<td>用于配置前置通知。指定增强的方法在切入点方法之前执行</td>
+</tr>
+<tr>
+<td>后置通知</td>
+<td>&lt; aop:after-returning &gt;</td>
+<td>用于配置后置通知。指定增强的方法在切入点方法之后执行</td>
+</tr>
+<tr>
+<td>环绕通知</td>
+<td>&lt; aop:around &gt;</td>
+<td>用于配置环绕通知。指定增强的方法在切入点方法之前和之后都执行</td>
+</tr>
+<tr>
+<td>异常抛出通知</td>
+<td>&lt; aop:throwing &gt;</td>
+<td>用于配置异常抛出通知。指定增强的方法在出现异常时执行</td>
+</tr>
+<tr>
+<td>最终通知</td>
+<td>&lt; aop:after &gt;</td>
+<td>用于配置最终通知。无论增强方式执行是否有异常都会执行</td>
+</tr>
+</tbody></table>
+<p><strong>切点表达式的抽取</strong></p>
+<p>当多个增强的切点表达式相同时，可以将切点表达式进行抽取，在增强中使用 pointcut-ref 属性代替 pointcut 属性来引用抽取后的切点表达式。</p>
+<pre><code class="xml">&lt;aop:config&gt;
+    &lt;aop:aspect ref=&quot;myAspect&quot;&gt;
+        &lt;aop:pointcut id=&quot;pointCut&quot; expression=&quot;execution(public void com.kalimera.aop.Target.save())&quot;/&gt;
+        &lt;aop:before method=&quot;before&quot; pointcut-ref=&quot;pointCut&quot;&gt;&lt;/aop:before&gt;
+        &lt;aop:after-returning method=&quot;after&quot; pointcut-ref=&quot;pointCut&quot;&gt;&lt;/aop:after-returning&gt;
+    &lt;/aop:aspect&gt;
+&lt;/aop:config&gt;
+</code></pre>
+<h2 id="6-3-基于注解的AOP开发"><a href="#6-3-基于注解的AOP开发" class="headerlink" title="6.3 基于注解的AOP开发"></a>6.3 基于注解的AOP开发</h2><h3 id="6-3-1-开发步骤"><a href="#6-3-1-开发步骤" class="headerlink" title="6.3.1 开发步骤"></a>6.3.1 开发步骤</h3><ul>
+<li><p>创建目标接口和目标类（内部有切点）</p>
+</li>
+<li><p>创建切面类（内部有增强方法）</p>
+</li>
+<li><p>将目标类和切面类的对象创建权交给 spring，在切面类中使用注解配置织入关系</p>
+</li>
+</ul>
+<pre><code class="java">@Component(&quot;target&quot;)
+public class Target implements TargetInterface &#123;
+
+    @Override
+    public void save() &#123;
+        System.out.println(&quot;====Target save running====&quot;);
+    &#125;
+&#125;
+</code></pre>
+<pre><code class="java">@Component(&quot;myAspect&quot;)
+@Aspect //用这个注解来告诉Spring容器这是个切面类
+public class MyAspect &#123;
+
+    //通知的方式
+    @Before(&quot;execution(* com.kalimera.aop.*.*(..))&quot;)
+    public void before() &#123;
+        System.out.println(&quot;====before running enhancement====&quot;);
+    &#125;
+
+    @After(&quot;execution(* com.kalimera.aop.*.*(..))&quot;)
+    public void after() &#123;
+        System.out.println(&quot;====after running enhancement====&quot;);
+    &#125;
+&#125;
+</code></pre>
+<ul>
+<li>在配置文件中开启组件扫描和 AOP 的自动代理</li>
+</ul>
+<pre><code class="xml">&lt;!--组件扫描--&gt;
+&lt;context:component-scan base-package=&quot;com.kalimera.aop&quot;/&gt;
+&lt;!--aop的自动代理--&gt;
+&lt;aop:aspectj-autoproxy/&gt;
+</code></pre>
+<h3 id="6-3-2-注解配置AOP详解"><a href="#6-3-2-注解配置AOP详解" class="headerlink" title="6.3.2 注解配置AOP详解"></a>6.3.2 注解配置AOP详解</h3><p><strong>注解通知的类型</strong></p>
+<p>通知的配置语法：<code>@通知注解(“切点表达式&quot;)</code></p>
+<table>
+<thead>
+<tr>
+<th><strong>名称</strong></th>
+<th><strong>注解</strong></th>
+<th><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>前置通知</td>
+<td>@Before</td>
+<td>用于配置前置通知。指定增强的方法在切入点方法之前执行</td>
+</tr>
+<tr>
+<td>后置通知</td>
+<td>@AfterReturning</td>
+<td>用于配置后置通知。指定增强的方法在切入点方法之后执行</td>
+</tr>
+<tr>
+<td>环绕通知</td>
+<td>@Around</td>
+<td>用于配置环绕通知。指定增强的方法在切入点方法之前和之后都执行</td>
+</tr>
+<tr>
+<td>异常抛出通知</td>
+<td>@AfterThrowing</td>
+<td>用于配置异常抛出通知。指定增强的方法在出现异常时执行</td>
+</tr>
+<tr>
+<td>最终通知</td>
+<td>@After</td>
+<td>用于配置最终通知。无论增强方式执行是否有异常都会执行</td>
+</tr>
+</tbody></table>
+<p><strong>切点表达式的抽取</strong></p>
+<pre><code class="java">@Component(&quot;myAspect&quot;)
+@Aspect
+public class MyAspect &#123;
+
+    @Before(&quot;pointCut()&quot;)
+    public void before() &#123;
+        System.out.println(&quot;====before running enhancement====&quot;);
+    &#125;
+
+    @After(&quot;pointCut()&quot;)
+    public void after() &#123;
+        System.out.println(&quot;====after running enhancement====&quot;);
+    &#125;
+    //抽取
+    @Pointcut(&quot;execution(* com.kalimera.aop.*.*(..))&quot;)
+    public void pointCut()&#123;&#125;
+&#125;
+</code></pre>
+<p>平台对象操作事务行为，定义对象设置事务属性，状态对象反馈事务运行过程中的信息</p>
 
       
 
@@ -1468,7 +1725,7 @@ $&#123;info&#125;
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-Spring-MVC-%E7%AE%80%E4%BB%8B"><span class="toc-number">1.</span> <span class="toc-text">1 Spring MVC 简介</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-Spring-MVC-%E6%A6%82%E8%BF%B0"><span class="toc-number">1.1.</span> <span class="toc-text">1.1 Spring MVC 概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-Spring-MVC-%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8"><span class="toc-number">1.2.</span> <span class="toc-text">1.2 Spring MVC 快速入门</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-3-Spring-MVC-%E7%BB%84%E4%BB%B6%E8%A7%A3%E6%9E%90"><span class="toc-number">1.3.</span> <span class="toc-text">1.3 Spring MVC 组件解析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-1-Spring-MVC-%E7%9A%84%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B"><span class="toc-number">1.3.1.</span> <span class="toc-text">1.3.1 Spring MVC 的执行流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-2-Spring-MVC-%E7%BB%84%E4%BB%B6%E8%A7%A3%E6%9E%90"><span class="toc-number">1.3.2.</span> <span class="toc-text">1.3.2 Spring MVC 组件解析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-3-Spring-MVC-%E6%B3%A8%E8%A7%A3%E8%A7%A3%E6%9E%90"><span class="toc-number">1.3.3.</span> <span class="toc-text">1.3.3 Spring MVC 注解解析</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-3-1-RequestMapping"><span class="toc-number">1.3.3.1.</span> <span class="toc-text">1.3.3.1 @RequestMapping</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-3-2-xml%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4%E6%B3%A8%E5%85%A5"><span class="toc-number">1.3.3.2.</span> <span class="toc-text">1.3.3.2 xml命名空间注入</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-3-3-%E7%BB%84%E4%BB%B6%E6%89%AB%E6%8F%8F"><span class="toc-number">1.3.3.3.</span> <span class="toc-text">1.3.3.3 组件扫描</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-4-%E8%A7%86%E5%9B%BE%E8%A7%A3%E6%9E%90%E5%99%A8"><span class="toc-number">1.3.4.</span> <span class="toc-text">1.3.4 视图解析器</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-Spring-MVC-%E6%95%B0%E6%8D%AE%E5%93%8D%E5%BA%94"><span class="toc-number">2.</span> <span class="toc-text">2 Spring MVC 数据响应</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1-%E9%A1%B5%E9%9D%A2%E8%B7%B3%E8%BD%AC"><span class="toc-number">2.1.</span> <span class="toc-text">2.1 页面跳转</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-1-%E7%9B%B4%E6%8E%A5%E8%BF%94%E5%9B%9E%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="toc-number">2.1.1.</span> <span class="toc-text">2.1.1 直接返回字符串</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-2-%E8%BF%94%E5%9B%9EModelAndView%E5%AF%B9%E8%B1%A1"><span class="toc-number">2.1.2.</span> <span class="toc-text">2.1.2 返回ModelAndView对象</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-3-%E5%90%91Request%E5%9F%9F%E5%AD%98%E5%82%A8%E6%95%B0%E6%8D%AE"><span class="toc-number">2.1.3.</span> <span class="toc-text">2.1.3 向Request域存储数据</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2-%E5%9B%9E%E5%86%99%E6%95%B0%E6%8D%AE"><span class="toc-number">2.2.</span> <span class="toc-text">2.2 回写数据</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-1-Response"><span class="toc-number">2.2.1.</span> <span class="toc-text">2.2.1 Response</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-2-%E8%BF%94%E5%9B%9E%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="toc-number">2.2.2.</span> <span class="toc-text">2.2.2 返回字符串</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-3-%E8%BF%94%E5%9B%9Ejson%E6%A0%BC%E5%BC%8F%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="toc-number">2.2.3.</span> <span class="toc-text">2.2.3 返回json格式字符串</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-4-%E8%BF%94%E5%9B%9E%E5%AF%B9%E8%B1%A1-%E9%9B%86%E5%90%88"><span class="toc-number">2.2.4.</span> <span class="toc-text">2.2.4 返回对象&#x2F;集合</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-3-%E8%8E%B7%E5%BE%97%E8%AF%B7%E6%B1%82%E6%95%B0%E6%8D%AE"><span class="toc-number">2.3.</span> <span class="toc-text">2.3 获得请求数据</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-1-%E8%8E%B7%E5%BE%97%E5%9F%BA%E6%9C%AC%E7%B1%BB%E5%9E%8B%E5%8F%82%E6%95%B0"><span class="toc-number">2.3.1.</span> <span class="toc-text">2.3.1 获得基本类型参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-2-%E8%8E%B7%E5%BE%97pojo%E7%B1%BB%E5%9E%8B%E5%8F%82%E6%95%B0"><span class="toc-number">2.3.2.</span> <span class="toc-text">2.3.2 获得pojo类型参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-3-%E8%8E%B7%E5%BE%97%E6%95%B0%E7%BB%84%E7%B1%BB%E5%9E%8B%E5%8F%82%E6%95%B0"><span class="toc-number">2.3.3.</span> <span class="toc-text">2.3.3 获得数组类型参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-4-%E8%8E%B7%E5%BE%97%E9%9B%86%E5%90%88%E7%B1%BB%E5%9E%8B%E5%8F%82%E6%95%B0"><span class="toc-number">2.3.4.</span> <span class="toc-text">2.3.4 获得集合类型参数</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-4-1-%E5%B0%86%E9%9B%86%E5%90%88%E5%8C%85%E8%A3%85%E5%88%B0%E4%B8%80%E4%B8%AApojo%E5%AF%B9%E8%B1%A1%E4%B8%AD"><span class="toc-number">2.3.4.1.</span> <span class="toc-text">2.3.4.1 将集合包装到一个pojo对象中</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-4-2-%E4%BD%BF%E7%94%A8ajax%E6%8F%90%E4%BA%A4"><span class="toc-number">2.3.4.2.</span> <span class="toc-text">2.3.4.2 使用ajax提交</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-4-%E8%AF%B7%E6%B1%82%E6%95%B0%E6%8D%AE%E4%B9%B1%E7%A0%81%E9%97%AE%E9%A2%98"><span class="toc-number">2.4.</span> <span class="toc-text">2.4 请求数据乱码问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-5-%E5%8F%82%E6%95%B0%E7%BB%91%E5%AE%9A%E6%B3%A8%E8%A7%A3"><span class="toc-number">2.5.</span> <span class="toc-text">2.5 参数绑定注解</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-6-Restful%E9%A3%8E%E6%A0%BC"><span class="toc-number">2.6.</span> <span class="toc-text">2.6 Restful风格</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-7-%E8%87%AA%E5%AE%9A%E4%B9%89%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2%E5%99%A8"><span class="toc-number">2.7.</span> <span class="toc-text">2.7 自定义类型转换器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-8-%E8%8E%B7%E5%BE%97Servlet%E7%9B%B8%E5%85%B3API"><span class="toc-number">2.8.</span> <span class="toc-text">2.8 获得Servlet相关API</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-9-%E8%8E%B7%E5%BE%97%E8%AF%B7%E6%B1%82%E5%A4%B4"><span class="toc-number">2.9.</span> <span class="toc-text">2.9 获得请求头</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-9-1-RequestHeader"><span class="toc-number">2.9.1.</span> <span class="toc-text">2.9.1 @RequestHeader</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-9-2-CookieValue"><span class="toc-number">2.9.2.</span> <span class="toc-text">2.9.2 @CookieValue</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-10-%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0"><span class="toc-number">2.10.</span> <span class="toc-text">2.10 文件上传</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-10-1-%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E5%AE%A2%E6%88%B7%E7%AB%AF%E4%B8%89%E8%A6%81%E7%B4%A0"><span class="toc-number">2.10.1.</span> <span class="toc-text">2.10.1 文件上传客户端三要素</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-10-2-%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E5%8E%9F%E7%90%86"><span class="toc-number">2.10.2.</span> <span class="toc-text">2.10.2 文件上传原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-10-3-%E5%8D%95%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0"><span class="toc-number">2.10.3.</span> <span class="toc-text">2.10.3 单文件上传</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-10-4-%E5%A4%9A%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0"><span class="toc-number">2.10.4.</span> <span class="toc-text">2.10.4 多文件上传</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-Spring-JdbcTemplate-%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8"><span class="toc-number">3.</span> <span class="toc-text">3 Spring JdbcTemplate 基本使用</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#3-1-%E6%A6%82%E8%BF%B0"><span class="toc-number">3.1.</span> <span class="toc-text">3.1 概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-2-%E5%BC%80%E5%8F%91%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8"><span class="toc-number">3.2.</span> <span class="toc-text">3.2 开发快速入门</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-3-Spring%E4%BA%A7%E7%94%9FJdbcTemplate%E5%AF%B9%E8%B1%A1"><span class="toc-number">3.3.</span> <span class="toc-text">3.3 Spring产生JdbcTemplate对象</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-4-JdbcTemplate%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C"><span class="toc-number">3.4.</span> <span class="toc-text">3.4 JdbcTemplate常用操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-1-%E6%9B%B4%E6%96%B0%E6%93%8D%E4%BD%9C"><span class="toc-number">3.4.1.</span> <span class="toc-text">3.4.1 更新操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-2-%E5%88%A0%E9%99%A4%E6%93%8D%E4%BD%9C"><span class="toc-number">3.4.2.</span> <span class="toc-text">3.4.2 删除操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-3-%E6%9F%A5%E8%AF%A2%E6%93%8D%E4%BD%9C"><span class="toc-number">3.4.3.</span> <span class="toc-text">3.4.3 查询操作</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-SpringMVC%E6%8B%A6%E6%88%AA%E5%99%A8"><span class="toc-number">4.</span> <span class="toc-text">4 SpringMVC拦截器</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#4-1-%E6%8B%A6%E6%88%AA%E5%99%A8%EF%BC%88interceptor%EF%BC%89%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="toc-number">4.1.</span> <span class="toc-text">4.1 拦截器（interceptor）的作用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-2-%E6%8B%A6%E6%88%AA%E5%99%A8%E4%B8%8E%E8%BF%87%E6%BB%A4%E5%99%A8%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">4.2.</span> <span class="toc-text">4.2 拦截器与过滤器的区别</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-3-%E6%8B%A6%E6%88%AA%E5%99%A8%E4%BD%BF%E7%94%A8%E6%AD%A5%E9%AA%A4"><span class="toc-number">4.3.</span> <span class="toc-text">4.3 拦截器使用步骤</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-4-%E6%8B%A6%E6%88%AA%E5%99%A8%E6%96%B9%E6%B3%95%E8%AF%B4%E6%98%8E"><span class="toc-number">4.4.</span> <span class="toc-text">4.4 拦截器方法说明</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#5-%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E6%9C%BA%E5%88%B6"><span class="toc-number">5.</span> <span class="toc-text">5 异常处理机制</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#5-1-%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E6%80%9D%E8%B7%AF"><span class="toc-number">5.1.</span> <span class="toc-text">5.1 异常处理思路</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-2-%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F"><span class="toc-number">5.2.</span> <span class="toc-text">5.2 异常处理的两种方式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-3-SimpleMappingExceptionResolver"><span class="toc-number">5.3.</span> <span class="toc-text">5.3 SimpleMappingExceptionResolver</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-4-%E8%87%AA%E5%AE%9A%E4%B9%89%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86"><span class="toc-number">5.4.</span> <span class="toc-text">5.4 自定义异常处理</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#6-%E9%9D%A2%E5%90%91%E5%88%87%E9%9D%A2%E7%BC%96%E7%A8%8B"><span class="toc-number">6.</span> <span class="toc-text">6 面向切面编程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#6-1-Spring%E7%9A%84AOP%E7%AE%80%E4%BB%8B"><span class="toc-number">6.1.</span> <span class="toc-text">6.1 Spring的AOP简介</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#6-1-1-%E4%BB%80%E4%B9%88%E6%98%AFAOP"><span class="toc-number">6.1.1.</span> <span class="toc-text">6.1.1 什么是AOP</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-1-2-AOP%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E6%8A%80%E6%9C%AF"><span class="toc-number">6.1.2.</span> <span class="toc-text">6.1.2 AOP动态代理技术</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-1-3-AOP%E7%9B%B8%E5%85%B3%E6%9C%AF%E8%AF%AD%E6%A6%82%E5%BF%B5"><span class="toc-number">6.1.3.</span> <span class="toc-text">6.1.3 AOP相关术语概念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-1-4-AOP%E5%BC%80%E5%8F%91%E4%BA%8B%E9%A1%B9"><span class="toc-number">6.1.4.</span> <span class="toc-text">6.1.4 AOP开发事项</span></a></li></ol></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-Spring-MVC-%E7%AE%80%E4%BB%8B"><span class="toc-number">1.</span> <span class="toc-text">1 Spring MVC 简介</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-Spring-MVC-%E6%A6%82%E8%BF%B0"><span class="toc-number">1.1.</span> <span class="toc-text">1.1 Spring MVC 概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-Spring-MVC-%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8"><span class="toc-number">1.2.</span> <span class="toc-text">1.2 Spring MVC 快速入门</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-3-Spring-MVC-%E7%BB%84%E4%BB%B6%E8%A7%A3%E6%9E%90"><span class="toc-number">1.3.</span> <span class="toc-text">1.3 Spring MVC 组件解析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-1-Spring-MVC-%E7%9A%84%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B"><span class="toc-number">1.3.1.</span> <span class="toc-text">1.3.1 Spring MVC 的执行流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-2-Spring-MVC-%E7%BB%84%E4%BB%B6%E8%A7%A3%E6%9E%90"><span class="toc-number">1.3.2.</span> <span class="toc-text">1.3.2 Spring MVC 组件解析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-3-Spring-MVC-%E6%B3%A8%E8%A7%A3%E8%A7%A3%E6%9E%90"><span class="toc-number">1.3.3.</span> <span class="toc-text">1.3.3 Spring MVC 注解解析</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-3-1-RequestMapping"><span class="toc-number">1.3.3.1.</span> <span class="toc-text">1.3.3.1 @RequestMapping</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-3-2-xml%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4%E6%B3%A8%E5%85%A5"><span class="toc-number">1.3.3.2.</span> <span class="toc-text">1.3.3.2 xml命名空间注入</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-3-3-%E7%BB%84%E4%BB%B6%E6%89%AB%E6%8F%8F"><span class="toc-number">1.3.3.3.</span> <span class="toc-text">1.3.3.3 组件扫描</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-4-%E8%A7%86%E5%9B%BE%E8%A7%A3%E6%9E%90%E5%99%A8"><span class="toc-number">1.3.4.</span> <span class="toc-text">1.3.4 视图解析器</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-Spring-MVC-%E6%95%B0%E6%8D%AE%E5%93%8D%E5%BA%94"><span class="toc-number">2.</span> <span class="toc-text">2 Spring MVC 数据响应</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1-%E9%A1%B5%E9%9D%A2%E8%B7%B3%E8%BD%AC"><span class="toc-number">2.1.</span> <span class="toc-text">2.1 页面跳转</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-1-%E7%9B%B4%E6%8E%A5%E8%BF%94%E5%9B%9E%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="toc-number">2.1.1.</span> <span class="toc-text">2.1.1 直接返回字符串</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-2-%E8%BF%94%E5%9B%9EModelAndView%E5%AF%B9%E8%B1%A1"><span class="toc-number">2.1.2.</span> <span class="toc-text">2.1.2 返回ModelAndView对象</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-3-%E5%90%91Request%E5%9F%9F%E5%AD%98%E5%82%A8%E6%95%B0%E6%8D%AE"><span class="toc-number">2.1.3.</span> <span class="toc-text">2.1.3 向Request域存储数据</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2-%E5%9B%9E%E5%86%99%E6%95%B0%E6%8D%AE"><span class="toc-number">2.2.</span> <span class="toc-text">2.2 回写数据</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-1-Response"><span class="toc-number">2.2.1.</span> <span class="toc-text">2.2.1 Response</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-2-%E8%BF%94%E5%9B%9E%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="toc-number">2.2.2.</span> <span class="toc-text">2.2.2 返回字符串</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-3-%E8%BF%94%E5%9B%9Ejson%E6%A0%BC%E5%BC%8F%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="toc-number">2.2.3.</span> <span class="toc-text">2.2.3 返回json格式字符串</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-4-%E8%BF%94%E5%9B%9E%E5%AF%B9%E8%B1%A1-%E9%9B%86%E5%90%88"><span class="toc-number">2.2.4.</span> <span class="toc-text">2.2.4 返回对象&#x2F;集合</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-3-%E8%8E%B7%E5%BE%97%E8%AF%B7%E6%B1%82%E6%95%B0%E6%8D%AE"><span class="toc-number">2.3.</span> <span class="toc-text">2.3 获得请求数据</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-1-%E8%8E%B7%E5%BE%97%E5%9F%BA%E6%9C%AC%E7%B1%BB%E5%9E%8B%E5%8F%82%E6%95%B0"><span class="toc-number">2.3.1.</span> <span class="toc-text">2.3.1 获得基本类型参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-2-%E8%8E%B7%E5%BE%97pojo%E7%B1%BB%E5%9E%8B%E5%8F%82%E6%95%B0"><span class="toc-number">2.3.2.</span> <span class="toc-text">2.3.2 获得pojo类型参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-3-%E8%8E%B7%E5%BE%97%E6%95%B0%E7%BB%84%E7%B1%BB%E5%9E%8B%E5%8F%82%E6%95%B0"><span class="toc-number">2.3.3.</span> <span class="toc-text">2.3.3 获得数组类型参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-4-%E8%8E%B7%E5%BE%97%E9%9B%86%E5%90%88%E7%B1%BB%E5%9E%8B%E5%8F%82%E6%95%B0"><span class="toc-number">2.3.4.</span> <span class="toc-text">2.3.4 获得集合类型参数</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-4-1-%E5%B0%86%E9%9B%86%E5%90%88%E5%8C%85%E8%A3%85%E5%88%B0%E4%B8%80%E4%B8%AApojo%E5%AF%B9%E8%B1%A1%E4%B8%AD"><span class="toc-number">2.3.4.1.</span> <span class="toc-text">2.3.4.1 将集合包装到一个pojo对象中</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-4-2-%E4%BD%BF%E7%94%A8ajax%E6%8F%90%E4%BA%A4"><span class="toc-number">2.3.4.2.</span> <span class="toc-text">2.3.4.2 使用ajax提交</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-4-%E8%AF%B7%E6%B1%82%E6%95%B0%E6%8D%AE%E4%B9%B1%E7%A0%81%E9%97%AE%E9%A2%98"><span class="toc-number">2.4.</span> <span class="toc-text">2.4 请求数据乱码问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-5-%E5%8F%82%E6%95%B0%E7%BB%91%E5%AE%9A%E6%B3%A8%E8%A7%A3"><span class="toc-number">2.5.</span> <span class="toc-text">2.5 参数绑定注解</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-6-Restful%E9%A3%8E%E6%A0%BC"><span class="toc-number">2.6.</span> <span class="toc-text">2.6 Restful风格</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-7-%E8%87%AA%E5%AE%9A%E4%B9%89%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2%E5%99%A8"><span class="toc-number">2.7.</span> <span class="toc-text">2.7 自定义类型转换器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-8-%E8%8E%B7%E5%BE%97Servlet%E7%9B%B8%E5%85%B3API"><span class="toc-number">2.8.</span> <span class="toc-text">2.8 获得Servlet相关API</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-9-%E8%8E%B7%E5%BE%97%E8%AF%B7%E6%B1%82%E5%A4%B4"><span class="toc-number">2.9.</span> <span class="toc-text">2.9 获得请求头</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-9-1-RequestHeader"><span class="toc-number">2.9.1.</span> <span class="toc-text">2.9.1 @RequestHeader</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-9-2-CookieValue"><span class="toc-number">2.9.2.</span> <span class="toc-text">2.9.2 @CookieValue</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-10-%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0"><span class="toc-number">2.10.</span> <span class="toc-text">2.10 文件上传</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-10-1-%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E5%AE%A2%E6%88%B7%E7%AB%AF%E4%B8%89%E8%A6%81%E7%B4%A0"><span class="toc-number">2.10.1.</span> <span class="toc-text">2.10.1 文件上传客户端三要素</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-10-2-%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E5%8E%9F%E7%90%86"><span class="toc-number">2.10.2.</span> <span class="toc-text">2.10.2 文件上传原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-10-3-%E5%8D%95%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0"><span class="toc-number">2.10.3.</span> <span class="toc-text">2.10.3 单文件上传</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-10-4-%E5%A4%9A%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0"><span class="toc-number">2.10.4.</span> <span class="toc-text">2.10.4 多文件上传</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-Spring-JdbcTemplate-%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8"><span class="toc-number">3.</span> <span class="toc-text">3 Spring JdbcTemplate 基本使用</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#3-1-%E6%A6%82%E8%BF%B0"><span class="toc-number">3.1.</span> <span class="toc-text">3.1 概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-2-%E5%BC%80%E5%8F%91%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8"><span class="toc-number">3.2.</span> <span class="toc-text">3.2 开发快速入门</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-3-Spring%E4%BA%A7%E7%94%9FJdbcTemplate%E5%AF%B9%E8%B1%A1"><span class="toc-number">3.3.</span> <span class="toc-text">3.3 Spring产生JdbcTemplate对象</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-4-JdbcTemplate%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C"><span class="toc-number">3.4.</span> <span class="toc-text">3.4 JdbcTemplate常用操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-1-%E6%9B%B4%E6%96%B0%E6%93%8D%E4%BD%9C"><span class="toc-number">3.4.1.</span> <span class="toc-text">3.4.1 更新操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-2-%E5%88%A0%E9%99%A4%E6%93%8D%E4%BD%9C"><span class="toc-number">3.4.2.</span> <span class="toc-text">3.4.2 删除操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-3-%E6%9F%A5%E8%AF%A2%E6%93%8D%E4%BD%9C"><span class="toc-number">3.4.3.</span> <span class="toc-text">3.4.3 查询操作</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-SpringMVC%E6%8B%A6%E6%88%AA%E5%99%A8"><span class="toc-number">4.</span> <span class="toc-text">4 SpringMVC拦截器</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#4-1-%E6%8B%A6%E6%88%AA%E5%99%A8%EF%BC%88interceptor%EF%BC%89%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="toc-number">4.1.</span> <span class="toc-text">4.1 拦截器（interceptor）的作用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-2-%E6%8B%A6%E6%88%AA%E5%99%A8%E4%B8%8E%E8%BF%87%E6%BB%A4%E5%99%A8%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">4.2.</span> <span class="toc-text">4.2 拦截器与过滤器的区别</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-3-%E6%8B%A6%E6%88%AA%E5%99%A8%E4%BD%BF%E7%94%A8%E6%AD%A5%E9%AA%A4"><span class="toc-number">4.3.</span> <span class="toc-text">4.3 拦截器使用步骤</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-4-%E6%8B%A6%E6%88%AA%E5%99%A8%E6%96%B9%E6%B3%95%E8%AF%B4%E6%98%8E"><span class="toc-number">4.4.</span> <span class="toc-text">4.4 拦截器方法说明</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#5-%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E6%9C%BA%E5%88%B6"><span class="toc-number">5.</span> <span class="toc-text">5 异常处理机制</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#5-1-%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E6%80%9D%E8%B7%AF"><span class="toc-number">5.1.</span> <span class="toc-text">5.1 异常处理思路</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-2-%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F"><span class="toc-number">5.2.</span> <span class="toc-text">5.2 异常处理的两种方式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-3-SimpleMappingExceptionResolver"><span class="toc-number">5.3.</span> <span class="toc-text">5.3 SimpleMappingExceptionResolver</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-4-%E8%87%AA%E5%AE%9A%E4%B9%89%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86"><span class="toc-number">5.4.</span> <span class="toc-text">5.4 自定义异常处理</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#6-%E9%9D%A2%E5%90%91%E5%88%87%E9%9D%A2%E7%BC%96%E7%A8%8B"><span class="toc-number">6.</span> <span class="toc-text">6 面向切面编程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#6-1-Spring%E7%9A%84AOP%E7%AE%80%E4%BB%8B"><span class="toc-number">6.1.</span> <span class="toc-text">6.1 Spring的AOP简介</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#6-1-1-%E4%BB%80%E4%B9%88%E6%98%AFAOP"><span class="toc-number">6.1.1.</span> <span class="toc-text">6.1.1 什么是AOP</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-1-2-AOP%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E6%8A%80%E6%9C%AF"><span class="toc-number">6.1.2.</span> <span class="toc-text">6.1.2 AOP动态代理技术</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-1-3-AOP%E7%9B%B8%E5%85%B3%E6%9C%AF%E8%AF%AD%E6%A6%82%E5%BF%B5"><span class="toc-number">6.1.3.</span> <span class="toc-text">6.1.3 AOP相关术语概念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-1-4-AOP%E5%BC%80%E5%8F%91%E4%BA%8B%E9%A1%B9"><span class="toc-number">6.1.4.</span> <span class="toc-text">6.1.4 AOP开发事项</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-2-%E5%9F%BA%E4%BA%8EXML%E7%9A%84AOP%E5%BC%80%E5%8F%91"><span class="toc-number">6.2.</span> <span class="toc-text">6.2 基于XML的AOP开发</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#6-2-1-%E5%BC%80%E5%8F%91%E6%AD%A5%E9%AA%A4"><span class="toc-number">6.2.1.</span> <span class="toc-text">6.2.1 开发步骤</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-2-2-XML%E9%85%8D%E7%BD%AEAOP%E8%AF%A6%E8%A7%A3"><span class="toc-number">6.2.2.</span> <span class="toc-text">6.2.2 XML配置AOP详解</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-3-%E5%9F%BA%E4%BA%8E%E6%B3%A8%E8%A7%A3%E7%9A%84AOP%E5%BC%80%E5%8F%91"><span class="toc-number">6.3.</span> <span class="toc-text">6.3 基于注解的AOP开发</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#6-3-1-%E5%BC%80%E5%8F%91%E6%AD%A5%E9%AA%A4"><span class="toc-number">6.3.1.</span> <span class="toc-text">6.3.1 开发步骤</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-3-2-%E6%B3%A8%E8%A7%A3%E9%85%8D%E7%BD%AEAOP%E8%AF%A6%E8%A7%A3"><span class="toc-number">6.3.2.</span> <span class="toc-text">6.3.2 注解配置AOP详解</span></a></li></ol></li></ol></li></ol>
                     </div>
                 </span>
             </div>
