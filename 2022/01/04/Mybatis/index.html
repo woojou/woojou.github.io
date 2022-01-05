@@ -18,8 +18,10 @@
 <meta property="og:image" content="https://img-blog.csdnimg.cn/f04c74de1a7a4bcb9060fbe9309aaff8.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAbTBfNDYzNDU4ODc=,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/b04b37c445ee49738b8308de222c08c6.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAbTBfNDYzNDU4ODc=,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/fbd9c4ba840d46ce810df3012864a451.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAbTBfNDYzNDU4ODc=,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/75011b62418d442ea7ae43b76ec23977.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAbTBfNDYzNDU4ODc=,size_9,color_FFFFFF,t_70,g_se,x_16#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/552ed43480814809b18f16653f0bcb4c.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAbTBfNDYzNDU4ODc=,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center">
 <meta property="article:published_time" content="2022-01-04T08:41:39.000Z">
-<meta property="article:modified_time" content="2022-01-05T01:25:55.229Z">
+<meta property="article:modified_time" content="2022-01-05T09:07:08.445Z">
 <meta property="article:author" content="Woojou">
 <meta property="article:tag" content="程序媛">
 <meta name="twitter:card" content="summary">
@@ -335,6 +337,226 @@ public class Test &#123;
 &#125;
 </code></pre>
 <h1 id="3-Mybatis映射文件概述"><a href="#3-Mybatis映射文件概述" class="headerlink" title="3 Mybatis映射文件概述"></a>3 Mybatis映射文件概述</h1><p><img src="https://img-blog.csdnimg.cn/fbd9c4ba840d46ce810df3012864a451.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAbTBfNDYzNDU4ODc=,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center"></p>
+<h1 id="4-Mybatis增删改查操作"><a href="#4-Mybatis增删改查操作" class="headerlink" title="4 Mybatis增删改查操作"></a>4 Mybatis增删改查操作</h1><h2 id="4-1-插入数据操作"><a href="#4-1-插入数据操作" class="headerlink" title="4.1 插入数据操作"></a>4.1 插入数据操作</h2><ul>
+<li>在AccountMapper中加入插入操作</li>
+</ul>
+<pre><code class="xml">&lt;!--插入操作--&gt;
+&lt;insert id=&quot;save&quot; parameterType=&quot;com.kalimera.domain.Account&quot;&gt;
+    insert into account values(#&#123;name&#125;, #&#123;money&#125;)
+&lt;/insert&gt;
+</code></pre>
+<p>这里参数类型指定是实体类，用#{}的方式指定参数，这里的必须要和实体类里的属性名一致。</p>
+<ul>
+<li>测试，注意最后必须要提交事务，因为Mybatis默认不提交事务。或者可以在openSession时传入布尔参数true。</li>
+</ul>
+<pre><code class="java">public void test2() throws IOException &#123;
+    //获得核心配置文件
+    InputStream resource = Resources.getResourceAsStream(&quot;sqlMapConfig.xml&quot;);
+    //获得sqlSession工厂对象
+    SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(resource);
+    //获得SqlSession对象
+    SqlSession sqlSession = sqlSessionFactory.openSession();
+    //创建对象，执行Sql操作
+    Account account = new Account();
+    account.setName(&quot;jerry&quot;);
+    account.setMoney(1000);
+    sqlSession.insert(&quot;accountMapper.save&quot;, account);
+    //提交事务
+    sqlSession.commit();
+    //释放资源
+    sqlSession.close();
+&#125;
+</code></pre>
+<p><strong>注意事项：</strong></p>
+<ul>
+<li>插入语句使用insert标签</li>
+<li>在映射文件中使用parameterType属性指定要插入的数据类型</li>
+<li>Sql语句中使用#{实体属性名}方式引用实体中的属性值</li>
+<li>插入操作使用的API是sqlSession.insert(“命名空间.id”,实体对象);</li>
+<li>插入操作涉及数据库数据变化，所以要使用sqlSession对象显示的提交事务，即sqlSession.commit() </li>
+</ul>
+<h2 id="4-2-修改数据操作"><a href="#4-2-修改数据操作" class="headerlink" title="4.2 修改数据操作"></a>4.2 修改数据操作</h2><ul>
+<li>在AccountMapper中加入修改更新操作</li>
+</ul>
+<pre><code class="xml">&lt;!--修改操作--&gt;
+&lt;update id=&quot;updateMoney&quot; parameterType=&quot;com.kalimera.domain.Account&quot;&gt;
+    update account set money=#&#123;money&#125; where name=#&#123;name&#125;
+&lt;/update&gt;
+</code></pre>
+<ul>
+<li>测试，依然需要提交事务，或者开启自动提交。</li>
+</ul>
+<pre><code class="java">@org.junit.Test
+    public void test3() throws IOException &#123;
+    //获得核心配置文件
+    InputStream resource = Resources.getResourceAsStream(&quot;sqlMapConfig.xml&quot;);
+    //获得sqlSession工厂对象
+    SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(resource);
+    //获得SqlSession对象
+    SqlSession sqlSession = sqlSessionFactory.openSession(true);
+    //执行Sql操作
+    Account account = new Account();
+    account.setName(&quot;lucy&quot;);
+    account.setMoney(2000);
+    sqlSession.update(&quot;accountMapper.updateMoney&quot;, account);
+    //提交事务
+    //sqlSession.commit();
+    //释放资源
+    sqlSession.close();
+&#125;
+</code></pre>
+<h2 id="4-3-删除数据操作"><a href="#4-3-删除数据操作" class="headerlink" title="4.3 删除数据操作"></a>4.3 删除数据操作</h2><ul>
+<li>在AccountMapper中加入删除操作，这里传入参数类型是基本数据类型String</li>
+</ul>
+<pre><code class="xml">&lt;!--删除操作--&gt;
+&lt;delete id=&quot;deleteByName&quot; parameterType=&quot;java.lang.String&quot;&gt;
+    delete from account where name=#&#123;name&#125;
+&lt;/delete&gt;
+</code></pre>
+<ul>
+<li>编写测试文件</li>
+</ul>
+<pre><code class="java">public void test4() throws IOException &#123;
+    //获得核心配置文件
+    InputStream resource = Resources.getResourceAsStream(&quot;sqlMapConfig.xml&quot;);
+    //获得sqlSession工厂对象
+    SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(resource);
+    //获得SqlSession对象
+    SqlSession sqlSession = sqlSessionFactory.openSession(true);
+    //执行Sql操作
+    sqlSession.delete(&quot;accountMapper.deleteByName&quot;, &quot;jerry&quot;);
+    //提交事务
+    //sqlSession.commit();
+    //释放资源
+    sqlSession.close();
+&#125;
+</code></pre>
+<h1 id="5-核心配置文件概述"><a href="#5-核心配置文件概述" class="headerlink" title="5 核心配置文件概述"></a>5 核心配置文件概述</h1><p>SqlMapConfig.xml 核心文件中 在config跟标签下有许多可以供配置的参数，它们<strong>必须要按照如下顺序配置</strong>。</p>
+<p><img src="https://img-blog.csdnimg.cn/75011b62418d442ea7ae43b76ec23977.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAbTBfNDYzNDU4ODc=,size_9,color_FFFFFF,t_70,g_se,x_16#pic_center"></p>
+<h2 id="5-1-environments标签"><a href="#5-1-environments标签" class="headerlink" title="5.1 environments标签"></a>5.1 environments标签</h2><p>支持多环境配置。</p>
+<p><img src="https://img-blog.csdnimg.cn/552ed43480814809b18f16653f0bcb4c.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAbTBfNDYzNDU4ODc=,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center"></p>
+<p><strong>事务管理器类型：</strong></p>
+<ul>
+<li><p><strong>JDBC</strong>：这个配置就是直接使用了JDBC 的提交和回滚设置，它依赖于从数据源得到的连接来管理事务作用域。</p>
+</li>
+<li><p><strong>MANAGED</strong>：这个配置几乎没做什么。它从来不提交或回滚一个连接，而是让容器来管理事务的整个生命周期（比如 JEE 应用服务器的上下文）。 默认情况下它会关闭连接，然而一些容器并不希望这样，因此需要将 closeConnection 属性设置为 false 来阻止它默认的关闭行为。</p>
+</li>
+</ul>
+<p><strong>数据源类型：</strong></p>
+<ul>
+<li><p><strong>UNPOOLED</strong>：这个数据源的实现只是每次被请求时打开和关闭连接，底层原理每次都是要新建connection，没有进行优化。</p>
+</li>
+<li><p><strong>POOLED</strong>：这种数据源的实现利用“池”的概念将 JDBC 连接对象组织起来。</p>
+</li>
+<li><p><strong>JNDI</strong>：这个数据源的实现是为了能在如 EJB 或应用服务器这类容器中使用，容器可以集中或在外部配置数据源，然后放置一个 JNDI 上下文的引用。</p>
+</li>
+</ul>
+<h2 id="5-2-Mapper标签"><a href="#5-2-Mapper标签" class="headerlink" title="5.2 Mapper标签"></a>5.2 Mapper标签</h2><p>用于加载映射的，加载方式有如下几种：</p>
+<ul>
+<li><p>使用相对于类路径的资源引用，例如：<code>&lt; mapper resource=&quot;org/mybatis/builder/AuthorMapper.xml&quot; /&gt;</code> (最常用的方法)</p>
+</li>
+<li><p>使用完全限定资源定位符（URL），例如：<code>&lt; mapper url=&quot;file:///var/mappers/AuthorMapper.xml&quot; /&gt;</code></p>
+</li>
+<li><p>使用映射器接口实现类的完全限定类名，例如：<code>&lt; mapper class=&quot;org.mybatis.builder.AuthorMapper&quot; /&gt;</code></p>
+</li>
+<li><p>将包内的映射器接口实现全部注册为映射器，例如：<code>&lt; package name=&quot;org.mybatis.builder&quot; /&gt;</code></p>
+</li>
+</ul>
+<h2 id="5-3-Properties标签"><a href="#5-3-Properties标签" class="headerlink" title="5.3 Properties标签"></a>5.3 Properties标签</h2><p>实际开发中，习惯将数据源的配置信息单独抽取成一个properties文件，该标签可以加载额外配置的properties文件。</p>
+<pre><code class="xml">&lt;!--加载外部properties--&gt;
+&lt;properties resource=&quot;jdbc.properties&quot;&gt;&lt;/properties&gt;
+
+&lt;!--数据源环境--&gt;
+&lt;environments default=&quot;development&quot;&gt;
+    &lt;environment id=&quot;development&quot;&gt;
+        &lt;transactionManager type=&quot;JDBC&quot;&gt;&lt;/transactionManager&gt;
+        &lt;dataSource type=&quot;POOLED&quot;&gt;
+            &lt;property name=&quot;driver&quot; value=&quot;$&#123;jdbc.driver&#125;&quot;/&gt;
+            &lt;property name=&quot;url&quot; value=&quot;$&#123;jdbc.url&#125;&quot;/&gt;
+            &lt;property name=&quot;username&quot; value=&quot;$&#123;jdbc.username&#125;&quot;/&gt;
+            &lt;property name=&quot;password&quot; value=&quot;$&#123;jdbc.password&#125;&quot;/&gt;
+        &lt;/dataSource&gt;
+    &lt;/environment&gt;
+&lt;/environments&gt;
+</code></pre>
+<h2 id="5-4-typeAliases标签"><a href="#5-4-typeAliases标签" class="headerlink" title="5.4 typeAliases标签"></a>5.4 typeAliases标签</h2><p>类型别名是为Java 类型设置别称。</p>
+<p>在sqlMapConfig.xml里配置别名标签</p>
+<pre><code class="xml">&lt;!--配置别名--&gt;
+&lt;typeAliases&gt;
+    &lt;typeAlias type=&quot;com.kalimera.domain.Account&quot; alias=&quot;account&quot;/&gt;
+&lt;/typeAliases&gt;
+</code></pre>
+<p>在AccountMapper.xml里使用别名</p>
+<pre><code class="xml">&lt;!--查询操作--&gt;
+&lt;select id=&quot;findAll&quot; resultType=&quot;account&quot;&gt;
+    select * from account
+&lt;/select&gt;
+</code></pre>
+<p>mybatis框架已经为我们设置好的一些常用的类型的别名:</p>
+<table>
+<thead>
+<tr>
+<th><strong>别名</strong></th>
+<th><strong>数据类型</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>string</td>
+<td>String</td>
+</tr>
+<tr>
+<td>long</td>
+<td>Long</td>
+</tr>
+<tr>
+<td>int</td>
+<td>Integer</td>
+</tr>
+<tr>
+<td>double</td>
+<td>Double</td>
+</tr>
+<tr>
+<td>boolean</td>
+<td>Boolean</td>
+</tr>
+</tbody></table>
+<h1 id="6-Mybatis相应API"><a href="#6-Mybatis相应API" class="headerlink" title="6 Mybatis相应API"></a>6 Mybatis相应API</h1><h2 id="6-1-工厂构建器SqlSessionFactoryBuilder"><a href="#6-1-工厂构建器SqlSessionFactoryBuilder" class="headerlink" title="6.1 工厂构建器SqlSessionFactoryBuilder"></a>6.1 工厂构建器SqlSessionFactoryBuilder</h2><p><code>SqlSessionFactory  build(InputStream inputStream)</code></p>
+<p>通过加载mybatis的核心文件的输入流的形式构建一个SqlSessionFactory对象</p>
+<pre><code class="java">String resource = &quot;org/mybatis/builder/mybatis-config.xml&quot;; 
+InputStream inputStream = Resources.getResourceAsStream(resource); 
+SqlSessionFactoryBuilder builder = new SqlSessionFactoryBuilder(); 
+SqlSessionFactory factory = builder.build(inputStream);
+</code></pre>
+<p>Resources 工具类在 org.apache.ibatis.io 包中。Resources 类可以从类路径下、文件系统或一个 web URL 中加载资源文件。</p>
+<h2 id="6-2-工厂对象SqlSessionFactory"><a href="#6-2-工厂对象SqlSessionFactory" class="headerlink" title="6.2 工厂对象SqlSessionFactory"></a>6.2 工厂对象SqlSessionFactory</h2><p>SqlSessionFactory 有多个个方法创建 SqlSession 实例。常用的有如下两个：</p>
+<table>
+<thead>
+<tr>
+<th><strong>方法</strong></th>
+<th><strong>解释</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>openSession()</td>
+<td>会默认开启一个事务，但事务不会自动提交，也就意味着需要手动提交该事务，更新操作数据才会持久化到数据库中</td>
+</tr>
+<tr>
+<td>openSession(boolean autoCommit)</td>
+<td>参数为是否自动提交，如果设置为true，那么不需要手动提交事务</td>
+</tr>
+</tbody></table>
+<h2 id="6-3-会话对象SqlSession"><a href="#6-3-会话对象SqlSession" class="headerlink" title="6.3 会话对象SqlSession"></a>6.3 会话对象SqlSession</h2><p>执行语句的方法主要有：</p>
+<pre><code class="java">&lt;T&gt; T selectOne(String statement, Object parameter) 
+&lt;E&gt; List&lt;E&gt; selectList(String statement, Object parameter) 
+int insert(String statement, Object parameter) 
+int update(String statement, Object parameter) 
+int delete(String statement, Object parameter)
+</code></pre>
+<p>操作事务的主要方法有：</p>
+<pre><code class="java">void commit()  
+void rollback() 
+</code></pre>
 
       
 
@@ -436,7 +658,7 @@ public class Test &#123;
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-Mybatis%E7%AE%80%E4%BB%8B"><span class="toc-number">1.</span> <span class="toc-text">1 Mybatis简介</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-%E5%8E%9F%E5%A7%8Bjdbc%E6%93%8D%E4%BD%9C"><span class="toc-number">1.1.</span> <span class="toc-text">1.1 原始jdbc操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-%E4%BB%80%E4%B9%88%E6%98%AFMybatis"><span class="toc-number">1.2.</span> <span class="toc-text">1.2 什么是Mybatis</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-Mybatis%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8"><span class="toc-number">2.</span> <span class="toc-text">2 Mybatis快速入门</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-Mybatis%E6%98%A0%E5%B0%84%E6%96%87%E4%BB%B6%E6%A6%82%E8%BF%B0"><span class="toc-number">3.</span> <span class="toc-text">3 Mybatis映射文件概述</span></a></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-Mybatis%E7%AE%80%E4%BB%8B"><span class="toc-number">1.</span> <span class="toc-text">1 Mybatis简介</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-%E5%8E%9F%E5%A7%8Bjdbc%E6%93%8D%E4%BD%9C"><span class="toc-number">1.1.</span> <span class="toc-text">1.1 原始jdbc操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-%E4%BB%80%E4%B9%88%E6%98%AFMybatis"><span class="toc-number">1.2.</span> <span class="toc-text">1.2 什么是Mybatis</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-Mybatis%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8"><span class="toc-number">2.</span> <span class="toc-text">2 Mybatis快速入门</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-Mybatis%E6%98%A0%E5%B0%84%E6%96%87%E4%BB%B6%E6%A6%82%E8%BF%B0"><span class="toc-number">3.</span> <span class="toc-text">3 Mybatis映射文件概述</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-Mybatis%E5%A2%9E%E5%88%A0%E6%94%B9%E6%9F%A5%E6%93%8D%E4%BD%9C"><span class="toc-number">4.</span> <span class="toc-text">4 Mybatis增删改查操作</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#4-1-%E6%8F%92%E5%85%A5%E6%95%B0%E6%8D%AE%E6%93%8D%E4%BD%9C"><span class="toc-number">4.1.</span> <span class="toc-text">4.1 插入数据操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-2-%E4%BF%AE%E6%94%B9%E6%95%B0%E6%8D%AE%E6%93%8D%E4%BD%9C"><span class="toc-number">4.2.</span> <span class="toc-text">4.2 修改数据操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-3-%E5%88%A0%E9%99%A4%E6%95%B0%E6%8D%AE%E6%93%8D%E4%BD%9C"><span class="toc-number">4.3.</span> <span class="toc-text">4.3 删除数据操作</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#5-%E6%A0%B8%E5%BF%83%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E6%A6%82%E8%BF%B0"><span class="toc-number">5.</span> <span class="toc-text">5 核心配置文件概述</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#5-1-environments%E6%A0%87%E7%AD%BE"><span class="toc-number">5.1.</span> <span class="toc-text">5.1 environments标签</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-2-Mapper%E6%A0%87%E7%AD%BE"><span class="toc-number">5.2.</span> <span class="toc-text">5.2 Mapper标签</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-3-Properties%E6%A0%87%E7%AD%BE"><span class="toc-number">5.3.</span> <span class="toc-text">5.3 Properties标签</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-4-typeAliases%E6%A0%87%E7%AD%BE"><span class="toc-number">5.4.</span> <span class="toc-text">5.4 typeAliases标签</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#6-Mybatis%E7%9B%B8%E5%BA%94API"><span class="toc-number">6.</span> <span class="toc-text">6 Mybatis相应API</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#6-1-%E5%B7%A5%E5%8E%82%E6%9E%84%E5%BB%BA%E5%99%A8SqlSessionFactoryBuilder"><span class="toc-number">6.1.</span> <span class="toc-text">6.1 工厂构建器SqlSessionFactoryBuilder</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-2-%E5%B7%A5%E5%8E%82%E5%AF%B9%E8%B1%A1SqlSessionFactory"><span class="toc-number">6.2.</span> <span class="toc-text">6.2 工厂对象SqlSessionFactory</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-3-%E4%BC%9A%E8%AF%9D%E5%AF%B9%E8%B1%A1SqlSession"><span class="toc-number">6.3.</span> <span class="toc-text">6.3 会话对象SqlSession</span></a></li></ol></li></ol>
                     </div>
                 </span>
             </div>
