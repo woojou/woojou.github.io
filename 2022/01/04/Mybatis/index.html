@@ -20,8 +20,10 @@
 <meta property="og:image" content="https://img-blog.csdnimg.cn/fbd9c4ba840d46ce810df3012864a451.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAbTBfNDYzNDU4ODc=,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/75011b62418d442ea7ae43b76ec23977.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAbTBfNDYzNDU4ODc=,size_9,color_FFFFFF,t_70,g_se,x_16#pic_center">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/552ed43480814809b18f16653f0bcb4c.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAbTBfNDYzNDU4ODc=,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/32663b1385cf4835bf6e6bd88416927a.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAbTBfNDYzNDU4ODc=,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/5d57f87d066e41cf9f9198fece859a38.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAbTBfNDYzNDU4ODc=,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center">
 <meta property="article:published_time" content="2022-01-04T08:41:39.000Z">
-<meta property="article:modified_time" content="2022-01-05T09:07:08.445Z">
+<meta property="article:modified_time" content="2022-01-06T08:21:52.012Z">
 <meta property="article:author" content="Woojou">
 <meta property="article:tag" content="程序媛">
 <meta name="twitter:card" content="summary">
@@ -557,6 +559,303 @@ int delete(String statement, Object parameter)
 <pre><code class="java">void commit()  
 void rollback() 
 </code></pre>
+<h1 id="7-Mybatis的Dao层实现"><a href="#7-Mybatis的Dao层实现" class="headerlink" title="7 Mybatis的Dao层实现"></a>7 Mybatis的Dao层实现</h1><h2 id="7-1-传统开发方式"><a href="#7-1-传统开发方式" class="headerlink" title="7.1 传统开发方式"></a>7.1 传统开发方式</h2><ul>
+<li>编写UserDao接口</li>
+</ul>
+<pre><code class="java">public interface UserDao &#123;
+    List&lt;User&gt; findAll() throws IOException;
+&#125;
+</code></pre>
+<ul>
+<li>编写UserDaoImpl实现类</li>
+</ul>
+<pre><code class="java">public class UserDaoImpl implements UserDao &#123;
+    public List&lt;User&gt; findAll() throws IOException &#123;
+        InputStream resourceAsStream = Resources.getResourceAsStream(&quot;SqlMapConfig.xml&quot;);
+        SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(resourceAsStream);
+        SqlSession sqlSession = sqlSessionFactory.openSession();
+        List&lt;User&gt; userList = sqlSession.selectList(&quot;userMapper.findAll&quot;);
+        sqlSession.close();
+        return userList;
+    &#125;
+&#125;
+</code></pre>
+<ul>
+<li>测试</li>
+</ul>
+<pre><code class="java">@Test
+public void testTraditionDao() throws IOException &#123;
+    UserDao userDao = new UserDaoImpl();
+    List&lt;User&gt; all = userDao.findAll();
+    System.out.println(all);
+&#125;
+</code></pre>
+<h2 id="7-2-代理开发方式"><a href="#7-2-代理开发方式" class="headerlink" title="7.2 代理开发方式"></a>7.2 代理开发方式</h2><p>只需要编写Dao接口，不需要具体实现。通过SqlSession获取到动态代理对象，直接调取方法即可。但是需要先配置：</p>
+<ol>
+<li>Mapper.xml文件中的<strong>namespace</strong>与mapper接口的全限定名相同</li>
+<li>Mapper<strong>接口方法名</strong>和Mapper.xml中定义的每个statement的id相同</li>
+<li>Mapper接口方法的<strong>输入参数类型</strong>和mapper.xml中定义的每个sql的parameterType的类型相同</li>
+<li>Mapper接口方法的<strong>输出参数类型</strong>和mapper.xml中定义的每个sql的resultType的类型相同</li>
+</ol>
+<ul>
+<li>UserMapper接口及相应配置</li>
+</ul>
+<p><img src="https://img-blog.csdnimg.cn/32663b1385cf4835bf6e6bd88416927a.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAbTBfNDYzNDU4ODc=,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center"></p>
+<ul>
+<li>测试代理方式</li>
+</ul>
+<pre><code class="java">@Test
+public void testProxyDao() throws IOException &#123;
+    InputStream resourceAsStream = Resources.getResourceAsStream(&quot;SqlMapConfig.xml&quot;);
+    SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(resourceAsStream);
+    SqlSession sqlSession = sqlSessionFactory.openSession();
+    //获得MyBatis框架生成的UserMapper接口的实现类
+    UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+    User user = userMapper.findById(1);
+    System.out.println(user);
+    sqlSession.close();
+&#125;
+</code></pre>
+<h1 id="8-Mybatis映射文件深入"><a href="#8-Mybatis映射文件深入" class="headerlink" title="8 Mybatis映射文件深入"></a>8 Mybatis映射文件深入</h1><h2 id="8-1-动态sql语句"><a href="#8-1-动态sql语句" class="headerlink" title="8.1 动态sql语句"></a>8.1 动态sql语句</h2><h3 id="8-1-1-lt-if-gt"><a href="#8-1-1-lt-if-gt" class="headerlink" title="8.1.1 &lt; if &gt;"></a>8.1.1 &lt; if &gt;</h3><ul>
+<li>UserMapper.xml</li>
+</ul>
+<pre><code class="xml">&lt;select id=&quot;findByCondition&quot; resultType=&quot;user&quot; parameterType=&quot;user&quot;&gt;
+    select * from sys_user
+    &lt;where&gt;
+        &lt;if test=&quot;id != 0&quot;&gt;
+            and id = #&#123;id&#125;
+        &lt;/if&gt;
+        &lt;if test=&quot;username != null&quot;&gt;
+            and username = #&#123;username&#125;
+        &lt;/if&gt;
+        &lt;if test=&quot;email != null&quot;&gt;
+            and email = #&#123;email&#125;
+        &lt;/if&gt;
+    &lt;/where&gt;
+&lt;/select&gt;
+</code></pre>
+<ul>
+<li>UserMapper 接口</li>
+</ul>
+<pre><code class="java">public interface UserMapper &#123;
+    List&lt;User&gt; findByCondition(User user);
+&#125;
+</code></pre>
+<ul>
+<li>测试</li>
+</ul>
+<pre><code class="java">public static void main(String[] args) throws IOException &#123;
+    InputStream resourceAsStream = Resources.getResourceAsStream(&quot;sqlMapConfig.xml&quot;);
+    SqlSessionFactory build = new SqlSessionFactoryBuilder().build(resourceAsStream);
+    SqlSession sqlSession = build.openSession();
+
+    UserMapper mapper = sqlSession.getMapper(UserMapper.class);
+
+    User user = new User();
+    user.setId(1l);
+
+    List&lt;User&gt; userList = mapper.findByCondition(user);
+    System.out.println(userList);
+    sqlSession.close();
+&#125;
+</code></pre>
+<ul>
+<li>打印实际操作的语句，可以看到只有id</li>
+</ul>
+<pre><code class="sql">Preparing: select * from sys_user WHERE id = ? 
+</code></pre>
+<ul>
+<li>如果带有id和username同时查询，打印出语句</li>
+</ul>
+<pre><code class="sql">Preparing: select * from sys_user WHERE id = ? and username = ? 
+</code></pre>
+<h3 id="8-1-2-lt-foreach-gt"><a href="#8-1-2-lt-foreach-gt" class="headerlink" title="8.1.2 &lt; foreach &gt;"></a>8.1.2 &lt; foreach &gt;</h3><ul>
+<li>UserMapper.xml</li>
+</ul>
+<pre><code class="xml">&lt;select id=&quot;findByIds&quot; parameterType=&quot;list&quot; resultType=&quot;user&quot;&gt;
+    select * from sys_user
+    &lt;where&gt;
+        &lt;foreach collection=&quot;list&quot; close=&quot;)&quot; open=&quot;id in(&quot; separator=&quot;,&quot; item=&quot;id&quot;&gt;
+            #&#123;id&#125;
+        &lt;/foreach&gt;
+    &lt;/where&gt;
+&lt;/select&gt;
+</code></pre>
+<ul>
+<li>UserMapper接口</li>
+</ul>
+<pre><code class="java">List&lt;User&gt; findByIds(List&lt;Long&gt; ids);
+</code></pre>
+<ul>
+<li>测试</li>
+</ul>
+<pre><code class="java">public static void main(String[] args) throws IOException &#123;
+    InputStream resourceAsStream = Resources.getResourceAsStream(&quot;sqlMapConfig.xml&quot;);
+    SqlSessionFactory build = new SqlSessionFactoryBuilder().build(resourceAsStream);
+    SqlSession sqlSession = build.openSession();
+
+    UserMapper mapper = sqlSession.getMapper(UserMapper.class);
+
+    List&lt;Long&gt; ids = new ArrayList&lt;&gt;();
+    ids.add(1l);
+    ids.add(2l);
+
+    List&lt;User&gt; userList = mapper.findByIds(ids);
+    System.out.println(userList);
+    sqlSession.close();
+&#125;
+</code></pre>
+<ul>
+<li>打印实际操作Sql语句</li>
+</ul>
+<pre><code class="sql">Preparing: select * from sys_user WHERE id in( ? , ? )
+</code></pre>
+<p>&lt; foreach &gt;标签用于遍历集合，它的属性：</p>
+<ul>
+<li>collection：代表要遍历的集合元素，注意编写时不要写#{}</li>
+<li>open：代表语句的开始部分</li>
+<li>close：代表结束部分</li>
+<li>item：代表遍历集合的每个元素，生成的变量名</li>
+<li>sperator：代表分隔符</li>
+</ul>
+<h2 id="8-2-Sql片段抽取"><a href="#8-2-Sql片段抽取" class="headerlink" title="8.2 Sql片段抽取"></a>8.2 Sql片段抽取</h2><p>一些重复的Sql语句可以提取出来（但是我总感觉这不是降低了可读性吗？感觉没有特别大的抽取必要啊）</p>
+<pre><code class="xml">&lt;mapper namespace=&quot;com.kalimera.dao.UserMapper&quot;&gt;
+    &lt;!--进行抽取--&gt;
+    &lt;sql id=&quot;selectUser&quot;&gt;select * from sys_user&lt;/sql&gt;
+
+    &lt;select id=&quot;findByCondition&quot; resultType=&quot;user&quot; parameterType=&quot;user&quot;&gt;
+        &lt;!--用include标签进行引用--&gt;
+        &lt;include refid=&quot;selectUser&quot;/&gt;
+        &lt;where&gt;
+            &lt;if test=&quot;id != 0&quot;&gt;
+                and id = #&#123;id&#125;
+            &lt;/if&gt;
+            &lt;if test=&quot;username != null&quot;&gt;
+                and username = #&#123;username&#125;
+            &lt;/if&gt;
+            &lt;if test=&quot;email != null&quot;&gt;
+                and email = #&#123;email&#125;
+            &lt;/if&gt;
+        &lt;/where&gt;
+    &lt;/select&gt;
+
+    &lt;select id=&quot;findByIds&quot; parameterType=&quot;list&quot; resultType=&quot;user&quot;&gt;
+        &lt;include refid=&quot;selectUser&quot;/&gt;
+        &lt;where&gt;
+            &lt;foreach collection=&quot;list&quot; open=&quot;id in(&quot; separator=&quot;,&quot; item=&quot;id&quot; close=&quot;)&quot;&gt;
+                #&#123;id&#125;
+            &lt;/foreach&gt;
+        &lt;/where&gt;
+    &lt;/select&gt;
+&lt;/mapper&gt;
+</code></pre>
+<h2 id="8-3-typeHandles标签"><a href="#8-3-typeHandles标签" class="headerlink" title="8.3 typeHandles标签"></a>8.3 typeHandles标签</h2><p>无论是 MyBatis 在预处理语句（PreparedStatement）中设置一个参数时，还是从结果集中取出一个值时， 都会用<strong>类型处理器</strong>将获取的值以合适的方式转换成 Java 类型。下表描述了一些默认的类型处理器（截取部分）。</p>
+<p><img src="https://img-blog.csdnimg.cn/5d57f87d066e41cf9f9198fece859a38.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAbTBfNDYzNDU4ODc=,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center"></p>
+<p>我们可以重写类型处理器或创建自己的类型处理器来处理不支持的或非标准的类型。具体做法为：实现 <code>org.apache.ibatis.type.TypeHandler</code> 接口， 或继承一个很便利的类 <code>org.apache.ibatis.type.BaseTypeHandler</code>， 然后可以选择性地将它映射到一个JDBC类型。</p>
+<p>下面要实现一个将数据库中的BigInt转换成Java中的Date的转换类。</p>
+<ul>
+<li>定义转换类继承类BaseTypeHandler&lt; T &gt;，这里的模板类型是要转换的java类型。</li>
+<li>覆盖4个未实现的方法，其中setNonNullParameter为java程序设置数据到数据库的回调方法，getNullableResult为查询时 mysql的字符串类型转换成 java的Type类型的方法。</li>
+</ul>
+<pre><code class="java">public class DateTypeHandler extends BaseTypeHandler&lt;Date&gt; &#123;
+    //将java类型 转换成 数据库需要的类型
+    public void setNonNullParameter(PreparedStatement preparedStatement, int i, Date date, JdbcType jdbcType) throws SQLException &#123;
+        long time = date.getTime();
+        preparedStatement.setLong(i,time);
+    &#125;
+
+    //将数据库中类型 转换成java类型
+    //String参数  要转换的字段名称
+    //ResultSet 查询出的结果集
+    public Date getNullableResult(ResultSet resultSet, String s) throws SQLException &#123;
+        //获得结果集中需要的数据(long) 转换成Date类型 返回
+        long aLong = resultSet.getLong(s);
+        Date date = new Date(aLong);
+        return date;
+    &#125;
+
+    //将数据库中类型 转换成java类型
+    //这里的int i是该属性字段在数据库中的位置
+    public Date getNullableResult(ResultSet resultSet, int i) throws SQLException &#123;
+        long aLong = resultSet.getLong(i);
+        Date date = new Date(aLong);
+        return date;
+    &#125;
+
+    //将数据库中类型 转换成java类型
+    public Date getNullableResult(CallableStatement callableStatement, int i) throws SQLException &#123;
+        long aLong = callableStatement.getLong(i);
+        Date date = new Date(aLong);
+        return date;
+    &#125;
+&#125;
+</code></pre>
+<ul>
+<li>在MyBatis核心配置文件中进行注册</li>
+</ul>
+<pre><code class="xml">&lt;!--注册类型自定义转换器--&gt;
+&lt;typeHandlers&gt;
+    &lt;typeHandler handler=&quot;com.itheima.typeHandlers.MyDateTypeHandler&quot;/&gt;
+&lt;/typeHandlers&gt;
+</code></pre>
+<h2 id="8-4-plugins标签"><a href="#8-4-plugins标签" class="headerlink" title="8.4 plugins标签"></a>8.4 plugins标签</h2><p>MyBatis可以使用第三方的插件来对功能进行扩展，分页助手PageHelper是将分页的复杂操作进行封装，使用简单的方式即可获得分页的相关数据</p>
+<ul>
+<li>导入通用PageHelper的坐标</li>
+</ul>
+<pre><code class="xml">&lt;dependency&gt;
+    &lt;groupId&gt;com.github.pagehelper&lt;/groupId&gt;
+    &lt;artifactId&gt;pagehelper&lt;/artifactId&gt;
+    &lt;version&gt;3.7.4&lt;/version&gt;
+&lt;/dependency&gt;
+
+&lt;dependency&gt;
+    &lt;groupId&gt;com.github.jsqlparser&lt;/groupId&gt;
+    &lt;artifactId&gt;jsqlparser&lt;/artifactId&gt;
+    &lt;version&gt;0.9.1&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
+<ul>
+<li>在mybatis核心配置文件中配置PageHelper插件，注意位置在environments前</li>
+</ul>
+<pre><code class="xml">&lt;plugins&gt;
+    &lt;plugin interceptor=&quot;com.github.pagehelper.PageHelper&quot;&gt;
+        &lt;property name=&quot;dialect&quot; value=&quot;mysql&quot;/&gt;
+    &lt;/plugin&gt;
+&lt;/plugins&gt;
+</code></pre>
+<ul>
+<li>测试分页数据获取</li>
+</ul>
+<pre><code class="java">public static void main(String[] args) throws IOException &#123;
+    InputStream resourceAsStream = Resources.getResourceAsStream(&quot;sqlMapConfig.xml&quot;);
+    SqlSessionFactory build = new SqlSessionFactoryBuilder().build(resourceAsStream);
+    SqlSession sqlSession = build.openSession();
+
+
+    UserMapper mapper = sqlSession.getMapper(UserMapper.class);
+    List&lt;Long&gt; ids = new ArrayList&lt;&gt;();
+
+    PageHelper.startPage(1,2);
+    List&lt;User&gt; userList = mapper.findByIds(ids);
+
+    for (User user : userList) &#123;
+        System.out.println(user);
+    &#125;
+
+    //获得与分页相关参数
+    PageInfo&lt;User&gt; pageInfo = new PageInfo&lt;User&gt;(userList);
+    System.out.println(&quot;当前页：&quot;+pageInfo.getPageNum());
+    System.out.println(&quot;每页显示条数：&quot;+pageInfo.getPageSize());
+    System.out.println(&quot;总条数：&quot;+pageInfo.getTotal());
+    System.out.println(&quot;总页数：&quot;+pageInfo.getPages());
+    System.out.println(&quot;上一页：&quot;+pageInfo.getPrePage());
+    System.out.println(&quot;下一页：&quot;+pageInfo.getNextPage());
+    System.out.println(&quot;是否是第一个：&quot;+pageInfo.isIsFirstPage());
+    System.out.println(&quot;是否是最后一个：&quot;+pageInfo.isIsLastPage());
+
+    sqlSession.close();
+&#125;
+</code></pre>
 
       
 
@@ -658,7 +957,7 @@ void rollback()
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-Mybatis%E7%AE%80%E4%BB%8B"><span class="toc-number">1.</span> <span class="toc-text">1 Mybatis简介</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-%E5%8E%9F%E5%A7%8Bjdbc%E6%93%8D%E4%BD%9C"><span class="toc-number">1.1.</span> <span class="toc-text">1.1 原始jdbc操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-%E4%BB%80%E4%B9%88%E6%98%AFMybatis"><span class="toc-number">1.2.</span> <span class="toc-text">1.2 什么是Mybatis</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-Mybatis%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8"><span class="toc-number">2.</span> <span class="toc-text">2 Mybatis快速入门</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-Mybatis%E6%98%A0%E5%B0%84%E6%96%87%E4%BB%B6%E6%A6%82%E8%BF%B0"><span class="toc-number">3.</span> <span class="toc-text">3 Mybatis映射文件概述</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-Mybatis%E5%A2%9E%E5%88%A0%E6%94%B9%E6%9F%A5%E6%93%8D%E4%BD%9C"><span class="toc-number">4.</span> <span class="toc-text">4 Mybatis增删改查操作</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#4-1-%E6%8F%92%E5%85%A5%E6%95%B0%E6%8D%AE%E6%93%8D%E4%BD%9C"><span class="toc-number">4.1.</span> <span class="toc-text">4.1 插入数据操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-2-%E4%BF%AE%E6%94%B9%E6%95%B0%E6%8D%AE%E6%93%8D%E4%BD%9C"><span class="toc-number">4.2.</span> <span class="toc-text">4.2 修改数据操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-3-%E5%88%A0%E9%99%A4%E6%95%B0%E6%8D%AE%E6%93%8D%E4%BD%9C"><span class="toc-number">4.3.</span> <span class="toc-text">4.3 删除数据操作</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#5-%E6%A0%B8%E5%BF%83%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E6%A6%82%E8%BF%B0"><span class="toc-number">5.</span> <span class="toc-text">5 核心配置文件概述</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#5-1-environments%E6%A0%87%E7%AD%BE"><span class="toc-number">5.1.</span> <span class="toc-text">5.1 environments标签</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-2-Mapper%E6%A0%87%E7%AD%BE"><span class="toc-number">5.2.</span> <span class="toc-text">5.2 Mapper标签</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-3-Properties%E6%A0%87%E7%AD%BE"><span class="toc-number">5.3.</span> <span class="toc-text">5.3 Properties标签</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-4-typeAliases%E6%A0%87%E7%AD%BE"><span class="toc-number">5.4.</span> <span class="toc-text">5.4 typeAliases标签</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#6-Mybatis%E7%9B%B8%E5%BA%94API"><span class="toc-number">6.</span> <span class="toc-text">6 Mybatis相应API</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#6-1-%E5%B7%A5%E5%8E%82%E6%9E%84%E5%BB%BA%E5%99%A8SqlSessionFactoryBuilder"><span class="toc-number">6.1.</span> <span class="toc-text">6.1 工厂构建器SqlSessionFactoryBuilder</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-2-%E5%B7%A5%E5%8E%82%E5%AF%B9%E8%B1%A1SqlSessionFactory"><span class="toc-number">6.2.</span> <span class="toc-text">6.2 工厂对象SqlSessionFactory</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-3-%E4%BC%9A%E8%AF%9D%E5%AF%B9%E8%B1%A1SqlSession"><span class="toc-number">6.3.</span> <span class="toc-text">6.3 会话对象SqlSession</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-Mybatis%E7%AE%80%E4%BB%8B"><span class="toc-number">1.</span> <span class="toc-text">1 Mybatis简介</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-%E5%8E%9F%E5%A7%8Bjdbc%E6%93%8D%E4%BD%9C"><span class="toc-number">1.1.</span> <span class="toc-text">1.1 原始jdbc操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-%E4%BB%80%E4%B9%88%E6%98%AFMybatis"><span class="toc-number">1.2.</span> <span class="toc-text">1.2 什么是Mybatis</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-Mybatis%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8"><span class="toc-number">2.</span> <span class="toc-text">2 Mybatis快速入门</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-Mybatis%E6%98%A0%E5%B0%84%E6%96%87%E4%BB%B6%E6%A6%82%E8%BF%B0"><span class="toc-number">3.</span> <span class="toc-text">3 Mybatis映射文件概述</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-Mybatis%E5%A2%9E%E5%88%A0%E6%94%B9%E6%9F%A5%E6%93%8D%E4%BD%9C"><span class="toc-number">4.</span> <span class="toc-text">4 Mybatis增删改查操作</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#4-1-%E6%8F%92%E5%85%A5%E6%95%B0%E6%8D%AE%E6%93%8D%E4%BD%9C"><span class="toc-number">4.1.</span> <span class="toc-text">4.1 插入数据操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-2-%E4%BF%AE%E6%94%B9%E6%95%B0%E6%8D%AE%E6%93%8D%E4%BD%9C"><span class="toc-number">4.2.</span> <span class="toc-text">4.2 修改数据操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-3-%E5%88%A0%E9%99%A4%E6%95%B0%E6%8D%AE%E6%93%8D%E4%BD%9C"><span class="toc-number">4.3.</span> <span class="toc-text">4.3 删除数据操作</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#5-%E6%A0%B8%E5%BF%83%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E6%A6%82%E8%BF%B0"><span class="toc-number">5.</span> <span class="toc-text">5 核心配置文件概述</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#5-1-environments%E6%A0%87%E7%AD%BE"><span class="toc-number">5.1.</span> <span class="toc-text">5.1 environments标签</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-2-Mapper%E6%A0%87%E7%AD%BE"><span class="toc-number">5.2.</span> <span class="toc-text">5.2 Mapper标签</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-3-Properties%E6%A0%87%E7%AD%BE"><span class="toc-number">5.3.</span> <span class="toc-text">5.3 Properties标签</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-4-typeAliases%E6%A0%87%E7%AD%BE"><span class="toc-number">5.4.</span> <span class="toc-text">5.4 typeAliases标签</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#6-Mybatis%E7%9B%B8%E5%BA%94API"><span class="toc-number">6.</span> <span class="toc-text">6 Mybatis相应API</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#6-1-%E5%B7%A5%E5%8E%82%E6%9E%84%E5%BB%BA%E5%99%A8SqlSessionFactoryBuilder"><span class="toc-number">6.1.</span> <span class="toc-text">6.1 工厂构建器SqlSessionFactoryBuilder</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-2-%E5%B7%A5%E5%8E%82%E5%AF%B9%E8%B1%A1SqlSessionFactory"><span class="toc-number">6.2.</span> <span class="toc-text">6.2 工厂对象SqlSessionFactory</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-3-%E4%BC%9A%E8%AF%9D%E5%AF%B9%E8%B1%A1SqlSession"><span class="toc-number">6.3.</span> <span class="toc-text">6.3 会话对象SqlSession</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#7-Mybatis%E7%9A%84Dao%E5%B1%82%E5%AE%9E%E7%8E%B0"><span class="toc-number">7.</span> <span class="toc-text">7 Mybatis的Dao层实现</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#7-1-%E4%BC%A0%E7%BB%9F%E5%BC%80%E5%8F%91%E6%96%B9%E5%BC%8F"><span class="toc-number">7.1.</span> <span class="toc-text">7.1 传统开发方式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-2-%E4%BB%A3%E7%90%86%E5%BC%80%E5%8F%91%E6%96%B9%E5%BC%8F"><span class="toc-number">7.2.</span> <span class="toc-text">7.2 代理开发方式</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#8-Mybatis%E6%98%A0%E5%B0%84%E6%96%87%E4%BB%B6%E6%B7%B1%E5%85%A5"><span class="toc-number">8.</span> <span class="toc-text">8 Mybatis映射文件深入</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#8-1-%E5%8A%A8%E6%80%81sql%E8%AF%AD%E5%8F%A5"><span class="toc-number">8.1.</span> <span class="toc-text">8.1 动态sql语句</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#8-1-1-lt-if-gt"><span class="toc-number">8.1.1.</span> <span class="toc-text">8.1.1 &lt; if &gt;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-1-2-lt-foreach-gt"><span class="toc-number">8.1.2.</span> <span class="toc-text">8.1.2 &lt; foreach &gt;</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-2-Sql%E7%89%87%E6%AE%B5%E6%8A%BD%E5%8F%96"><span class="toc-number">8.2.</span> <span class="toc-text">8.2 Sql片段抽取</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-3-typeHandles%E6%A0%87%E7%AD%BE"><span class="toc-number">8.3.</span> <span class="toc-text">8.3 typeHandles标签</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-4-plugins%E6%A0%87%E7%AD%BE"><span class="toc-number">8.4.</span> <span class="toc-text">8.4 plugins标签</span></a></li></ol></li></ol>
                     </div>
                 </span>
             </div>
