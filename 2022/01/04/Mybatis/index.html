@@ -23,9 +23,9 @@
 <meta property="og:image" content="https://img-blog.csdnimg.cn/32663b1385cf4835bf6e6bd88416927a.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAbTBfNDYzNDU4ODc=,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/5d57f87d066e41cf9f9198fece859a38.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAbTBfNDYzNDU4ODc=,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center">
 <meta property="article:published_time" content="2022-01-04T08:41:39.000Z">
-<meta property="article:modified_time" content="2022-01-06T08:21:52.012Z">
+<meta property="article:modified_time" content="2022-01-08T03:00:00.237Z">
 <meta property="article:author" content="Woojou">
-<meta property="article:tag" content="程序媛">
+<meta property="article:tag" content="框架">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://img-blog.csdnimg.cn/f04c74de1a7a4bcb9060fbe9309aaff8.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAbTBfNDYzNDU4ODc=,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center">
   
@@ -856,6 +856,496 @@ public void testProxyDao() throws IOException &#123;
     sqlSession.close();
 &#125;
 </code></pre>
+<h1 id="9-Mybatis多表操作"><a href="#9-Mybatis多表操作" class="headerlink" title="9 Mybatis多表操作"></a>9 Mybatis多表操作</h1><h2 id="9-1-一对一查询"><a href="#9-1-一对一查询" class="headerlink" title="9.1 一对一查询"></a>9.1 一对一查询</h2><p>案例：这里用人与其身份证对应关系为例，创建 tb_card 和 tb_person 两张表</p>
+<pre><code class="sql">mysql&gt; create table tb_card (
+    -&gt; id int primary key auto_increment,
+    -&gt; code varchar(18)
+    -&gt; );
+Query OK, 0 rows affected (0.03 sec)
+
+mysql&gt; insert into tb_card(code) values (&#39;432801198009191038&#39;);
+Query OK, 1 row affected (0.01 sec)
+
+mysql&gt; insert into tb_card(code) values (&#39;432801198009191039&#39;);
+Query OK, 1 row affected (0.01 sec)
+
+mysql&gt; insert into tb_card(code) values (&#39;432801198009191040&#39;);
+Query OK, 1 row affected (0.01 sec)
+
+
+
+mysql&gt; create table tb_person (
+    -&gt; id int primary key auto_increment,
+    -&gt; name varchar(18),
+    -&gt; sex varchar(18),
+    -&gt; age int,
+    -&gt; card_id int unique
+    -&gt; );
+Query OK, 0 rows affected (0.01 sec)
+
+mysql&gt; insert into tb_person(name, sex, age, card_id) values (&#39;jack&#39;,&#39;male&#39;,23,1) ;
+Query OK, 1 row affected (0.01 sec)
+
+mysql&gt; insert into tb_person(name, sex, age, card_id) values (&#39;rose&#39;,&#39;female&#39;,21,2) ;
+Query OK, 1 row affected (0.01 sec)
+
+mysql&gt; insert into tb_person(name, sex, age, card_id) values (&#39;tom&#39;,&#39;male&#39;,31,3) ;
+Query OK, 1 row affected (0.01 sec)
+
+mysql&gt; select * from tb_card c, tb_person p where c.id=p.card_id;
++----+--------------------+----+------+--------+------+---------+
+| id | code               | id | name | sex    | age  | card_id |
++----+--------------------+----+------+--------+------+---------+
+|  1 | 432801198009191038 |  1 | jack | male   |   23 |       1 |
+|  2 | 432801198009191039 |  2 | rose | female |   21 |       2 |
+|  3 | 432801198009191040 |  3 | tom  | male   |   31 |       3 |
++----+--------------------+----+------+--------+------+---------+
+</code></pre>
+<p>并创建他们的实体类，记得重写toString()方法。</p>
+<ul>
+<li>编写PersonMapper接口</li>
+</ul>
+<pre><code class="java">public interface PersonMapper &#123;
+    Person findById(int id);
+&#125;
+</code></pre>
+<ul>
+<li>编写PersonMapper.xml</li>
+</ul>
+<pre><code class="xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;
+&lt;!DOCTYPE mapper PUBLIC &quot;-//mybatis.org//DTD Mapper 3.0//EN&quot; &quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;&gt;
+
+&lt;mapper namespace=&quot;com.kalimera.dao.PersonMapper&quot;&gt;
+
+    &lt;resultMap id=&quot;personMap&quot; type=&quot;person&quot;&gt;
+        &lt;!--手动指定字段与实体属性的映射关系
+            column: 数据表的字段名称
+            property：实体的属性名称
+        --&gt;
+        &lt;id property=&quot;id&quot; column=&quot;id&quot; /&gt;
+        &lt;result property=&quot;name&quot; column=&quot;name&quot; /&gt;
+        &lt;result property=&quot;sex&quot; column=&quot;sex&quot; /&gt;
+        &lt;result property=&quot;age&quot; column=&quot;age&quot; /&gt;
+        &lt;!-- 一对一关联映射:association --&gt;
+        &lt;association property=&quot;card&quot; javaType=&quot;card&quot;&gt;
+            &lt;id column=&quot;id&quot; property=&quot;id&quot;/&gt;
+            &lt;result column=&quot;code&quot; property=&quot;code&quot;/&gt;
+        &lt;/association&gt;
+    &lt;/resultMap&gt;
+
+    &lt;select id=&quot;findById&quot; parameterType=&quot;int&quot; resultMap=&quot;personMap&quot;&gt;
+        select * from tb_card c, tb_person p where c.id=p.card_id and p.id=#&#123;id&#125;;
+    &lt;/select&gt;
+
+&lt;/mapper&gt;
+</code></pre>
+<ul>
+<li>编写测试类</li>
+</ul>
+<pre><code class="java">@Test
+public void test1() throws IOException &#123;
+    InputStream resourceAsStream = Resources.getResourceAsStream(&quot;sqlMapConfig.xml&quot;);
+    SqlSessionFactory build = new SqlSessionFactoryBuilder().build(resourceAsStream);
+    SqlSession sqlSession = build.openSession();
+    PersonMapper mapper = sqlSession.getMapper(PersonMapper.class);
+    Person person1 = mapper.findById(1);
+    Person person2 = mapper.findById(2);
+    Person person3 = mapper.findById(3);
+    System.out.println(person1);
+    System.out.println(person2);
+    System.out.println(person3);
+    sqlSession.close();
+&#125;
+</code></pre>
+<p>输出结果</p>
+<pre><code>Person&#123;id=1, name=&#39;jack&#39;, sex=&#39;male&#39;, age=23, card=Card&#123;id=1, code=&#39;432801198009191038&#39;&#125;&#125;
+Person&#123;id=2, name=&#39;rose&#39;, sex=&#39;female&#39;, age=21, card=Card&#123;id=2, code=&#39;432801198009191039&#39;&#125;&#125;
+Person&#123;id=3, name=&#39;tom&#39;, sex=&#39;male&#39;, age=31, card=Card&#123;id=3, code=&#39;432801198009191040&#39;&#125;&#125;
+</code></pre>
+<h2 id="9-2-一对多查询"><a href="#9-2-一对多查询" class="headerlink" title="9.2 一对多查询"></a>9.2 一对多查询</h2><p>案例：一个班级可以有多个学生，一个学生只能属于一个班级，班级和学生是一对多的关系。</p>
+<pre><code class="sql">+----+-------+--------+------+----------+
+| id | name  | sex    | age  | class_no |
++----+-------+--------+------+----------+
+|  1 | jack  | male   |   13 |        1 |
+|  2 | jerry | male   |   13 |        2 |
+|  3 | rose  | female |   13 |        1 |
++----+-------+--------+------+----------+
+
++----+----------+
+| id | name     |
++----+----------+
+|  1 | art      |
+|  2 | computer |
++----+----------+
+
+//联表查询
++----+----------+----+-------+--------+------+----------+
+| id | name     | id | name  | sex    | age  | class_no |
++----+----------+----+-------+--------+------+----------+
+|  1 | art      |  1 | jack  | male   |   13 |        1 |
+|  2 | computer |  2 | jerry | male   |   13 |        2 |
+|  1 | art      |  3 | rose  | female |   13 |        1 |
++----+----------+----+-------+--------+------+----------+
+</code></pre>
+<ul>
+<li>实体类</li>
+</ul>
+<pre><code class="java">//班级实体类
+public class Class &#123;
+    private int class_no;
+    private String major;
+    private List&lt;Person&gt; students;
+
+    public List&lt;Person&gt; getStudents() &#123;
+        return students;
+    &#125;
+
+    public void setStudents(List&lt;Person&gt; students) &#123;
+        this.students = students;
+    &#125;
+
+    public int getClass_no() &#123;
+        return class_no;
+    &#125;
+
+    public void setClass_no(int class_no) &#123;
+        this.class_no = class_no;
+    &#125;
+
+    public String getMajor() &#123;
+        return major;
+    &#125;
+
+    public void setMajor(String major) &#123;
+        this.major = major;
+    &#125;
+
+    @Override
+    public String toString() &#123;
+        return &quot;Class&#123;&quot; +
+                &quot;class_no=&quot; + class_no +
+                &quot;, major=&#39;&quot; + major + &#39;\&#39;&#39; +
+                &quot;, students=&quot; + students +
+                &#39;&#125;&#39;;
+    &#125;
+&#125;
+
+//学生个体实体类
+public class Person &#123;
+    private Integer id; // 主键id
+    private String name; // 姓名
+    private String sex; // 性别
+    private Integer age; // 年龄
+
+    public Integer getId() &#123;
+        return id;
+    &#125;
+
+    public void setId(Integer id) &#123;
+        this.id = id;
+    &#125;
+
+    public String getName() &#123;
+        return name;
+    &#125;
+
+    public void setName(String name) &#123;
+        this.name = name;
+    &#125;
+
+    public String getSex() &#123;
+        return sex;
+    &#125;
+
+    public void setSex(String sex) &#123;
+        this.sex = sex;
+    &#125;
+
+    public Integer getAge() &#123;
+        return age;
+    &#125;
+
+    public void setAge(Integer age) &#123;
+        this.age = age;
+    &#125;
+
+    @Override
+    public String toString() &#123;
+        return &quot;Person&#123;&quot; +
+                &quot;id=&quot; + id +
+                &quot;, name=&#39;&quot; + name + &#39;\&#39;&#39; +
+                &quot;, sex=&#39;&quot; + sex + &#39;\&#39;&#39; +
+                &quot;, age=&quot; + age +
+                &#39;&#125;&#39;;
+    &#125;
+&#125;
+</code></pre>
+<ul>
+<li>创建ClassMapper接口类</li>
+</ul>
+<pre><code class="java">public interface ClassMapper &#123;
+    List&lt;Class&gt; findAll();
+&#125;
+</code></pre>
+<ul>
+<li>配置ClassMapper.xml</li>
+</ul>
+<pre><code class="xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;
+&lt;!DOCTYPE mapper PUBLIC &quot;-//mybatis.org//DTD Mapper 3.0//EN&quot; &quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;&gt;
+
+&lt;mapper namespace=&quot;com.kalimera.dao.ClassMapper&quot;&gt;
+    &lt;resultMap id=&quot;classMap&quot; type=&quot;class&quot;&gt;
+        &lt;id column=&quot;id&quot; property=&quot;class_no&quot;/&gt;
+        &lt;result column=&quot;name&quot; property=&quot;major&quot;/&gt;
+        &lt;collection property=&quot;students&quot; ofType=&quot;person&quot;&gt;
+            &lt;id column=&quot;id&quot; property=&quot;id&quot;/&gt;
+            &lt;result column=&quot;name&quot; property=&quot;name&quot;/&gt;
+            &lt;result column=&quot;sex&quot; property=&quot;sex&quot;/&gt;
+            &lt;result column=&quot;age&quot; property=&quot;age&quot;/&gt;
+        &lt;/collection&gt;
+    &lt;/resultMap&gt;
+
+    &lt;select id=&quot;findAll&quot; resultMap=&quot;classMap&quot;&gt;
+        select * from tb_class c, tb_person p where c.id=p.class_no
+    &lt;/select&gt;
+&lt;/mapper&gt;
+</code></pre>
+<ul>
+<li>测试</li>
+</ul>
+<pre><code class="java">@Test
+public void test1() throws IOException &#123;
+    InputStream resourceAsStream = Resources.getResourceAsStream(&quot;sqlMapConfig.xml&quot;);
+    SqlSessionFactory build = new SqlSessionFactoryBuilder().build(resourceAsStream);
+    SqlSession sqlSession = build.openSession();
+    PersonMapper mapper = sqlSession.getMapper(PersonMapper.class);
+    Person person1 = mapper.findById(1);
+    Person person2 = mapper.findById(2);
+    Person person3 = mapper.findById(3);
+    System.out.println(person1);
+    System.out.println(person2);
+    System.out.println(person3);
+    sqlSession.close();
+&#125;
+</code></pre>
+<pre><code>Class&#123;class_no=1, major=&#39;art&#39;, students=[Person&#123;id=1, name=&#39;art&#39;, sex=&#39;male&#39;, age=13&#125;]&#125;, 
+Class&#123;class_no=2, major=&#39;computer&#39;, students=[Person&#123;id=2, name=&#39;computer&#39;, sex=&#39;male&#39;, age=13&#125;]&#125;
+</code></pre>
+<p>可以看到班级1的学生数量本来应该为2，但是这里为1，并且学生们的名字出现了错误。经过排查发现，本身配置文件是没有问题的，是在建表的时候有一些问题。两张表里的id不能起同一个名字，否则就会映射为单条数据，name也不能为同一个名字，这样也会出现映射混乱的情况。</p>
+<p>把class里面的id改为cid，person里的name改为username之后，重新修改xml文件就输出了正确结果如下(可算对了，累死我了)：</p>
+<pre><code>Class&#123;class_no=1, major=&#39;art&#39;, students=[Person&#123;id=1, name=&#39;jack&#39;, sex=&#39;male&#39;, age=13&#125;, Person&#123;id=3, name=&#39;rose&#39;, sex=&#39;female&#39;, age=13&#125;]&#125;,
+Class&#123;class_no=2, major=&#39;computer&#39;, students=[Person&#123;id=2, name=&#39;jerry&#39;, sex=&#39;male&#39;, age=13&#125;]&#125;]
+</code></pre>
+<h2 id="9-3-多对多查询"><a href="#9-3-多对多查询" class="headerlink" title="9.3 多对多查询"></a>9.3 多对多查询</h2><p>案例：用户表和角色表的关系为，一个用户有多个角色，一个角色被多个用户使用</p>
+<p>这里用的表是之前那个Spring小项目中建的三张表（用户、角色，用户角色对应表）</p>
+<pre><code class="xml">&lt;resultMap id=&quot;userRoleMap&quot; type=&quot;user&quot;&gt;
+    &lt;!--user的信息--&gt;
+    &lt;id column=&quot;userId&quot; property=&quot;id&quot;&gt;&lt;/id&gt;
+    &lt;result column=&quot;username&quot; property=&quot;username&quot;&gt;&lt;/result&gt;
+    &lt;result column=&quot;password&quot; property=&quot;password&quot;&gt;&lt;/result&gt;
+    &lt;result column=&quot;birthday&quot; property=&quot;birthday&quot;&gt;&lt;/result&gt;
+    &lt;!--user内部的roleList信息--&gt;
+    &lt;collection property=&quot;roleList&quot; ofType=&quot;role&quot;&gt;
+        &lt;id column=&quot;roleId&quot; property=&quot;id&quot;&gt;&lt;/id&gt;
+        &lt;result column=&quot;roleName&quot; property=&quot;roleName&quot;&gt;&lt;/result&gt;
+        &lt;result column=&quot;roleDesc&quot; property=&quot;roleDesc&quot;&gt;&lt;/result&gt;
+    &lt;/collection&gt;
+&lt;/resultMap&gt;
+
+&lt;select id=&quot;findUserAndRoleAll&quot; resultMap=&quot;userRoleMap&quot;&gt;
+    SELECT * FROM USER u,sys_user_role ur,sys_role r WHERE u.id=ur.userId AND ur.roleId=r.id
+&lt;/select&gt;
+</code></pre>
+<h1 id="10-Mybatis注解开发"><a href="#10-Mybatis注解开发" class="headerlink" title="10 Mybatis注解开发"></a>10 Mybatis注解开发</h1><h2 id="10-1-常见的增删改查注解"><a href="#10-1-常见的增删改查注解" class="headerlink" title="10.1 常见的增删改查注解"></a>10.1 常见的增删改查注解</h2><p>此时我们不再需要Mapper.xml的配置文件，只需要保留核心配置文件即可。删除原核心配置文件中加载配置的语句，修改为扫描使用注解的类：</p>
+<pre><code class="xml">&lt;!--扫描注解类--&gt;
+&lt;mappers&gt;
+    &lt;mapper class=&quot;com.kalimera.dao.PersonMapper&quot;/&gt;
+&lt;/mappers&gt;
+</code></pre>
+<h3 id="10-1-1-Insert"><a href="#10-1-1-Insert" class="headerlink" title="10.1.1 @Insert"></a>10.1.1 @Insert</h3><ul>
+<li>在PersonMapper接口中标上注解</li>
+</ul>
+<pre><code class="java">@Insert(&quot;insert into tb_person values (null, #&#123;name&#125;, #&#123;sex&#125;, #&#123;age&#125;, #&#123;class_no&#125;)&quot;)
+void save(Person person);
+</code></pre>
+<ul>
+<li>测试</li>
+</ul>
+<pre><code class="java">//在所有方法前执行
+@Before
+public void before() throws IOException &#123;
+    InputStream resourceAsStream = Resources.getResourceAsStream(&quot;sqlMapConfig.xml&quot;);
+    SqlSessionFactory build = new SqlSessionFactoryBuilder().build(resourceAsStream);
+    SqlSession sqlSession = build.openSession(true);
+    mapper = sqlSession.getMapper(PersonMapper.class);
+&#125;
+
+@Test
+public void testSave() &#123;
+    Person person = new Person();
+    person.setAge(15);
+    person.setSex(&quot;female&quot;);
+    person.setName(&quot;lucy&quot;);
+    person.setClass_no(2);
+
+    mapper.save(person);
+    
+&#125;
+</code></pre>
+<h3 id="10-1-2-Delete"><a href="#10-1-2-Delete" class="headerlink" title="10.1.2 @Delete"></a>10.1.2 @Delete</h3><ul>
+<li>注解</li>
+</ul>
+<pre><code class="java">@Delete(&quot;delete from tb_person where id=#&#123;id&#125;&quot;)
+void deleteById(int id);
+</code></pre>
+<ul>
+<li>测试</li>
+</ul>
+<pre><code class="java">@Test
+public void testDelete() &#123;
+    mapper.deleteById(4);
+&#125;
+</code></pre>
+<h3 id="10-1-3-Update"><a href="#10-1-3-Update" class="headerlink" title="10.1.3 @Update"></a>10.1.3 @Update</h3><ul>
+<li>注解</li>
+</ul>
+<pre><code class="java">@Update(&quot;update tb_person set name=#&#123;name&#125;, sex=#&#123;sex&#125;, age=#&#123;age&#125;, class_no=#&#123;class_no&#125; where id=#&#123;id&#125;&quot;)
+void update(Person person);
+</code></pre>
+<ul>
+<li>测试</li>
+</ul>
+<pre><code class="java">@Test
+public void testUpdate() &#123;
+    Person person = new Person();
+    person.setId(2);
+    person.setAge(15);
+    person.setSex(&quot;female&quot;);
+    person.setName(&quot;lucy&quot;);
+    person.setClass_no(2);
+    mapper.update(person);
+&#125;
+</code></pre>
+<h3 id="10-1-4-Select"><a href="#10-1-4-Select" class="headerlink" title="10.1.4 @Select"></a>10.1.4 @Select</h3><ul>
+<li>注解</li>
+</ul>
+<pre><code class="java">@Select(&quot;select * from tb_person&quot;)
+List&lt;Person&gt; findAll();
+
+@Select(&quot;select * from tb_person where id=#&#123;id&#125;&quot;)
+Person findById(Integer id);
+</code></pre>
+<ul>
+<li>测试</li>
+</ul>
+<pre><code class="java">@Test
+public void testFindAll() &#123;
+    List&lt;Person&gt; personList = mapper.findAll();
+    for (Person person : personList) &#123;
+        System.out.println(person);
+    &#125;
+&#125;
+
+@Test
+public void testFindById() &#123;
+    Person byId = mapper.findById(1);
+    System.out.println(byId);
+&#125;
+</code></pre>
+<h2 id="10-2-复杂映射开发"><a href="#10-2-复杂映射开发" class="headerlink" title="10.2 复杂映射开发"></a>10.2 复杂映射开发</h2><p>实现复杂关系映射之前我们可以在映射文件中通过配置<resultMap>来实现，使用注解开发后，我们可以使用@Results注解，@Result注解，@One注解，@Many注解组合完成复杂关系的配置</resultMap></p>
+<table>
+<thead>
+<tr>
+<th><strong>注解</strong></th>
+<th><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>@Results</td>
+<td>代替的是标签&lt; resultMap &gt;该注解中可以使用单个@Result注解，也可以使用@Result集合。使用格式：@Results（{@Result（），@Result（）}）或@Results（@Result（））</td>
+</tr>
+<tr>
+<td>@Resut</td>
+<td>代替了&lt; id &gt;标签和&lt; result &gt;标签@Result中属性介绍：column：数据库的列名property：需要装配的属性名one：需要使用的@One 注解（@Result（one=@One）（）））many：需要使用的@Many 注解（@Result（many=@many）（）））</td>
+</tr>
+<tr>
+<td>@One （一对一）</td>
+<td>代替了&lt; assocation &gt; 标签，是多表查询的关键，在注解中用来指定子查询返回单一对象。@One注解属性介绍：select: 指定用来多表查询的 sqlmapper使用格式：@Result(column=” “,property=””,one=@One(select=””))</td>
+</tr>
+<tr>
+<td>@Many （多对一）</td>
+<td>代替了&lt; collection &gt;标签, 是是多表查询的关键，在注解中用来指定子查询返回对象集合。使用格式：@Result(property=””,column=””,many=@Many(select=””))</td>
+</tr>
+</tbody></table>
+<h2 id="10-2-1-One"><a href="#10-2-1-One" class="headerlink" title="10.2.1 @One"></a>10.2.1 @One</h2><p>查找学生对应班级的一对一关系</p>
+<ul>
+<li>先对Class Mapper进行注解</li>
+</ul>
+<pre><code class="java">@Select(&quot;select * from tb_class where cid=#&#123;id&#125;&quot;)
+@Results(&#123;
+    @Result(column = &quot;cid&quot;, property = &quot;class_no&quot;),
+    @Result(column = &quot;major&quot;, property = &quot;major&quot;)
+&#125;)
+Class findById(Integer id);
+</code></pre>
+<ul>
+<li>对PersonMapper进行注解</li>
+</ul>
+<pre><code class="java">@Select(&quot;select * from tb_person&quot;)
+@Results(id = &quot;personMap&quot;, value = &#123;
+    @Result(column = &quot;id&quot;, property = &quot;id&quot;, id = true),
+    @Result(column = &quot;name&quot;, property = &quot;name&quot;),
+    @Result(column = &quot;sex&quot;, property = &quot;sex&quot;),
+    @Result(column = &quot;age&quot;, property = &quot;age&quot;),
+    @Result(property = &quot;aClass&quot;, column = &quot;class_no&quot;,
+            one = @One(select = &quot;com.kalimera.dao.ClassMapper.findById&quot;)
+           )
+&#125;)
+List&lt;Person&gt; findAll();
+
+@Select(&quot;select * from tb_person where id=#&#123;id&#125;&quot;)
+@ResultMap(&quot;personMap&quot;) //复用
+Person findById(Integer id);
+</code></pre>
+<p>将对于tb_person表的查询结果，通过班级号，与ClassMapper以班级号查询的结果进行连接。</p>
+<h3 id="10-2-2-Many"><a href="#10-2-2-Many" class="headerlink" title="10.2.2 @Many"></a>10.2.2 @Many</h3><ul>
+<li>PersonMapper注解，通过班级号来查找</li>
+</ul>
+<pre><code class="java">@Select(&quot;select * from tb_person where class_no=#&#123;classNo&#125;&quot;)
+List&lt;Person&gt; findByClassNo(Integer classNo);
+</code></pre>
+<ul>
+<li>ClassMapper注解</li>
+</ul>
+<pre><code class="java">@Select(&quot;select * from tb_class where cid=#&#123;id&#125;&quot;)
+@Results(&#123;
+    @Result(column = &quot;cid&quot;, property = &quot;class_no&quot;),
+    @Result(column = &quot;major&quot;, property = &quot;major&quot;),
+    @Result(property = &quot;students&quot;, column = &quot;cid&quot;,
+            many = @Many(select = &quot;com.kalimera.dao.PersonMapper.findByClassNo&quot;)
+           )
+&#125;)
+Class findById(Integer id);
+</code></pre>
+<ul>
+<li>测试</li>
+</ul>
+<pre><code class="java">private ClassMapper mapper;
+
+@Before
+public void before() throws IOException &#123;
+    InputStream resourceAsStream = Resources.getResourceAsStream(&quot;sqlMapConfig.xml&quot;);
+    SqlSessionFactory build = new SqlSessionFactoryBuilder().build(resourceAsStream);
+    SqlSession sqlSession = build.openSession(true);
+    mapper = sqlSession.getMapper(ClassMapper.class);
+&#125;
+
+@Test
+public void testFindById() &#123;
+    Class aClass = mapper.findById(1);
+    System.out.println(aClass);
+&#125;
+</code></pre>
 
       
 
@@ -864,6 +1354,17 @@ public void testProxyDao() throws IOException &#123;
     <div class="article-info article-info-index">
       
       
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">框架</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
       
 
       
@@ -957,7 +1458,7 @@ public void testProxyDao() throws IOException &#123;
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-Mybatis%E7%AE%80%E4%BB%8B"><span class="toc-number">1.</span> <span class="toc-text">1 Mybatis简介</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-%E5%8E%9F%E5%A7%8Bjdbc%E6%93%8D%E4%BD%9C"><span class="toc-number">1.1.</span> <span class="toc-text">1.1 原始jdbc操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-%E4%BB%80%E4%B9%88%E6%98%AFMybatis"><span class="toc-number">1.2.</span> <span class="toc-text">1.2 什么是Mybatis</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-Mybatis%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8"><span class="toc-number">2.</span> <span class="toc-text">2 Mybatis快速入门</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-Mybatis%E6%98%A0%E5%B0%84%E6%96%87%E4%BB%B6%E6%A6%82%E8%BF%B0"><span class="toc-number">3.</span> <span class="toc-text">3 Mybatis映射文件概述</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-Mybatis%E5%A2%9E%E5%88%A0%E6%94%B9%E6%9F%A5%E6%93%8D%E4%BD%9C"><span class="toc-number">4.</span> <span class="toc-text">4 Mybatis增删改查操作</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#4-1-%E6%8F%92%E5%85%A5%E6%95%B0%E6%8D%AE%E6%93%8D%E4%BD%9C"><span class="toc-number">4.1.</span> <span class="toc-text">4.1 插入数据操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-2-%E4%BF%AE%E6%94%B9%E6%95%B0%E6%8D%AE%E6%93%8D%E4%BD%9C"><span class="toc-number">4.2.</span> <span class="toc-text">4.2 修改数据操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-3-%E5%88%A0%E9%99%A4%E6%95%B0%E6%8D%AE%E6%93%8D%E4%BD%9C"><span class="toc-number">4.3.</span> <span class="toc-text">4.3 删除数据操作</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#5-%E6%A0%B8%E5%BF%83%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E6%A6%82%E8%BF%B0"><span class="toc-number">5.</span> <span class="toc-text">5 核心配置文件概述</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#5-1-environments%E6%A0%87%E7%AD%BE"><span class="toc-number">5.1.</span> <span class="toc-text">5.1 environments标签</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-2-Mapper%E6%A0%87%E7%AD%BE"><span class="toc-number">5.2.</span> <span class="toc-text">5.2 Mapper标签</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-3-Properties%E6%A0%87%E7%AD%BE"><span class="toc-number">5.3.</span> <span class="toc-text">5.3 Properties标签</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-4-typeAliases%E6%A0%87%E7%AD%BE"><span class="toc-number">5.4.</span> <span class="toc-text">5.4 typeAliases标签</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#6-Mybatis%E7%9B%B8%E5%BA%94API"><span class="toc-number">6.</span> <span class="toc-text">6 Mybatis相应API</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#6-1-%E5%B7%A5%E5%8E%82%E6%9E%84%E5%BB%BA%E5%99%A8SqlSessionFactoryBuilder"><span class="toc-number">6.1.</span> <span class="toc-text">6.1 工厂构建器SqlSessionFactoryBuilder</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-2-%E5%B7%A5%E5%8E%82%E5%AF%B9%E8%B1%A1SqlSessionFactory"><span class="toc-number">6.2.</span> <span class="toc-text">6.2 工厂对象SqlSessionFactory</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-3-%E4%BC%9A%E8%AF%9D%E5%AF%B9%E8%B1%A1SqlSession"><span class="toc-number">6.3.</span> <span class="toc-text">6.3 会话对象SqlSession</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#7-Mybatis%E7%9A%84Dao%E5%B1%82%E5%AE%9E%E7%8E%B0"><span class="toc-number">7.</span> <span class="toc-text">7 Mybatis的Dao层实现</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#7-1-%E4%BC%A0%E7%BB%9F%E5%BC%80%E5%8F%91%E6%96%B9%E5%BC%8F"><span class="toc-number">7.1.</span> <span class="toc-text">7.1 传统开发方式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-2-%E4%BB%A3%E7%90%86%E5%BC%80%E5%8F%91%E6%96%B9%E5%BC%8F"><span class="toc-number">7.2.</span> <span class="toc-text">7.2 代理开发方式</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#8-Mybatis%E6%98%A0%E5%B0%84%E6%96%87%E4%BB%B6%E6%B7%B1%E5%85%A5"><span class="toc-number">8.</span> <span class="toc-text">8 Mybatis映射文件深入</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#8-1-%E5%8A%A8%E6%80%81sql%E8%AF%AD%E5%8F%A5"><span class="toc-number">8.1.</span> <span class="toc-text">8.1 动态sql语句</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#8-1-1-lt-if-gt"><span class="toc-number">8.1.1.</span> <span class="toc-text">8.1.1 &lt; if &gt;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-1-2-lt-foreach-gt"><span class="toc-number">8.1.2.</span> <span class="toc-text">8.1.2 &lt; foreach &gt;</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-2-Sql%E7%89%87%E6%AE%B5%E6%8A%BD%E5%8F%96"><span class="toc-number">8.2.</span> <span class="toc-text">8.2 Sql片段抽取</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-3-typeHandles%E6%A0%87%E7%AD%BE"><span class="toc-number">8.3.</span> <span class="toc-text">8.3 typeHandles标签</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-4-plugins%E6%A0%87%E7%AD%BE"><span class="toc-number">8.4.</span> <span class="toc-text">8.4 plugins标签</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-Mybatis%E7%AE%80%E4%BB%8B"><span class="toc-number">1.</span> <span class="toc-text">1 Mybatis简介</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-%E5%8E%9F%E5%A7%8Bjdbc%E6%93%8D%E4%BD%9C"><span class="toc-number">1.1.</span> <span class="toc-text">1.1 原始jdbc操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-%E4%BB%80%E4%B9%88%E6%98%AFMybatis"><span class="toc-number">1.2.</span> <span class="toc-text">1.2 什么是Mybatis</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-Mybatis%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8"><span class="toc-number">2.</span> <span class="toc-text">2 Mybatis快速入门</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-Mybatis%E6%98%A0%E5%B0%84%E6%96%87%E4%BB%B6%E6%A6%82%E8%BF%B0"><span class="toc-number">3.</span> <span class="toc-text">3 Mybatis映射文件概述</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-Mybatis%E5%A2%9E%E5%88%A0%E6%94%B9%E6%9F%A5%E6%93%8D%E4%BD%9C"><span class="toc-number">4.</span> <span class="toc-text">4 Mybatis增删改查操作</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#4-1-%E6%8F%92%E5%85%A5%E6%95%B0%E6%8D%AE%E6%93%8D%E4%BD%9C"><span class="toc-number">4.1.</span> <span class="toc-text">4.1 插入数据操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-2-%E4%BF%AE%E6%94%B9%E6%95%B0%E6%8D%AE%E6%93%8D%E4%BD%9C"><span class="toc-number">4.2.</span> <span class="toc-text">4.2 修改数据操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-3-%E5%88%A0%E9%99%A4%E6%95%B0%E6%8D%AE%E6%93%8D%E4%BD%9C"><span class="toc-number">4.3.</span> <span class="toc-text">4.3 删除数据操作</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#5-%E6%A0%B8%E5%BF%83%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E6%A6%82%E8%BF%B0"><span class="toc-number">5.</span> <span class="toc-text">5 核心配置文件概述</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#5-1-environments%E6%A0%87%E7%AD%BE"><span class="toc-number">5.1.</span> <span class="toc-text">5.1 environments标签</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-2-Mapper%E6%A0%87%E7%AD%BE"><span class="toc-number">5.2.</span> <span class="toc-text">5.2 Mapper标签</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-3-Properties%E6%A0%87%E7%AD%BE"><span class="toc-number">5.3.</span> <span class="toc-text">5.3 Properties标签</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-4-typeAliases%E6%A0%87%E7%AD%BE"><span class="toc-number">5.4.</span> <span class="toc-text">5.4 typeAliases标签</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#6-Mybatis%E7%9B%B8%E5%BA%94API"><span class="toc-number">6.</span> <span class="toc-text">6 Mybatis相应API</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#6-1-%E5%B7%A5%E5%8E%82%E6%9E%84%E5%BB%BA%E5%99%A8SqlSessionFactoryBuilder"><span class="toc-number">6.1.</span> <span class="toc-text">6.1 工厂构建器SqlSessionFactoryBuilder</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-2-%E5%B7%A5%E5%8E%82%E5%AF%B9%E8%B1%A1SqlSessionFactory"><span class="toc-number">6.2.</span> <span class="toc-text">6.2 工厂对象SqlSessionFactory</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-3-%E4%BC%9A%E8%AF%9D%E5%AF%B9%E8%B1%A1SqlSession"><span class="toc-number">6.3.</span> <span class="toc-text">6.3 会话对象SqlSession</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#7-Mybatis%E7%9A%84Dao%E5%B1%82%E5%AE%9E%E7%8E%B0"><span class="toc-number">7.</span> <span class="toc-text">7 Mybatis的Dao层实现</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#7-1-%E4%BC%A0%E7%BB%9F%E5%BC%80%E5%8F%91%E6%96%B9%E5%BC%8F"><span class="toc-number">7.1.</span> <span class="toc-text">7.1 传统开发方式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-2-%E4%BB%A3%E7%90%86%E5%BC%80%E5%8F%91%E6%96%B9%E5%BC%8F"><span class="toc-number">7.2.</span> <span class="toc-text">7.2 代理开发方式</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#8-Mybatis%E6%98%A0%E5%B0%84%E6%96%87%E4%BB%B6%E6%B7%B1%E5%85%A5"><span class="toc-number">8.</span> <span class="toc-text">8 Mybatis映射文件深入</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#8-1-%E5%8A%A8%E6%80%81sql%E8%AF%AD%E5%8F%A5"><span class="toc-number">8.1.</span> <span class="toc-text">8.1 动态sql语句</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#8-1-1-lt-if-gt"><span class="toc-number">8.1.1.</span> <span class="toc-text">8.1.1 &lt; if &gt;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-1-2-lt-foreach-gt"><span class="toc-number">8.1.2.</span> <span class="toc-text">8.1.2 &lt; foreach &gt;</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-2-Sql%E7%89%87%E6%AE%B5%E6%8A%BD%E5%8F%96"><span class="toc-number">8.2.</span> <span class="toc-text">8.2 Sql片段抽取</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-3-typeHandles%E6%A0%87%E7%AD%BE"><span class="toc-number">8.3.</span> <span class="toc-text">8.3 typeHandles标签</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-4-plugins%E6%A0%87%E7%AD%BE"><span class="toc-number">8.4.</span> <span class="toc-text">8.4 plugins标签</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#9-Mybatis%E5%A4%9A%E8%A1%A8%E6%93%8D%E4%BD%9C"><span class="toc-number">9.</span> <span class="toc-text">9 Mybatis多表操作</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#9-1-%E4%B8%80%E5%AF%B9%E4%B8%80%E6%9F%A5%E8%AF%A2"><span class="toc-number">9.1.</span> <span class="toc-text">9.1 一对一查询</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-2-%E4%B8%80%E5%AF%B9%E5%A4%9A%E6%9F%A5%E8%AF%A2"><span class="toc-number">9.2.</span> <span class="toc-text">9.2 一对多查询</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-3-%E5%A4%9A%E5%AF%B9%E5%A4%9A%E6%9F%A5%E8%AF%A2"><span class="toc-number">9.3.</span> <span class="toc-text">9.3 多对多查询</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#10-Mybatis%E6%B3%A8%E8%A7%A3%E5%BC%80%E5%8F%91"><span class="toc-number">10.</span> <span class="toc-text">10 Mybatis注解开发</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#10-1-%E5%B8%B8%E8%A7%81%E7%9A%84%E5%A2%9E%E5%88%A0%E6%94%B9%E6%9F%A5%E6%B3%A8%E8%A7%A3"><span class="toc-number">10.1.</span> <span class="toc-text">10.1 常见的增删改查注解</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#10-1-1-Insert"><span class="toc-number">10.1.1.</span> <span class="toc-text">10.1.1 @Insert</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#10-1-2-Delete"><span class="toc-number">10.1.2.</span> <span class="toc-text">10.1.2 @Delete</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#10-1-3-Update"><span class="toc-number">10.1.3.</span> <span class="toc-text">10.1.3 @Update</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#10-1-4-Select"><span class="toc-number">10.1.4.</span> <span class="toc-text">10.1.4 @Select</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-2-%E5%A4%8D%E6%9D%82%E6%98%A0%E5%B0%84%E5%BC%80%E5%8F%91"><span class="toc-number">10.2.</span> <span class="toc-text">10.2 复杂映射开发</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-2-1-One"><span class="toc-number">10.3.</span> <span class="toc-text">10.2.1 @One</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#10-2-2-Many"><span class="toc-number">10.3.1.</span> <span class="toc-text">10.2.2 @Many</span></a></li></ol></li></ol></li></ol>
                     </div>
                 </span>
             </div>
