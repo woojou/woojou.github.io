@@ -28,8 +28,12 @@
 <meta property="og:image" content="https://upload-images.jianshu.io/upload_images/17624800-1ad043a2c28923c4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/779/format/webp">
 <meta property="og:image" content="https://3803541485-files.gitbook.io/~/files/v0/b/gitbook-28427.appspot.com/o/assets%2F-L_5HvtIhTFW9TQlOF8e%2F-L_5TIKcBFHWPtY3OwUo%2F-L_5TJctbmT4TYol6GFi%2F%E5%81%8F%E5%90%91%E9%94%81.png?generation=1551665549951273&alt=media">
 <meta property="og:image" content="https://3803541485-files.gitbook.io/~/files/v0/b/gitbook-28427.appspot.com/o/assets%2F-L_5HvtIhTFW9TQlOF8e%2F-L_5TIKcBFHWPtY3OwUo%2F-L_5TJcvhlUdgfv1YFly%2F%E8%BD%BB%E9%87%8F%E7%BA%A7%E9%94%81%E6%B5%81%E7%A8%8B%E5%9B%BE.png?generation=1551665550532560&alt=media">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20201206223144780.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3llaG9uZ3poaTE5OTQ=,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/img_convert/2a3c22e2ac6d0a8990f04e4920760b57.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20201206223202433.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3llaG9uZ3poaTE5OTQ=,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://raw.githubusercontent.com/chenxiao19920206/RedSpiderArticlePhotos/master/java-base/multi-thread/%E7%BA%BF%E7%A8%8B%E6%B1%A0%E4%B8%BB%E8%A6%81%E7%9A%84%E5%A4%84%E7%90%86%E6%B5%81%E7%A8%8B.png">
 <meta property="article:published_time" content="2022-01-24T11:46:42.000Z">
-<meta property="article:modified_time" content="2022-01-28T08:35:36.991Z">
+<meta property="article:modified_time" content="2022-01-29T09:52:07.774Z">
 <meta property="article:author" content="Woojou">
 <meta property="article:tag" content="JAVA">
 <meta name="twitter:card" content="summary">
@@ -1243,8 +1247,8 @@ public void blockLock() &#123;
 </tbody></table>
 <h3 id="9-2-6-乐观锁与悲观锁"><a href="#9-2-6-乐观锁与悲观锁" class="headerlink" title="9.2.6 乐观锁与悲观锁"></a>9.2.6 乐观锁与悲观锁</h3><p>锁可以从不同角度分类，乐观锁和悲观锁就是另一种区别于上面的锁分类方式。</p>
 <ul>
-<li>悲观锁：即我们常说的锁。对于悲观锁来说，它认为每次访问共享资源都会发生冲突，所以必须对每次数据操作上锁，以保证临界区的程序同一时间只能有一个线程在执行。</li>
-<li>乐观锁：也就是无锁。乐观锁假设对共享资源的访问没有冲突，线程可以不停执行，不加锁也不用等待。然而一旦多个线程发生了冲突，就使用称为CAS的技术来保证线程执行的安全性。由于无锁操作中没有锁的存在，所以也不会出现死锁的情况。即乐观锁天生免疫死锁。</li>
+<li>悲观锁：即我们常说的锁。对于悲观锁来说，它认为每次访问共享资源都会发生冲突，所以<strong>必须对每次数据操作上锁</strong>，以保证临界区的程序同一时间只能有一个线程在执行。</li>
+<li>乐观锁：也就是无锁。乐观锁假设对共享资源的访问没有冲突，线程可以不停执行，不加锁也不用等待。然而一旦多个线程发生了冲突，就使用称为<strong>CAS</strong>的技术来保证线程执行的安全性。由于无锁操作中没有锁的存在，所以也不会出现死锁的情况。即乐观锁天生免疫死锁。</li>
 </ul>
 <p>乐观锁适用于“读多写少”的环境，避免频繁加锁解锁影响性能；悲观锁适用于“写多读少”的环境，避免频繁失败和重试影响性能。</p>
 <h1 id="第十章-CAS和原子操作"><a href="#第十章-CAS和原子操作" class="headerlink" title="第十章 CAS和原子操作"></a>第十章 CAS和原子操作</h1><h2 id="10-1-CAS的概念"><a href="#10-1-CAS的概念" class="headerlink" title="10.1 CAS的概念"></a>10.1 CAS的概念</h2><p>CAS全名是Compare And Swap，即比较并交换。CAS中有三个需要关注的值：</p>
@@ -1284,6 +1288,652 @@ boolean compareAndSwapLong(Object o, long offset,long expected,long x);
 <li>使用JDK 1.5开始就提供的<code>AtomicReference</code>类保证对象之间的原子性，把多个变量放到一个对象里面进行CAS操作。</li>
 <li>使用锁。锁内的临界区代码可以保证只有当前线程能操作。</li>
 </ol>
+<h1 id="第十一章-AQS"><a href="#第十一章-AQS" class="headerlink" title="第十一章 AQS"></a>第十一章 AQS</h1><p>参考资料来源<a target="_blank" rel="noopener" href="https://developer.aliyun.com/article/779674">https://developer.aliyun.com/article/779674</a></p>
+<h2 id="11-1-AQS简介"><a href="#11-1-AQS简介" class="headerlink" title="11.1 AQS简介"></a>11.1 AQS简介</h2><p>AQS（AbstractQueuedSynchronizer）即是抽象队列同步器，是用来构建Lock锁和同步组件的基础框架，很多锁和同步组件都是基于AQS构建，比如ReentrantLock、ReentrantReadWriteLock、CountDownLatch、Semaphore。</p>
+<p>观察源码的数据结构：</p>
+<pre><code class="java">public abstract class AbstractQueuedSynchronizer extends AbstractOwnableSynchronizer implements java.io.Serializable &#123;
+    //头结点
+    private transient volatile Node head;
+    //尾节点
+    private transient volatile Node tail;
+    //共享状态
+    private volatile int state;
+    
+    //内部类，构建链表的Node节点
+    static final class Node &#123;
+        volatile Node prev;
+        volatile Node next;
+        volatile Thread thread;
+    &#125;
+&#125;
+//AbstractQueuedSynchronizer的父类
+public abstract class AbstractOwnableSynchronizer implements java.io.Serializable &#123;
+    //占用锁的线程
+    private transient Thread exclusiveOwnerThread;
+&#125;
+</code></pre>
+<p><img src="https://img-blog.csdnimg.cn/20201206223144780.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3llaG9uZ3poaTE5OTQ=,size_16,color_FFFFFF,t_70#pic_center"></p>
+<h3 id="11-1-1-state"><a href="#11-1-1-state" class="headerlink" title="11.1.1 state"></a>11.1.1 state</h3><p><code>state</code>表示同步状态，用于展现当前临界资源的获取锁情况。由<code>volatile</code>修饰，保证了多线程间的可见性。</p>
+<p>通过<code>getState()</code>，<code>setState()</code>，<code>compareAndSetState()</code>三个方法进行维护。这三个方法都用<code>final</code>修饰，限制子类不能对其重写。</p>
+<pre><code class="java">private volatile int state;
+
+protected final int getState() &#123;
+    return state;
+&#125;
+protected final void setState(int newState) &#123;
+    state = newState;
+&#125;
+//CAS操作
+protected final boolean compareAndSetState(int expect, int update) &#123;
+    return unsafe.compareAndSwapInt(this, stateOffset, expect, update);
+&#125;
+</code></pre>
+<h3 id="11-1-2-CLH队列"><a href="#11-1-2-CLH队列" class="headerlink" title="11.1.2 CLH队列"></a>11.1.2 CLH队列</h3><p>CLH队列是一个双向链表队列，由head和tail分别记录头结点和尾结点，队列的元素类型是Node。</p>
+<p>当一个线程获取同步状态(state)失败时，AQS会将此线程以及等待的状态等信息封装成Node加入到队列中，同时阻塞该线程，等待后续被唤醒。</p>
+<p>Node节点组成如下：</p>
+<pre><code class="java">static final class Node &#123;
+    //共享模式下的等待标记
+    static final Node SHARED = new Node();
+    //独占模式下的等待标记
+    static final Node EXCLUSIVE = null;
+    //表示当前节点的线程因为超时或者中断被取消
+    static final int CANCELLED =  1;
+    //表示当前节点的后续节点的线程需要运行，也就是通过unpark操作
+    static final int SIGNAL    = -1;
+    //表示当前节点在condition队列中
+    static final int CONDITION = -2;
+    //共享模式下起作用，表示后续的节点会传播唤醒的操作
+    static final int PROPAGATE = -3;
+    //状态，包括上面的四种状态值，初始值为0，一般是节点的初始状态
+    volatile int waitStatus;
+    //上一个节点的引用
+    volatile Node prev;
+    //下一个节点的引用
+    volatile Node next;
+    //保存在当前节点的线程引用
+    volatile Thread thread;
+    //用于标记是否为共享模式
+    Node nextWaiter;
+    
+    // 判断共享模式的方法
+    final boolean isShared() &#123;
+        return nextWaiter == SHARED;
+    &#125;
+
+    Node(Thread thread, Node mode) &#123;
+        this.nextWaiter = mode;
+        this.thread = thread;
+    &#125;
+&#125;
+</code></pre>
+<h3 id="11-1-3-exclusiveOwnerThread"><a href="#11-1-3-exclusiveOwnerThread" class="headerlink" title="11.1.3 exclusiveOwnerThread"></a>11.1.3 exclusiveOwnerThread</h3><p>通过继承AbstractOwnableSynchronizer类所拥有的属性。表示独占模式下同步器的持有者。</p>
+<h2 id="11-2-AQS实现原理"><a href="#11-2-AQS实现原理" class="headerlink" title="11.2 AQS实现原理"></a>11.2 AQS实现原理</h2><p>AQS有两种模式：独占式和共享式。</p>
+<h3 id="11-2-1-独占式"><a href="#11-2-1-独占式" class="headerlink" title="11.2.1 独占式"></a>11.2.1 独占式</h3><p>同一时刻仅有一个线程持有同步状态，或者说是资源。如ReentrantLock。</p>
+<p>AQS在独占模式下获取同步状态用<code>acquire()</code>方法：</p>
+<pre><code class="java">public final void acquire(int arg) &#123;
+    //这里Node.EXCLUSIVE就是一个空指针
+    if (!tryAcquire(arg) &amp;&amp;
+        acquireQueued(addWaiter(Node.EXCLUSIVE), arg))
+        selfInterrupt();
+&#125;
+</code></pre>
+<p>具体的思路如下图：</p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/2a3c22e2ac6d0a8990f04e4920760b57.png"></p>
+<p>下面对源码进行详细的分析。</p>
+<p><strong>tryAcquire</strong></p>
+<p>这里并没有具体实现，需要子类根据自己的情况来实现，因为不同的锁有不同的实现方式，例如公平锁和非公平锁的实现方式就不一样。</p>
+<p><code>arg</code>是要获取的资源的个数，在独占模式下始终为1。</p>
+<pre><code class="java">//直接抛出异常，这是由子类进行实现的方法，体现了模板模式的思想
+protected boolean tryAcquire(int arg) &#123;
+    throw new UnsupportedOperationException();
+&#125;
+</code></pre>
+<p>如果这一步没有成功，那么后续就要将这个线程加入到队列中。如果成功了，那么就直接返回了。</p>
+<p><strong>addWaiter</strong></p>
+<p>把当前线程包装成Node添加到队列中。</p>
+<pre><code class="java">private Node addWaiter(Node mode) &#123;
+    //把当前线程包装成Node节点,condition队列的后续节点为mode
+    Node node = new Node(Thread.currentThread(), mode);
+    //获取到尾结点
+    Node pred = tail;
+    //判断尾结点是否为null，如果不为空，那就证明队列已经初始化了
+    if (pred != null) &#123;
+        //已经初始化了，就直接把Node节点添加到队列的末尾
+        node.prev = pred;
+        //使用CAS尝试修改tail为node，如果成功就返回true
+        if (compareAndSetTail(pred, node)) &#123;
+            pred.next = node;
+            //返回包含当前线程的节点Node
+            return node;
+        &#125;
+    &#125;
+    //如果队列没有初始化，或者CAS插入失败
+    //那就调用enq()方法，自旋CAS插入
+    enq(node);
+    return node;
+&#125;
+
+// 自旋CAS插入等待队列
+private Node enq(final Node node) &#123;
+    //一个死循环 实现自旋
+    for (;;) &#123;
+        Node t = tail;
+        //如果尾节点为空，代表队列还没有初始化过
+        if (t == null) &#123;
+            //创建一个新的节点，使用CAS修改为头节点
+            if (compareAndSetHead(new Node()))
+                //如果成功了就把该头节点也赋值给尾节点
+                tail = head;
+        &#125; else &#123;
+            //如果是第一次循环为空，就已经创建了一个一个Node，那么第二次循环就不会为空了
+            //如果尾结点不为空，就把传进来的node节点的前驱节点指向尾结点
+            node.prev = t;
+            //cas原子性操作，把传进来的node节点设置为尾结点
+            if (compareAndSetTail(t, node)) &#123;
+                //把原来的尾结点的后驱节点指向传进来的node节点
+                t.next = node;
+                return t;
+            &#125;
+        &#125;
+    &#125;
+&#125;
+</code></pre>
+<p><strong>acquireQueued</strong></p>
+<p>现在通过<code>addWaiter</code>方法，已经把一个Node放到等待队列尾部了。跳回到调用<code>addWaiter</code>方法的<code>acquireQueued</code>方法。</p>
+<pre><code class="java">//在队列中的节点node通过acquireQueued()方法获取资源，忽略中断。
+final boolean acquireQueued(final Node node, int arg) &#123;
+    boolean failed = true;
+    try &#123;
+        boolean interrupted = false;
+        //自旋的操作，一个死循环
+        for (;;) &#123;
+            //获取传进来的node节点的前驱节点，赋值给p
+            final Node p = node.predecessor();
+            //如果p是头结点，node节点就是第二个节点，则再次去尝试获取资源
+            if (p == head &amp;&amp; tryAcquire(arg)) &#123;
+                //tryAcquire(arg)获取资源成功的话，则把node节点设置为头结点
+                setHead(node);
+                //把原来的头结点p的后驱节点设置为null，等待GC垃圾回收
+                p.next = null;
+                failed = false;
+                return interrupted;
+            &#125;
+            //如果p不是头结点，或者tryAcquire()获取资源失败，判断是否可以被park，也就是把线程阻塞起来
+            if (shouldParkAfterFailedAcquire(p, node) &amp;&amp;
+                parkAndCheckInterrupt())//&amp;&amp;前面如果返回true，将当前线程阻塞并检查是否被中断
+                //如果阻塞过程中被中断，则置interrupted标志位为true。
+                interrupted = true;
+        &#125;
+    &#125; finally &#123;
+        if (failed)
+            cancelAcquire(node);
+    &#125;
+&#125;
+</code></pre>
+<p>所以<strong>结点进入等待队列后，是调用park使它进入阻塞状态的。只有头结点的线程是处于活跃状态的</strong>。</p>
+<p>最后是selfInterrupt()方法，自我中断。</p>
+<pre><code class="java">static void selfInterrupt() &#123;
+    Thread.currentThread().interrupt();
+&#125;
+</code></pre>
+<h3 id="11-2-2-共享式"><a href="#11-2-2-共享式" class="headerlink" title="11.2.2 共享式"></a>11.2.2 共享式</h3><p>同时可以被多个线程获取，具体的资源个数可以通过参数指定。如Semaphore/CountDownLatch。</p>
+<p>AQS在独占模式下获取同步状态用<code>acquireShared()</code>方法：</p>
+<pre><code class="java">public final void acquireShared(int arg) &#123;
+    if (tryAcquireShared(arg) &lt; 0)
+        doAcquireShared(arg);
+&#125;
+</code></pre>
+<p>这段代码很简单，首先调用tryAcquireShared()方法，tryAcquireShared返回是一个int数值，当返回值大于等于0的时候，说明获得成功获取锁，方法结束，否则返回负数，表示获取同步状态失败，执行doAcquireShared方法。</p>
+<p><strong>tryAcquireShared</strong></p>
+<p>tryAcquireShared()方法是一个模板方法由子类去重写，具体如何获取同步资源由实现类去定义，AQS只是一个框架。</p>
+<p><strong>doAcquireShared</strong></p>
+<pre><code class="java">private void doAcquireShared(int arg) &#123;
+    //调用addWaiter()方法，把当前线程包装成Node，标志为共享式，插入到队列中
+    final Node node = addWaiter(Node.SHARED);
+    boolean failed = true;
+    try &#123;
+        boolean interrupted = false;
+        for (;;) &#123;
+            //获取当前节点node的前驱节点
+            final Node p = node.predecessor();
+            //前驱节点是否是头结点
+            if (p == head) &#123;
+                //如果前驱节点是头结点，则调用tryAcquireShared()获取同步资源
+                int r = tryAcquireShared(arg);
+                //r&gt;=0表示获取同步资源成功，只有获取成功，才会执行到return退出for循环
+                if (r &gt;= 0) &#123;
+                    //设置node为头结点
+                    setHeadAndPropagate(node, r);
+                    p.next = null; // help GC
+                    if (interrupted)
+                        selfInterrupt();
+                    failed = false;
+                    return;
+                &#125;
+            &#125;
+            //判断是否可以被park，跟独占式的逻辑一样返回true，则进行park操作，阻塞线程
+            if (shouldParkAfterFailedAcquire(p, node) &amp;&amp;
+                parkAndCheckInterrupt())
+                interrupted = true;
+        &#125;
+    &#125; finally &#123;
+        if (failed)
+            cancelAcquire(node);
+    &#125;
+&#125;
+</code></pre>
+<p>基本上跟独占式的逻辑差不多，不同的地方在于两点：</p>
+<ul>
+<li>入队的Node是标志为SHARED共享式的</li>
+<li>获取同步资源的方式是tryAcquireShared()方法。</li>
+</ul>
+<h2 id="11-3-AQS的模板模式"><a href="#11-3-AQS的模板模式" class="headerlink" title="11.3 AQS的模板模式"></a>11.3 AQS的模板模式</h2><p>AQS中有一些模板方法是需要子类来实现的：</p>
+<ul>
+<li><code>isHeldExclusively()</code>：该线程是否正在独占资源。只有用到condition才需要去实现它。</li>
+<li><code>tryAcquire(int)</code>：独占方式。尝试获取资源，成功则返回true，失败则返回false。</li>
+<li><code>tryRelease(int)</code>：独占方式。尝试释放资源，成功则返回true，失败则返回false。</li>
+<li><code>tryAcquireShared(int)</code>：共享方式。尝试获取资源。负数表示失败；0表示成功，但没有剩余可用资源；正数表示成功，且有剩余资源。</li>
+<li><code>tryReleaseShared(int)</code>：共享方式。尝试释放资源，如果释放后允许唤醒后续等待结点返回true，否则返回false。</li>
+</ul>
+<p>这些方法虽然都是<code>protected</code>方法，但是它们并没有在AQS具体实现，而是直接抛出异常。</p>
+<h2 id="11-4-ReentrantLock"><a href="#11-4-ReentrantLock" class="headerlink" title="11.4 ReentrantLock"></a>11.4 ReentrantLock</h2><p>ReentrantLock是一个经典的AQS使用案例。这是一个悲观锁，有两种模式，一种是公平锁，另一种是非公平锁。最后它是重入锁，也就是能够对共享资源重复加锁。</p>
+<p><img src="https://img-blog.csdnimg.cn/20201206223202433.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3llaG9uZ3poaTE5OTQ=,size_16,color_FFFFFF,t_70#pic_center"></p>
+<p>FairSync是公平锁的实现，NonfairSync则是非公平锁的实现。通过构造器传入的boolean值进行判断。</p>
+<pre><code class="java">public ReentrantLock(boolean fair) &#123;
+    //true则使用公平锁，false则使用非公平锁
+    sync = fair ? new FairSync() : new NonfairSync();
+&#125;
+//默认是非公平锁
+public ReentrantLock() &#123;
+    sync = new NonfairSync();
+&#125;
+</code></pre>
+<p>公平锁遵循<strong>FIFO</strong>（先进先出）原则，先到的线程会优先获取资源，后到的线程会进行排队等待，能保证每个线程都能拿到锁，不会存在有线程饿死的情况。</p>
+<p>非公平锁是则不遵守先进先出的原则，会出现有<strong>线程插队</strong>的情况，不能保证每个线程都能拿到锁，会存在有线程饿死的情况。</p>
+<h3 id="11-4-1-上锁"><a href="#11-4-1-上锁" class="headerlink" title="11.4.1 上锁"></a>11.4.1 上锁</h3><pre><code class="java">//用lock方法上锁
+public void lock() &#123;
+    //sync是非公平锁或公平锁
+    sync.lock();
+&#125;
+
+//sync中的lock方法
+//这里就是调用AQS的acquire()方法，获取同步资源
+final void lock() &#123;
+    //独占式同步方法，获取资源数为1
+    //acquire内部会调用tryAcquire方法
+    acquire(1);
+&#125;
+</code></pre>
+<p>具体的tryAcquire方法上面分析过，有公平锁和非公平锁两种实现方式。</p>
+<p><strong>公平锁</strong></p>
+<pre><code class="java">protected final boolean tryAcquire(int acquires) &#123;
+    //获取当前线程
+    final Thread current = Thread.currentThread();
+    //获取同步状态
+    int c = getState();
+    //判断同步状态是否为0
+    if (c == 0) &#123;
+        //关键在这里，公平锁会判断是否需要排队
+        if (!hasQueuedPredecessors() &amp;&amp;
+            //如果不需要排队，则直接cas操作更新同步状态为1
+            compareAndSetState(0, acquires)) &#123;
+            //设置占用锁的线程为当前线程
+            setExclusiveOwnerThread(current);
+            //返回true，表示上锁成功
+            return true;
+        &#125;
+    &#125;
+    //判断当前线程是否是拥有锁的线程，主要是可重入锁的逻辑
+    else if (current == getExclusiveOwnerThread()) &#123;
+        //如果是当前线程，则同步状态+1
+        int nextc = c + acquires;
+        if (nextc &lt; 0)
+            throw new Error(&quot;Maximum lock count exceeded&quot;);
+        //设置同步状态
+        setState(nextc);
+        return true;
+    &#125;
+    //以上情况都不是，则返回false，表示上锁失败。上锁失败根据AQS的框架设计，会入队排队
+    return false;
+&#125;
+</code></pre>
+<p><strong>非公平锁</strong></p>
+<p>关键的区别就在于尝试获取锁的时候，公平锁会判断是否需要排队再去更新同步状态，非公平锁是直接就更新同步，不判断是否需要排队。</p>
+<pre><code class="java">protected final boolean tryAcquire(int acquires) &#123;
+    return nonfairTryAcquire(acquires);
+&#125;
+//非公平式获取锁
+final boolean nonfairTryAcquire(int acquires) &#123;
+    //这段跟公平锁是一样的操作
+    final Thread current = Thread.currentThread();
+    int c = getState();
+    if (c == 0) &#123;
+        //关键在这里，不再判断是否需要排队，而是直接去更新同步状态，通俗点讲就是插队
+        if (compareAndSetState(0, acquires)) &#123;
+            //如果获取同步状态成功，则设置占用锁的线程为当前线程
+            setExclusiveOwnerThread(current);
+            //返回true表示获取锁成功
+            return true;
+        &#125;
+    &#125;
+    //以下逻辑跟公平锁的逻辑一样
+    else if (current == getExclusiveOwnerThread()) &#123;
+        int nextc = c + acquires;
+        if (nextc &lt; 0) // overflow
+            throw new Error(&quot;Maximum lock count exceeded&quot;);
+        setState(nextc);
+        return true;
+    &#125;
+    return false;
+&#125;
+</code></pre>
+<p>从性能上来说，公平锁的性能是比非公平锁要差的，因为<strong>公平锁要遵守FIFO(先进先出)的原则，这就会增加了上下文切换与等待线程的状态变换时间</strong>。</p>
+<p>但是非公平锁的缺点也是很明显的，因为允许插队，这就会存在有线程饿死的情况。</p>
+<h3 id="11-4-2-解锁"><a href="#11-4-2-解锁" class="headerlink" title="11.4.2 解锁"></a>11.4.2 解锁</h3><pre><code class="java">public void unlock() &#123;
+    //调用AQS中的release()方法
+    sync.release(1);
+&#125;
+
+public final boolean release(int arg) &#123;
+    //返回true表示该锁已经被释放一次，当前没有被任何线程持有
+    if (tryRelease(arg)) &#123;
+        //获取头结点h
+        Node h = head;
+        //判断头结点是否为null并且waitStatus不是初始化节点状态，解除线程挂起状态
+        if (h != null &amp;&amp; h.waitStatus != 0)
+            unparkSuccessor(h);
+        return true;
+    &#125;
+    return false;
+&#125;
+
+//tryRelease不需要区分公平锁和非公平锁
+protected final boolean tryRelease(int releases) &#123;
+    //减少可重入的次数
+    int c = getState() - releases;
+    //如果当前线程不是持有锁的线程，抛出异常
+    if (Thread.currentThread() != getExclusiveOwnerThread())
+        throw new IllegalMonitorStateException();
+    boolean free = false;
+    // 如果持有线程全部释放，将当前独占锁所有线程设置为null，并更新state
+    if (c == 0) &#123;
+        //状态为0，表示持有线程被全部释放，设置为true
+        free = true;
+        setExclusiveOwnerThread(null);
+    &#125;
+    setState(c);
+    return free;
+&#125;
+</code></pre>
+<h1 id="第十二章-线程池原理"><a href="#第十二章-线程池原理" class="headerlink" title="第十二章 线程池原理"></a>第十二章 线程池原理</h1><h2 id="12-1-为什么要有线程池技术"><a href="#12-1-为什么要有线程池技术" class="headerlink" title="12.1 为什么要有线程池技术"></a>12.1 为什么要有线程池技术</h2><p>如果服务端每次接受到一个任务，创建一个线程，然后执行的话，当有成千上万个任务递交给服务器的时候，就会创建数以万计的线程。这样必然导致操作系统会频繁地进行线程上下文切换，无故增加系统的负载。同时线程创建和消亡会浪费系统资源。</p>
+<p>线程池会预先创建若干数量的线程，不能由用户直接对线程的创建进行控制，在这个前提下重复使用固定或较为固定数目的线程来完成任务执行。这样，一方面消除了频繁创建和消亡线程的系统资源开销。另一方面，面对过量任务的提交能够平缓的劣化。</p>
+<h2 id="12-2-线程池的实现原理"><a href="#12-2-线程池的实现原理" class="headerlink" title="12.2 线程池的实现原理"></a>12.2 线程池的实现原理</h2><h3 id="12-2-1-线程池的创建"><a href="#12-2-1-线程池的创建" class="headerlink" title="12.2.1 线程池的创建"></a>12.2.1 线程池的创建</h3><p>我们可以用ThreadPoolExecutor来创建一个线程池。它有四种构造方法：</p>
+<pre><code class="java">// 五个参数的构造函数
+public ThreadPoolExecutor(int corePoolSize,
+                          int maximumPoolSize,
+                          long keepAliveTime,
+                          TimeUnit unit,
+                          BlockingQueue&lt;Runnable&gt; workQueue)
+
+// 六个参数的构造函数-1
+public ThreadPoolExecutor(int corePoolSize,
+                          int maximumPoolSize,
+                          long keepAliveTime,
+                          TimeUnit unit,
+                          BlockingQueue&lt;Runnable&gt; workQueue,
+                          ThreadFactory threadFactory)
+
+// 六个参数的构造函数-2
+public ThreadPoolExecutor(int corePoolSize,
+                          int maximumPoolSize,
+                          long keepAliveTime,
+                          TimeUnit unit,
+                          BlockingQueue&lt;Runnable&gt; workQueue,
+                          RejectedExecutionHandler handler)
+
+// 七个参数的构造函数
+public ThreadPoolExecutor(int corePoolSize,
+                          int maximumPoolSize,
+                          long keepAliveTime,
+                          TimeUnit unit,
+                          BlockingQueue&lt;Runnable&gt; workQueue,
+                          ThreadFactory threadFactory,
+                          RejectedExecutionHandler handler)
+</code></pre>
+<p>这里涉及到了多个参数：</p>
+<ul>
+<li><p><strong>int corePoolSize</strong>：该线程池中<strong>核心线程数最大值</strong></p>
+<p>线程池中有两类线程，核心线程和非核心线程。核心线程默认情况下会一直存在于线程池中，即使这个核心线程什么都不干（铁饭碗），而非核心线程如果长时间的闲置，就会被销毁（临时工）。</p>
+</li>
+<li><p><strong>int maximumPoolSize</strong>：该线程池中<strong>线程总数最大值</strong>，也就是核心线程数+非核心线程数</p>
+</li>
+<li><p><strong>long keepAliveTime</strong>：<strong>非核心线程闲置超时时长</strong></p>
+</li>
+<li><p><strong>TimeUnit unit</strong>：keepAliveTime的单位</p>
+<p>NANOSECONDS ： 1微毫秒 = 1微秒 / 1000 ；MICROSECONDS ： 1微秒 = 1毫秒 / 1000 ；MILLISECONDS ： 1毫秒 = 1秒 /1000；SECONDS ： 秒； MINUTES ： 分 ；HOURS ： 小时 ；DAYS ： 天</p>
+</li>
+<li><p><strong>BlockingQueue workQueue</strong>：阻塞队列，维护着<strong>等待执行的Runnable任务对象</strong></p>
+<p>常用的几个阻塞队列：</p>
+<ol>
+<li><p><strong>LinkedBlockingQueue</strong></p>
+<p>链式阻塞队列，底层数据结构是链表，默认大小是<code>Integer.MAX_VALUE</code>，也可以指定大小。按照FIFO原则对元素进行排序。</p>
+</li>
+<li><p><strong>ArrayBlockingQueue</strong></p>
+<p>数组阻塞队列，底层数据结构是数组，需要指定队列的大小。按照FIFO原则对元素进行排序，吞吐量低于链式。</p>
+</li>
+<li><p><strong>SynchronousQueue</strong></p>
+<p>同步队列，不存储元素的阻塞队列。每个put操作必须等待一个take操作，反之亦然。</p>
+</li>
+<li><p><strong>DelayQueue</strong></p>
+<p>延迟队列，该队列中的元素只有当其指定的延迟时间到了，才能够从队列中获取到该元素 。</p>
+</li>
+</ol>
+</li>
+</ul>
+<p>以上是五个必要的参数，还有两个非必要参数</p>
+<ul>
+<li><p><strong>ThreadFactory threadFactory</strong></p>
+<p>创建线程的工厂 ，用于批量创建线程，统一在创建线程时设置一些参数，如是否守护线程、线程的优先级等。可以给每个创建出来的线程设置有意义的明明。如果不指定，会新建一个默认的线程工厂。</p>
+</li>
+<li><p><strong>RejectedExecutionHandler handler</strong></p>
+<p><strong>拒绝处理策略</strong>，线程数量大于最大线程数就会采用拒绝处理策略，四种拒绝处理的策略为 ：</p>
+<ol>
+<li><strong>ThreadPoolExecutor.AbortPolicy</strong>：<strong>默认拒绝处理策略</strong>，丢弃任务并抛出RejectedExecutionException异常。</li>
+<li><strong>ThreadPoolExecutor.DiscardPolicy</strong>：丢弃新来的任务，但是不抛出异常。</li>
+<li><strong>ThreadPoolExecutor.DiscardOldestPolicy</strong>：丢弃队列头部（最旧的）的任务，然后重新尝试执行程序（如果再次失败，重复此过程）。</li>
+<li><strong>ThreadPoolExecutor.CallerRunsPolicy</strong>：由调用线程处理该任务。</li>
+</ol>
+</li>
+</ul>
+<h3 id="12-2-2-线程池状态"><a href="#12-2-2-线程池状态" class="headerlink" title="12.2.2 线程池状态"></a>12.2.2 线程池状态</h3><p>线程池本身需要一个调度线程，这个线程用来管控线程池里的各种事务，例如创建线程、销毁线程、任务队列管理、线程队列管理等。所以线程池也有自己的状态。</p>
+<p><code>ThreadPoolExecutor</code>类中定义了一个<code>volatile int runState</code>来表示线程池的状态 ，分别为<strong>RUNNING、SHURDOWN、STOP、TIDYING 、TERMINATED</strong>。</p>
+<ul>
+<li>线程池创建后处于<strong>RUNNING</strong>状态。</li>
+<li>调用shutdown()方法后处于<strong>SHUTDOWN</strong>状态，线程池不能接受新的任务，清除一些空闲worker,会等待阻塞队列的任务完成。</li>
+<li>调用shutdownNow()方法后处于<strong>STOP</strong>状态，线程池不能接受新的任务，中断所有线程，阻塞队列中没有被执行的任务全部丢弃。此时，poolsize=0，阻塞队列的size也为0。</li>
+<li>当所有的任务已终止，ctl里记录的”任务数量”为0时，线程池会变为<strong>TIDYING</strong>状态。接着会执行terminated()函数。ctl是一个<strong>控制状态的属性</strong>，AtomicInteger类型的变量。</li>
+<li>线程池处在TIDYING状态时，<strong>执行完terminated()方法之后</strong>，就会由 <strong>TIDYING -&gt; TERMINATED</strong>， 线程池被设置为TERMINATED状态。</li>
+</ul>
+<h3 id="12-2-3-线程池任务处理流程"><a href="#12-2-3-线程池任务处理流程" class="headerlink" title="12.2.3 线程池任务处理流程"></a>12.2.3 线程池任务处理流程</h3><p>处理任务的核心方法是<code>execute</code>：</p>
+<pre><code class="java">// JDK 1.8 
+public void execute(Runnable command) &#123;
+    if (command == null)
+        throw new NullPointerException();   
+    int c = ctl.get();
+    // 1.当前线程数小于corePoolSize,则调用addWorker创建核心线程执行任务
+    if (workerCountOf(c) &lt; corePoolSize) &#123;
+        //线程创建成功，直接返回
+       if (addWorker(command, true))
+           return;
+       c = ctl.get();
+    &#125;
+    // 2.如果不小于corePoolSize或线程创建不成功，则将任务添加到workQueue队列。
+    if (isRunning(c) &amp;&amp; workQueue.offer(command)) &#123;
+        //重新检查
+        int recheck = ctl.get();
+        // 2.1 如果isRunning返回false(状态检查)，则remove这个任务，然后执行拒绝策略。
+        if (! isRunning(recheck) &amp;&amp; remove(command))
+            reject(command);
+            // 2.2 线程池处于running状态，但是没有线程，则创建线程
+        else if (workerCountOf(recheck) == 0)
+            addWorker(null, false);
+    &#125;
+    // 3.如果放入workQueue失败，则创建非核心线程执行任务，
+    // 如果这时创建非核心线程失败(当前线程总数不小于maximumPoolSize时)，就会执行拒绝策略。
+    else if (!addWorker(command, false))
+         reject(command);
+&#125;
+</code></pre>
+<p>这里二次检查的原因是：在多线程环境下，线程池的状态时随时变化的。有可能刚获取完线程池状态后就变了。判断是否将<code>command</code>加入<code>workqueue</code>是线程池之前的状态。倘若没有二次检查，万一线程池处于非<strong>RUNNING</strong>状态（在多线程环境下很有可能发生），那么<code>command</code>永远不会执行。</p>
+<p>整体处理流程如下：</p>
+<ol>
+<li>线程总数量 &lt; corePoolSize，无论线程是否空闲，都会新建一个核心线程执行任务（让核心线程数量快速达到corePoolSize，在核心线程数量 &lt; corePoolSize时）。<strong>注意，这一步需要获得全局锁。</strong></li>
+<li>线程总数量 &gt;= corePoolSize时，新来的线程任务会进入任务队列中等待，然后空闲的核心线程会依次去缓存队列中取任务来执行（体现了<strong>线程复用</strong>）。 </li>
+<li>当缓存队列满了，说明这个时候任务已经多到爆棚，需要一些“临时工”来执行这些任务了。于是会创建非核心线程去执行这个任务。<strong>注意，这一步需要获得全局锁。</strong></li>
+<li>缓存队列满了， 且总线程数达到了<code>maximumPoolSize</code>，则会采取上面提到的拒绝策略进行处理</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/chenxiao19920206/RedSpiderArticlePhotos/master/java-base/multi-thread/%E7%BA%BF%E7%A8%8B%E6%B1%A0%E4%B8%BB%E8%A6%81%E7%9A%84%E5%A4%84%E7%90%86%E6%B5%81%E7%A8%8B.png"></p>
+<h3 id="12-2-4-线程复用的实现"><a href="#12-2-4-线程复用的实现" class="headerlink" title="12.2.4 线程复用的实现"></a>12.2.4 线程复用的实现</h3><p><code>ThreadPoolExecutor</code>在用<code>addWorker</code>创建线程时，会将线程封装成<strong>工作线程worker</strong>,并放入<strong>工作线程组</strong>中，然后这个worker反复从阻塞队列中拿任务去执行。</p>
+<pre><code class="java">// ThreadPoolExecutor.addWorker方法源码
+private boolean addWorker(Runnable firstTask, boolean core) &#123;
+    retry:
+    for (;;) &#123;
+        int c = ctl.get();
+        int rs = runStateOf(c);
+
+        // Check if queue empty only if necessary.
+        if (rs &gt;= SHUTDOWN &amp;&amp;
+            ! (rs == SHUTDOWN &amp;&amp;
+               firstTask == null &amp;&amp;
+               ! workQueue.isEmpty()))
+            return false;
+
+        for (;;) &#123;
+            int wc = workerCountOf(c);
+            if (wc &gt;= CAPACITY ||
+                // 1.如果core是ture,证明需要创建的线程为核心线程，则先判断当前线程是否大于核心线程
+                // 如果core是false,证明需要创建的是非核心线程，则先判断当前线程数是否大于总线程数
+                // 如果不小于，则返回false
+                wc &gt;= (core ? corePoolSize : maximumPoolSize))
+                return false;
+            //用CAS操作修改增加worker数量
+            //如果CAS操作由于workerCount被修改不成功，就要继续内循环
+            if (compareAndIncrementWorkerCount(c))
+                break retry;
+            
+            c = ctl.get();  // Re-read ctl
+            //如果线程池的状态发生了变化，就要继续循环，重新判断处理
+            if (runStateOf(c) != rs)
+                continue retry;
+            
+        &#125;
+    &#125;
+    
+    //走到这里代表现在已经对于能否创建worker的基本环境条件判断完毕
+    //真正的进行到创建环节
+    
+    boolean workerStarted = false;
+    boolean workerAdded = false;
+    Worker w = null;
+    try &#123;
+        // 1.创建一个worker对象
+        w = new Worker(firstTask);
+        // 2.实例化一个Thread对象
+        final Thread t = w.thread;
+        if (t != null) &#123;
+            // 3.线程池全局锁
+            final ReentrantLock mainLock = this.mainLock;
+            mainLock.lock();
+            try &#123;
+                // 重新检查线程池的状态
+                // Back out on ThreadFactory failure or if
+                // shut down before lock acquired.
+                int rs = runStateOf(ctl.get());
+
+                if (rs &lt; SHUTDOWN ||
+                    (rs == SHUTDOWN &amp;&amp; firstTask == null)) &#123;
+                    if (t.isAlive()) // precheck that t is startable
+                        throw new IllegalThreadStateException();
+                    workers.add(w);
+                    int s = workers.size();
+                    if (s &gt; largestPoolSize)
+                        largestPoolSize = s;
+                    workerAdded = true;
+                &#125;
+            &#125; finally &#123;
+                //一定要关锁
+                mainLock.unlock();
+            &#125;
+            //true代表线程创建成功了
+            if (workerAdded) &#123;
+                // 4.启动这个线程
+                t.start();
+                workerStarted = true;
+            &#125;
+        &#125;
+    &#125; finally &#123;
+        if (! workerStarted)
+            addWorkerFailed(w);
+    &#125;
+    return workerStarted;
+&#125;
+</code></pre>
+<h2 id="12-3-四种常见的线程池"><a href="#12-3-四种常见的线程池" class="headerlink" title="12.3 四种常见的线程池"></a>12.3 四种常见的线程池</h2><p><code>Executors</code>类中提供的几个静态方法来创建线程池。</p>
+<h3 id="12-3-1-FixedThreadPool"><a href="#12-3-1-FixedThreadPool" class="headerlink" title="12.3.1 FixedThreadPool"></a>12.3.1 FixedThreadPool</h3><pre><code class="java">public static ExecutorService newFixedThreadPool(int nThreads) &#123;
+        return new ThreadPoolExecutor(nThreads, nThreads,
+                                      0L, TimeUnit.MILLISECONDS,
+                                      new LinkedBlockingQueue&lt;Runnable&gt;());
+&#125;
+</code></pre>
+<p>核心线程数量和总线程数量相等，都是传入的参数nThreads，所以只能创建核心线程，不能创建非核心线程。</p>
+<p>因为LinkedBlockingQueue的默认大小是Integer.MAX_VALUE，故如果核心线程空闲，则交给核心线程处理；如果核心线程不空闲，则入列等待，直到核心线程空闲。</p>
+<p>这里keepAliveTime设置为0L，也就是**当线程池中的线程数大于<code>corePoolSize</code>**， 多余的空闲线程会被立即终止。</p>
+<p>FixedThreadPool的<code>execute()</code>方法运行过程步骤如下：</p>
+<ol>
+<li>如果当前运行的线程数少于corePoolSize，就创建新线程来执行任务</li>
+<li>在线程池中运行的线程数等于crePoolSize后，将任务加入阻塞队列中</li>
+<li>核心线程完成任务后，会在循环中反复从阻塞队列中取任务来执行</li>
+</ol>
+<p>FixedThreadPool因为阻塞队列可以很大（最大为Integer最大值），所以几乎不会触发拒绝策略。也因为这是个无界的队列，所以线程池里的线程数永远不会大于<code>corePoolSize</code>，所有线程池中的线程都会一直存在，直到显式的执行 <code>ExecutorService.shutdown()</code> 关闭。</p>
+<h3 id="12-3-2-SingleThreadExecutor"><a href="#12-3-2-SingleThreadExecutor" class="headerlink" title="12.3.2 SingleThreadExecutor"></a>12.3.2 SingleThreadExecutor</h3><pre><code class="java">public static ExecutorService newSingleThreadExecutor() &#123;
+    return new FinalizableDelegatedExecutorService
+        (new ThreadPoolExecutor(1, 1,
+                                0L, TimeUnit.MILLISECONDS,
+                                new LinkedBlockingQueue&lt;Runnable&gt;()));
+&#125;
+</code></pre>
+<p>有且仅有一个核心线程（ corePoolSize == maximumPoolSize=1），使用了LinkedBlockingQueue（容量很大），<strong>不会创建非核心线程</strong>。所有任务按照<strong>先来先执行</strong>的顺序执行。如果这个唯一的线程不空闲，那么新来的任务会存储在任务队列里等待执行。</p>
+<h3 id="12-3-3-CachedThreadPool"><a href="#12-3-3-CachedThreadPool" class="headerlink" title="12.3.3 CachedThreadPool"></a>12.3.3 CachedThreadPool</h3><pre><code class="java">public static ExecutorService newCachedThreadPool() &#123;
+    return new ThreadPoolExecutor(0, Integer.MAX_VALUE,
+                                  60L, TimeUnit.SECONDS,
+                                  new SynchronousQueue&lt;Runnable&gt;());
+&#125;
+</code></pre>
+<p>这是一个不会创建核心线程的，容量很大的线程池。线程池中的空闲线程等待新任务的最长时间为60秒，超过60秒就会被终止。</p>
+<p>SynchronousQueue是一个没有容量的队列，每个插入操作必须等待另一个线程对应移除操作。这代表，如果主线程提交任务的速度高于线程池中非核心线程处理任务的速度，该线程池就会不断创建新的线程。极端情况下，会一直耗尽CPU和内存资源。</p>
+<p>当需要执行很多<strong>短时间</strong>的任务时，CacheThreadPool的线程复用率比较高， 会显著的<strong>提高性能</strong>。而且线程60s后会回收，意味着即使没有任务进来，CacheThreadPool并不会占用很多资源。</p>
+<h3 id="12-3-4-ScheduledThreadPool"><a href="#12-3-4-ScheduledThreadPool" class="headerlink" title="12.3.4 ScheduledThreadPool"></a>12.3.4 ScheduledThreadPool</h3><p>创建一个定长线程池，支持定时及周期性任务执行。</p>
+<pre><code class="java">public static ScheduledExecutorService newScheduledThreadPool(int corePoolSize) &#123;
+    return new ScheduledThreadPoolExecutor(corePoolSize);
+&#125;
+
+//ScheduledThreadPoolExecutor():
+public ScheduledThreadPoolExecutor(int corePoolSize) &#123;
+    super(corePoolSize, Integer.MAX_VALUE,
+          DEFAULT_KEEPALIVE_MILLIS, MILLISECONDS,
+          new DelayedWorkQueue());
+&#125;
+</code></pre>
+<p>DelayedWorkQueue是一个无界队列。</p>
+<p>前面介绍过DelayedQueue，该队列中的元素只有当其指定的延迟时间到了，才能够从队列中获取到该元素 。</p>
+<p>ScheduledThreadPoolExecutor会把待调度的任务（ScheduledFutureTask）放到延迟队列中，ScheduledFutureTask包含三个成员变量：</p>
+<ul>
+<li>long型成员变量time，表示这个任务将要被执行的具体时间</li>
+<li>long型成员变量sequenceNumber，一个序号</li>
+<li>long型成员变量period，表示任务执行的间隔周期</li>
+</ul>
+<p>这个线程池用于在给定的延迟之后运行任务，或者定期执行任务。</p>
+<p>每次线程从延迟队列中获取到期的任务（ScheduledFutureTask的time大于当前时间），执行后，把time变量修改为下次将要被执行的时间，然后重新放回延迟队列中。</p>
 
       
 
@@ -1396,7 +2046,7 @@ boolean compareAndSwapLong(Object o, long offset,long expected,long x);
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E4%B8%80%E7%AB%A0-%E8%BF%9B%E7%A8%8B%E4%B8%8E%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-number">1.</span> <span class="toc-text">第一章 进程与线程的基本概念</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-%E7%BA%BF%E7%A8%8B%E4%B8%8E%E8%BF%9B%E7%A8%8B"><span class="toc-number">1.1.</span> <span class="toc-text">1.1 线程与进程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%87%E6%8D%A2"><span class="toc-number">1.2.</span> <span class="toc-text">1.2 上下文切换</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%85%A5%E9%97%A8%E7%B1%BB%E5%92%8C%E6%8E%A5%E5%8F%A3"><span class="toc-number">2.</span> <span class="toc-text">第二章 多线程入门类和接口</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1-Thread%E7%B1%BB%E5%92%8CRunnable%E6%8E%A5%E5%8F%A3"><span class="toc-number">2.1.</span> <span class="toc-text">2.1 Thread类和Runnable接口</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-1-%E7%BB%A7%E6%89%BFThread%E7%B1%BB"><span class="toc-number">2.1.1.</span> <span class="toc-text">2.1.1 继承Thread类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-2-%E5%AE%9E%E7%8E%B0Runnable%E6%8E%A5%E5%8F%A3"><span class="toc-number">2.1.2.</span> <span class="toc-text">2.1.2 实现Runnable接口</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-3-Thread%E7%B1%BB%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95%E6%BA%90%E7%A0%81"><span class="toc-number">2.1.3.</span> <span class="toc-text">2.1.3 Thread类构造方法源码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-4-Thread%E7%B1%BB%E7%9A%84%E5%87%A0%E4%B8%AA%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95"><span class="toc-number">2.1.4.</span> <span class="toc-text">2.1.4 Thread类的几个常用方法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2-Callable%E3%80%81Future%E4%B8%8EFutureTask"><span class="toc-number">2.2.</span> <span class="toc-text">2.2 Callable、Future与FutureTask</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-1-Callable%E6%8E%A5%E5%8F%A3"><span class="toc-number">2.2.1.</span> <span class="toc-text">2.2.1 Callable接口</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-2-Future%E6%8E%A5%E5%8F%A3"><span class="toc-number">2.2.2.</span> <span class="toc-text">2.2.2 Future接口</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-3-FutureTask%E6%8E%A5%E5%8F%A3"><span class="toc-number">2.2.3.</span> <span class="toc-text">2.2.3 FutureTask接口</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-4-FutureTask%E7%9A%84%E5%87%A0%E4%B8%AA%E7%8A%B6%E6%80%81"><span class="toc-number">2.2.4.</span> <span class="toc-text">2.2.4 FutureTask的几个状态</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E7%AB%A0-%E7%BA%BF%E7%A8%8B%E7%BB%84%E5%92%8C%E7%BA%BF%E7%A8%8B%E4%BC%98%E5%85%88%E7%BA%A7"><span class="toc-number">3.</span> <span class="toc-text">第三章 线程组和线程优先级</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#3-1-%E7%BA%BF%E7%A8%8B%E7%BB%84%EF%BC%88ThreadGroup%EF%BC%89"><span class="toc-number">3.1.</span> <span class="toc-text">3.1 线程组（ThreadGroup）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-2-%E7%BA%BF%E7%A8%8B%E7%9A%84%E4%BC%98%E5%85%88%E7%BA%A7"><span class="toc-number">3.2.</span> <span class="toc-text">3.2 线程的优先级</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-3-%E5%AE%88%E6%8A%A4%E7%BA%BF%E7%A8%8B"><span class="toc-number">3.3.</span> <span class="toc-text">3.3 守护线程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-4-%E7%BA%BF%E7%A8%8B%E7%BB%84%E7%9A%84%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95%E5%8F%8A%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="toc-number">3.4.</span> <span class="toc-text">3.4 线程组的常用方法及数据结构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-1-%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95"><span class="toc-number">3.4.1.</span> <span class="toc-text">3.4.1 常用方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-2-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="toc-number">3.4.2.</span> <span class="toc-text">3.4.2 数据结构</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E5%9B%9B%E7%AB%A0-Java%E7%BA%BF%E7%A8%8B%E7%9A%84%E7%8A%B6%E6%80%81%E5%8F%8A%E4%B8%BB%E8%A6%81%E8%BD%AC%E5%8C%96%E6%96%B9%E6%B3%95"><span class="toc-number">4.</span> <span class="toc-text">第四章 Java线程的状态及主要转化方法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#4-1-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B8%AD%E7%9A%84%E7%BA%BF%E7%A8%8B%E7%8A%B6%E6%80%81"><span class="toc-number">4.1.</span> <span class="toc-text">4.1 操作系统中的线程状态</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-2-Java%E7%BA%BF%E7%A8%8B%E7%8A%B6%E6%80%81"><span class="toc-number">4.2.</span> <span class="toc-text">4.2 Java线程状态</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-1-NEW"><span class="toc-number">4.2.1.</span> <span class="toc-text">4.2.1 NEW</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-2-RUNNABLE"><span class="toc-number">4.2.2.</span> <span class="toc-text">4.2.2 RUNNABLE</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-3-BLOCKED"><span class="toc-number">4.2.3.</span> <span class="toc-text">4.2.3 BLOCKED</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-4-WAITING"><span class="toc-number">4.2.4.</span> <span class="toc-text">4.2.4 WAITING</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-5-TIMED-WAITING"><span class="toc-number">4.2.5.</span> <span class="toc-text">4.2.5 TIMED_WAITING</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-6-TERMINATED"><span class="toc-number">4.2.6.</span> <span class="toc-text">4.2.6 TERMINATED</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-3-%E7%BA%BF%E7%A8%8B%E7%8A%B6%E6%80%81%E8%BD%AC%E6%8D%A2"><span class="toc-number">4.3.</span> <span class="toc-text">4.3 线程状态转换</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-1-BLOCKED%E4%B8%8ERUNNABLE%E7%8A%B6%E6%80%81%E7%9A%84%E8%BD%AC%E6%8D%A2"><span class="toc-number">4.3.1.</span> <span class="toc-text">4.3.1 BLOCKED与RUNNABLE状态的转换</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-2-WAITING%E7%8A%B6%E6%80%81%E4%B8%8ERUNNABLE%E7%8A%B6%E6%80%81%E7%9A%84%E8%BD%AC%E6%8D%A2"><span class="toc-number">4.3.2.</span> <span class="toc-text">4.3.2 WAITING状态与RUNNABLE状态的转换</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-3-%E7%BA%BF%E7%A8%8B%E4%B8%AD%E6%96%AD"><span class="toc-number">4.3.3.</span> <span class="toc-text">4.3.3 线程中断</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E4%BA%94%E7%AB%A0-Java%E7%BA%BF%E7%A8%8B%E9%97%B4%E7%9A%84%E9%80%9A%E4%BF%A1"><span class="toc-number">5.</span> <span class="toc-text">第五章 Java线程间的通信</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#5-1-%E9%94%81%E4%B8%8E%E5%90%8C%E6%AD%A5"><span class="toc-number">5.1.</span> <span class="toc-text">5.1 锁与同步</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-2-%E7%AD%89%E5%BE%85-%E9%80%9A%E7%9F%A5%E6%9C%BA%E5%88%B6"><span class="toc-number">5.2.</span> <span class="toc-text">5.2 等待&#x2F;通知机制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-3-%E4%BF%A1%E5%8F%B7%E9%87%8F"><span class="toc-number">5.3.</span> <span class="toc-text">5.3 信号量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-4-%E7%AE%A1%E9%81%93"><span class="toc-number">5.4.</span> <span class="toc-text">5.4 管道</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-5-%E5%85%B6%E4%BB%96%E9%80%9A%E4%BF%A1%E7%9B%B8%E5%85%B3"><span class="toc-number">5.5.</span> <span class="toc-text">5.5 其他通信相关</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-5-1-join%E6%96%B9%E6%B3%95"><span class="toc-number">5.5.1.</span> <span class="toc-text">5.5.1 join方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-5-2-sleep%E6%96%B9%E6%B3%95"><span class="toc-number">5.5.2.</span> <span class="toc-text">5.5.2 sleep方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-5-3-ThreadLocal%E7%B1%BB"><span class="toc-number">5.5.3.</span> <span class="toc-text">5.5.3 ThreadLocal类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-5-4-InheritableThreadLocal"><span class="toc-number">5.5.4.</span> <span class="toc-text">5.5.4 InheritableThreadLocal</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E5%85%AD%E7%AB%A0-Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86"><span class="toc-number">6.</span> <span class="toc-text">第六章 Java内存模型基础知识</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#6-1-%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E6%A8%A1%E5%9E%8B"><span class="toc-number">6.1.</span> <span class="toc-text">6.1 并发编程模型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-2-Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E7%9A%84%E6%8A%BD%E8%B1%A1%E7%BB%93%E6%9E%84"><span class="toc-number">6.2.</span> <span class="toc-text">6.2 Java内存模型的抽象结构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#6-2-1-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA"><span class="toc-number">6.2.1.</span> <span class="toc-text">6.2.1 运行时数据区</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-2-2-%E7%A1%AC%E4%BB%B6%E5%86%85%E5%AD%98%E6%9E%B6%E6%9E%84"><span class="toc-number">6.2.2.</span> <span class="toc-text">6.2.2 硬件内存架构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-2-3-Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%EF%BC%88JMM%EF%BC%89"><span class="toc-number">6.2.3.</span> <span class="toc-text">6.2.3 Java内存模型（JMM）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-2-4-JMM%E4%B8%8EJava%E5%86%85%E5%AD%98%E5%8C%BA%E5%9F%9F%E5%88%92%E5%88%86"><span class="toc-number">6.2.4.</span> <span class="toc-text">6.2.4 JMM与Java内存区域划分</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-3-%E9%A1%BA%E5%BA%8F%E4%B8%80%E8%87%B4%E6%80%A7"><span class="toc-number">6.3.</span> <span class="toc-text">6.3 顺序一致性</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#6-3-1-%E6%95%B0%E6%8D%AE%E7%AB%9E%E4%BA%89%E5%92%8C%E9%A1%BA%E5%BA%8F%E4%B8%80%E8%87%B4%E6%80%A7"><span class="toc-number">6.3.1.</span> <span class="toc-text">6.3.1 数据竞争和顺序一致性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-3-2-%E9%A1%BA%E5%BA%8F%E4%B8%80%E8%87%B4%E6%80%A7%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B"><span class="toc-number">6.3.2.</span> <span class="toc-text">6.3.2 顺序一致性内存模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-3-3-%E5%90%8C%E6%AD%A5%E7%A8%8B%E5%BA%8F%E7%9A%84%E9%A1%BA%E5%BA%8F%E4%B8%80%E8%87%B4%E6%80%A7"><span class="toc-number">6.3.3.</span> <span class="toc-text">6.3.3 同步程序的顺序一致性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-3-4-%E6%9C%AA%E5%90%8C%E6%AD%A5%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%89%A7%E8%A1%8C%E7%89%B9%E6%80%A7"><span class="toc-number">6.3.4.</span> <span class="toc-text">6.3.4 未同步程序的执行特性</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E4%B8%83%E7%AB%A0-%E9%87%8D%E6%8E%92%E5%BA%8F"><span class="toc-number">7.</span> <span class="toc-text">第七章 重排序</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#7-1-%E9%87%8D%E6%8E%92%E5%BA%8F%E5%A6%82%E4%BD%95%E6%8F%90%E9%AB%98%E6%80%A7%E8%83%BD"><span class="toc-number">7.1.</span> <span class="toc-text">7.1 重排序如何提高性能</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-2-%E9%87%8D%E6%8E%92%E7%9A%84%E4%B8%89%E7%A7%8D%E7%B1%BB%E5%9E%8B"><span class="toc-number">7.2.</span> <span class="toc-text">7.2 重排的三种类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-3-%E9%87%8D%E6%8E%92%E5%BA%8F%E9%81%B5%E5%BE%AA%E5%87%86%E5%88%99"><span class="toc-number">7.3.</span> <span class="toc-text">7.3 重排序遵循准则</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#7-3-1-%E6%95%B0%E6%8D%AE%E4%BE%9D%E8%B5%96%E6%80%A7"><span class="toc-number">7.3.1.</span> <span class="toc-text">7.3.1 数据依赖性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-3-2-as-if-serial%E8%AF%AD%E4%B9%89"><span class="toc-number">7.3.2.</span> <span class="toc-text">7.3.2 as-if-serial语义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-3-3-happens-before%E8%A7%84%E5%88%99"><span class="toc-number">7.3.3.</span> <span class="toc-text">7.3.3 happens-before规则</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-3-4-%E5%AF%B9%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%A8%8B%E5%BA%8F%E7%9A%84%E5%BD%B1%E5%93%8D"><span class="toc-number">7.3.4.</span> <span class="toc-text">7.3.4 对多线程程序的影响</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E5%85%AB%E7%AB%A0-volatile"><span class="toc-number">8.</span> <span class="toc-text">第八章 volatile</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#8-1-volatile%E7%89%B9%E6%80%A7"><span class="toc-number">8.1.</span> <span class="toc-text">8.1 volatile特性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-2-volatile%E5%86%99-%E8%AF%BB%E7%9A%84%E5%86%85%E5%AD%98%E8%AF%AD%E4%B9%89"><span class="toc-number">8.2.</span> <span class="toc-text">8.2 volatile写-读的内存语义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-3-volatile%E5%86%99-%E8%AF%BB%E5%BB%BA%E7%AB%8B%E7%9A%84happens-before%E5%85%B3%E7%B3%BB"><span class="toc-number">8.3.</span> <span class="toc-text">8.3 volatile写-读建立的happens-before关系</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-4-volatile%E7%9A%84%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86"><span class="toc-number">8.4.</span> <span class="toc-text">8.4 volatile的实现原理</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E4%B9%9D%E7%AB%A0-synchronized%E4%B8%8E%E9%94%81"><span class="toc-number">9.</span> <span class="toc-text">第九章 synchronized与锁</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#9-1-synchronized%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86%E4%B8%8E%E5%BA%94%E7%94%A8"><span class="toc-number">9.1.</span> <span class="toc-text">9.1 synchronized实现原理与应用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-2-%E5%87%A0%E7%A7%8D%E9%94%81"><span class="toc-number">9.2.</span> <span class="toc-text">9.2 几种锁</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#9-2-1-Java%E5%AF%B9%E8%B1%A1%E5%A4%B4"><span class="toc-number">9.2.1.</span> <span class="toc-text">9.2.1 Java对象头</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9-2-2-%E5%81%8F%E5%90%91%E9%94%81"><span class="toc-number">9.2.2.</span> <span class="toc-text">9.2.2 偏向锁</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9-2-3-%E8%BD%BB%E9%87%8F%E7%BA%A7%E9%94%81"><span class="toc-number">9.2.3.</span> <span class="toc-text">9.2.3 轻量级锁</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9-2-4-%E9%87%8D%E9%87%8F%E7%BA%A7%E9%94%81"><span class="toc-number">9.2.4.</span> <span class="toc-text">9.2.4 重量级锁</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9-2-5-%E5%90%84%E7%A7%8D%E9%94%81%E7%9A%84%E4%BC%98%E7%BC%BA%E7%82%B9%E5%AF%B9%E6%AF%94"><span class="toc-number">9.2.5.</span> <span class="toc-text">9.2.5 各种锁的优缺点对比</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9-2-6-%E4%B9%90%E8%A7%82%E9%94%81%E4%B8%8E%E6%82%B2%E8%A7%82%E9%94%81"><span class="toc-number">9.2.6.</span> <span class="toc-text">9.2.6 乐观锁与悲观锁</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E5%8D%81%E7%AB%A0-CAS%E5%92%8C%E5%8E%9F%E5%AD%90%E6%93%8D%E4%BD%9C"><span class="toc-number">10.</span> <span class="toc-text">第十章 CAS和原子操作</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#10-1-CAS%E7%9A%84%E6%A6%82%E5%BF%B5"><span class="toc-number">10.1.</span> <span class="toc-text">10.1 CAS的概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-2-CAS%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86-Unsafe%E7%B1%BB"><span class="toc-number">10.2.</span> <span class="toc-text">10.2 CAS实现原理-Unsafe类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-3-%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E5%8E%9F%E5%AD%90%E6%93%8D%E4%BD%9C"><span class="toc-number">10.3.</span> <span class="toc-text">10.3 如何实现原子操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-4-CAS%E5%AE%9E%E7%8E%B0%E5%8E%9F%E5%AD%90%E6%93%8D%E4%BD%9C%E7%9A%84%E4%B8%89%E5%A4%A7%E9%97%AE%E9%A2%98"><span class="toc-number">10.4.</span> <span class="toc-text">10.4 CAS实现原子操作的三大问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#10-4-1-ABA%E9%97%AE%E9%A2%98"><span class="toc-number">10.4.1.</span> <span class="toc-text">10.4.1 ABA问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#10-4-2-%E5%BE%AA%E7%8E%AF%E6%97%B6%E9%97%B4%E9%95%BF-%E5%BC%80%E9%94%80%E5%A4%A7"><span class="toc-number">10.4.2.</span> <span class="toc-text">10.4.2 循环时间长 开销大</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#10-4-3-%E5%8F%AA%E8%83%BD%E4%BF%9D%E8%AF%81%E4%B8%80%E4%B8%AA%E5%85%B1%E4%BA%AB%E5%8F%98%E9%87%8F%E7%9A%84%E5%8E%9F%E5%AD%90%E6%93%8D%E4%BD%9C"><span class="toc-number">10.4.3.</span> <span class="toc-text">10.4.3 只能保证一个共享变量的原子操作</span></a></li></ol></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E4%B8%80%E7%AB%A0-%E8%BF%9B%E7%A8%8B%E4%B8%8E%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-number">1.</span> <span class="toc-text">第一章 进程与线程的基本概念</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-%E7%BA%BF%E7%A8%8B%E4%B8%8E%E8%BF%9B%E7%A8%8B"><span class="toc-number">1.1.</span> <span class="toc-text">1.1 线程与进程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%87%E6%8D%A2"><span class="toc-number">1.2.</span> <span class="toc-text">1.2 上下文切换</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%85%A5%E9%97%A8%E7%B1%BB%E5%92%8C%E6%8E%A5%E5%8F%A3"><span class="toc-number">2.</span> <span class="toc-text">第二章 多线程入门类和接口</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1-Thread%E7%B1%BB%E5%92%8CRunnable%E6%8E%A5%E5%8F%A3"><span class="toc-number">2.1.</span> <span class="toc-text">2.1 Thread类和Runnable接口</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-1-%E7%BB%A7%E6%89%BFThread%E7%B1%BB"><span class="toc-number">2.1.1.</span> <span class="toc-text">2.1.1 继承Thread类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-2-%E5%AE%9E%E7%8E%B0Runnable%E6%8E%A5%E5%8F%A3"><span class="toc-number">2.1.2.</span> <span class="toc-text">2.1.2 实现Runnable接口</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-3-Thread%E7%B1%BB%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95%E6%BA%90%E7%A0%81"><span class="toc-number">2.1.3.</span> <span class="toc-text">2.1.3 Thread类构造方法源码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-4-Thread%E7%B1%BB%E7%9A%84%E5%87%A0%E4%B8%AA%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95"><span class="toc-number">2.1.4.</span> <span class="toc-text">2.1.4 Thread类的几个常用方法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2-Callable%E3%80%81Future%E4%B8%8EFutureTask"><span class="toc-number">2.2.</span> <span class="toc-text">2.2 Callable、Future与FutureTask</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-1-Callable%E6%8E%A5%E5%8F%A3"><span class="toc-number">2.2.1.</span> <span class="toc-text">2.2.1 Callable接口</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-2-Future%E6%8E%A5%E5%8F%A3"><span class="toc-number">2.2.2.</span> <span class="toc-text">2.2.2 Future接口</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-3-FutureTask%E6%8E%A5%E5%8F%A3"><span class="toc-number">2.2.3.</span> <span class="toc-text">2.2.3 FutureTask接口</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-4-FutureTask%E7%9A%84%E5%87%A0%E4%B8%AA%E7%8A%B6%E6%80%81"><span class="toc-number">2.2.4.</span> <span class="toc-text">2.2.4 FutureTask的几个状态</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E7%AB%A0-%E7%BA%BF%E7%A8%8B%E7%BB%84%E5%92%8C%E7%BA%BF%E7%A8%8B%E4%BC%98%E5%85%88%E7%BA%A7"><span class="toc-number">3.</span> <span class="toc-text">第三章 线程组和线程优先级</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#3-1-%E7%BA%BF%E7%A8%8B%E7%BB%84%EF%BC%88ThreadGroup%EF%BC%89"><span class="toc-number">3.1.</span> <span class="toc-text">3.1 线程组（ThreadGroup）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-2-%E7%BA%BF%E7%A8%8B%E7%9A%84%E4%BC%98%E5%85%88%E7%BA%A7"><span class="toc-number">3.2.</span> <span class="toc-text">3.2 线程的优先级</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-3-%E5%AE%88%E6%8A%A4%E7%BA%BF%E7%A8%8B"><span class="toc-number">3.3.</span> <span class="toc-text">3.3 守护线程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-4-%E7%BA%BF%E7%A8%8B%E7%BB%84%E7%9A%84%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95%E5%8F%8A%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="toc-number">3.4.</span> <span class="toc-text">3.4 线程组的常用方法及数据结构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-1-%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95"><span class="toc-number">3.4.1.</span> <span class="toc-text">3.4.1 常用方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-2-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="toc-number">3.4.2.</span> <span class="toc-text">3.4.2 数据结构</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E5%9B%9B%E7%AB%A0-Java%E7%BA%BF%E7%A8%8B%E7%9A%84%E7%8A%B6%E6%80%81%E5%8F%8A%E4%B8%BB%E8%A6%81%E8%BD%AC%E5%8C%96%E6%96%B9%E6%B3%95"><span class="toc-number">4.</span> <span class="toc-text">第四章 Java线程的状态及主要转化方法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#4-1-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B8%AD%E7%9A%84%E7%BA%BF%E7%A8%8B%E7%8A%B6%E6%80%81"><span class="toc-number">4.1.</span> <span class="toc-text">4.1 操作系统中的线程状态</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-2-Java%E7%BA%BF%E7%A8%8B%E7%8A%B6%E6%80%81"><span class="toc-number">4.2.</span> <span class="toc-text">4.2 Java线程状态</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-1-NEW"><span class="toc-number">4.2.1.</span> <span class="toc-text">4.2.1 NEW</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-2-RUNNABLE"><span class="toc-number">4.2.2.</span> <span class="toc-text">4.2.2 RUNNABLE</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-3-BLOCKED"><span class="toc-number">4.2.3.</span> <span class="toc-text">4.2.3 BLOCKED</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-4-WAITING"><span class="toc-number">4.2.4.</span> <span class="toc-text">4.2.4 WAITING</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-5-TIMED-WAITING"><span class="toc-number">4.2.5.</span> <span class="toc-text">4.2.5 TIMED_WAITING</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-6-TERMINATED"><span class="toc-number">4.2.6.</span> <span class="toc-text">4.2.6 TERMINATED</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-3-%E7%BA%BF%E7%A8%8B%E7%8A%B6%E6%80%81%E8%BD%AC%E6%8D%A2"><span class="toc-number">4.3.</span> <span class="toc-text">4.3 线程状态转换</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-1-BLOCKED%E4%B8%8ERUNNABLE%E7%8A%B6%E6%80%81%E7%9A%84%E8%BD%AC%E6%8D%A2"><span class="toc-number">4.3.1.</span> <span class="toc-text">4.3.1 BLOCKED与RUNNABLE状态的转换</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-2-WAITING%E7%8A%B6%E6%80%81%E4%B8%8ERUNNABLE%E7%8A%B6%E6%80%81%E7%9A%84%E8%BD%AC%E6%8D%A2"><span class="toc-number">4.3.2.</span> <span class="toc-text">4.3.2 WAITING状态与RUNNABLE状态的转换</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-3-%E7%BA%BF%E7%A8%8B%E4%B8%AD%E6%96%AD"><span class="toc-number">4.3.3.</span> <span class="toc-text">4.3.3 线程中断</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E4%BA%94%E7%AB%A0-Java%E7%BA%BF%E7%A8%8B%E9%97%B4%E7%9A%84%E9%80%9A%E4%BF%A1"><span class="toc-number">5.</span> <span class="toc-text">第五章 Java线程间的通信</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#5-1-%E9%94%81%E4%B8%8E%E5%90%8C%E6%AD%A5"><span class="toc-number">5.1.</span> <span class="toc-text">5.1 锁与同步</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-2-%E7%AD%89%E5%BE%85-%E9%80%9A%E7%9F%A5%E6%9C%BA%E5%88%B6"><span class="toc-number">5.2.</span> <span class="toc-text">5.2 等待&#x2F;通知机制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-3-%E4%BF%A1%E5%8F%B7%E9%87%8F"><span class="toc-number">5.3.</span> <span class="toc-text">5.3 信号量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-4-%E7%AE%A1%E9%81%93"><span class="toc-number">5.4.</span> <span class="toc-text">5.4 管道</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-5-%E5%85%B6%E4%BB%96%E9%80%9A%E4%BF%A1%E7%9B%B8%E5%85%B3"><span class="toc-number">5.5.</span> <span class="toc-text">5.5 其他通信相关</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-5-1-join%E6%96%B9%E6%B3%95"><span class="toc-number">5.5.1.</span> <span class="toc-text">5.5.1 join方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-5-2-sleep%E6%96%B9%E6%B3%95"><span class="toc-number">5.5.2.</span> <span class="toc-text">5.5.2 sleep方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-5-3-ThreadLocal%E7%B1%BB"><span class="toc-number">5.5.3.</span> <span class="toc-text">5.5.3 ThreadLocal类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-5-4-InheritableThreadLocal"><span class="toc-number">5.5.4.</span> <span class="toc-text">5.5.4 InheritableThreadLocal</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E5%85%AD%E7%AB%A0-Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86"><span class="toc-number">6.</span> <span class="toc-text">第六章 Java内存模型基础知识</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#6-1-%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E6%A8%A1%E5%9E%8B"><span class="toc-number">6.1.</span> <span class="toc-text">6.1 并发编程模型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-2-Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E7%9A%84%E6%8A%BD%E8%B1%A1%E7%BB%93%E6%9E%84"><span class="toc-number">6.2.</span> <span class="toc-text">6.2 Java内存模型的抽象结构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#6-2-1-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA"><span class="toc-number">6.2.1.</span> <span class="toc-text">6.2.1 运行时数据区</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-2-2-%E7%A1%AC%E4%BB%B6%E5%86%85%E5%AD%98%E6%9E%B6%E6%9E%84"><span class="toc-number">6.2.2.</span> <span class="toc-text">6.2.2 硬件内存架构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-2-3-Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%EF%BC%88JMM%EF%BC%89"><span class="toc-number">6.2.3.</span> <span class="toc-text">6.2.3 Java内存模型（JMM）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-2-4-JMM%E4%B8%8EJava%E5%86%85%E5%AD%98%E5%8C%BA%E5%9F%9F%E5%88%92%E5%88%86"><span class="toc-number">6.2.4.</span> <span class="toc-text">6.2.4 JMM与Java内存区域划分</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-3-%E9%A1%BA%E5%BA%8F%E4%B8%80%E8%87%B4%E6%80%A7"><span class="toc-number">6.3.</span> <span class="toc-text">6.3 顺序一致性</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#6-3-1-%E6%95%B0%E6%8D%AE%E7%AB%9E%E4%BA%89%E5%92%8C%E9%A1%BA%E5%BA%8F%E4%B8%80%E8%87%B4%E6%80%A7"><span class="toc-number">6.3.1.</span> <span class="toc-text">6.3.1 数据竞争和顺序一致性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-3-2-%E9%A1%BA%E5%BA%8F%E4%B8%80%E8%87%B4%E6%80%A7%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B"><span class="toc-number">6.3.2.</span> <span class="toc-text">6.3.2 顺序一致性内存模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-3-3-%E5%90%8C%E6%AD%A5%E7%A8%8B%E5%BA%8F%E7%9A%84%E9%A1%BA%E5%BA%8F%E4%B8%80%E8%87%B4%E6%80%A7"><span class="toc-number">6.3.3.</span> <span class="toc-text">6.3.3 同步程序的顺序一致性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-3-4-%E6%9C%AA%E5%90%8C%E6%AD%A5%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%89%A7%E8%A1%8C%E7%89%B9%E6%80%A7"><span class="toc-number">6.3.4.</span> <span class="toc-text">6.3.4 未同步程序的执行特性</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E4%B8%83%E7%AB%A0-%E9%87%8D%E6%8E%92%E5%BA%8F"><span class="toc-number">7.</span> <span class="toc-text">第七章 重排序</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#7-1-%E9%87%8D%E6%8E%92%E5%BA%8F%E5%A6%82%E4%BD%95%E6%8F%90%E9%AB%98%E6%80%A7%E8%83%BD"><span class="toc-number">7.1.</span> <span class="toc-text">7.1 重排序如何提高性能</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-2-%E9%87%8D%E6%8E%92%E7%9A%84%E4%B8%89%E7%A7%8D%E7%B1%BB%E5%9E%8B"><span class="toc-number">7.2.</span> <span class="toc-text">7.2 重排的三种类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-3-%E9%87%8D%E6%8E%92%E5%BA%8F%E9%81%B5%E5%BE%AA%E5%87%86%E5%88%99"><span class="toc-number">7.3.</span> <span class="toc-text">7.3 重排序遵循准则</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#7-3-1-%E6%95%B0%E6%8D%AE%E4%BE%9D%E8%B5%96%E6%80%A7"><span class="toc-number">7.3.1.</span> <span class="toc-text">7.3.1 数据依赖性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-3-2-as-if-serial%E8%AF%AD%E4%B9%89"><span class="toc-number">7.3.2.</span> <span class="toc-text">7.3.2 as-if-serial语义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-3-3-happens-before%E8%A7%84%E5%88%99"><span class="toc-number">7.3.3.</span> <span class="toc-text">7.3.3 happens-before规则</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-3-4-%E5%AF%B9%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%A8%8B%E5%BA%8F%E7%9A%84%E5%BD%B1%E5%93%8D"><span class="toc-number">7.3.4.</span> <span class="toc-text">7.3.4 对多线程程序的影响</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E5%85%AB%E7%AB%A0-volatile"><span class="toc-number">8.</span> <span class="toc-text">第八章 volatile</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#8-1-volatile%E7%89%B9%E6%80%A7"><span class="toc-number">8.1.</span> <span class="toc-text">8.1 volatile特性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-2-volatile%E5%86%99-%E8%AF%BB%E7%9A%84%E5%86%85%E5%AD%98%E8%AF%AD%E4%B9%89"><span class="toc-number">8.2.</span> <span class="toc-text">8.2 volatile写-读的内存语义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-3-volatile%E5%86%99-%E8%AF%BB%E5%BB%BA%E7%AB%8B%E7%9A%84happens-before%E5%85%B3%E7%B3%BB"><span class="toc-number">8.3.</span> <span class="toc-text">8.3 volatile写-读建立的happens-before关系</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-4-volatile%E7%9A%84%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86"><span class="toc-number">8.4.</span> <span class="toc-text">8.4 volatile的实现原理</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E4%B9%9D%E7%AB%A0-synchronized%E4%B8%8E%E9%94%81"><span class="toc-number">9.</span> <span class="toc-text">第九章 synchronized与锁</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#9-1-synchronized%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86%E4%B8%8E%E5%BA%94%E7%94%A8"><span class="toc-number">9.1.</span> <span class="toc-text">9.1 synchronized实现原理与应用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-2-%E5%87%A0%E7%A7%8D%E9%94%81"><span class="toc-number">9.2.</span> <span class="toc-text">9.2 几种锁</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#9-2-1-Java%E5%AF%B9%E8%B1%A1%E5%A4%B4"><span class="toc-number">9.2.1.</span> <span class="toc-text">9.2.1 Java对象头</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9-2-2-%E5%81%8F%E5%90%91%E9%94%81"><span class="toc-number">9.2.2.</span> <span class="toc-text">9.2.2 偏向锁</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9-2-3-%E8%BD%BB%E9%87%8F%E7%BA%A7%E9%94%81"><span class="toc-number">9.2.3.</span> <span class="toc-text">9.2.3 轻量级锁</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9-2-4-%E9%87%8D%E9%87%8F%E7%BA%A7%E9%94%81"><span class="toc-number">9.2.4.</span> <span class="toc-text">9.2.4 重量级锁</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9-2-5-%E5%90%84%E7%A7%8D%E9%94%81%E7%9A%84%E4%BC%98%E7%BC%BA%E7%82%B9%E5%AF%B9%E6%AF%94"><span class="toc-number">9.2.5.</span> <span class="toc-text">9.2.5 各种锁的优缺点对比</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9-2-6-%E4%B9%90%E8%A7%82%E9%94%81%E4%B8%8E%E6%82%B2%E8%A7%82%E9%94%81"><span class="toc-number">9.2.6.</span> <span class="toc-text">9.2.6 乐观锁与悲观锁</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E5%8D%81%E7%AB%A0-CAS%E5%92%8C%E5%8E%9F%E5%AD%90%E6%93%8D%E4%BD%9C"><span class="toc-number">10.</span> <span class="toc-text">第十章 CAS和原子操作</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#10-1-CAS%E7%9A%84%E6%A6%82%E5%BF%B5"><span class="toc-number">10.1.</span> <span class="toc-text">10.1 CAS的概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-2-CAS%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86-Unsafe%E7%B1%BB"><span class="toc-number">10.2.</span> <span class="toc-text">10.2 CAS实现原理-Unsafe类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-3-%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E5%8E%9F%E5%AD%90%E6%93%8D%E4%BD%9C"><span class="toc-number">10.3.</span> <span class="toc-text">10.3 如何实现原子操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-4-CAS%E5%AE%9E%E7%8E%B0%E5%8E%9F%E5%AD%90%E6%93%8D%E4%BD%9C%E7%9A%84%E4%B8%89%E5%A4%A7%E9%97%AE%E9%A2%98"><span class="toc-number">10.4.</span> <span class="toc-text">10.4 CAS实现原子操作的三大问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#10-4-1-ABA%E9%97%AE%E9%A2%98"><span class="toc-number">10.4.1.</span> <span class="toc-text">10.4.1 ABA问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#10-4-2-%E5%BE%AA%E7%8E%AF%E6%97%B6%E9%97%B4%E9%95%BF-%E5%BC%80%E9%94%80%E5%A4%A7"><span class="toc-number">10.4.2.</span> <span class="toc-text">10.4.2 循环时间长 开销大</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#10-4-3-%E5%8F%AA%E8%83%BD%E4%BF%9D%E8%AF%81%E4%B8%80%E4%B8%AA%E5%85%B1%E4%BA%AB%E5%8F%98%E9%87%8F%E7%9A%84%E5%8E%9F%E5%AD%90%E6%93%8D%E4%BD%9C"><span class="toc-number">10.4.3.</span> <span class="toc-text">10.4.3 只能保证一个共享变量的原子操作</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E5%8D%81%E4%B8%80%E7%AB%A0-AQS"><span class="toc-number">11.</span> <span class="toc-text">第十一章 AQS</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#11-1-AQS%E7%AE%80%E4%BB%8B"><span class="toc-number">11.1.</span> <span class="toc-text">11.1 AQS简介</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#11-1-1-state"><span class="toc-number">11.1.1.</span> <span class="toc-text">11.1.1 state</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#11-1-2-CLH%E9%98%9F%E5%88%97"><span class="toc-number">11.1.2.</span> <span class="toc-text">11.1.2 CLH队列</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#11-1-3-exclusiveOwnerThread"><span class="toc-number">11.1.3.</span> <span class="toc-text">11.1.3 exclusiveOwnerThread</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#11-2-AQS%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86"><span class="toc-number">11.2.</span> <span class="toc-text">11.2 AQS实现原理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#11-2-1-%E7%8B%AC%E5%8D%A0%E5%BC%8F"><span class="toc-number">11.2.1.</span> <span class="toc-text">11.2.1 独占式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#11-2-2-%E5%85%B1%E4%BA%AB%E5%BC%8F"><span class="toc-number">11.2.2.</span> <span class="toc-text">11.2.2 共享式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#11-3-AQS%E7%9A%84%E6%A8%A1%E6%9D%BF%E6%A8%A1%E5%BC%8F"><span class="toc-number">11.3.</span> <span class="toc-text">11.3 AQS的模板模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#11-4-ReentrantLock"><span class="toc-number">11.4.</span> <span class="toc-text">11.4 ReentrantLock</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#11-4-1-%E4%B8%8A%E9%94%81"><span class="toc-number">11.4.1.</span> <span class="toc-text">11.4.1 上锁</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#11-4-2-%E8%A7%A3%E9%94%81"><span class="toc-number">11.4.2.</span> <span class="toc-text">11.4.2 解锁</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E5%8D%81%E4%BA%8C%E7%AB%A0-%E7%BA%BF%E7%A8%8B%E6%B1%A0%E5%8E%9F%E7%90%86"><span class="toc-number">12.</span> <span class="toc-text">第十二章 线程池原理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#12-1-%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E6%9C%89%E7%BA%BF%E7%A8%8B%E6%B1%A0%E6%8A%80%E6%9C%AF"><span class="toc-number">12.1.</span> <span class="toc-text">12.1 为什么要有线程池技术</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#12-2-%E7%BA%BF%E7%A8%8B%E6%B1%A0%E7%9A%84%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86"><span class="toc-number">12.2.</span> <span class="toc-text">12.2 线程池的实现原理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#12-2-1-%E7%BA%BF%E7%A8%8B%E6%B1%A0%E7%9A%84%E5%88%9B%E5%BB%BA"><span class="toc-number">12.2.1.</span> <span class="toc-text">12.2.1 线程池的创建</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#12-2-2-%E7%BA%BF%E7%A8%8B%E6%B1%A0%E7%8A%B6%E6%80%81"><span class="toc-number">12.2.2.</span> <span class="toc-text">12.2.2 线程池状态</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#12-2-3-%E7%BA%BF%E7%A8%8B%E6%B1%A0%E4%BB%BB%E5%8A%A1%E5%A4%84%E7%90%86%E6%B5%81%E7%A8%8B"><span class="toc-number">12.2.3.</span> <span class="toc-text">12.2.3 线程池任务处理流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#12-2-4-%E7%BA%BF%E7%A8%8B%E5%A4%8D%E7%94%A8%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="toc-number">12.2.4.</span> <span class="toc-text">12.2.4 线程复用的实现</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#12-3-%E5%9B%9B%E7%A7%8D%E5%B8%B8%E8%A7%81%E7%9A%84%E7%BA%BF%E7%A8%8B%E6%B1%A0"><span class="toc-number">12.3.</span> <span class="toc-text">12.3 四种常见的线程池</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#12-3-1-FixedThreadPool"><span class="toc-number">12.3.1.</span> <span class="toc-text">12.3.1 FixedThreadPool</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#12-3-2-SingleThreadExecutor"><span class="toc-number">12.3.2.</span> <span class="toc-text">12.3.2 SingleThreadExecutor</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#12-3-3-CachedThreadPool"><span class="toc-number">12.3.3.</span> <span class="toc-text">12.3.3 CachedThreadPool</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#12-3-4-ScheduledThreadPool"><span class="toc-number">12.3.4.</span> <span class="toc-text">12.3.4 ScheduledThreadPool</span></a></li></ol></li></ol></li></ol>
                     </div>
                 </span>
             </div>
