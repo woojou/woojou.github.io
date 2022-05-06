@@ -6,17 +6,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://woojou.github.io">
-  <title>Archives: 2021/8 | woojou&#39;s blog</title>
+  <title>牛客网项目 | woojou&#39;s blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="专注于JAVA后端知识，很菜">
-<meta property="og:type" content="website">
-<meta property="og:title" content="woojou&#39;s blog">
-<meta property="og:url" content="http://woojou.github.io/archives/2021/08/index.html">
+  <meta name="description" content="1. 搭建环境进入网址Spring Initializr，利用这个工具来创建一个基本项目，依赖中需要加入 aop、web、thymeleaf和devtools。现在直接搜aop是搜不出来了，但是没关系，可以在项目创建好之后，自己在pom.xml中添加该依赖： &lt;dependency&gt;     &lt;groupId&gt;org.springframework.boot&lt;&#x2F;g">
+<meta property="og:type" content="article">
+<meta property="og:title" content="牛客网项目">
+<meta property="og:url" content="http://woojou.github.io/2022/05/02/%E7%89%9B%E5%AE%A2%E7%BD%91%E9%A1%B9%E7%9B%AE/index.html">
 <meta property="og:site_name" content="woojou&#39;s blog">
-<meta property="og:description" content="专注于JAVA后端知识，很菜">
+<meta property="og:description" content="1. 搭建环境进入网址Spring Initializr，利用这个工具来创建一个基本项目，依赖中需要加入 aop、web、thymeleaf和devtools。现在直接搜aop是搜不出来了，但是没关系，可以在项目创建好之后，自己在pom.xml中添加该依赖： &lt;dependency&gt;     &lt;groupId&gt;org.springframework.boot&lt;&#x2F;g">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-05-02T11:39:16.000Z">
+<meta property="article:modified_time" content="2022-05-06T13:30:44.894Z">
 <meta property="article:author" content="Woojou">
-<meta property="article:tag" content="程序媛">
+<meta property="article:tag" content="项目">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternative" href="/atom.xml" title="woojou&#39;s blog" type="application/atom+xml">
@@ -157,136 +159,235 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-牛客网项目" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      牛客网项目
+    </h1>
+  
+
+        
+        <a href="/2022/05/02/%E7%89%9B%E5%AE%A2%E7%BD%91%E9%A1%B9%E7%9B%AE/" class="archive-article-date">
+  	<time datetime="2022-05-02T11:39:16.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-05-02</time>
+</a>
+        
+      </header>
     
+    <div class="article-entry" itemprop="articleBody">
+      
+        <span id="more"></span>
+
+<h1 id="1-搭建环境"><a href="#1-搭建环境" class="headerlink" title="1. 搭建环境"></a>1. 搭建环境</h1><p>进入网址<a target="_blank" rel="noopener" href="https://start.spring.io/">Spring Initializr</a>，利用这个工具来创建一个基本项目，依赖中需要加入 aop、web、thymeleaf和devtools。现在直接搜aop是搜不出来了，但是没关系，可以在项目创建好之后，自己在pom.xml中添加该依赖：</p>
+<pre><code class="xml">&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-aop&lt;/artifactId&gt;
+&lt;/dependency&gt;
+</code></pre>
+<p>另外注意，这里的JDK版本必须要选择对应于IDEA中的。IDEA中有好几处JDK需要配置，分别是Settings中Build下的Java Compiler还有Project Structure里project与modules部分。</p>
+<p>下面来简单测试一下。</p>
+<p>编写一个Controller类：</p>
+<pre><code class="java">package com.nowcoder.community.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+@Controller
+@RequestMapping(&quot;/alpha&quot;)
+public class AlphaController &#123;
+
+    @RequestMapping(&quot;/test&quot;)
+    @ResponseBody
+    public String test() &#123;
+        return &quot;Hello Spring Boot&quot;;
+    &#125;
+&#125;
+</code></pre>
+<p>在application.properties中配置基本端口和路径</p>
+<pre><code class="properties">server.port=8080
+server.servlet.context-path=/community
+</code></pre>
+<p>输入网址：localhost:8080/community/alpha/test，可以看到网页打印出Hello Spring Boot。</p>
+<h1 id="2-发送邮件"><a href="#2-发送邮件" class="headerlink" title="2. 发送邮件"></a>2. 发送邮件</h1><p>尝试了新浪邮箱，但是发现怎么都不行，于是上网搜索，换成了QQ邮箱就妥了。具体配置步骤可以看<a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000021587834">这里</a>。</p>
+<p>在util包下创建了一个工具类 MailClient</p>
+<pre><code class="java">package com.nowcoder.community.util;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.stereotype.Component;
+
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+
+@Component
+public class MailClient &#123;
+
+    //记录打印日志
+    private static final Logger logger = LoggerFactory.getLogger(MailClient.class);
+
+    @Autowired
+    private JavaMailSender mailSender;
+
+    @Value(&quot;$&#123;spring.mail.username&#125;&quot;)
+    private String from;
+
+    public void sendMail(String to, String subject, String content) &#123;
+        try &#123;
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message);
+
+            helper.setFrom(from);
+            helper.setTo(to);
+            helper.setSubject(subject);
+            helper.setText(content, true);
+
+            mailSender.send(helper.getMimeMessage());
+        &#125; catch (MessagingException e) &#123;
+            logger.error(&quot;邮件发送失败:&quot; + e.getMessage());
+        &#125;
+    &#125;
+&#125;
+</code></pre>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
       
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2021" class="archive-year">2021</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/08/07/JavaWeb/" class="archive-article-date">
-  	<time datetime="2021-08-07T07:13:19.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-08-07</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/08/07/JavaWeb/">JavaWeb</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">JAVA</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">项目</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://woojou.github.io/2022/05/02/%E7%89%9B%E5%AE%A2%E7%BD%91%E9%A1%B9%E7%9B%AE/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/08/03/Maven/" class="archive-article-date">
-  	<time datetime="2021-08-03T08:56:04.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-08-03</time>
-</a>
+<nav id="article-nav">
+  
+  
+    <a href="/2022/01/24/Java%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Java并发编程</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/08/03/Maven/">Maven</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">工具</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
+        
+        
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-%E6%90%AD%E5%BB%BA%E7%8E%AF%E5%A2%83"><span class="toc-number">1.</span> <span class="toc-text">1. 搭建环境</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-%E5%8F%91%E9%80%81%E9%82%AE%E4%BB%B6"><span class="toc-number">2.</span> <span class="toc-text">2. 发送邮件</span></a></li></ol>
+                    </div>
+                </span>
+            </div>
         </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
+        
+    </div>
+</aside>
+
+
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/08/03/Spring%E6%A1%86%E6%9E%B6/" class="archive-article-date">
-  	<time datetime="2021-08-03T07:26:05.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-08-03</time>
-</a>
-        </div>
-    	 
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/08/03/Spring%E6%A1%86%E6%9E%B6/">Spring框架</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">框架</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
   
 
-    
+  
+
+  
 
 
           </div>
@@ -309,8 +410,8 @@
 	var yiliaConfig = {
 		mathjax: true,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,

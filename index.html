@@ -159,6 +159,156 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-牛客网项目" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2022/05/02/%E7%89%9B%E5%AE%A2%E7%BD%91%E9%A1%B9%E7%9B%AE/">牛客网项目</a>
+    </h1>
+  
+
+        
+        <a href="/2022/05/02/%E7%89%9B%E5%AE%A2%E7%BD%91%E9%A1%B9%E7%9B%AE/" class="archive-article-date">
+  	<time datetime="2022-05-02T11:39:16.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-05-02</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <span id="more"></span>
+
+<h1 id="1-搭建环境"><a href="#1-搭建环境" class="headerlink" title="1. 搭建环境"></a>1. 搭建环境</h1><p>进入网址<a target="_blank" rel="noopener" href="https://start.spring.io/">Spring Initializr</a>，利用这个工具来创建一个基本项目，依赖中需要加入 aop、web、thymeleaf和devtools。现在直接搜aop是搜不出来了，但是没关系，可以在项目创建好之后，自己在pom.xml中添加该依赖：</p>
+<pre><code class="xml">&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-aop&lt;/artifactId&gt;
+&lt;/dependency&gt;
+</code></pre>
+<p>另外注意，这里的JDK版本必须要选择对应于IDEA中的。IDEA中有好几处JDK需要配置，分别是Settings中Build下的Java Compiler还有Project Structure里project与modules部分。</p>
+<p>下面来简单测试一下。</p>
+<p>编写一个Controller类：</p>
+<pre><code class="java">package com.nowcoder.community.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+@Controller
+@RequestMapping(&quot;/alpha&quot;)
+public class AlphaController &#123;
+
+    @RequestMapping(&quot;/test&quot;)
+    @ResponseBody
+    public String test() &#123;
+        return &quot;Hello Spring Boot&quot;;
+    &#125;
+&#125;
+</code></pre>
+<p>在application.properties中配置基本端口和路径</p>
+<pre><code class="properties">server.port=8080
+server.servlet.context-path=/community
+</code></pre>
+<p>输入网址：localhost:8080/community/alpha/test，可以看到网页打印出Hello Spring Boot。</p>
+<h1 id="2-发送邮件"><a href="#2-发送邮件" class="headerlink" title="2. 发送邮件"></a>2. 发送邮件</h1><p>尝试了新浪邮箱，但是发现怎么都不行，于是上网搜索，换成了QQ邮箱就妥了。具体配置步骤可以看<a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000021587834">这里</a>。</p>
+<p>在util包下创建了一个工具类 MailClient</p>
+<pre><code class="java">package com.nowcoder.community.util;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.stereotype.Component;
+
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+
+@Component
+public class MailClient &#123;
+
+    //记录打印日志
+    private static final Logger logger = LoggerFactory.getLogger(MailClient.class);
+
+    @Autowired
+    private JavaMailSender mailSender;
+
+    @Value(&quot;$&#123;spring.mail.username&#125;&quot;)
+    private String from;
+
+    public void sendMail(String to, String subject, String content) &#123;
+        try &#123;
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message);
+
+            helper.setFrom(from);
+            helper.setTo(to);
+            helper.setSubject(subject);
+            helper.setText(content, true);
+
+            mailSender.send(helper.getMimeMessage());
+        &#125; catch (MessagingException e) &#123;
+            logger.error(&quot;邮件发送失败:&quot; + e.getMessage());
+        &#125;
+    &#125;
+&#125;
+</code></pre>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">项目</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2022/05/02/%E7%89%9B%E5%AE%A2%E7%BD%91%E9%A1%B9%E7%9B%AE/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-Java并发编程" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -827,80 +977,6 @@
 
 
   
-    <article id="post-Spring框架" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/08/03/Spring%E6%A1%86%E6%9E%B6/">Spring框架</a>
-    </h1>
-  
-
-        
-        <a href="/2021/08/03/Spring%E6%A1%86%E6%9E%B6/" class="archive-article-date">
-  	<time datetime="2021-08-03T07:26:05.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-08-03</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>本文章是根据<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1WZ4y1P7Bp">黑马程序员SSM框架课程</a>做的笔记。</p>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">框架</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2021/08/03/Spring%E6%A1%86%E6%9E%B6/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &amp;raquo;</a>
@@ -1040,6 +1116,10 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">JAVA</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">项目</a>
               </li>
             
             <div class="clearfix"></div>
