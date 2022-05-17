@@ -453,6 +453,428 @@ class KafkaConsumer &#123;
     &#125;
 &#125;
 </code></pre>
+<h1 id="5-Elasticsearch"><a href="#5-Elasticsearch" class="headerlink" title="5. Elasticsearch"></a>5. Elasticsearch</h1><ul>
+<li><p>Elasticsearch简介 </p>
+<ul>
+<li>一个分布式的、Restful风格的搜索引擎。 </li>
+<li>支持对各种类型的数据的检索。 </li>
+<li>搜索速度快，可以提供实时的搜索服务。 </li>
+<li>便于水平扩展，每秒可以处理PB级海量数据。 </li>
+</ul>
+</li>
+<li><p>Elasticsearch术语 </p>
+<ul>
+<li><p>索引(database)、<del>类型(table)</del>、文档(row)、字段(col)。</p>
+<p>6.0以后废弃了类型，索引直接表示table</p>
+</li>
+<li><p>集群(多台服务器在一起)、节点(每一台服务器)、分片(对索引的进一步划分)、副本(对分片的备份)。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="5-1-安装"><a href="#5-1-安装" class="headerlink" title="5.1 安装"></a>5.1 安装</h2><p><a target="_blank" rel="noopener" href="https://www.elastic.co/cn/">免费且开放的搜索：Elasticsearch、ELK 和 Kibana 的开发者 | Elastic</a> 下载好直接解压</p>
+<p><strong>配置文件</strong>：elasticsearch.yml</p>
+<pre><code class="xml"># ======================== Elasticsearch Configuration =========================
+#
+# NOTE: Elasticsearch comes with reasonable defaults for most settings.
+#       Before you set out to tweak and tune the configuration, make sure you
+#       understand what are you trying to accomplish and the consequences.
+#
+# The primary way of configuring a node is via this file. This template lists
+# the most important settings you may want to configure for a production cluster.
+#
+# Please consult the documentation for further information on configuration options:
+# https://www.elastic.co/guide/en/elasticsearch/reference/index.html
+#
+# ---------------------------------- Cluster -----------------------------------
+#
+# Use a descriptive name for your cluster:
+#
+cluster.name: nowcoder
+#
+# ------------------------------------ Node ------------------------------------
+#
+# Use a descriptive name for the node:
+#
+#node.name: node-1
+#
+# Add custom attributes to the node:
+#
+#node.attr.rack: r1
+#
+# ----------------------------------- Paths ------------------------------------
+#
+# Path to directory where to store the data (separate multiple locations by comma):
+#
+path.data: d:/data/elasticsearch-6.4.3/data
+#
+# Path to log files:
+#
+path.logs: d:/data/elasticsearch-6.4.3//logs
+#
+# ----------------------------------- Memory -----------------------------------
+#
+# Lock the memory on startup:
+#
+#bootstrap.memory_lock: true
+#
+# Make sure that the heap size is set to about half the memory available
+# on the system and that the owner of the process is allowed to use this
+# limit.
+#
+# Elasticsearch performs poorly when the system is swapping the memory.
+#
+# ---------------------------------- Network -----------------------------------
+#
+# Set the bind address to a specific IP (IPv4 or IPv6):
+#
+#network.host: 192.168.0.1
+#
+# Set a custom port for HTTP:
+#
+#http.port: 9200
+#
+# For more information, consult the network module documentation.
+#
+# --------------------------------- Discovery ----------------------------------
+#
+# Pass an initial list of hosts to perform discovery when new node is started:
+# The default list of hosts is [&quot;127.0.0.1&quot;, &quot;[::1]&quot;]
+#
+#discovery.zen.ping.unicast.hosts: [&quot;host1&quot;, &quot;host2&quot;]
+#
+# Prevent the &quot;split brain&quot; by configuring the majority of nodes (total number of master-eligible nodes / 2 + 1):
+#
+#discovery.zen.minimum_master_nodes: 
+#
+# For more information, consult the zen discovery module documentation.
+#
+# ---------------------------------- Gateway -----------------------------------
+#
+# Block initial recovery after a full cluster restart until N nodes are started:
+#
+#gateway.recover_after_nodes: 3
+#
+# For more information, consult the gateway module documentation.
+#
+# ---------------------------------- Various -----------------------------------
+#
+# Require explicit names when deleting indices:
+#
+#action.destructive_requires_name: true
+</code></pre>
+<p><strong>环境变量</strong>：拷贝好bin目录的路径，存放到环境变量的path下</p>
+<p><strong>中文分词插件</strong>：<a target="_blank" rel="noopener" href="https://github.com/medcl/elasticsearch-analysis-ik/releases/tag/v6.4.3">Release v6.4.3 · medcl/elasticsearch-analysis-ik · GitHub</a>下载与ES对应的版本，解压缩到 …\elasticsearch-6.4.3\plugins\ik</p>
+<p>​        \config\IKAnalyzer.cfg.xml中规定了自己的扩展字典，你可以在相应的文件中自己配置</p>
+<p><strong>下载Postman</strong>：<a target="_blank" rel="noopener" href="https://www.postman.com/">Postman API Platform | Sign Up for Free</a></p>
+<p>ES在启动时，默认申请1g内存，在学习阶段，这太耗内存了，可以调小一点。大家可以修改其config目录下的jvm.options文件，将初识内存调整为256m，将最大内存调整为512m</p>
+<h2 id="5-2-使用"><a href="#5-2-使用" class="headerlink" title="5.2 使用"></a>5.2 使用</h2><p>启动ES：直接双击 D:\elasticsearch-6.4.3\bin\elasticsearch.bat</p>
+<p>查看健康状况：curl -X GET “localhost:9200/_cat/health?v”</p>
+<p>查看节点：curl -X GET “localhost:9200/_cat/nodes?v”</p>
+<p>查看索引：curl -X GET “localhost:9200/_cat/indices?v”</p>
+<p>建立索引：curl -X PUT “localhost:9200/{要建立的索引}”</p>
+<p>删除索引：curl -X DELETE “localhost:9200/{要删除的索引}”</p>
+<p>利用postman：</p>
+<p><img src="https://img-blog.csdnimg.cn/8e5301723f6240f387124d6e581d072b.png"></p>
+<p><img src="https://img-blog.csdnimg.cn/5c2e3aac7f0e4fffb884274ec1799cfe.png"></p>
+<p><img src="https://img-blog.csdnimg.cn/e8ae00f2add9423495bb9d5fbc20e5de.png"></p>
+<p>使用中文存数据：</p>
+<pre><code>localhost:9200/test/_doc/1
+&#123;
+    &quot;title&quot;: &quot;互联网招聘&quot;,
+    &quot;content&quot;: &quot;招聘程序员&quot;
+&#125;
+
+localhost:9200/test/_doc/2
+&#123;
+    &quot;title&quot;: &quot;互联网求职&quot;,
+    &quot;content&quot;: &quot;寻求运营岗位&quot;
+&#125;
+
+localhost:9200/test/_doc/3
+&#123;
+    &quot;title&quot;: &quot;实习生推荐&quot;,
+    &quot;content&quot;: &quot;本人在一家互联网公司任职，可推荐实习开发岗位&quot;
+&#125;
+</code></pre>
+<p>查询搜索：</p>
+<p><img src="https://img-blog.csdnimg.cn/9a69b3d739cc4b2eb7672e8655f690ac.png"></p>
+<p><img src="https://img-blog.csdnimg.cn/d07f99d345394ec8aca3bc8b44781db0.png"></p>
+<p>复杂的查询：</p>
+<p><img src="https://img-blog.csdnimg.cn/3505771e587440158a851202e989598e.png"></p>
+<h2 id="5-3-Spring整合Elasticsearch"><a href="#5-3-Spring整合Elasticsearch" class="headerlink" title="5.3 Spring整合Elasticsearch"></a>5.3 Spring整合Elasticsearch</h2><ul>
+<li>引入依赖 <ul>
+<li>spring-boot-starter-data-elasticsearch </li>
+</ul>
+</li>
+</ul>
+<pre><code class="xml">&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-data-elasticsearch&lt;/artifactId&gt;
+&lt;/dependency&gt;
+</code></pre>
+<ul>
+<li>配置Elasticsearch <ul>
+<li>cluster-name、cluster-nodes </li>
+</ul>
+</li>
+</ul>
+<pre><code class="properties">#ElasticsearchProperties
+spring.data.elasticsearch.cluster-name=nowcoder
+spring.data.elasticsearch.cluster-nodes=127.0.0.1:9300
+</code></pre>
+<ul>
+<li>修改Netty配置<ul>
+<li>Redis和Elasticsearch的netty会引起冲突，在CommunityApplication类中配置</li>
+</ul>
+</li>
+</ul>
+<pre><code class="java">@PostConstruct
+public void init() &#123;
+    //解决Netty启动冲突问题
+    //see Netty4Utils.setAvailableProcessors()
+    System.setProperty(&quot;es.set.netty.runtime.available.processors&quot;, &quot;false&quot;);
+&#125;
+</code></pre>
+<ul>
+<li>注解配置实体类</li>
+</ul>
+<pre><code class="java">package com.nowcoder.community.entity;
+
+import org.springframework.data.annotation.Id;
+import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
+
+import java.util.Date;
+
+//type逐渐被废弃了这里只是一个简单的占位 shards分片 replicas副本
+@Document(indexName = &quot;discusspost&quot;, type = &quot;_doc&quot;, shards = 6, replicas = 3)
+public class DiscussPost &#123;
+
+    @Id
+    private int id;
+
+    @Field(type = FieldType.Integer)
+    private int userId;
+
+    // analyzer是存储时拆词的标准依据 searchAnalyzer是搜索时的
+    @Field(type = FieldType.Text, analyzer = &quot;ik_max_word&quot;, searchAnalyzer = &quot;ik_smart&quot;)
+    private String title;
+
+    @Field(type = FieldType.Text, analyzer = &quot;ik_max_word&quot;, searchAnalyzer = &quot;ik_smart&quot;)
+    private String content;
+
+    @Field(type = FieldType.Integer)
+    private int type;
+
+    @Field(type = FieldType.Integer)
+    private int status;
+
+    @Field(type = FieldType.Date)
+    private Date createTime;
+
+    @Field(type = FieldType.Integer)
+    private int commentCount;
+
+    @Field(type = FieldType.Double)
+    private double score;
+
+    ...
+&#125;
+</code></pre>
+<ul>
+<li>Spring Data Elasticsearch <ul>
+<li>ElasticsearchTemplate </li>
+<li>ElasticsearchRepository</li>
+</ul>
+</li>
+</ul>
+<pre><code class="java">package com.nowcoder.community;
+
+
+import com.nowcoder.community.dao.DiscussPostMapper;
+import com.nowcoder.community.dao.elasticsearch.DiscussPostRepository;
+import com.nowcoder.community.entity.DiscussPost;
+import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.index.query.QueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.search.SearchHits;
+import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
+import org.elasticsearch.search.fetch.subphase.highlight.HighlightField;
+import org.elasticsearch.search.sort.SortBuilders;
+import org.elasticsearch.search.sort.SortOrder;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
+import org.springframework.data.elasticsearch.core.SearchResultMapper;
+import org.springframework.data.elasticsearch.core.aggregation.AggregatedPage;
+import org.springframework.data.elasticsearch.core.aggregation.impl.AggregatedPageImpl;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
+import org.springframework.data.elasticsearch.core.query.SearchQuery;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringRunner;
+
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+@RunWith(SpringRunner.class)
+@SpringBootTest
+@ContextConfiguration(classes = CommunityApplication.class)
+public class ElasticsearchTests &#123;
+    @Resource
+    private DiscussPostMapper discussPostMapper;
+
+    @Autowired
+    private DiscussPostRepository discussPostRepository;
+
+    @Autowired
+    private ElasticsearchTemplate elasticsearchTemplate;
+
+    @Test
+    public void testInsert() &#123;
+        discussPostRepository.save(discussPostMapper.selectDiscussPostById(241));
+        discussPostRepository.save(discussPostMapper.selectDiscussPostById(242));
+        discussPostRepository.save(discussPostMapper.selectDiscussPostById(243));
+    &#125;
+
+    @Test
+    public void testInsertList() &#123;
+        discussPostRepository.saveAll(discussPostMapper.selectDiscussPosts(101, 0, 100));
+        discussPostRepository.saveAll(discussPostMapper.selectDiscussPosts(102, 0, 100));
+        discussPostRepository.saveAll(discussPostMapper.selectDiscussPosts(103, 0, 100));
+        discussPostRepository.saveAll(discussPostMapper.selectDiscussPosts(111, 0, 100));
+        discussPostRepository.saveAll(discussPostMapper.selectDiscussPosts(112, 0, 100));
+        discussPostRepository.saveAll(discussPostMapper.selectDiscussPosts(131, 0, 100));
+        discussPostRepository.saveAll(discussPostMapper.selectDiscussPosts(132, 0, 100));
+        discussPostRepository.saveAll(discussPostMapper.selectDiscussPosts(133, 0, 100));
+        discussPostRepository.saveAll(discussPostMapper.selectDiscussPosts(134, 0, 100));
+    &#125;
+
+    @Test
+    public void testUpdate() &#123;
+        DiscussPost post =discussPostMapper.selectDiscussPostById(231);
+        post.setContent(&quot;我是新人，使劲儿灌水&quot;);
+        discussPostRepository.save(post);
+    &#125;
+
+    @Test
+    public void testDelete() &#123;
+        //discussPostRepository.deleteById(231);
+        discussPostRepository.deleteAll();
+    &#125;
+
+    @Test
+    public void testSearchByRepository() &#123;
+        SearchQuery searchQuery = new NativeSearchQueryBuilder()
+                .withQuery(QueryBuilders.multiMatchQuery(&quot;互联网寒冬&quot;, &quot;title&quot;, &quot;content&quot;))
+                .withSort(SortBuilders.fieldSort(&quot;type&quot;).order(SortOrder.DESC))
+                .withSort(SortBuilders.fieldSort(&quot;score&quot;).order(SortOrder.DESC))
+                .withSort(SortBuilders.fieldSort(&quot;createTime&quot;).order(SortOrder.DESC))
+                .withPageable(PageRequest.of(0, 10))
+                .withHighlightFields(
+                        new HighlightBuilder.Field(&quot;title&quot;).preTags(&quot;&lt;em&gt;&quot;).postTags(&quot;&lt;em&gt;&quot;),
+                        new HighlightBuilder.Field(&quot;content&quot;).preTags(&quot;&lt;em&gt;&quot;).postTags(&quot;&lt;em&gt;&quot;)
+                ).build();
+
+        Page&lt;DiscussPost&gt; page = discussPostRepository.search(searchQuery);
+        System.out.println(page.getTotalElements());
+        System.out.println(page.getTotalPages());
+        System.out.println(page.getNumber());
+        System.out.println(page.getSize());
+
+        for(DiscussPost post: page) &#123;
+            System.out.println(post);
+        &#125;
+
+    &#125;
+
+    @Test
+    public void testSearchByTemplate() &#123;
+        SearchQuery searchQuery = new NativeSearchQueryBuilder()
+                .withQuery(QueryBuilders.multiMatchQuery(&quot;互联网寒冬&quot;, &quot;title&quot;, &quot;content&quot;))
+                .withSort(SortBuilders.fieldSort(&quot;type&quot;).order(SortOrder.DESC))
+                .withSort(SortBuilders.fieldSort(&quot;score&quot;).order(SortOrder.DESC))
+                .withSort(SortBuilders.fieldSort(&quot;createTime&quot;).order(SortOrder.DESC))
+                .withPageable(PageRequest.of(0, 10))
+                .withHighlightFields(
+                        new HighlightBuilder.Field(&quot;title&quot;).preTags(&quot;&lt;em&gt;&quot;).postTags(&quot;&lt;em&gt;&quot;),
+                        new HighlightBuilder.Field(&quot;content&quot;).preTags(&quot;&lt;em&gt;&quot;).postTags(&quot;&lt;em&gt;&quot;)
+                ).build();
+
+
+        Page&lt;DiscussPost&gt; page = elasticsearchTemplate.queryForPage(searchQuery, DiscussPost.class, new SearchResultMapper() &#123;
+            @Override
+            public &lt;T&gt; AggregatedPage&lt;T&gt; mapResults(SearchResponse searchResponse, Class&lt;T&gt; aClass, Pageable pageable) &#123;
+                SearchHits hits = searchResponse.getHits();
+                if(hits.getTotalHits() &lt;= 0) &#123;
+                    return null;
+                &#125;
+
+                List&lt;DiscussPost&gt; list = new ArrayList&lt;&gt;();
+                for(SearchHit hit : hits) &#123;
+                    DiscussPost post = new DiscussPost();
+
+                    String id = hit.getSourceAsMap().get(&quot;id&quot;).toString();
+                    post.setId(Integer.valueOf(id));
+
+                    String userId = hit.getSourceAsMap().get(&quot;userId&quot;).toString();
+                    post.setUserId(Integer.valueOf(userId));
+
+                    String title = hit.getSourceAsMap().get(&quot;title&quot;).toString();
+                    post.setTitle(title);
+
+                    String content = hit.getSourceAsMap().get(&quot;content&quot;).toString();
+                    post.setContent(content);
+
+                    String status = hit.getSourceAsMap().get(&quot;status&quot;).toString();
+                    post.setStatus(Integer.valueOf(status));
+
+                    String createTime = hit.getSourceAsMap().get(&quot;createTime&quot;).toString();
+                    post.setCreateTime(new Date(Long.valueOf(createTime)));
+
+                    String commentCount = hit.getSourceAsMap().get(&quot;commentCount&quot;).toString();
+                    post.setCommentCount(Integer.valueOf(commentCount));
+
+                    // 处理高亮显示的结果
+                    HighlightField titleField = hit.getHighlightFields().get(&quot;title&quot;);
+                    if (titleField != null) &#123;
+                        post.setTitle(titleField.getFragments()[0].toString());
+                    &#125;
+
+                    HighlightField contentField = hit.getHighlightFields().get(&quot;content&quot;);
+                    if (contentField != null) &#123;
+                        post.setContent(contentField.getFragments()[0].toString());
+                    &#125;
+
+                    list.add(post);
+                &#125;
+
+                return new AggregatedPageImpl(list, pageable,
+                        hits.getTotalHits(), searchResponse.getAggregations(), searchResponse.getScrollId(), hits.getMaxScore());
+            &#125;
+        &#125;);
+
+        System.out.println(page.getTotalElements());
+        System.out.println(page.getTotalPages());
+        System.out.println(page.getNumber());
+        System.out.println(page.getSize());
+
+        for(DiscussPost post: page) &#123;
+            System.out.println(post);
+        &#125;
+    &#125;
+&#125;
+</code></pre>
 
       
 
