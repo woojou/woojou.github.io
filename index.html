@@ -351,6 +351,20 @@ public class RedisConfig &#123;
 &#125;
 </code></pre>
 <h2 id="3-3-Redis使用场景"><a href="#3-3-Redis使用场景" class="headerlink" title="3.3 Redis使用场景"></a>3.3 Redis使用场景</h2><p><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/1415674">Redis的8大应用场景 - 云+社区 - 腾讯云 (tencent.com)</a></p>
+<h2 id="3-4-Redis高级数据应用"><a href="#3-4-Redis高级数据应用" class="headerlink" title="3.4 Redis高级数据应用"></a>3.4 Redis高级数据应用</h2><ul>
+<li>UV（Unique Visitor） <ul>
+<li>独立访客，需通过用户 IP 排重统计数据。 </li>
+<li>每次访问都要进行统计。 </li>
+<li>HyperLogLog ，性能好，且存储空间小。 </li>
+</ul>
+</li>
+<li>DAU（Daily Active User） <ul>
+<li>日活跃用户，需通过用户 ID 排重统计数据。 </li>
+<li>访问过一次，则认为其活跃。 </li>
+<li>Bitmap，性能好、且可以统计精确的结果。</li>
+</ul>
+</li>
+</ul>
 <h1 id="4-Kafka"><a href="#4-Kafka" class="headerlink" title="4. Kafka"></a>4. Kafka</h1><ul>
 <li>Kafka是一个分布式的流媒体平台。 </li>
 <li>应用：消息系统、日志收集、用户行为追踪、流式处理。</li>
@@ -874,6 +888,13 @@ public class ElasticsearchTests &#123;
         &#125;
     &#125;
 &#125;
+</code></pre>
+<h1 id="6-Spring-Security"><a href="#6-Spring-Security" class="headerlink" title="6. Spring Security"></a>6. Spring Security</h1><p>spring security底层就是filter，也就是说在Interceptor和controller之前执行。spring security包含了认证和授权。认证后将一个token存入，后续的授权都依赖于这个先前存入的结果。</p>
+<p>使用时，在spring boot中直接引入依赖即可</p>
+<pre><code class="xml">&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-security&lt;/artifactId&gt;
+&lt;/dependency&gt;
 </code></pre>
 
       

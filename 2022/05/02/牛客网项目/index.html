@@ -22,7 +22,7 @@
 <meta property="og:image" content="https://img-blog.csdnimg.cn/d07f99d345394ec8aca3bc8b44781db0.png">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/3505771e587440158a851202e989598e.png">
 <meta property="article:published_time" content="2022-05-02T11:39:16.000Z">
-<meta property="article:modified_time" content="2022-05-17T03:53:18.222Z">
+<meta property="article:modified_time" content="2022-05-19T00:04:02.153Z">
 <meta property="article:author" content="Woojou">
 <meta property="article:tag" content="项目">
 <meta name="twitter:card" content="summary">
@@ -358,6 +358,20 @@ public class RedisConfig &#123;
 &#125;
 </code></pre>
 <h2 id="3-3-Redis使用场景"><a href="#3-3-Redis使用场景" class="headerlink" title="3.3 Redis使用场景"></a>3.3 Redis使用场景</h2><p><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/1415674">Redis的8大应用场景 - 云+社区 - 腾讯云 (tencent.com)</a></p>
+<h2 id="3-4-Redis高级数据应用"><a href="#3-4-Redis高级数据应用" class="headerlink" title="3.4 Redis高级数据应用"></a>3.4 Redis高级数据应用</h2><ul>
+<li>UV（Unique Visitor） <ul>
+<li>独立访客，需通过用户 IP 排重统计数据。 </li>
+<li>每次访问都要进行统计。 </li>
+<li>HyperLogLog ，性能好，且存储空间小。 </li>
+</ul>
+</li>
+<li>DAU（Daily Active User） <ul>
+<li>日活跃用户，需通过用户 ID 排重统计数据。 </li>
+<li>访问过一次，则认为其活跃。 </li>
+<li>Bitmap，性能好、且可以统计精确的结果。</li>
+</ul>
+</li>
+</ul>
 <h1 id="4-Kafka"><a href="#4-Kafka" class="headerlink" title="4. Kafka"></a>4. Kafka</h1><ul>
 <li>Kafka是一个分布式的流媒体平台。 </li>
 <li>应用：消息系统、日志收集、用户行为追踪、流式处理。</li>
@@ -882,6 +896,13 @@ public class ElasticsearchTests &#123;
     &#125;
 &#125;
 </code></pre>
+<h1 id="6-Spring-Security"><a href="#6-Spring-Security" class="headerlink" title="6. Spring Security"></a>6. Spring Security</h1><p>spring security底层就是filter，也就是说在Interceptor和controller之前执行。spring security包含了认证和授权。认证后将一个token存入，后续的授权都依赖于这个先前存入的结果。</p>
+<p>使用时，在spring boot中直接引入依赖即可</p>
+<pre><code class="xml">&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-security&lt;/artifactId&gt;
+&lt;/dependency&gt;
+</code></pre>
 
       
 
@@ -994,7 +1015,7 @@ public class ElasticsearchTests &#123;
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-%E6%90%AD%E5%BB%BA%E7%8E%AF%E5%A2%83"><span class="toc-number">1.</span> <span class="toc-text">1. 搭建环境</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-%E5%8F%91%E9%80%81%E9%82%AE%E4%BB%B6"><span class="toc-number">2.</span> <span class="toc-text">2. 发送邮件</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-Redis"><span class="toc-number">3.</span> <span class="toc-text">3. Redis</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#3-1-%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-number">3.1.</span> <span class="toc-text">3.1 常用命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-2-Spring%E6%95%B4%E5%90%88Redis"><span class="toc-number">3.2.</span> <span class="toc-text">3.2 Spring整合Redis</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-3-Redis%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-number">3.3.</span> <span class="toc-text">3.3 Redis使用场景</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-Kafka"><span class="toc-number">4.</span> <span class="toc-text">4. Kafka</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#4-1-%E5%AE%89%E8%A3%85"><span class="toc-number">4.1.</span> <span class="toc-text">4.1 安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-2-%E4%BD%BF%E7%94%A8"><span class="toc-number">4.2.</span> <span class="toc-text">4.2 使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-3-Spring%E6%95%B4%E5%90%88Kafka"><span class="toc-number">4.3.</span> <span class="toc-text">4.3 Spring整合Kafka</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#5-Elasticsearch"><span class="toc-number">5.</span> <span class="toc-text">5. Elasticsearch</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#5-1-%E5%AE%89%E8%A3%85"><span class="toc-number">5.1.</span> <span class="toc-text">5.1 安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-2-%E4%BD%BF%E7%94%A8"><span class="toc-number">5.2.</span> <span class="toc-text">5.2 使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-3-Spring%E6%95%B4%E5%90%88Elasticsearch"><span class="toc-number">5.3.</span> <span class="toc-text">5.3 Spring整合Elasticsearch</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-%E6%90%AD%E5%BB%BA%E7%8E%AF%E5%A2%83"><span class="toc-number">1.</span> <span class="toc-text">1. 搭建环境</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-%E5%8F%91%E9%80%81%E9%82%AE%E4%BB%B6"><span class="toc-number">2.</span> <span class="toc-text">2. 发送邮件</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-Redis"><span class="toc-number">3.</span> <span class="toc-text">3. Redis</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#3-1-%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-number">3.1.</span> <span class="toc-text">3.1 常用命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-2-Spring%E6%95%B4%E5%90%88Redis"><span class="toc-number">3.2.</span> <span class="toc-text">3.2 Spring整合Redis</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-3-Redis%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-number">3.3.</span> <span class="toc-text">3.3 Redis使用场景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-4-Redis%E9%AB%98%E7%BA%A7%E6%95%B0%E6%8D%AE%E5%BA%94%E7%94%A8"><span class="toc-number">3.4.</span> <span class="toc-text">3.4 Redis高级数据应用</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-Kafka"><span class="toc-number">4.</span> <span class="toc-text">4. Kafka</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#4-1-%E5%AE%89%E8%A3%85"><span class="toc-number">4.1.</span> <span class="toc-text">4.1 安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-2-%E4%BD%BF%E7%94%A8"><span class="toc-number">4.2.</span> <span class="toc-text">4.2 使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-3-Spring%E6%95%B4%E5%90%88Kafka"><span class="toc-number">4.3.</span> <span class="toc-text">4.3 Spring整合Kafka</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#5-Elasticsearch"><span class="toc-number">5.</span> <span class="toc-text">5. Elasticsearch</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#5-1-%E5%AE%89%E8%A3%85"><span class="toc-number">5.1.</span> <span class="toc-text">5.1 安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-2-%E4%BD%BF%E7%94%A8"><span class="toc-number">5.2.</span> <span class="toc-text">5.2 使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-3-Spring%E6%95%B4%E5%90%88Elasticsearch"><span class="toc-number">5.3.</span> <span class="toc-text">5.3 Spring整合Elasticsearch</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#6-Spring-Security"><span class="toc-number">6.</span> <span class="toc-text">6. Spring Security</span></a></li></ol>
                     </div>
                 </span>
             </div>
