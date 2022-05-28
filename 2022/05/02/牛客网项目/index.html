@@ -22,7 +22,7 @@
 <meta property="og:image" content="https://img-blog.csdnimg.cn/d07f99d345394ec8aca3bc8b44781db0.png">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/3505771e587440158a851202e989598e.png">
 <meta property="article:published_time" content="2022-05-02T11:39:16.000Z">
-<meta property="article:modified_time" content="2022-05-19T12:25:39.637Z">
+<meta property="article:modified_time" content="2022-05-28T13:21:38.904Z">
 <meta property="article:author" content="Woojou">
 <meta property="article:tag" content="项目">
 <meta name="twitter:card" content="summary">
@@ -220,8 +220,8 @@ public class AlphaController &#123;
 server.servlet.context-path=/community
 </code></pre>
 <p>输入网址：localhost:8080/community/alpha/test，可以看到网页打印出Hello Spring Boot。</p>
-<h1 id="2-发送邮件"><a href="#2-发送邮件" class="headerlink" title="2. 发送邮件"></a>2. 发送邮件</h1><p>尝试了新浪邮箱，但是发现怎么都不行，于是上网搜索，换成了QQ邮箱就妥了。具体配置步骤可以看<a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000021587834">这里</a>。</p>
-<p>在util包下创建了一个工具类 MailClient</p>
+<h1 id="2-发送邮件"><a href="#2-发送邮件" class="headerlink" title="2. 发送邮件"></a>2. 发送邮件</h1><p>尝试了用新浪邮箱开启代理发送邮件，但是实验时发现怎么都不行，于是上网搜索，换成了QQ邮箱就妥了。具体配置步骤可以看<a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000021587834">这里</a>。</p>
+<p>在util包下创建了一个工具类 MailClient，利用Spring框架提供的 JavaMailSender 类来完成发送邮件的功能。</p>
 <pre><code class="java">package com.nowcoder.community.util;
 
 import org.slf4j.Logger;
@@ -249,6 +249,7 @@ public class MailClient &#123;
 
     public void sendMail(String to, String subject, String content) &#123;
         try &#123;
+            //创建信息
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message);
 
@@ -261,6 +262,36 @@ public class MailClient &#123;
         &#125; catch (MessagingException e) &#123;
             logger.error(&quot;邮件发送失败:&quot; + e.getMessage());
         &#125;
+    &#125;
+&#125;
+</code></pre>
+<p>在实际调用的时候，可以使用发送文本邮件，还是html网页邮件，具体示例如下：</p>
+<pre><code class="java">@RunWith(SpringRunner.class)
+@SpringBootTest
+@ContextConfiguration(classes = CommunityApplication.class)
+public class MailTest &#123;
+
+    @Autowired
+    private MailClient mailClient;
+
+    @Autowired
+    private TemplateEngine templateEngine;
+
+    @Test
+    public void testTextMail() &#123;
+        mailClient.sendMail(&quot;woojou@sina.com&quot;, &quot;Test&quot;, &quot;Welcome&quot;);
+    &#125;
+
+    @Test
+    public void testHtmlMail() &#123;
+        Context context = new Context();
+        context.setVariable(&quot;username&quot;, &quot;Cindy&quot;);
+        //发送一个html网页
+        String content = templateEngine.process(&quot;/mail/demo&quot;, context);
+        //System.out.println(content);
+
+        mailClient.sendMail(&quot;woojou@sina.com&quot;, &quot;HtmlTest&quot;, content);
+
     &#125;
 &#125;
 </code></pre>
@@ -904,6 +935,382 @@ public class ElasticsearchTests &#123;
     &lt;artifactId&gt;spring-boot-starter-security&lt;/artifactId&gt;
 &lt;/dependency&gt;
 </code></pre>
+<h1 id="7-注册功能"><a href="#7-注册功能" class="headerlink" title="7. 注册功能"></a>7. 注册功能</h1><h2 id="7-1-dao"><a href="#7-1-dao" class="headerlink" title="7.1 dao"></a>7.1 dao</h2><p>提供一个插入用户信息的方法</p>
+<pre><code class="java">int insertUser(User user);
+</code></pre>
+<pre><code class="xml">&lt;sql id=&quot;insertFields&quot;&gt;
+    username, password, salt, email, type, status, activation_code, header_url, create_time
+&lt;/sql&gt;
+
+&lt;insert id=&quot;insertUser&quot; parameterType=&quot;User&quot; keyProperty=&quot;id&quot;&gt;
+    insert into user (&lt;include refid=&quot;insertFields&quot;/&gt;)
+    values (#&#123;username&#125;, #&#123;password&#125;, #&#123;salt&#125;, #&#123;email&#125;, #&#123;type&#125;, #&#123;status&#125;, #&#123;activationCode&#125;, #&#123;headerUrl&#125;, #&#123;createTime&#125;)
+&lt;/insert&gt;
+</code></pre>
+<h2 id="7-2-service"><a href="#7-2-service" class="headerlink" title="7.2 service"></a>7.2 service</h2><ol>
+<li>先对所有字段进行判空</li>
+<li>验证账号与邮箱是否已经被注册过</li>
+<li>创建一个User对象，将其插入进数据库表中</li>
+<li>生成激活码，用于生成一个激活链接，然后给用户发送激活邮件（利用了Thymeleaf模板发送HTML网页邮件）</li>
+<li>点击激活链接后，判断激活码是否正确以及用户是否已经激活。如果没有被激活过，现在修改其状态码为1</li>
+</ol>
+<h2 id="7-3-controller"><a href="#7-3-controller" class="headerlink" title="7.3 controller"></a>7.3 controller</h2><pre><code class="java">@RequestMapping(path = &quot;/register&quot;, method = RequestMethod.POST)
+public String register(Model model, User user) &#123;
+    Map&lt;String, Object&gt; map = userService.register(user);
+    if (map == null || map.isEmpty()) &#123;
+        model.addAttribute(&quot;msg&quot;, &quot;注册成功，我们已经向您的邮箱发送了一封激活邮件，请完成激活操作&quot;);
+        model.addAttribute(&quot;target&quot;, &quot;/index&quot;);
+        return &quot;/site/operate-result&quot;;
+    &#125; else &#123;
+        //返回错误信息
+        model.addAttribute(&quot;usernameMsg&quot;, map.get(&quot;usernameMsg&quot;));
+        model.addAttribute(&quot;emailMsg&quot;, map.get(&quot;emailMsg&quot;));
+        model.addAttribute(&quot;passwordMsg&quot;, map.get(&quot;passwordMsg&quot;));
+        return &quot;/site/register&quot;;
+    &#125;
+&#125;
+</code></pre>
+<p>点击了激活链接后的操作，主要是一些页面提示状态的显示。</p>
+<pre><code class="java">@RequestMapping(path = &quot;/activation/&#123;userId&#125;/&#123;code&#125;&quot;, method = RequestMethod.GET)
+public String activation(Model model, @PathVariable(&quot;userId&quot;) int userId, @PathVariable(&quot;code&quot;) String code) &#123;
+    int result = userService.activation(userId, code);
+    if (result == ACTIVATION_SUCCESS) &#123;
+        model.addAttribute(&quot;msg&quot;, &quot;激活成功&quot;);
+        model.addAttribute(&quot;target&quot;, &quot;/login&quot;);
+    &#125; else if (result == ACTIVATION_REPEAT) &#123;
+        model.addAttribute(&quot;msg&quot;, &quot;您的账号已被激活，请勿重复激活&quot;);
+        model.addAttribute(&quot;target&quot;, &quot;/index&quot;);
+    &#125; else &#123;
+        model.addAttribute(&quot;msg&quot;, &quot;激活失败&quot;);
+        model.addAttribute(&quot;target&quot;, &quot;/index&quot;);
+    &#125;
+    return &quot;/site/operate-result&quot;;
+&#125;
+</code></pre>
+<h1 id="8-登录功能"><a href="#8-登录功能" class="headerlink" title="8. 登录功能"></a>8. 登录功能</h1><h2 id="8-1-验证码生成"><a href="#8-1-验证码生成" class="headerlink" title="8.1 验证码生成"></a>8.1 验证码生成</h2><h3 id="8-1-1-配置类"><a href="#8-1-1-配置类" class="headerlink" title="8.1.1 配置类"></a>8.1.1 配置类</h3><p>spring没有提供kaptcha的自动注入，需要我们自己写配置类</p>
+<pre><code class="java">@Configuration
+public class KaptchaConfig &#123;
+
+    //spring没有提供自动注入需要我们自己写配置类
+    @Bean
+    public Producer kaptchaProducer() &#123;
+        Properties properties = new Properties();
+        
+        // 设置尺寸
+        properties.setProperty(&quot;kaptcha.image.width&quot;, &quot;100&quot;);
+        properties.setProperty(&quot;kaptcha.image.height&quot;, &quot;40&quot;);
+        // 设置字体
+        properties.setProperty(&quot;kaptcha.textproducer.font.size&quot;, &quot;32&quot;);
+        properties.setProperty(&quot;kaptcha.textproducer.font.color&quot;, &quot;0,0,0&quot;); //黑色
+        // 设置验证码的字母范围
+        properties.setProperty(&quot;kaptcha.textproducer.char.string&quot;, &quot;0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ&quot;); //字母范围
+        // 验证码长度为4
+        properties.setProperty(&quot;kaptcha.textproducer.char.length&quot;, &quot;4&quot;);
+        // 没有噪点
+        properties.setProperty(&quot;kaptcha.noise.impl&quot;, &quot;com.google.code.kaptcha.impl.NoNoise&quot;);
+
+        DefaultKaptcha kaptcha = new DefaultKaptcha();
+        Config config = new Config(properties);
+        kaptcha.setConfig(config);
+        return kaptcha;
+    &#125;
+&#125;
+</code></pre>
+<h3 id="8-1-2-获取验证码"><a href="#8-1-2-获取验证码" class="headerlink" title="8.1.2 获取验证码"></a>8.1.2 获取验证码</h3><pre><code class="java">@RequestMapping(path = &quot;/kaptcha&quot;, method = RequestMethod.GET)
+public void getKaptcha(HttpServletResponse response/*, HttpSession session*/) &#123;
+    //生成验证码
+    String text = kaptchaProducer.createText();
+    BufferedImage image = kaptchaProducer.createImage(text);
+
+    // 生成随机的凭证
+    String kaptchaOwner = CommunityUtil.generateUUID();
+    String kaptchaKey = RedisKeyUtil.getKaptchaKey(kaptchaOwner);
+    
+    // 存入Cookie
+    Cookie cookie = new Cookie(&quot;kaptchaOwner&quot;, kaptchaOwner);
+    cookie.setMaxAge(60);
+    cookie.setPath(contextPath);
+    response.addCookie(cookie);
+    // 存入Redis,键（随机凭证）值（验证码）
+    redisTemplate.opsForValue().set(kaptchaKey, text, 60, TimeUnit.SECONDS);
+
+    // 将图片输出给浏览器
+    response.setContentType(&quot;image/png&quot;);
+    try &#123;
+        OutputStream os = response.getOutputStream();
+        ImageIO.write(image, &quot;png&quot;, os);
+    &#125; catch (IOException e) &#123;
+        logger.error(&quot;验证码响应失败: &quot; + e.getMessage());
+    &#125;
+&#125;
+</code></pre>
+<h2 id="8-2-service"><a href="#8-2-service" class="headerlink" title="8.2 service"></a>8.2 service</h2><ol>
+<li>字段判空，账号密码验证，以及是否已经激活判断</li>
+<li>生成登录凭证，并存入Redis</li>
+<li>如果登录失败，就存入一些错误信息</li>
+</ol>
+<h2 id="8-3-controller"><a href="#8-3-controller" class="headerlink" title="8.3 controller"></a>8.3 controller</h2><ol>
+<li>从Cookie中取到验证码的凭证，去redis中搜寻到验证码，进行比对</li>
+<li>调用业务层的登录函数，获得到Loginticket的ticket</li>
+<li>将ticket存入Cookie，设置cookie生效范围与时间。加入到Response中。</li>
+</ol>
+<h2 id="8-4-登录凭证拦截器"><a href="#8-4-登录凭证拦截器" class="headerlink" title="8.4 登录凭证拦截器"></a>8.4 登录凭证拦截器</h2><h3 id="8-4-1-preHandle"><a href="#8-4-1-preHandle" class="headerlink" title="8.4.1 preHandle"></a>8.4.1 preHandle</h3><p>拦截器的preHandle方法<strong>在Controller处理之前进行调用</strong>，也就是在请求方法之前调用。</p>
+<p>在这一步，根据之前在Cookie中存入的ticket去Redis中寻找登录凭证，然后根据登录凭证去查找登录的用户信息。将该用户对象存入到hostholder中。构建用户认证的结果，并存入SecurityContext，以便于Security进行授权。</p>
+<pre><code class="java">@Override
+public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception &#123;
+    //从cookie中获取凭证
+    String ticket = CookieUtil.getValue(request, &quot;ticket&quot;);
+    if (ticket != null) &#123;
+        LoginTicket loginTicket = userService.findByTicket(ticket);
+        // 登录凭证不为空，且登录凭证没有过期
+        if (loginTicket != null &amp;&amp; loginTicket.getStatus() == 0 &amp;&amp; loginTicket.getExpired().after(new Date())) &#123;
+            User user = userService.findUserById(loginTicket.getUserId());
+            hostHolder.setUser(user);
+
+            // 构建用户认证的结果,并存入SecurityContext,以便于Security进行授权.
+            Authentication authentication = new UsernamePasswordAuthenticationToken(
+                user, user.getPassword(), userService.getAuthorities(user.getId()));
+            SecurityContextHolder.setContext(new SecurityContextImpl(authentication));
+        &#125;
+    &#125;
+    return true;
+&#125;
+</code></pre>
+<p>这里调用的业务层，<code>findUserById</code>其实运用到了Redis，而不是直接的Mysql数据库。因为每次Controller请求是非常频繁的，每次都要做一次数据库查询会大大降低效率。</p>
+<pre><code class="java">public User findUserById(int id) &#123;
+    User user = getCache(id);
+    if(user == null) &#123;
+        user = initCache(id);
+    &#125;
+    return user;
+&#125;
+// 1.优先从缓存中取值
+private User getCache(int userId) &#123;
+    String redisKey = RedisKeyUtil.getUserKey(userId);
+    return (User) redisTemplate.opsForValue().get(redisKey);
+&#125;
+
+// 2.取不到时初始化缓存数据
+private User initCache(int userId) &#123;
+    User user = userMapper.selectById(userId);
+    String redisKey = RedisKeyUtil.getUserKey(userId);
+    redisTemplate.opsForValue().set(redisKey, user, 3600, TimeUnit.SECONDS);
+    return user;
+&#125;
+
+// 3.数据变更时清除缓存数据
+private void clearCache(int userId) &#123;
+    String redisKey = RedisKeyUtil.getUserKey(userId);
+    redisTemplate.delete(redisKey);
+&#125;
+</code></pre>
+<p>这个HostHolder，是多线程操作，每次能从线程池中返回当前线程的用户。<code>ThreadLocal</code> 叫做本地线程变量，意思是说，<code>ThreadLocal</code> 中填充的的是当前线程的变量，该变量对其他线程而言是封闭且隔离的，<code>ThreadLocal</code> 为变量在每个线程中创建了一个副本，这样每个线程都可以访问自己内部的副本变量。</p>
+<h3 id="8-4-2-postHandle"><a href="#8-4-2-postHandle" class="headerlink" title="8.4.2 postHandle"></a>8.4.2 postHandle</h3><p>postHandle是进行处理器拦截用的，它的执行时间是在处理器进行处理之后，也就是在<strong>Controller的方法调用之后执行</strong>，但是它会在DispatcherServlet进行<strong>视图的渲染之前执行</strong>，也就是说在这个方法中你可以<strong>对ModelAndView进行操作</strong>。</p>
+<p>在这里，把之前加入到hostholder中的用户对象加入到ModelAndView中。这里是为了页面显示所需的user信息。</p>
+<pre><code class="java">@Override
+public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception &#123;
+    User user = hostHolder.getUser();
+    if(user != null &amp;&amp; modelAndView != null) &#123;
+        modelAndView.addObject(&quot;loginUser&quot;, user);
+    &#125;
+&#125;
+</code></pre>
+<h3 id="8-4-3-afterCompletion"><a href="#8-4-3-afterCompletion" class="headerlink" title="8.4.3 afterCompletion"></a>8.4.3 afterCompletion</h3><p>afterCompletion方法将在整个请求完成之后，也就是视图渲染之后执行，主要用于清理资源。</p>
+<p>这里，只需要清除hostholder。</p>
+<pre><code class="java">@Override
+public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception &#123;
+    hostHolder.clear();
+&#125;
+</code></pre>
+<h1 id="9-头像上传"><a href="#9-头像上传" class="headerlink" title="9. 头像上传"></a>9. 头像上传</h1><h2 id="9-1-本地上传"><a href="#9-1-本地上传" class="headerlink" title="9.1 本地上传"></a>9.1 本地上传</h2><h3 id="9-1-1-前端"><a href="#9-1-1-前端" class="headerlink" title="9.1.1 前端"></a>9.1.1 前端</h3><p>必须是POST请求，enctype=“multipart/form-data”</p>
+<pre><code class="html">&lt;form class=&quot;mt-5&quot; method=&quot;post&quot; enctype=&quot;multipart/form-data&quot; th:action=&quot;@&#123;/user/upload&#125;&quot;&gt;
+    &lt;div class=&quot;form-group row mt-4&quot;&gt;
+        &lt;label class=&quot;col-sm-2 col-form-label text-right&quot;&gt;选择头像:&lt;/label&gt;
+        &lt;div class=&quot;col-sm-10&quot;&gt;
+            &lt;div class=&quot;custom-file&quot;&gt;
+                &lt;input type=&quot;file&quot; class=&quot;custom-file-input&quot; th:class=&quot;|custom-file-input $&#123;error!=null?&#39;is-invalid&#39;:&#39;&#39;&#125;|&quot;
+                       id=&quot;head-image&quot; name=&quot;headerImage&quot;  lang=&quot;es&quot; required=&quot;&quot;&gt;
+                &lt;label class=&quot;custom-file-label&quot; for=&quot;head-image&quot; data-browse=&quot;文件&quot;&gt;选择一张图片&lt;/label&gt;
+                &lt;div class=&quot;invalid-feedback&quot; th:text=&quot;$&#123;error&#125;&quot;&gt;
+                    错误啦！
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;form-group row mt-4&quot;&gt;
+        &lt;div class=&quot;col-sm-2&quot;&gt;&lt;/div&gt;
+        &lt;div class=&quot;col-sm-10 text-center&quot;&gt;
+            &lt;button type=&quot;submit&quot; class=&quot;btn btn-info text-white form-control&quot;&gt;立即上传&lt;/button&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/form&gt;
+</code></pre>
+<h3 id="9-1-2-dao"><a href="#9-1-2-dao" class="headerlink" title="9.1.2 dao"></a>9.1.2 dao</h3><pre><code class="java">int updateHeader(int id, String headerUrl);
+</code></pre>
+<pre><code class="xml">&lt;update id=&quot;updateHeader&quot;&gt;
+    update user set header_url = #&#123;headerUrl&#125; where id = #&#123;id&#125;
+&lt;/update&gt;
+</code></pre>
+<h3 id="9-1-3-service"><a href="#9-1-3-service" class="headerlink" title="9.1.3 service"></a>9.1.3 service</h3><pre><code class="java">public int updateHeader(int userId, String headerUrl) &#123;
+    int rows = userMapper.updateHeader(userId, headerUrl);
+    // 做更改后一定要清除缓存
+    clearCache(userId);
+    return rows;
+&#125;
+</code></pre>
+<h3 id="9-1-4-controller"><a href="#9-1-4-controller" class="headerlink" title="9.1.4 controller"></a>9.1.4 controller</h3><p>利用SpringMVC的MultipartFile来上传文件</p>
+<ol>
+<li><p>首先要进行一些常规的判空、判错的操作。</p>
+</li>
+<li><p>然后为该文件创建一个随机的文件路径，创建文件类，文件导入到该地址</p>
+</li>
+</ol>
+<pre><code class="java">@RequestMapping(path = &quot;/upload&quot;, method = RequestMethod.POST)
+public String uploadHeader(MultipartFile headerImage, Model model) &#123;
+    if (headerImage == null) &#123;
+        model.addAttribute(&quot;error&quot;, &quot;您还没有选择图片！&quot;);
+        return &quot;/site/setting&quot;;
+    &#125;
+
+    String fileName = headerImage.getOriginalFilename();
+    String suffix = fileName.substring(fileName.lastIndexOf(&quot;.&quot;));
+
+    if (StringUtils.isBlank(suffix)) &#123;
+        model.addAttribute(&quot;error&quot;, &quot;图片格式不正确！&quot;);
+        return &quot;/site/setting&quot;;
+    &#125;
+
+    fileName = CommunityUtil.generateUUID() + suffix;
+    // uploadPath:本地上传路径
+    String dest = uploadPath + &quot;/&quot; + fileName;
+    File file = new File(dest);
+    try &#123;
+        headerImage.transferTo(file);
+    &#125; catch (IOException e) &#123;
+        logger.error(&quot;上传文件失败: &quot; + e.getMessage());
+        throw new RuntimeException(&quot;上传文件失败,服务器发生异常!&quot;, e);
+    &#125;
+
+    User user = hostHolder.getUser();
+    String headerUrl = domain + contextPath + &quot;/user/header/&quot; + fileName;
+    userService.updateHeader(user.getId(), headerUrl);
+    return &quot;redirect:/user/setting&quot;;
+&#125;
+</code></pre>
+<p>读取头像</p>
+<pre><code class="java">@RequestMapping(path = &quot;/header/&#123;fileName&#125;&quot;)
+public void getHeader(@PathVariable(&quot;fileName&quot;) String fileName, HttpServletResponse response) &#123;
+    // 服务器存放路径
+    fileName = uploadPath + &quot;/&quot; + fileName;
+    // 文件后缀
+    String suffix = fileName.substring(fileName.lastIndexOf(&quot;.&quot;) + 1);
+    // 设置响应类型
+    response.setContentType(&quot;image/&quot; + suffix);
+
+    // 文件输入输出流
+    try (FileInputStream fis = new FileInputStream(fileName);
+         OutputStream fos = response.getOutputStream()) &#123;
+
+        byte[] buffer = new byte[1024];
+        int b = 0;
+        while ((b = fis.read(buffer)) != -1) &#123;
+            fos.write(buffer, 0, b);
+        &#125;
+    &#125; catch (IOException e) &#123;
+        logger.error(&quot;读取头像失败: &quot; + e.getMessage());
+    &#125;
+&#125;
+</code></pre>
+<h2 id="9-2-上传到云服务器"><a href="#9-2-上传到云服务器" class="headerlink" title="9.2 上传到云服务器"></a>9.2 上传到云服务器</h2><h3 id="9-2-1-前端"><a href="#9-2-1-前端" class="headerlink" title="9.2.1 前端"></a>9.2.1 前端</h3><pre><code class="html">&lt;!-- 利用前端代码进行提交 --&gt;
+&lt;form class=&quot;mt-5&quot; id=&quot;uploadForm&quot;&gt;
+    &lt;div class=&quot;form-group row mt-4&quot;&gt;
+        &lt;label for=&quot;head-image&quot; class=&quot;col-sm-2 col-form-label text-right&quot;&gt;选择头像:&lt;/label&gt;
+        &lt;div class=&quot;col-sm-10&quot;&gt;
+            &lt;div class=&quot;custom-file&quot;&gt;
+                &lt;input type=&quot;hidden&quot; name=&quot;token&quot; th:value=&quot;$&#123;uploadToken&#125;&quot;&gt;
+                &lt;input type=&quot;hidden&quot; name=&quot;key&quot; th:value=&quot;$&#123;fileName&#125;&quot;&gt;
+                &lt;!--这里name必须写成file--&gt;
+                &lt;input type=&quot;file&quot; class=&quot;custom-file-input&quot; id=&quot;head-image&quot; name=&quot;file&quot;  lang=&quot;es&quot; required=&quot;&quot;&gt;
+                &lt;label class=&quot;custom-file-label&quot; for=&quot;head-image&quot; data-browse=&quot;文件&quot;&gt;选择一张图片&lt;/label&gt;
+                &lt;div class=&quot;invalid-feedback&quot;&gt;
+                    错误啦！
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;form-group row mt-4&quot;&gt;
+        &lt;div class=&quot;col-sm-2&quot;&gt;&lt;/div&gt;
+        &lt;div class=&quot;col-sm-10 text-center&quot;&gt;
+            &lt;button type=&quot;submit&quot; class=&quot;btn btn-info text-white form-control&quot;&gt;立即上传&lt;/button&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/form&gt;
+</code></pre>
+<pre><code class="js">$(function()&#123;
+    $(&quot;#uploadForm&quot;).submit(upload);
+&#125;);
+// 利用异步提交的方式
+function upload() &#123;
+    $.ajax(&#123;
+        url: &quot;http://upload-cn-east-2.qiniup.com&quot;,
+        method: &quot;post&quot;,
+        // 不需要把提交的表单转成字符串
+        processData: false,
+        // 让浏览器自动设置，不可以为true
+        contentType: false,
+        data: new FormData($(&quot;#uploadForm&quot;)[0]),
+        success: function(data) &#123;
+            if(data &amp;&amp; data.code == 0) &#123;
+                // 更新头像访问路径
+                $.post(
+                    CONTEXT_PATH + &quot;/user/header/url&quot;,
+                    &#123;&quot;fileName&quot;:$(&quot;input[name=&#39;key&#39;]&quot;).val()&#125;,
+                    function(data) &#123;
+                        data = $.parseJSON(data);
+                        if(data.code == 0) &#123;
+                            window.location.reload();
+                        &#125; else &#123;
+                            alert(data.msg);
+                        &#125;
+                    &#125;
+                );
+            &#125; else &#123;
+                alert(&quot;上传失败!&quot;);
+            &#125;
+        &#125;
+    &#125;);
+    return false;
+&#125;
+</code></pre>
+<h3 id="9-2-2-后端"><a href="#9-2-2-后端" class="headerlink" title="9.2.2 后端"></a>9.2.2 后端</h3><pre><code class="java">@LoginRequired
+@RequestMapping(path = &quot;/setting&quot;, method = RequestMethod.GET)
+public String getSettingPage(Model model) &#123;
+    // 文件名称
+    String fileName = CommunityUtil.generateUUID();
+    // 设置响应信息（七牛云特定的写法模板）
+    StringMap policy = new StringMap();
+    policy.put(&quot;returnBody&quot;, CommunityUtil.getJSONString(0));
+    // 生成上传凭证
+    Auth auth = Auth.create(accessKey, secretKey);
+    String uploadToken = auth.uploadToken(headerBucketName, fileName, 3600, policy);
+
+    model.addAttribute(&quot;uploadToken&quot;, uploadToken);
+    model.addAttribute(&quot;fileName&quot;, fileName);
+
+    return &quot;/site/setting&quot;;
+&#125;
+
+@RequestMapping(path = &quot;header/url&quot;, method = RequestMethod.POST)
+@ResponseBody
+public String updateHeaderUrl(String fileName) &#123;
+    if(StringUtils.isBlank(fileName)) &#123;
+        return CommunityUtil.getJSONString(1, &quot;文件名不可以为空&quot;);
+    &#125;
+    String url = headerBucketUrl+&quot;/&quot;+fileName;
+    userService.updateHeader(hostHolder.getUser().getId(), url);
+    return CommunityUtil.getJSONString(0, &quot;成功！&quot;);
+&#125;
+</code></pre>
 
       
 
@@ -1016,7 +1423,7 @@ public class ElasticsearchTests &#123;
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-%E6%90%AD%E5%BB%BA%E7%8E%AF%E5%A2%83"><span class="toc-number">1.</span> <span class="toc-text">1. 搭建环境</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-%E5%8F%91%E9%80%81%E9%82%AE%E4%BB%B6"><span class="toc-number">2.</span> <span class="toc-text">2. 发送邮件</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-Redis"><span class="toc-number">3.</span> <span class="toc-text">3. Redis</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#3-1-%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-number">3.1.</span> <span class="toc-text">3.1 常用命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-2-Spring%E6%95%B4%E5%90%88Redis"><span class="toc-number">3.2.</span> <span class="toc-text">3.2 Spring整合Redis</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-3-Redis%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-number">3.3.</span> <span class="toc-text">3.3 Redis使用场景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-4-Redis%E9%AB%98%E7%BA%A7%E6%95%B0%E6%8D%AE%E5%BA%94%E7%94%A8"><span class="toc-number">3.4.</span> <span class="toc-text">3.4 Redis高级数据应用</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-Kafka"><span class="toc-number">4.</span> <span class="toc-text">4. Kafka</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#4-1-%E5%AE%89%E8%A3%85"><span class="toc-number">4.1.</span> <span class="toc-text">4.1 安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-2-%E4%BD%BF%E7%94%A8"><span class="toc-number">4.2.</span> <span class="toc-text">4.2 使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-3-Spring%E6%95%B4%E5%90%88Kafka"><span class="toc-number">4.3.</span> <span class="toc-text">4.3 Spring整合Kafka</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#5-Elasticsearch"><span class="toc-number">5.</span> <span class="toc-text">5. Elasticsearch</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#5-1-%E5%AE%89%E8%A3%85"><span class="toc-number">5.1.</span> <span class="toc-text">5.1 安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-2-%E4%BD%BF%E7%94%A8"><span class="toc-number">5.2.</span> <span class="toc-text">5.2 使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-3-Spring%E6%95%B4%E5%90%88Elasticsearch"><span class="toc-number">5.3.</span> <span class="toc-text">5.3 Spring整合Elasticsearch</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#6-Spring-Security"><span class="toc-number">6.</span> <span class="toc-text">6. Spring Security</span></a></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-%E6%90%AD%E5%BB%BA%E7%8E%AF%E5%A2%83"><span class="toc-number">1.</span> <span class="toc-text">1. 搭建环境</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-%E5%8F%91%E9%80%81%E9%82%AE%E4%BB%B6"><span class="toc-number">2.</span> <span class="toc-text">2. 发送邮件</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-Redis"><span class="toc-number">3.</span> <span class="toc-text">3. Redis</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#3-1-%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-number">3.1.</span> <span class="toc-text">3.1 常用命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-2-Spring%E6%95%B4%E5%90%88Redis"><span class="toc-number">3.2.</span> <span class="toc-text">3.2 Spring整合Redis</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-3-Redis%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-number">3.3.</span> <span class="toc-text">3.3 Redis使用场景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-4-Redis%E9%AB%98%E7%BA%A7%E6%95%B0%E6%8D%AE%E5%BA%94%E7%94%A8"><span class="toc-number">3.4.</span> <span class="toc-text">3.4 Redis高级数据应用</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-Kafka"><span class="toc-number">4.</span> <span class="toc-text">4. Kafka</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#4-1-%E5%AE%89%E8%A3%85"><span class="toc-number">4.1.</span> <span class="toc-text">4.1 安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-2-%E4%BD%BF%E7%94%A8"><span class="toc-number">4.2.</span> <span class="toc-text">4.2 使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-3-Spring%E6%95%B4%E5%90%88Kafka"><span class="toc-number">4.3.</span> <span class="toc-text">4.3 Spring整合Kafka</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#5-Elasticsearch"><span class="toc-number">5.</span> <span class="toc-text">5. Elasticsearch</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#5-1-%E5%AE%89%E8%A3%85"><span class="toc-number">5.1.</span> <span class="toc-text">5.1 安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-2-%E4%BD%BF%E7%94%A8"><span class="toc-number">5.2.</span> <span class="toc-text">5.2 使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-3-Spring%E6%95%B4%E5%90%88Elasticsearch"><span class="toc-number">5.3.</span> <span class="toc-text">5.3 Spring整合Elasticsearch</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#6-Spring-Security"><span class="toc-number">6.</span> <span class="toc-text">6. Spring Security</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#7-%E6%B3%A8%E5%86%8C%E5%8A%9F%E8%83%BD"><span class="toc-number">7.</span> <span class="toc-text">7. 注册功能</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#7-1-dao"><span class="toc-number">7.1.</span> <span class="toc-text">7.1 dao</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-2-service"><span class="toc-number">7.2.</span> <span class="toc-text">7.2 service</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-3-controller"><span class="toc-number">7.3.</span> <span class="toc-text">7.3 controller</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#8-%E7%99%BB%E5%BD%95%E5%8A%9F%E8%83%BD"><span class="toc-number">8.</span> <span class="toc-text">8. 登录功能</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#8-1-%E9%AA%8C%E8%AF%81%E7%A0%81%E7%94%9F%E6%88%90"><span class="toc-number">8.1.</span> <span class="toc-text">8.1 验证码生成</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#8-1-1-%E9%85%8D%E7%BD%AE%E7%B1%BB"><span class="toc-number">8.1.1.</span> <span class="toc-text">8.1.1 配置类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-1-2-%E8%8E%B7%E5%8F%96%E9%AA%8C%E8%AF%81%E7%A0%81"><span class="toc-number">8.1.2.</span> <span class="toc-text">8.1.2 获取验证码</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-2-service"><span class="toc-number">8.2.</span> <span class="toc-text">8.2 service</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-3-controller"><span class="toc-number">8.3.</span> <span class="toc-text">8.3 controller</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-4-%E7%99%BB%E5%BD%95%E5%87%AD%E8%AF%81%E6%8B%A6%E6%88%AA%E5%99%A8"><span class="toc-number">8.4.</span> <span class="toc-text">8.4 登录凭证拦截器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#8-4-1-preHandle"><span class="toc-number">8.4.1.</span> <span class="toc-text">8.4.1 preHandle</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-4-2-postHandle"><span class="toc-number">8.4.2.</span> <span class="toc-text">8.4.2 postHandle</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-4-3-afterCompletion"><span class="toc-number">8.4.3.</span> <span class="toc-text">8.4.3 afterCompletion</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#9-%E5%A4%B4%E5%83%8F%E4%B8%8A%E4%BC%A0"><span class="toc-number">9.</span> <span class="toc-text">9. 头像上传</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#9-1-%E6%9C%AC%E5%9C%B0%E4%B8%8A%E4%BC%A0"><span class="toc-number">9.1.</span> <span class="toc-text">9.1 本地上传</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#9-1-1-%E5%89%8D%E7%AB%AF"><span class="toc-number">9.1.1.</span> <span class="toc-text">9.1.1 前端</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9-1-2-dao"><span class="toc-number">9.1.2.</span> <span class="toc-text">9.1.2 dao</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9-1-3-service"><span class="toc-number">9.1.3.</span> <span class="toc-text">9.1.3 service</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9-1-4-controller"><span class="toc-number">9.1.4.</span> <span class="toc-text">9.1.4 controller</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-2-%E4%B8%8A%E4%BC%A0%E5%88%B0%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-number">9.2.</span> <span class="toc-text">9.2 上传到云服务器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#9-2-1-%E5%89%8D%E7%AB%AF"><span class="toc-number">9.2.1.</span> <span class="toc-text">9.2.1 前端</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9-2-2-%E5%90%8E%E7%AB%AF"><span class="toc-number">9.2.2.</span> <span class="toc-text">9.2.2 后端</span></a></li></ol></li></ol></li></ol>
                     </div>
                 </span>
             </div>
