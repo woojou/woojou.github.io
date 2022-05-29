@@ -22,7 +22,7 @@
 <meta property="og:image" content="https://img-blog.csdnimg.cn/d07f99d345394ec8aca3bc8b44781db0.png">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/3505771e587440158a851202e989598e.png">
 <meta property="article:published_time" content="2022-05-02T11:39:16.000Z">
-<meta property="article:modified_time" content="2022-05-28T13:21:38.904Z">
+<meta property="article:modified_time" content="2022-05-29T09:18:56.653Z">
 <meta property="article:author" content="Woojou">
 <meta property="article:tag" content="项目">
 <meta name="twitter:card" content="summary">
@@ -928,12 +928,101 @@ public class ElasticsearchTests &#123;
     &#125;
 &#125;
 </code></pre>
-<h1 id="6-Spring-Security"><a href="#6-Spring-Security" class="headerlink" title="6. Spring Security"></a>6. Spring Security</h1><p>spring security底层就是filter，也就是说在Interceptor和controller之前执行。spring security包含了认证和授权。认证后将一个token存入，后续的授权都依赖于这个先前存入的结果。</p>
+<h1 id="6-Spring-Security"><a href="#6-Spring-Security" class="headerlink" title="6. Spring Security"></a>6. Spring Security</h1><p>spring security底层就是filter，也就是说在Interceptor和controller之前执行。spring security包含了认证和授权。认证后将一个token存入，后续的授权都依赖于这个先前存入的结果。不过在我们这个项目里，是绕过了spring security走自己的login网页逻辑，在登录凭证拦截器中人为把token结果存入，便于后序的过滤功能。</p>
 <p>使用时，在spring boot中直接引入依赖即可</p>
 <pre><code class="xml">&lt;dependency&gt;
     &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
     &lt;artifactId&gt;spring-boot-starter-security&lt;/artifactId&gt;
 &lt;/dependency&gt;
+</code></pre>
+<p>通过一个spring security的配置类来进行我们自定义的权限控制的操作。</p>
+<pre><code class="java">@Configuration
+public class SecurityConfig extends WebSecurityConfigurerAdapter implements CommunityConstant &#123;
+
+    @Override
+    public void configure(WebSecurity web) throws Exception &#123;
+        web.ignoring().antMatchers(&quot;/resources/**&quot;);
+    &#125;
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception &#123;
+        // 授权
+        http.authorizeRequests()
+                .antMatchers(
+                        &quot;/user/setting&quot;,
+                        &quot;/user/upload&quot;,
+                        &quot;/like&quot;,
+                        &quot;/discuss/add&quot;,
+                        &quot;comment/add/**&quot;,
+                        &quot;/letter/**&quot;,
+                        &quot;/notice/**&quot;,
+                        &quot;follow&quot;,
+                        &quot;unfollow&quot;
+                )
+                .hasAnyAuthority(
+            // 任意用户都可以执行的操作，前提是必须登录
+                        AUTHORITY_ADMIN,
+                        AUTHORITY_MODERATOR,
+                        AUTHORITY_USER
+                )
+                .antMatchers(
+                        &quot;/discuss/top&quot;,
+                        &quot;/discuss/wonderful&quot;
+                )
+                .hasAnyAuthority(
+            // 版主才可以进行的操作，置顶+加精
+                        AUTHORITY_MODERATOR
+                )
+                .antMatchers(
+                        &quot;/discuss/delete&quot;,
+                        &quot;/data/**&quot;
+                )
+                .hasAnyAuthority(
+            // 管理员可以执行的操作
+                        AUTHORITY_ADMIN
+                )
+                .anyRequest().permitAll()
+                .and().csrf().disable();
+
+        // 权限不够时的处理
+        http.exceptionHandling()
+                .authenticationEntryPoint(new AuthenticationEntryPoint() &#123;
+                    //没有登陆的情况
+                    @Override
+                    public void commence(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException, ServletException &#123;
+                        String header = httpServletRequest.getHeader(&quot;x-requested-with&quot;);
+                        if (&quot;XMLHttpRequest&quot;.equals(header)) &#123;
+                            // 异步请求
+                            httpServletResponse.setContentType(&quot;application/plain;charset=utf-8&quot;);
+                            PrintWriter writer = httpServletResponse.getWriter();
+                            writer.write(CommunityUtil.getJSONString(403, &quot;您还没有登录！&quot;));
+                        &#125; else &#123;
+                            httpServletResponse.sendRedirect(httpServletRequest.getContextPath() + &quot;/login&quot;);
+                        &#125;
+                    &#125;
+                &#125;)
+                .accessDeniedHandler(new AccessDeniedHandler() &#123;
+                    // 权限不足
+                    @Override
+                    public void handle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AccessDeniedException e) throws IOException, ServletException &#123;
+                        String header = httpServletRequest.getHeader(&quot;x-requested-with&quot;);
+                        if (&quot;XMLHttpRequest&quot;.equals(header)) &#123;
+                            // 异步请求
+                            httpServletResponse.setContentType(&quot;application/plain;charset=utf-8&quot;);
+                            PrintWriter writer = httpServletResponse.getWriter();
+                            writer.write(CommunityUtil.getJSONString(403, &quot;您没有访问权限！&quot;));
+                        &#125; else &#123;
+                            httpServletResponse.sendRedirect(httpServletRequest.getContextPath() + &quot;/denied&quot;);
+                        &#125;
+                    &#125;
+                &#125;);
+
+        // Security底层默认会拦截/logout请求,进行退出处理.
+        // 覆盖它默认的逻辑,才能执行我们自己的退出代码.
+        // 随便给一个路径
+        http.logout().logoutUrl(&quot;/securitylogout&quot;);
+    &#125;
+&#125;
 </code></pre>
 <h1 id="7-注册功能"><a href="#7-注册功能" class="headerlink" title="7. 注册功能"></a>7. 注册功能</h1><h2 id="7-1-dao"><a href="#7-1-dao" class="headerlink" title="7.1 dao"></a>7.1 dao</h2><p>提供一个插入用户信息的方法</p>
 <pre><code class="java">int insertUser(User user);
@@ -1067,7 +1156,7 @@ public boolean preHandle(HttpServletRequest request, HttpServletResponse respons
             User user = userService.findUserById(loginTicket.getUserId());
             hostHolder.setUser(user);
 
-            // 构建用户认证的结果,并存入SecurityContext,以便于Security进行授权.
+            // 构建用户认证的结果token,并存入SecurityContext,以便于Security进行授权.
             Authentication authentication = new UsernamePasswordAuthenticationToken(
                 user, user.getPassword(), userService.getAuthorities(user.getId()));
             SecurityContextHolder.setContext(new SecurityContextImpl(authentication));
@@ -1311,6 +1400,416 @@ public String updateHeaderUrl(String fileName) &#123;
     return CommunityUtil.getJSONString(0, &quot;成功！&quot;);
 &#125;
 </code></pre>
+<h3 id="9-2-3-本地文件上传至云端"><a href="#9-2-3-本地文件上传至云端" class="headerlink" title="9.2.3 本地文件上传至云端"></a>9.2.3 本地文件上传至云端</h3><p>这里UploadTask类通过实现Runnable接口便于启动定时任务上传文件。</p>
+<pre><code class="java">/*=========调用============*/
+UploadTask task = new UploadTask(fileName, suffix);
+// 启动定时器，定时查看是否生成长图成功
+// 成功后会返回一个值
+Future future = taskScheduler.scheduleAtFixedRate(task, 500);
+task.setFuture(future); //修改这个状态就可以停止该线程
+/*=========调用============*/
+
+class UploadTask implements Runnable &#123;
+    //文件名称
+    private String fileName;
+    //文件后缀
+    private String suffix;
+    //启动任务的返回值
+    private Future future;
+    //开始时间
+    private long startTime;
+    //上传次数
+    private int uploadTimes;
+
+    public void setFuture(Future future) &#123;
+        this.future = future;
+    &#125;
+
+    public UploadTask(String fileName, String suffix) &#123;
+        this.fileName = fileName;
+        this.suffix = suffix;
+        this.startTime = System.currentTimeMillis();
+    &#125;
+
+    @Override
+    public void run() &#123;
+        // 生成图片失败
+        if (System.currentTimeMillis() - startTime &gt; 30000) &#123;
+            logger.error(&quot;执行时间过长，终止任务：&quot; + fileName);
+            future.cancel(true);
+            return;
+        &#125;
+        //上传失败
+        if (uploadTimes &gt;= 3) &#123;
+            logger.error(&quot;上传次数过多，终止任务：&quot; + fileName);
+            future.cancel(true);
+            return;
+        &#125;
+
+        String path = wkImageStorage + &quot;/&quot; + fileName + suffix;
+        File file = new File(path);
+        if (file.exists()) &#123;
+            logger.info(String.format(&quot;开始第%d次上传[%s]&quot;, ++uploadTimes, fileName));
+            /*=================七牛云特定的写法模板======================*/
+            // 设置响应信息
+            StringMap policy = new StringMap();
+            policy.put(&quot;returnBody&quot;, CommunityUtil.getJSONString(0));
+            // 生成上传凭证
+            Auth auth = Auth.create(accessKey, secretKey);
+            String uploadToken = auth.uploadToken(shareBucketName, fileName, 3600, policy);
+
+            //指定上传机房
+            UploadManager manager = new UploadManager(new Configuration(Zone.autoZone()));
+            try &#123;
+                //开始上传
+                Response response = manager.put(
+                    path, fileName, uploadToken, null, &quot;image/&quot; + suffix.substring(suffix.lastIndexOf(&quot;.&quot;) + 1), false
+                );
+            /*=================七牛云特定的写法模板======================*/
+                // 处理响应结果
+                JSONObject json = JSONObject.parseObject(response.bodyString());
+                if (json == null || json.get(&quot;code&quot;) == null || !json.get(&quot;code&quot;).toString().equals(&quot;0&quot;)) &#123;
+                    logger.info(String.format(&quot;第%d次上传失败[%s].&quot;, uploadTimes, fileName));
+                &#125; else &#123;
+                    logger.info(String.format(&quot;第%d次上传成功[%s].&quot;, uploadTimes, fileName));
+                    future.cancel(true);
+                &#125;
+            &#125; catch (QiniuException e) &#123;
+                logger.info(String.format(&quot;第%d次上传失败[%s].&quot;, uploadTimes, fileName));
+            &#125;
+        &#125; else &#123;
+            logger.info(&quot;等待图片生成[&quot; + fileName + &quot;].&quot;);
+        &#125;
+    &#125;
+&#125;
+</code></pre>
+<h1 id="10-登录状态检查（拦截器）"><a href="#10-登录状态检查（拦截器）" class="headerlink" title="10. 登录状态检查（拦截器）"></a>10. 登录状态检查（拦截器）</h1><p>通过自定义一个注解 @LoginRequired，然后编写一个拦截器去检查带有该注解的方法，检验hostholder中是否有用户实例。</p>
+<p>不过该方法在运用Spring Security之后就被淘汰了。</p>
+<pre><code class="java">//标注注解用于方法，在运行时起作用
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface LoginRequired &#123;
+&#125;
+</code></pre>
+<pre><code class="java">@Component
+public class LoginRequiredInterceptor implements HandlerInterceptor &#123;
+
+    @Autowired
+    private HostHolder hostHolder;
+
+    @Override
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception &#123;
+        if(handler instanceof HandlerMethod) &#123;
+            HandlerMethod handlerMethod = (HandlerMethod) handler;
+            Method method = handlerMethod.getMethod();
+            LoginRequired annotation = method.getAnnotation(LoginRequired.class);
+            if (annotation != null &amp;&amp; hostHolder.getUser() == null) &#123;
+                response.sendRedirect(request.getContextPath() + &quot;/login&quot;);
+                return false;
+            &#125;
+        &#125;
+        return true;
+    &#125;
+&#125;
+</code></pre>
+<p>可以看到，这个拦截器的preHandle方法必须在登录凭证拦截器preHandle方法执行之后才可以执行，那么多个拦截器的时候，如何去安排他们执行的顺序呢？这时候需要在配置类中规定，哪个拦截器先被配置，哪个就先执行。</p>
+<pre><code class="java">@Configuration
+public class WebMvcConfig implements WebMvcConfigurer &#123;
+//
+//    @Autowired
+//    private AlphaInterceptor alphaInterceptor;
+
+    @Autowired
+    private LoginTicketInterceptor loginTicketInterceptor;
+
+    @Autowired
+    private LoginRequiredInterceptor loginRequiredInterceptor;
+
+    @Autowired
+    private MessageInterceptor messageInterceptor;
+
+    @Autowired
+    private DataInterceptor dataInterceptor;
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) &#123;
+//        //排除静态资源
+//        //只拦截login register
+//        registry.addInterceptor(alphaInterceptor)
+//                .excludePathPatterns(&quot;/**/*.css&quot;, &quot;/**/*.js&quot;, &quot;/**/*.png&quot;, &quot;/**/*.jpg&quot;, &quot;/**/*.jpeg&quot;)
+//                .addPathPatterns(&quot;/register&quot;, &quot;/login&quot;);
+
+        registry.addInterceptor(loginTicketInterceptor)
+                .excludePathPatterns(&quot;/**/*.css&quot;, &quot;/**/*.js&quot;, &quot;/**/*.png&quot;, &quot;/**/*.jpg&quot;, &quot;/**/*.jpeg&quot;);
+
+        registry.addInterceptor(loginRequiredInterceptor)
+                .excludePathPatterns(&quot;/**/*.css&quot;, &quot;/**/*.js&quot;, &quot;/**/*.png&quot;, &quot;/**/*.jpg&quot;, &quot;/**/*.jpeg&quot;);
+
+        registry.addInterceptor(messageInterceptor)
+                .excludePathPatterns(&quot;/**/*.css&quot;, &quot;/**/*.js&quot;, &quot;/**/*.png&quot;, &quot;/**/*.jpg&quot;, &quot;/**/*.jpeg&quot;);
+
+        registry.addInterceptor(dataInterceptor)
+                .excludePathPatterns(&quot;/**/*.css&quot;, &quot;/**/*.js&quot;, &quot;/**/*.png&quot;, &quot;/**/*.jpg&quot;, &quot;/**/*.jpeg&quot;);
+
+    &#125;
+&#125;
+</code></pre>
+<p>从上面可以总结出各个拦截器方法执行的顺序：</p>
+<pre><code>loginTicketInterceptor    preHandle
+    loginRequiredInterceptor  preHandle
+        messageInterceptor    preHandle
+            dataInterceptor  preHandle
+            dataInterceptor  postHandle
+        messageInterceptor  postHandle
+    loginRequiredInterceptor postHandle
+loginTicketInterceptor postHandle
+/*
+postHandler在拦截器链内所有拦截器返成功调用
+afterCompletion只有preHandle返回true才调用
+afterCompletion按拦截器定义逆序调用
+*/
+</code></pre>
+<h1 id="11-敏感词过滤发布帖子"><a href="#11-敏感词过滤发布帖子" class="headerlink" title="11. 敏感词过滤发布帖子"></a>11. 敏感词过滤发布帖子</h1><h2 id="11-1-字典树"><a href="#11-1-字典树" class="headerlink" title="11.1 字典树"></a>11.1 字典树</h2><h3 id="11-1-1-节点"><a href="#11-1-1-节点" class="headerlink" title="11.1.1 节点"></a>11.1.1 节点</h3><pre><code class="java">class TrieNode &#123;
+
+    // 关键词结束标识
+    private boolean isKeywordEnd = false;
+
+    // 子节点(key是下级字符,value是下级节点)
+    private Map&lt;Character, TrieNode&gt; subNodes = new HashMap&lt;&gt;();
+
+    public boolean isKeywordEnd() &#123;
+        return isKeywordEnd;
+    &#125;
+
+    public void setKeywordEnd(boolean keywordEnd) &#123;
+        isKeywordEnd = keywordEnd;
+    &#125;
+
+    // 添加子节点
+    public void addSubNode(Character c, TrieNode node) &#123;
+        subNodes.put(c, node);
+    &#125;
+
+    // 获取子节点
+    public TrieNode getSubNode(Character c) &#123;
+        return subNodes.get(c);
+    &#125;
+
+&#125;
+</code></pre>
+<h3 id="11-1-2-敏感词过滤器"><a href="#11-1-2-敏感词过滤器" class="headerlink" title="11.1.2 敏感词过滤器"></a>11.1.2 敏感词过滤器</h3><pre><code class="java">@Component
+public class SensitiveFilter &#123;
+
+    private static final Logger logger = LoggerFactory.getLogger(SensitiveFilter.class);
+
+    private TrieNode rootNode = new TrieNode();
+
+    // 在服务器加载Servlet的时候运行，并且只会被服务器执行一次。在对象加载完依赖注入后执行。
+    @PostConstruct
+    public void init() &#123;
+        // 加载敏感词文件
+        try (
+                InputStream is = this.getClass().getClassLoader().getResourceAsStream(&quot;sensitive-words.txt&quot;);
+                BufferedReader reader = new BufferedReader(new InputStreamReader(is))
+        ) &#123;
+            String keyword = &quot;&quot;;
+            while ((keyword = reader.readLine()) != null) &#123;
+                // 每一行就是单独的一个敏感词
+                this.addKeyword(keyword);
+            &#125;
+
+        &#125; catch (IOException e) &#123;
+            logger.error(&quot;加载文件失败！：&quot; + e.getMessage());
+            throw new IllegalArgumentException(e);
+        &#125;
+    &#125;
+
+
+    private void addKeyword(String keyword) &#123;
+        TrieNode tempNode = rootNode;
+        for (int i = 0; i &lt; keyword.length(); i++) &#123;
+            char c = keyword.charAt(i);
+            TrieNode subNode = tempNode.getSubNode(c);
+
+            if (subNode == null) &#123;
+                // 初始化子节点
+                subNode = new TrieNode();
+                tempNode.addSubNode(c, subNode);
+            &#125;
+
+            // 指向子节点,进入下一轮循环
+            tempNode = subNode;
+
+            // 设置结束标识
+            if (i == keyword.length() - 1) &#123;
+                tempNode.setKeywordEnd(true);
+            &#125;
+        &#125;
+    &#125;
+
+    public String filter(String text) &#123;
+        if (StringUtils.isBlank(text)) return null;
+
+        int begin = 0;
+        int end = 0;
+        TrieNode tempNode = rootNode;
+        StringBuilder sb = new StringBuilder();
+
+        // begin指向疑似敏感词的头
+        while (begin &lt; text.length()) &#123;
+
+            if (end &gt;= text.length()) &#123;
+                // 证明 begin-end 这之间的词不是敏感词，可以把begin加入
+                // 从下一个位置开始重新搜寻敏感词
+                sb.append(text.charAt(begin++));
+                end = begin;
+                continue;
+            &#125;
+
+            Character c = text.charAt(end);
+
+            // 如果是符号而不是一个字符，应当略过
+            if(isSymbol(c)) &#123;
+                // 如果是头节点，也就是begin=end
+                if (tempNode == rootNode) &#123;
+                    sb.append(c);
+                    begin++;
+                &#125;
+                end++;
+                continue;
+            &#125;
+
+            TrieNode curNode = tempNode.getSubNode(c);
+            if(curNode == null) &#123;
+                // 以begin开头的字符串不是敏感词，把begin加入，而不是一整个词
+                sb.append(text.charAt(begin++));
+                end = begin;
+                // 进行下一轮搜寻
+                tempNode = this.rootNode;
+            &#125; else if(!curNode.isKeywordEnd()) &#123;
+                // 疑似敏感词，继续向下搜寻
+                tempNode = curNode;
+                end++;
+            &#125; else &#123;
+                sb.append(&quot;***&quot;);
+                begin = ++end;
+                tempNode = this.rootNode;
+            &#125;
+        &#125;
+        return sb.toString();
+    &#125;
+
+    // 判断是否为符号
+    private boolean isSymbol(Character c) &#123;
+        // 0x2E80~0x9FFF 是东亚文字范围
+        return !CharUtils.isAsciiAlphanumeric(c) &amp;&amp; (c &lt; 0x2E80 || c &gt; 0x9FFF);
+    &#125;
+&#125;
+</code></pre>
+<h2 id="11-2-service"><a href="#11-2-service" class="headerlink" title="11.2 service"></a>11.2 service</h2><p>业务层中，在添加帖子的时候就进行过滤</p>
+<pre><code class="java">public int addDiscussPost(DiscussPost post) &#123;
+    if (post == null) &#123;
+        throw new IllegalArgumentException(&quot;参数不可为空&quot;);
+    &#125;
+
+    // 转义HTML标记
+    post.setTitle(HtmlUtils.htmlEscape(post.getTitle()));
+    post.setContent(HtmlUtils.htmlEscape(post.getContent()));
+
+    // 敏感词过滤标题和内容
+    post.setTitle(sensitiveFilter.filter(post.getTitle()));
+    post.setContent(sensitiveFilter.filter(post.getContent()));
+
+    // 最后调用dao层加入到数据库中
+    return discussPostMapper.insertDiscussPost(post);
+&#125;
+</code></pre>
+<h2 id="11-3-controller"><a href="#11-3-controller" class="headerlink" title="11.3 controller"></a>11.3 controller</h2><pre><code class="java">@RequestMapping(path = &quot;/add&quot;, method = RequestMethod.POST)
+@ResponseBody
+public String addDiscussPost(String title, String content) &#123;
+    User user = hostHolder.getUser();
+    if (user == null) &#123;
+        return CommunityUtil.getJSONString(403, &quot;请登录后再发帖！&quot;);
+    &#125;
+
+    DiscussPost post = new DiscussPost();
+    post.setUserId(user.getId());
+    post.setTitle(title);
+    post.setContent(content);
+    post.setCreateTime(new Date());
+
+    discussPostService.addDiscussPost(post);
+
+    //发送事件
+    Event event = new Event()
+        .setTopic(TOPIC_PUBLISH)
+        .setEntityUserId(user.getId())
+        .setEntityType(ENTITY_TYPE_POST)
+        .setEntityId(post.getId());
+    eventProducer.fileEvent(event);
+
+    //计算帖子分数
+    //加入redis库中，这个索引利用quartz绑定了定时操作
+    //会定时对于该索引里存储的所有帖子进行分数更新
+    String redisKey = RedisKeyUtil.getPostScoreKey();
+    redisTemplate.opsForSet().add(redisKey, post.getId());
+
+    return CommunityUtil.getJSONString(0, &quot;发布成功！&quot;);
+&#125;
+</code></pre>
+<h2 id="11-4-Kafka消费发帖事件"><a href="#11-4-Kafka消费发帖事件" class="headerlink" title="11.4 Kafka消费发帖事件"></a>11.4 Kafka消费发帖事件</h2><pre><code class="java">@KafkaListener(topics = &#123;TOPIC_PUBLISH&#125;)
+public void handlePublishMessage(ConsumerRecord record) &#123;
+    if (record == null || record.value() == null) &#123;
+        logger.error(&quot;消息的内容为空!&quot;);
+        return;
+    &#125;
+
+    Event event = JSONObject.parseObject(record.value().toString(), Event.class);
+    if (event == null) &#123;
+        logger.error(&quot;消息格式错误!&quot;);
+        return;
+    &#125;
+
+    // 调用业务层发布帖子
+    DiscussPost post = discussPostService.findDiscssPost(event.getEntityId());
+    // 更新搜索引擎库
+    elasticsearchService.saveDiscussPost(post);
+&#125;
+</code></pre>
+<h2 id="11-5-前端异步发送帖子"><a href="#11-5-前端异步发送帖子" class="headerlink" title="11.5 前端异步发送帖子"></a>11.5 前端异步发送帖子</h2><p>使用jQuery发送AJAX请求。</p>
+<pre><code class="js">$(function()&#123;
+    $(&quot;#publishBtn&quot;).click(publish);
+&#125;);
+
+function publish() &#123;
+    $(&quot;#publishModal&quot;).modal(&quot;hide&quot;);
+
+    // 获取标题和内容
+    var title = $(&quot;#recipient-name&quot;).val();
+    var content = $(&quot;#message-text&quot;).val();
+    // 发送异步请求(POST)
+    $.post(
+        CONTEXT_PATH + &quot;/discuss/add&quot;,
+        &#123;&quot;title&quot;:title,&quot;content&quot;:content&#125;,
+        function(data) &#123;
+            data = $.parseJSON(data);
+            // 在提示框中显示返回消息
+            $(&quot;#hintBody&quot;).text(data.msg);
+            // 显示提示框
+            $(&quot;#hintModal&quot;).modal(&quot;show&quot;);
+            // 2秒后,自动隐藏提示框
+            setTimeout(function()&#123;
+                $(&quot;#hintModal&quot;).modal(&quot;hide&quot;);
+                // 刷新页面
+                if(data.code == 0) &#123;
+                    window.location.reload();
+                &#125;
+            &#125;, 2000);
+        &#125;
+    );
+
+&#125;
+</code></pre>
 
       
 
@@ -1423,7 +1922,7 @@ public String updateHeaderUrl(String fileName) &#123;
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-%E6%90%AD%E5%BB%BA%E7%8E%AF%E5%A2%83"><span class="toc-number">1.</span> <span class="toc-text">1. 搭建环境</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-%E5%8F%91%E9%80%81%E9%82%AE%E4%BB%B6"><span class="toc-number">2.</span> <span class="toc-text">2. 发送邮件</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-Redis"><span class="toc-number">3.</span> <span class="toc-text">3. Redis</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#3-1-%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-number">3.1.</span> <span class="toc-text">3.1 常用命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-2-Spring%E6%95%B4%E5%90%88Redis"><span class="toc-number">3.2.</span> <span class="toc-text">3.2 Spring整合Redis</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-3-Redis%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-number">3.3.</span> <span class="toc-text">3.3 Redis使用场景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-4-Redis%E9%AB%98%E7%BA%A7%E6%95%B0%E6%8D%AE%E5%BA%94%E7%94%A8"><span class="toc-number">3.4.</span> <span class="toc-text">3.4 Redis高级数据应用</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-Kafka"><span class="toc-number">4.</span> <span class="toc-text">4. Kafka</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#4-1-%E5%AE%89%E8%A3%85"><span class="toc-number">4.1.</span> <span class="toc-text">4.1 安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-2-%E4%BD%BF%E7%94%A8"><span class="toc-number">4.2.</span> <span class="toc-text">4.2 使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-3-Spring%E6%95%B4%E5%90%88Kafka"><span class="toc-number">4.3.</span> <span class="toc-text">4.3 Spring整合Kafka</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#5-Elasticsearch"><span class="toc-number">5.</span> <span class="toc-text">5. Elasticsearch</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#5-1-%E5%AE%89%E8%A3%85"><span class="toc-number">5.1.</span> <span class="toc-text">5.1 安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-2-%E4%BD%BF%E7%94%A8"><span class="toc-number">5.2.</span> <span class="toc-text">5.2 使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-3-Spring%E6%95%B4%E5%90%88Elasticsearch"><span class="toc-number">5.3.</span> <span class="toc-text">5.3 Spring整合Elasticsearch</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#6-Spring-Security"><span class="toc-number">6.</span> <span class="toc-text">6. Spring Security</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#7-%E6%B3%A8%E5%86%8C%E5%8A%9F%E8%83%BD"><span class="toc-number">7.</span> <span class="toc-text">7. 注册功能</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#7-1-dao"><span class="toc-number">7.1.</span> <span class="toc-text">7.1 dao</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-2-service"><span class="toc-number">7.2.</span> <span class="toc-text">7.2 service</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-3-controller"><span class="toc-number">7.3.</span> <span class="toc-text">7.3 controller</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#8-%E7%99%BB%E5%BD%95%E5%8A%9F%E8%83%BD"><span class="toc-number">8.</span> <span class="toc-text">8. 登录功能</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#8-1-%E9%AA%8C%E8%AF%81%E7%A0%81%E7%94%9F%E6%88%90"><span class="toc-number">8.1.</span> <span class="toc-text">8.1 验证码生成</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#8-1-1-%E9%85%8D%E7%BD%AE%E7%B1%BB"><span class="toc-number">8.1.1.</span> <span class="toc-text">8.1.1 配置类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-1-2-%E8%8E%B7%E5%8F%96%E9%AA%8C%E8%AF%81%E7%A0%81"><span class="toc-number">8.1.2.</span> <span class="toc-text">8.1.2 获取验证码</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-2-service"><span class="toc-number">8.2.</span> <span class="toc-text">8.2 service</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-3-controller"><span class="toc-number">8.3.</span> <span class="toc-text">8.3 controller</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-4-%E7%99%BB%E5%BD%95%E5%87%AD%E8%AF%81%E6%8B%A6%E6%88%AA%E5%99%A8"><span class="toc-number">8.4.</span> <span class="toc-text">8.4 登录凭证拦截器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#8-4-1-preHandle"><span class="toc-number">8.4.1.</span> <span class="toc-text">8.4.1 preHandle</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-4-2-postHandle"><span class="toc-number">8.4.2.</span> <span class="toc-text">8.4.2 postHandle</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-4-3-afterCompletion"><span class="toc-number">8.4.3.</span> <span class="toc-text">8.4.3 afterCompletion</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#9-%E5%A4%B4%E5%83%8F%E4%B8%8A%E4%BC%A0"><span class="toc-number">9.</span> <span class="toc-text">9. 头像上传</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#9-1-%E6%9C%AC%E5%9C%B0%E4%B8%8A%E4%BC%A0"><span class="toc-number">9.1.</span> <span class="toc-text">9.1 本地上传</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#9-1-1-%E5%89%8D%E7%AB%AF"><span class="toc-number">9.1.1.</span> <span class="toc-text">9.1.1 前端</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9-1-2-dao"><span class="toc-number">9.1.2.</span> <span class="toc-text">9.1.2 dao</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9-1-3-service"><span class="toc-number">9.1.3.</span> <span class="toc-text">9.1.3 service</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9-1-4-controller"><span class="toc-number">9.1.4.</span> <span class="toc-text">9.1.4 controller</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-2-%E4%B8%8A%E4%BC%A0%E5%88%B0%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-number">9.2.</span> <span class="toc-text">9.2 上传到云服务器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#9-2-1-%E5%89%8D%E7%AB%AF"><span class="toc-number">9.2.1.</span> <span class="toc-text">9.2.1 前端</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9-2-2-%E5%90%8E%E7%AB%AF"><span class="toc-number">9.2.2.</span> <span class="toc-text">9.2.2 后端</span></a></li></ol></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-%E6%90%AD%E5%BB%BA%E7%8E%AF%E5%A2%83"><span class="toc-number">1.</span> <span class="toc-text">1. 搭建环境</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-%E5%8F%91%E9%80%81%E9%82%AE%E4%BB%B6"><span class="toc-number">2.</span> <span class="toc-text">2. 发送邮件</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-Redis"><span class="toc-number">3.</span> <span class="toc-text">3. Redis</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#3-1-%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-number">3.1.</span> <span class="toc-text">3.1 常用命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-2-Spring%E6%95%B4%E5%90%88Redis"><span class="toc-number">3.2.</span> <span class="toc-text">3.2 Spring整合Redis</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-3-Redis%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-number">3.3.</span> <span class="toc-text">3.3 Redis使用场景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-4-Redis%E9%AB%98%E7%BA%A7%E6%95%B0%E6%8D%AE%E5%BA%94%E7%94%A8"><span class="toc-number">3.4.</span> <span class="toc-text">3.4 Redis高级数据应用</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-Kafka"><span class="toc-number">4.</span> <span class="toc-text">4. Kafka</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#4-1-%E5%AE%89%E8%A3%85"><span class="toc-number">4.1.</span> <span class="toc-text">4.1 安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-2-%E4%BD%BF%E7%94%A8"><span class="toc-number">4.2.</span> <span class="toc-text">4.2 使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-3-Spring%E6%95%B4%E5%90%88Kafka"><span class="toc-number">4.3.</span> <span class="toc-text">4.3 Spring整合Kafka</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#5-Elasticsearch"><span class="toc-number">5.</span> <span class="toc-text">5. Elasticsearch</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#5-1-%E5%AE%89%E8%A3%85"><span class="toc-number">5.1.</span> <span class="toc-text">5.1 安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-2-%E4%BD%BF%E7%94%A8"><span class="toc-number">5.2.</span> <span class="toc-text">5.2 使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-3-Spring%E6%95%B4%E5%90%88Elasticsearch"><span class="toc-number">5.3.</span> <span class="toc-text">5.3 Spring整合Elasticsearch</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#6-Spring-Security"><span class="toc-number">6.</span> <span class="toc-text">6. Spring Security</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#7-%E6%B3%A8%E5%86%8C%E5%8A%9F%E8%83%BD"><span class="toc-number">7.</span> <span class="toc-text">7. 注册功能</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#7-1-dao"><span class="toc-number">7.1.</span> <span class="toc-text">7.1 dao</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-2-service"><span class="toc-number">7.2.</span> <span class="toc-text">7.2 service</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-3-controller"><span class="toc-number">7.3.</span> <span class="toc-text">7.3 controller</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#8-%E7%99%BB%E5%BD%95%E5%8A%9F%E8%83%BD"><span class="toc-number">8.</span> <span class="toc-text">8. 登录功能</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#8-1-%E9%AA%8C%E8%AF%81%E7%A0%81%E7%94%9F%E6%88%90"><span class="toc-number">8.1.</span> <span class="toc-text">8.1 验证码生成</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#8-1-1-%E9%85%8D%E7%BD%AE%E7%B1%BB"><span class="toc-number">8.1.1.</span> <span class="toc-text">8.1.1 配置类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-1-2-%E8%8E%B7%E5%8F%96%E9%AA%8C%E8%AF%81%E7%A0%81"><span class="toc-number">8.1.2.</span> <span class="toc-text">8.1.2 获取验证码</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-2-service"><span class="toc-number">8.2.</span> <span class="toc-text">8.2 service</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-3-controller"><span class="toc-number">8.3.</span> <span class="toc-text">8.3 controller</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-4-%E7%99%BB%E5%BD%95%E5%87%AD%E8%AF%81%E6%8B%A6%E6%88%AA%E5%99%A8"><span class="toc-number">8.4.</span> <span class="toc-text">8.4 登录凭证拦截器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#8-4-1-preHandle"><span class="toc-number">8.4.1.</span> <span class="toc-text">8.4.1 preHandle</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-4-2-postHandle"><span class="toc-number">8.4.2.</span> <span class="toc-text">8.4.2 postHandle</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-4-3-afterCompletion"><span class="toc-number">8.4.3.</span> <span class="toc-text">8.4.3 afterCompletion</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#9-%E5%A4%B4%E5%83%8F%E4%B8%8A%E4%BC%A0"><span class="toc-number">9.</span> <span class="toc-text">9. 头像上传</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#9-1-%E6%9C%AC%E5%9C%B0%E4%B8%8A%E4%BC%A0"><span class="toc-number">9.1.</span> <span class="toc-text">9.1 本地上传</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#9-1-1-%E5%89%8D%E7%AB%AF"><span class="toc-number">9.1.1.</span> <span class="toc-text">9.1.1 前端</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9-1-2-dao"><span class="toc-number">9.1.2.</span> <span class="toc-text">9.1.2 dao</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9-1-3-service"><span class="toc-number">9.1.3.</span> <span class="toc-text">9.1.3 service</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9-1-4-controller"><span class="toc-number">9.1.4.</span> <span class="toc-text">9.1.4 controller</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-2-%E4%B8%8A%E4%BC%A0%E5%88%B0%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-number">9.2.</span> <span class="toc-text">9.2 上传到云服务器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#9-2-1-%E5%89%8D%E7%AB%AF"><span class="toc-number">9.2.1.</span> <span class="toc-text">9.2.1 前端</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9-2-2-%E5%90%8E%E7%AB%AF"><span class="toc-number">9.2.2.</span> <span class="toc-text">9.2.2 后端</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9-2-3-%E6%9C%AC%E5%9C%B0%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E8%87%B3%E4%BA%91%E7%AB%AF"><span class="toc-number">9.2.3.</span> <span class="toc-text">9.2.3 本地文件上传至云端</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#10-%E7%99%BB%E5%BD%95%E7%8A%B6%E6%80%81%E6%A3%80%E6%9F%A5%EF%BC%88%E6%8B%A6%E6%88%AA%E5%99%A8%EF%BC%89"><span class="toc-number">10.</span> <span class="toc-text">10. 登录状态检查（拦截器）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#11-%E6%95%8F%E6%84%9F%E8%AF%8D%E8%BF%87%E6%BB%A4%E5%8F%91%E5%B8%83%E5%B8%96%E5%AD%90"><span class="toc-number">11.</span> <span class="toc-text">11. 敏感词过滤发布帖子</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#11-1-%E5%AD%97%E5%85%B8%E6%A0%91"><span class="toc-number">11.1.</span> <span class="toc-text">11.1 字典树</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#11-1-1-%E8%8A%82%E7%82%B9"><span class="toc-number">11.1.1.</span> <span class="toc-text">11.1.1 节点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#11-1-2-%E6%95%8F%E6%84%9F%E8%AF%8D%E8%BF%87%E6%BB%A4%E5%99%A8"><span class="toc-number">11.1.2.</span> <span class="toc-text">11.1.2 敏感词过滤器</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#11-2-service"><span class="toc-number">11.2.</span> <span class="toc-text">11.2 service</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#11-3-controller"><span class="toc-number">11.3.</span> <span class="toc-text">11.3 controller</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#11-4-Kafka%E6%B6%88%E8%B4%B9%E5%8F%91%E5%B8%96%E4%BA%8B%E4%BB%B6"><span class="toc-number">11.4.</span> <span class="toc-text">11.4 Kafka消费发帖事件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#11-5-%E5%89%8D%E7%AB%AF%E5%BC%82%E6%AD%A5%E5%8F%91%E9%80%81%E5%B8%96%E5%AD%90"><span class="toc-number">11.5.</span> <span class="toc-text">11.5 前端异步发送帖子</span></a></li></ol></li></ol>
                     </div>
                 </span>
             </div>
